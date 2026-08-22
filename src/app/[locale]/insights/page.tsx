@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { InsightsList } from "@/components/insights/InsightsList";
 import { insightsPosts } from "@/data/insights";
+import { getPublishedInsights } from "@/lib/content";
 import type { Locale } from "@/i18n/routing";
 import styles from "./page.module.css";
 
@@ -33,7 +34,11 @@ export default async function InsightsPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("insights");
-  const publishedPosts = insightsPosts.filter((post) => post.is_published);
+  // Supabase bağlıysa oradan; değilse brief'ten seed edilmiş yerel liste
+  // (şu an hiçbiri yayında değil — gövde metinleri bekleniyor).
+  const fromDb = await getPublishedInsights();
+  const publishedPosts =
+    fromDb.length > 0 ? fromDb : insightsPosts.filter((post) => post.is_published);
 
   return (
     <div>

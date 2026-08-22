@@ -33,5 +33,34 @@
     "categoryAll": "All",
     "comingSoon": "Content is on the way.",
     "readMore": "Read more"
+  },
+  "work": {
+    "empty": "The work inventory is on the way.",
+    "archiveTitle": "Archive",
+    "confidentialClient": "Confidential client",
+    "case": {
+      "problem": "Problem",
+      "solution": "Solution",
+      "result": "Result",
+      "evidence": "Evidence",
+      "evidenceEmpty": "Visual material is on the way."
+    }
+  },
+  "directors": {
+    "heroTitle": "THE PEOPLE BEHIND THE FRAME.",
+    "heroSubtitle": "Films are not made by companies. They are made by people — and these are ours.",
+    "empty": "The crew list is on the way.",
+    "reel": "Reel",
+    "reelEmpty": "The reel is on the way.",
+    "selectedWork": "Selected work",
+    "confidentialClient": "Confidential client",
+    "relationship": {
+      "staff": "Staff",
+      "freelance": "We work with"
+    }
+  },
+  "friends": {
+    "testimonialsTitle": "What they say",
+    "testimonialsEmpty": "Client testimonials are on the way."
   }
 }

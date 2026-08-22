@@ -33,5 +33,34 @@
     "categoryAll": "Tümü",
     "comingSoon": "İçerik hazırlanıyor.",
     "readMore": "Devamını oku"
+  },
+  "work": {
+    "empty": "İş envanteri hazırlanıyor.",
+    "archiveTitle": "Arşiv",
+    "confidentialClient": "Gizli müşteri",
+    "case": {
+      "problem": "Sorun",
+      "solution": "Çözüm",
+      "result": "Sonuç",
+      "evidence": "Kanıt",
+      "evidenceEmpty": "Görsel malzeme hazırlanıyor."
+    }
+  },
+  "directors": {
+    "heroTitle": "KADRAJIN ARKASINDAKİLER.",
+    "heroSubtitle": "Filmleri şirketler çekmez, insanlar çeker — ve bunlar bizimkiler.",
+    "empty": "Kadro hazırlanıyor.",
+    "reel": "Reel",
+    "reelEmpty": "Reel hazırlanıyor.",
+    "selectedWork": "Seçilmiş işler",
+    "confidentialClient": "Gizli müşteri",
+    "relationship": {
+      "staff": "Kadromuzda",
+      "freelance": "Birlikte çalıştığımız"
+    }
+  },
+  "friends": {
+    "testimonialsTitle": "Ne diyorlar",
+    "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."
   }
 }

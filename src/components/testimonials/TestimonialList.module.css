@@ -1,0 +1,23 @@
+.list {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.item {
+  border-left: 2px solid var(--color-brand-fuchsia);
+  padding-left: var(--space-4);
+}
+
+.quote {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(1rem, 2vw, 1.375rem);
+  margin: 0 0 var(--space-3);
+}
+
+.attribution {
+  font-size: 0.8125rem;
+  opacity: 0.75;
+  margin: 0;
+}

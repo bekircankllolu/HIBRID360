@@ -2,15 +2,21 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import { insightsPosts } from "@/data/insights";
+import {
+  getPublishedDirectors,
+  getPublishedInsights,
+  getPublishedWorks,
+} from "@/lib/content";
 
 // brief-rev12.md Bölüm 1.7 — GEO/AI görünürlüğü: sitemap.xml zorunlu.
-// Faz 1'de mevcut olan tüm statik rotalar listelenir; Faz 2+'de Works/
-// Insights gibi dinamik (Supabase tabanlı) rotalar buraya eklenecek.
+// Statik rotalar + Supabase'ten gelen yayınlanmış Works/Directors/Insights
+// detay sayfaları listelenir.
 const STATIC_PATHS = [
   "",
   "/work",
   "/what-we-do",
   "/culture",
+  "/culture/directors",
   "/insights",
   "/friends",
   "/contact",
@@ -21,12 +27,23 @@ const STATIC_PATHS = [
   "/accessibility",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const publishedInsightsPaths = insightsPosts
-    .filter((post) => post.is_published)
-    .map((post) => `/insights/${post.slug}`);
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [works, directors, dbInsights] = await Promise.all([
+    getPublishedWorks(),
+    getPublishedDirectors(),
+    getPublishedInsights(),
+  ]);
 
-  return [...STATIC_PATHS, ...publishedInsightsPaths].flatMap((path) =>
+  const insights =
+    dbInsights.length > 0 ? dbInsights : insightsPosts.filter((p) => p.is_published);
+
+  const dynamicPaths = [
+    ...works.map((work) => `/work/${work.slug}`),
+    ...directors.map((director) => `/culture/directors/${director.slug}`),
+    ...insights.map((post) => `/insights/${post.slug}`),
+  ];
+
+  return [...STATIC_PATHS, ...dynamicPaths].flatMap((path) =>
     routing.locales.map((locale) => ({
       url: `${SITE_URL}/${locale}${path}`,
       lastModified: new Date(),

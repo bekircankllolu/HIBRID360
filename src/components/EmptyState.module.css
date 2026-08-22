@@ -1,0 +1,10 @@
+.emptyState {
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  opacity: 0.75;
+}
+
+.emptyState p {
+  margin: 0;
+}
