@@ -1,0 +1,32 @@
+.page {
+  min-height: 60vh;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-8);
+}
+
+.title {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.75rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.cta {
+  align-self: flex-start;
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  padding: var(--space-3) var(--space-6);
+}
+
+.cta:hover {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}

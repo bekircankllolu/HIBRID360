@@ -16,12 +16,14 @@
       "cookie": "Çerez Politikası",
       "kvkk": "KVKK Aydınlatma Metni",
       "aiUsage": "AI Kullanımı ve Haklar",
-      "accessibility": "Erişilebilirlik Beyanı"
+      "accessibility": "Erişilebilirlik Beyanı",
+      "sustainability": "Sürdürülebilirlik"
     },
     "social": {
       "label": "Sosyal Medya"
     },
-    "copyright": "© 2026 Hibrid 360. All Rights Reserved."
+    "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
+    "carbonNeutral": "🌱 Karbon nötr"
   },
   "home": {
     "placeholder": "TODO: brief-rev12.md Bölüm 1 — ana sayfa içeriği"
@@ -120,5 +122,38 @@
   },
   "solarSystem": {
     "assetNote": "Hibrid taşlarının görselleri prodüksiyonda; sahne şimdilik marka renkleriyle çiziliyor."
+  },
+  "notFound": {
+    "cta": "İşlere git"
+  },
+  "legal": {
+    "pendingCounsel": "Bu sayfanın metni hukuk danışmanıyla birlikte hazırlanıyor. Aşağıdaki başlıklar sayfanın kapsayacağı konuları gösterir.",
+    "sectionPending": "Metin hazırlanıyor."
+  },
+  "accessibilityPage": {
+    "knownLimitations": "Known limitations — bilinen sınırlamalar",
+    "lastReviewed": "Last reviewed — {date}",
+    "reviewPending": "Last reviewed — yayın öncesi erişilebilirlik denetimi tamamlandığında girilecek."
+  },
+  "sustainability": {
+    "title": "Sustainability",
+    "pendingEvidence": "Karbon nötr iddiası, ölçüm ve sertifika verisi girilmeden yayınlanmaz. Aşağıdaki bölümler tamamlandığında bu sayfa ve footer rozeti yayına açılacak.",
+    "measurement": "Measurement — bu site sayfa görüntüleme başına yaklaşık {grams} g CO₂ salıyor; {tool} ile {date} tarihinde ölçüldü.",
+    "measurementPending": "Ölçüm bekleniyor: sayfa başına gram CO₂, ölçüm aracı ve tarih.",
+    "hostingPending": "Yeşil enerjiyle çalışan hosting sağlayıcısının adı bekleniyor.",
+    "offset": "Offset — kalan salım {program} üzerinden denkleştirildi, sertifika no. {certificate}.",
+    "offsetPending": "Denkleştirme bekleniyor: program adı ve sertifika numarası.",
+    "onSetPending": "Prodüksiyonda ulaşım, catering, atık ve ekipman uygulamaları yazılacak."
+  },
+  "consent": {
+    "label": "Çerez tercihleri",
+    "message": "Bu sitede yalnızca zorunlu çerezleri kullanıyoruz; analitik çerezler için onayınızı istiyoruz.",
+    "policyLink": "Çerez Politikası",
+    "accept": "Kabul et",
+    "reject": "Reddet",
+    "settings": "Ayarlar",
+    "save": "Tercihi kaydet",
+    "necessary": "Zorunlu çerezler (kapatılamaz)",
+    "analytics": "Analitik çerezler"
   }
 }

@@ -1,8 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import { PageStub } from "@/components/PageStub";
+import { LegalPage } from "@/components/legal/LegalPage";
+import { kvkkSections } from "@/data/legal";
 import type { Locale } from "@/i18n/routing";
 
-// TODO: brief-rev12.md Bölüm 14 — KVKK/GDPR aydınlatma metni
+// brief-rev12.md Bölüm 14 — yasal sayfa, iki dilli.
 export async function generateMetadata({
   params,
 }: {
@@ -13,12 +14,19 @@ export async function generateMetadata({
   return { title: t("kvkk") };
 }
 
-export default async function KvkkPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
   const t = await getTranslations("footer.legal");
-  return <PageStub title={t("kvkk")} locale={locale} path="/kvkk" />;
+  return (
+    <LegalPage
+      locale={locale}
+      title={t("kvkk")}
+      path="/kvkk"
+      sections={kvkkSections}
+    />
+  );
 }

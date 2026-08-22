@@ -20,6 +20,7 @@ const STATIC_PATHS = [
   "/what-we-do/ai-creative-production",
   "/culture",
   "/culture/directors",
+  "/culture/sustainability",
   "/insights",
   "/friends",
   "/contact",
@@ -27,7 +28,7 @@ const STATIC_PATHS = [
   "/privacy",
   "/cookie-policy",
   "/kvkk",
-  "/ai-usage-rights",
+  "/ai-policy",
   "/accessibility",
 ];
 

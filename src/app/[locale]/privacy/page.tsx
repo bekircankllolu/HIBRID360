@@ -1,8 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import { PageStub } from "@/components/PageStub";
+import { LegalPage } from "@/components/legal/LegalPage";
+import { privacySections } from "@/data/legal";
 import type { Locale } from "@/i18n/routing";
 
-// TODO: brief-rev12.md Bölüm 14 — Privacy Policy (iki dilli, KVKK/GDPR uyumlu)
+// brief-rev12.md Bölüm 14 — yasal sayfa, iki dilli.
 export async function generateMetadata({
   params,
 }: {
@@ -13,12 +14,19 @@ export async function generateMetadata({
   return { title: t("privacy") };
 }
 
-export default async function PrivacyPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
   const t = await getTranslations("footer.legal");
-  return <PageStub title={t("privacy")} locale={locale} path="/privacy" />;
+  return (
+    <LegalPage
+      locale={locale}
+      title={t("privacy")}
+      path="/privacy"
+      sections={privacySections}
+    />
+  );
 }

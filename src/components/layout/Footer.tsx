@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BRAND_SIGNATURE, SOCIAL_PLATFORMS } from "@/lib/site";
+import { isSustainabilityPublishable } from "@/data/sustainability";
 import styles from "./Footer.module.css";
 
 // Sosyal kanal URL'leri henüz teyit edilmedi (brief 17.2: bazıları
@@ -15,9 +16,15 @@ export function Footer() {
     { href: "/privacy", label: t("legal.privacy") },
     { href: "/cookie-policy", label: t("legal.cookie") },
     { href: "/kvkk", label: t("legal.kvkk") },
-    { href: "/ai-usage-rights", label: t("legal.aiUsage") },
+    { href: "/ai-policy", label: t("legal.aiUsage") },
     { href: "/accessibility", label: t("legal.accessibility") },
+    { href: "/culture/sustainability", label: t("legal.sustainability") },
   ];
+
+  // brief 1.9 — karbon nötr rozeti YALNIZCA ölçüm + sertifika verisi
+  // girildiğinde yayınlanır. Veri yokken rozet gösterilmez (greenwashing
+  // uyarısı, bkz. src/data/sustainability.ts).
+  const showCarbonBadge = isSustainabilityPublishable();
 
   return (
     <footer className={styles.footer}>
@@ -42,6 +49,12 @@ export function Footer() {
           </div>
           <p className={styles.copyright}>{t("copyright")}</p>
         </div>
+
+        {showCarbonBadge && (
+          <Link href="/culture/sustainability" className={styles.carbonBadge}>
+            {t("carbonNeutral")}
+          </Link>
+        )}
 
         {/* brief-rev12.md Bölüm 2.2: marka imzası, her sayfanın footer'ında,
             iki dilde de değişmez (Kademe 1-2 sabit). */}

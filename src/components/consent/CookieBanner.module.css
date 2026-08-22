@@ -1,0 +1,84 @@
+.banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  background: var(--color-brand-white);
+  color: var(--color-text-on-white);
+  border-top: 2px solid var(--color-brand-fuchsia);
+}
+
+.inner {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  justify-content: space-between;
+}
+
+.text {
+  margin: 0;
+  font-size: 0.875rem;
+  max-width: 44rem;
+}
+
+.link {
+  text-decoration: underline;
+}
+
+.settings {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Kabul ve reddet aynı görsel ağırlıkta — reddetmek kabul etmek kadar
+   kolay olmalı (KVKK/GDPR açık rıza ilkesi). */
+.primary {
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  border: 1px solid var(--color-brand-black);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: var(--color-brand-fuchsia);
+  border-color: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid var(--color-brand-black);
+  color: var(--color-text-on-white);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+
+.secondary:hover {
+  border-color: var(--color-brand-fuchsia);
+  color: var(--color-brand-fuchsia);
+}

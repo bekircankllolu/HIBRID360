@@ -16,12 +16,14 @@
       "cookie": "Cookie Policy",
       "kvkk": "KVKK Disclosure Notice",
       "aiUsage": "AI Usage & Rights",
-      "accessibility": "Accessibility Statement"
+      "accessibility": "Accessibility Statement",
+      "sustainability": "Sustainability"
     },
     "social": {
       "label": "Social"
     },
-    "copyright": "© 2026 Hibrid 360. All Rights Reserved."
+    "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
+    "carbonNeutral": "🌱 Carbon neutral"
   },
   "home": {
     "placeholder": "TODO: brief-rev12.md Section 1 — homepage content"
@@ -120,5 +122,38 @@
   },
   "solarSystem": {
     "assetNote": "The Hibrid stone artwork is in production; the scene is drawn in brand colours for now."
+  },
+  "notFound": {
+    "cta": "Go to the work"
+  },
+  "legal": {
+    "pendingCounsel": "The text of this page is being prepared with legal counsel. The headings below show what the page will cover.",
+    "sectionPending": "Text in preparation."
+  },
+  "accessibilityPage": {
+    "knownLimitations": "Known limitations",
+    "lastReviewed": "Last reviewed — {date}",
+    "reviewPending": "Last reviewed — to be filled in once the pre-launch accessibility audit is complete."
+  },
+  "sustainability": {
+    "title": "Sustainability",
+    "pendingEvidence": "A carbon neutral claim is not published without measurement and certificate data. This page and the footer badge go live once the sections below are complete.",
+    "measurement": "Measurement — this site emits approximately {grams} g CO₂ per page view, measured with {tool} on {date}.",
+    "measurementPending": "Awaiting measurement: grams of CO₂ per page view, tool name and date.",
+    "hostingPending": "Awaiting the name of the green hosting provider.",
+    "offset": "Offset — remaining emissions offset through {program}, certificate no. {certificate}.",
+    "offsetPending": "Awaiting offset details: programme name and certificate number.",
+    "onSetPending": "On-set practices — travel, catering, waste and equipment — to be written."
+  },
+  "consent": {
+    "label": "Cookie preferences",
+    "message": "We use only necessary cookies on this site; we ask for your consent before any analytics cookies.",
+    "policyLink": "Cookie Policy",
+    "accept": "Accept",
+    "reject": "Reject",
+    "settings": "Settings",
+    "save": "Save preference",
+    "necessary": "Necessary cookies (cannot be disabled)",
+    "analytics": "Analytics cookies"
   }
 }

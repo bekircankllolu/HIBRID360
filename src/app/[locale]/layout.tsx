@@ -7,6 +7,8 @@ import { routing, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
+import { CookieBanner } from "@/components/consent/CookieBanner";
+import { Analytics } from "@/components/consent/Analytics";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/schema";
 import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
@@ -102,6 +104,10 @@ export default async function LocaleLayout({
           {/* DECISIONS #3 (VARSAYILANLA İLERLE) — derece işareti imleci.
               prefers-reduced-motion ve dokunmatik cihazlarda kapalı. */}
           <CustomCursor />
+          {/* brief 1.8 / 14 — çerez onay bandı (kabul / reddet / ayarlar).
+              Analytics yalnızca rıza verildiğinde yüklenir (brief 1.7). */}
+          <CookieBanner />
+          <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

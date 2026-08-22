@@ -20,6 +20,10 @@ içeriği, kurumsal canlı yayın ve fotoğraf üretimi yapar.
   rakamlı, kaynaklı yazılar
 - [Friends](https://hibrid360.com/tr/friends): Müşteri sözleri
 - [Contact](https://hibrid360.com/tr/contact): İletişim, Brief Builder
+- [AI Usage & Rights](https://hibrid360.com/tr/ai-policy): Yapay zekâ
+  kullanımı, veri ve haklar politikası
+- [Accessibility](https://hibrid360.com/tr/accessibility): Erişilebilirlik
+  beyanı ve bilinen sınırlamalar
 
 Not: Bu dosya, ilgili sayfalar Faz 1-6 boyunca gerçek içerikle
 doldurulduğunda güncellenecektir (bkz. docs/ROADMAP.md).
