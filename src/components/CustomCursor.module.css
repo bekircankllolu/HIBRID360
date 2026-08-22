@@ -1,0 +1,21 @@
+/* DECISIONS #3 — Seçenek B: derece işareti (°), fuşya.
+   Sistem imleci gizlenmiyor; bu yalnızca üstüne binen bir katman. */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--color-brand-fuchsia);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    display: none;
+  }
+}

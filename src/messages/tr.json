@@ -117,5 +117,8 @@
       "unconfigured": "Form altyapısı henüz bağlanmadı. Bu arada bize doğrudan yazabilirsiniz: contact@hibrid360.com",
       "error": "Gönderim sırasında bir sorun oldu. Lütfen tekrar deneyin."
     }
+  },
+  "solarSystem": {
+    "assetNote": "Hibrid taşlarının görselleri prodüksiyonda; sahne şimdilik marka renkleriyle çiziliyor."
   }
 }

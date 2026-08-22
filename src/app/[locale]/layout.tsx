@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CustomCursor } from "@/components/CustomCursor";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/schema";
 import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
@@ -15,15 +16,20 @@ import "@/styles/globals.css";
  * Fontlar — CLAUDE.md marka sistemi: Montserrat (marka/başlık),
  * Inter (gövde, DECISIONS #2 VARSAYILANLA İLERLE).
  *
- * Performans notu: `weight` dizisi verilmediğinde next/font her ailenin
- * DEĞİŞKEN (variable) sürümünü tek dosya olarak yükler — sabit ağırlıklar
- * istendiğinde ağırlık başına ayrı dosya inerdi (5 dosya / ~238KB).
- * `latin-ext` alt kümesi Türkçe glifleri (ğ ş ı İ) için zorunlu.
+ * Performans notu (CLAUDE.md bütçesi):
+ *   - `weight` dizisi verilmediğinde next/font her ailenin DEĞİŞKEN
+ *     (variable) sürümünü tek dosya olarak yükler.
+ *   - `latin-ext` alt kümesi Türkçe glifleri (ğ ş ı İ) için zorunlu.
+ *   - Montserrat `preload: false`: hero'daki dev "HIBRID" yazısı artık
+ *     glif path'i olduğu için (bkz. src/data/wordmark.ts) ilk boyama bu
+ *     fontu beklemiyor. Preload'dan çıkarılınca ~130KB kritik yoldan
+ *     kalkıyor; başlıklar display:swap ile hemen sonra yerine oturuyor.
  */
 const montserrat = Montserrat({
   subsets: ["latin", "latin-ext"],
   variable: "--font-montserrat",
   display: "swap",
+  preload: false,
 });
 
 const inter = Inter({
@@ -93,6 +99,9 @@ export default async function LocaleLayout({
           <Header />
           {children}
           <Footer />
+          {/* DECISIONS #3 (VARSAYILANLA İLERLE) — derece işareti imleci.
+              prefers-reduced-motion ve dokunmatik cihazlarda kapalı. */}
+          <CustomCursor />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -117,5 +117,8 @@
       "unconfigured": "The form backend is not connected yet. In the meantime you can write to us directly: contact@hibrid360.com",
       "error": "Something went wrong while sending. Please try again."
     }
+  },
+  "solarSystem": {
+    "assetNote": "The Hibrid stone artwork is in production; the scene is drawn in brand colours for now."
   }
 }
