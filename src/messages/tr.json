@@ -62,5 +62,23 @@
   "friends": {
     "testimonialsTitle": "Ne diyorlar",
     "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."
+  },
+  "serviceProduction": {
+    "localeNote": "Bu sayfa, Türkiye'de çekim yapmak isteyen yurt dışı ajans, yapımcı ve markalar için hazırlandı; içeriği İngilizcedir.",
+    "evidenceTitle": "Kanıt",
+    "evidenceEmpty": "Hizmet verilen uluslararası yapımların listesi hazırlanıyor."
+  },
+  "howWeWork": {
+    "processTitle": "Süreç",
+    "budgetTitle": "Bütçe bandı",
+    "pendingShort": "belirlenecek",
+    "pendingHint": "Başlangıç bantları ve süreler netleştiğinde bu tablo güncellenecek.",
+    "cta": "Brief'ini oluştur",
+    "table": {
+      "format": "Format",
+      "startingFrom": "Başlangıç",
+      "scope": "Kapsam",
+      "duration": "Süre"
+    }
   }
 }

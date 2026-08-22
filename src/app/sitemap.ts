@@ -15,6 +15,8 @@ const STATIC_PATHS = [
   "",
   "/work",
   "/what-we-do",
+  "/what-we-do/service-production",
+  "/what-we-do/how-we-work",
   "/culture",
   "/culture/directors",
   "/insights",

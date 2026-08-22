@@ -62,5 +62,23 @@
   "friends": {
     "testimonialsTitle": "What they say",
     "testimonialsEmpty": "Client testimonials are on the way."
+  },
+  "serviceProduction": {
+    "localeNote": "",
+    "evidenceTitle": "Evidence",
+    "evidenceEmpty": "The list of international productions we have serviced is on the way."
+  },
+  "howWeWork": {
+    "processTitle": "Process",
+    "budgetTitle": "Budget bands",
+    "pendingShort": "to be set",
+    "pendingHint": "This table will be updated once the starting bands and durations are confirmed.",
+    "cta": "Build your brief",
+    "table": {
+      "format": "Format",
+      "startingFrom": "Starting from",
+      "scope": "Scope",
+      "duration": "Duration"
+    }
   }
 }
