@@ -114,9 +114,8 @@ export default async function HowWeWorkPage({
       </section>
 
       <section className={styles.cta}>
-        {/* brief 20.5: "Sayfanın altında tek CTA: Brief Builder (20.8)".
-            TODO: Faz 4 — /brief rotası açılınca CTA oraya bağlanacak. */}
-        <Link href="/contact" className={styles.ctaButton}>
+        {/* brief 20.5: "Sayfanın altında tek CTA: Brief Builder (20.8)". */}
+        <Link href="/brief" className={styles.ctaButton}>
           {t("cta")}
         </Link>
       </section>

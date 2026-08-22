@@ -1,0 +1,111 @@
+.hero {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-4) var(--space-12);
+}
+
+/* brief 11.4 Soru 5 / 11.8: "CREATE THE FUTURE." MONA'nın yanında,
+   neon mint yeşili. Baby pink zemin dışında mint kullanılmadığı için
+   başlık siyah zeminde beyaz kalır; mint yalnızca MONA bölümünde. */
+.heroTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2.25rem, 7vw, 5rem);
+  margin: 0 0 var(--space-6);
+}
+
+.heroLead {
+  max-width: 46rem;
+  margin: 0;
+}
+
+.block {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-4);
+}
+
+.blockTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  margin: 0 0 var(--space-4);
+}
+
+.blockBody {
+  max-width: 46rem;
+  margin: 0;
+}
+
+/* brief 11.8 blok 3 — kanıt satırı, sarı bant. Sarı zemin → siyah metin. */
+.proof {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}
+
+.proofList {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+}
+
+.closing {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 3vw, 2.25rem);
+  max-width: 42rem;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: var(--space-8);
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  padding: var(--space-3) var(--space-6);
+}
+
+.cta:hover {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}
+
+/* brief 11.6: replikler SEO için sayfada metin olarak da bulunur.
+   Görsel olarak katlanabilir, tarayıcılar ve AI araçları için tam metin. */
+.transcript {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-4) var(--space-24);
+}
+
+.transcript summary {
+  cursor: pointer;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+}
+
+.transcriptList {
+  margin: var(--space-6) 0 0;
+  max-width: 46rem;
+}
+
+.transcriptList dt {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  margin-top: var(--space-6);
+}
+
+.transcriptList dd {
+  margin: var(--space-2) 0 0;
+  opacity: 0.85;
+}

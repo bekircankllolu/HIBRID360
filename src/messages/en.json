@@ -80,5 +80,42 @@
       "scope": "Scope",
       "duration": "Duration"
     }
+  },
+  "mona": {
+    "sectionLabel": "MONA",
+    "headLabel": "MONA's screen",
+    "mediaPending": "MONA's character video and voice-over are in production; for now the lines run as text only.",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "stop": "Stop",
+    "next": "Next"
+  },
+  "aiCreativeProduction": {
+    "transcriptTitle": "All lines (text)"
+  },
+  "brief": {
+    "progress": "Question {current} of {total}",
+    "back": "Back",
+    "next": "Next",
+    "send": "Send it",
+    "sending": "Sending…",
+    "sent": "Your brief reached us.",
+    "summaryTitle": "Summary",
+    "notAnswered": "—",
+    "consent": "I have read the KVKK disclosure notice and consent to my data being processed for the proposal process.",
+    "privacyNote": "The data collected is used only for the proposal process.",
+    "aiNote": "This summary is prepared with AI support; the proposal is written by a human.",
+    "budgetPending": "Budget bands will be added to this list once they are confirmed.",
+    "fields": {
+      "whoFor": "Brand name and target audience",
+      "reference": "Reference link",
+      "email": "Email"
+    },
+    "errors": {
+      "consent": "You must tick the KVKK consent box to continue.",
+      "email": "Enter a valid email address.",
+      "unconfigured": "The form backend is not connected yet. In the meantime you can write to us directly: contact@hibrid360.com",
+      "error": "Something went wrong while sending. Please try again."
+    }
   }
 }

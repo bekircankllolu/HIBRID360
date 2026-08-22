@@ -44,3 +44,8 @@ export const SOCIAL_PLATFORMS = [
   "LinkedIn",
   "Spotify",
 ] as const;
+
+// TODO: brief 16 (video ve görsel varlık listesi) — marka favicon'u ve
+// og:image görseli teslim edilince public/ altına eklenecek. create-next-app
+// ile gelen 26KB'lık varsayılan favicon kaldırıldı (CLAUDE.md: placeholder
+// varlık production'a gitmez).

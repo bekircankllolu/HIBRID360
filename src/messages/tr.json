@@ -80,5 +80,42 @@
       "scope": "Kapsam",
       "duration": "Süre"
     }
+  },
+  "mona": {
+    "sectionLabel": "MONA",
+    "headLabel": "MONA'nın ekranı",
+    "mediaPending": "MONA'nın karakter videosu ve seslendirmesi prodüksiyonda; replikler şimdilik yalnızca yazı olarak akıyor.",
+    "mute": "Sesi kapat",
+    "unmute": "Sesi aç",
+    "stop": "Sustur",
+    "next": "Devam"
+  },
+  "aiCreativeProduction": {
+    "transcriptTitle": "Tüm replikler (metin)"
+  },
+  "brief": {
+    "progress": "Soru {current} / {total}",
+    "back": "Geri",
+    "next": "İleri",
+    "send": "Gönder",
+    "sending": "Gönderiliyor…",
+    "sent": "Brief'in bize ulaştı.",
+    "summaryTitle": "Özet",
+    "notAnswered": "—",
+    "consent": "KVKK aydınlatma metnini okudum, verilerimin teklif süreci için işlenmesine açık rıza veriyorum.",
+    "privacyNote": "Toplanan veri yalnızca teklif süreci için kullanılır.",
+    "aiNote": "Bu özet yapay zekâ desteğiyle hazırlanır; teklifi insan yazar.",
+    "budgetPending": "Bütçe bantları netleştiğinde bu listeye eklenecek.",
+    "fields": {
+      "whoFor": "Marka adı ve hedef kitle",
+      "reference": "Referans link",
+      "email": "E-posta"
+    },
+    "errors": {
+      "consent": "Devam etmek için KVKK açık rıza kutucuğunu işaretlemelisiniz.",
+      "email": "Geçerli bir e-posta adresi girin.",
+      "unconfigured": "Form altyapısı henüz bağlanmadı. Bu arada bize doğrudan yazabilirsiniz: contact@hibrid360.com",
+      "error": "Gönderim sırasında bir sorun oldu. Lütfen tekrar deneyin."
+    }
   }
 }

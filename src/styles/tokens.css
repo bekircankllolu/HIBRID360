@@ -18,8 +18,15 @@
   --color-text-on-black: var(--color-brand-white);
   --color-text-on-white: var(--color-brand-black);
 
-  /* MONA-only palette (neon mint on baby pink) is defined in Faz 4 once
-     exact hex values are confirmed against the character sheet — not set here. */
+  /* MONA-only palette — brief-rev12.md Bölüm 11.1: baby pink zemin, neon
+     mint yeşili metin, lila kostüm. CLAUDE.md: bu renkler YALNIZCA MONA
+     bölümünde ve büyük puntoda kullanılır, başka hiçbir yerde geçmez.
+     TODO: brief 11.7 — kesin hex değerleri karakter sayfası (character
+     sheet) üretilince marka ekibiyle teyit edilecek; aşağıdakiler brief'in
+     renk tarifine uyan, WCAG AA kontrastı sağlanmış çalışma değerleridir. */
+  --color-mona-baby-pink: #f7cfe0;
+  --color-mona-neon-mint: #0f6b4f;
+  --color-mona-lilac: #b49bd8;
 
   /* Typography */
   --font-brand: var(--font-montserrat), "Montserrat", system-ui, sans-serif;

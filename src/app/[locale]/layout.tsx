@@ -11,16 +11,23 @@ import { organizationJsonLd } from "@/lib/schema";
 import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 import "@/styles/globals.css";
 
+/**
+ * Fontlar — CLAUDE.md marka sistemi: Montserrat (marka/başlık),
+ * Inter (gövde, DECISIONS #2 VARSAYILANLA İLERLE).
+ *
+ * Performans notu: `weight` dizisi verilmediğinde next/font her ailenin
+ * DEĞİŞKEN (variable) sürümünü tek dosya olarak yükler — sabit ağırlıklar
+ * istendiğinde ağırlık başına ayrı dosya inerdi (5 dosya / ~238KB).
+ * `latin-ext` alt kümesi Türkçe glifleri (ğ ş ı İ) için zorunlu.
+ */
 const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-montserrat",
   display: "swap",
 });
 
 const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
   display: "swap",
 });

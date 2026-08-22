@@ -10,13 +10,13 @@ import styles from "./page.module.css";
  * Photography · AI Creative Production · Service Production (International) ·
  * How We Work.
  *
- * Faz 3'te son iki madde açıldı. Diğerleri kendi fazlarında eklenecek:
- * AI Creative Production → Faz 4 (MONA), Creative/Digital/Production vb.
- * mevcut siteden taşınacak.
+ * Faz 3'te Service Production ve How We Work, Faz 4'te AI Creative
+ * Production açıldı. Kalan maddeler mevcut siteden taşınacak.
  */
 export const metadata = { title: "What We Do" };
 
 const OPEN_PAGES = [
+  { href: "/what-we-do/ai-creative-production", label: "AI Creative Production" },
   { href: "/what-we-do/service-production", label: "Service Production (International)" },
   { href: "/what-we-do/how-we-work", label: "How We Work" },
 ];
@@ -30,7 +30,6 @@ const PENDING_PAGES = [
   "Cloud TV",
   "Event Management",
   "Photography",
-  "AI Creative Production",
 ];
 
 export default async function WhatWeDoPage({
@@ -51,8 +50,7 @@ export default async function WhatWeDoPage({
       <h1 className={styles.title}>WHAT WE DO</h1>
       <ul className={styles.subPages}>
         {PENDING_PAGES.map((label) => (
-          // TODO: brief Bölüm 9-10 — bu sayfalar mevcut siteden taşınacak;
-          // AI Creative Production Faz 4'te (MONA) açılacak.
+          // TODO: brief Bölüm 9-10 — bu sayfalar mevcut siteden taşınacak.
           <li key={label} className={styles.pending}>
             {label}
           </li>

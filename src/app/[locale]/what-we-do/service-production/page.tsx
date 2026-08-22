@@ -93,8 +93,7 @@ export default async function ServiceProductionPage({
           Send us the treatment and the shoot window. You get a local budget
           within two working days.
         </p>
-        {/* TODO: Faz 4 — Brief Builder (/brief) açılınca CTA oraya bağlanacak. */}
-        <Link href="/contact" className={styles.ctaButton}>
+        <Link href="/brief" className={styles.ctaButton}>
           Get a production quote
         </Link>
       </section>
