@@ -60,3 +60,10 @@
   opacity: 0.6;
   margin: 0;
 }
+
+.signature {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(0.9rem, 1.5vw, 1.125rem);
+  margin: 0;
+}

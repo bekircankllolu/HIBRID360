@@ -1,0 +1,25 @@
+# Hibrid 360
+
+> Türkiye's AI-native Creative Production Studio. Reklam filmi, dijital
+> içerik, canlı yayın ve yapay zekâ destekli yaratıcı prodüksiyon —
+> İstanbul merkezli, uluslararası prodüksiyonlara da hizmet veriyor.
+
+Hibrid 360, insan yaratıcılığını yapay zekâ hassasiyetiyle birleştiren bir
+prodüksiyon stüdyosudur. Reklam filmi, ürün tanıtım videosu, sosyal medya
+içeriği, kurumsal canlı yayın ve fotoğraf üretimi yapar.
+
+## Sayfalar
+
+- [Work](https://hibrid360.com/tr/work): Seçili işler ve vaka çalışmaları
+- [What We Do](https://hibrid360.com/tr/what-we-do): Creative, Production,
+  Digital, Live Broadcast, AI Creative Production, Service Production
+  (International), How We Work
+- [Culture](https://hibrid360.com/tr/culture): Who We Are, What We Believe,
+  Directors & Crew, Partners
+- [Insights](https://hibrid360.com/tr/insights): Prodüksiyon üzerine
+  rakamlı, kaynaklı yazılar
+- [Friends](https://hibrid360.com/tr/friends): Müşteri sözleri
+- [Contact](https://hibrid360.com/tr/contact): İletişim, Brief Builder
+
+Not: Bu dosya, ilgili sayfalar Faz 1-6 boyunca gerçek içerikle
+doldurulduğunda güncellenecektir (bkz. docs/ROADMAP.md).

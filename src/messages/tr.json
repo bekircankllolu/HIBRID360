@@ -25,5 +25,13 @@
   },
   "home": {
     "placeholder": "TODO: brief-rev12.md Bölüm 1 — ana sayfa içeriği"
+  },
+  "insights": {
+    "heroTitle": "WHAT WE LEARNED MAKING IT.",
+    "heroSubtitle": "Numbers, methods and mistakes from our own productions — written by the people who ran them.",
+    "categoryLabel": "Kategori",
+    "categoryAll": "Tümü",
+    "comingSoon": "İçerik hazırlanıyor.",
+    "readMore": "Devamını oku"
   }
 }

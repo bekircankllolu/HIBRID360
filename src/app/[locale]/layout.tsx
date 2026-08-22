@@ -6,6 +6,9 @@ import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationJsonLd } from "@/lib/schema";
+import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 import "@/styles/globals.css";
 
 const montserrat = Montserrat({
@@ -22,8 +25,6 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hibrid360.com";
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -37,7 +38,19 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: "Hibrid 360",
+    title: {
+      default: SITE_NAME,
+      template: `%s · ${SITE_NAME}`,
+    },
+    // brief-rev12.md Bölüm 1.7: anahtar kelime istifi temizlendi — tek,
+    // doğal cümle. Sayfa özelinde farklı bir açıklama hazır olduğunda
+    // ilgili page.tsx kendi generateMetadata'sında bunu geçersiz kılar.
+    description: SITE_TAGLINE,
+    openGraph: {
+      siteName: SITE_NAME,
+      locale,
+      type: "website",
+    },
     alternates: {
       canonical: `/${locale}`,
       languages: {
@@ -68,6 +81,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${montserrat.variable} ${inter.variable}`}>
       <body>
+        <JsonLd data={organizationJsonLd(locale as Locale)} />
         <NextIntlClientProvider messages={messages}>
           <Header />
           {children}

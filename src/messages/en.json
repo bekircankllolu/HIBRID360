@@ -25,5 +25,13 @@
   },
   "home": {
     "placeholder": "TODO: brief-rev12.md Section 1 — homepage content"
+  },
+  "insights": {
+    "heroTitle": "WHAT WE LEARNED MAKING IT.",
+    "heroSubtitle": "Numbers, methods and mistakes from our own productions — written by the people who ran them.",
+    "categoryLabel": "Category",
+    "categoryAll": "All",
+    "comingSoon": "Content is on the way.",
+    "readMore": "Read more"
   }
 }
