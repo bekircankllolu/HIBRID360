@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.option {
+  background: transparent;
+  border: 1px solid var(--color-brand-white);
+  color: var(--color-brand-white);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-body-medium);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--color-brand-fuchsia);
+  color: var(--color-brand-fuchsia);
+}
+
+.option[aria-current="true"] {
+  background: var(--color-brand-fuchsia);
+  border-color: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  cursor: default;
+}

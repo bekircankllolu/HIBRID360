@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "work": "WORK",
+    "whatWeDo": "WHAT WE DO",
+    "culture": "CULTURE",
+    "insights": "INSIGHTS",
+    "friends": "FRIENDS",
+    "contact": "CONTACT"
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  },
+  "footer": {
+    "legal": {
+      "privacy": "Privacy Policy",
+      "cookie": "Cookie Policy",
+      "kvkk": "KVKK Disclosure Notice",
+      "aiUsage": "AI Usage & Rights",
+      "accessibility": "Accessibility Statement"
+    },
+    "social": {
+      "label": "Social"
+    },
+    "copyright": "© 2026 Hibrid 360. All Rights Reserved."
+  },
+  "home": {
+    "placeholder": "TODO: brief-rev12.md Section 1 — homepage content"
+  }
+}

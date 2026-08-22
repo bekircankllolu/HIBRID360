@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "work": "WORK",
+    "whatWeDo": "WHAT WE DO",
+    "culture": "CULTURE",
+    "insights": "INSIGHTS",
+    "friends": "FRIENDS",
+    "contact": "CONTACT"
+  },
+  "languageSwitcher": {
+    "label": "Dil"
+  },
+  "footer": {
+    "legal": {
+      "privacy": "Gizlilik Politikası",
+      "cookie": "Çerez Politikası",
+      "kvkk": "KVKK Aydınlatma Metni",
+      "aiUsage": "AI Kullanımı ve Haklar",
+      "accessibility": "Erişilebilirlik Beyanı"
+    },
+    "social": {
+      "label": "Sosyal Medya"
+    },
+    "copyright": "© 2026 Hibrid 360. All Rights Reserved."
+  },
+  "home": {
+    "placeholder": "TODO: brief-rev12.md Bölüm 1 — ana sayfa içeriği"
+  }
+}

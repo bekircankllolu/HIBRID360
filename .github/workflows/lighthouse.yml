@@ -1,0 +1,28 @@
+name: Lighthouse CI
+
+# CLAUDE.md: "Her PR'da performans bütçesi kontrol edilir" — LCP (mobil)
+# < 2.5s, ilk yükleme < 2MB. Eşikler lighthouserc.js içinde tanımlı.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Run Lighthouse CI
+        run: npx lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

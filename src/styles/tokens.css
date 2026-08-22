@@ -1,0 +1,52 @@
+/**
+ * Design tokens — Hibrid 360
+ * Source of truth: CLAUDE.md "Marka sistemi (sabit — değiştirilmez)".
+ * Do not hardcode brand hex values anywhere else in the codebase —
+ * always reference these custom properties.
+ */
+:root {
+  /* Brand colors — fixed, do not change without a brief update */
+  --color-brand-black: #000000;
+  --color-brand-white: #ffffff;
+  --color-brand-fuchsia: #ff00ff; /* Pantone 806 C */
+  --color-brand-yellow: #fffc00; /* Pantone 803 C */
+
+  /* WCAG AA contrast rule (CLAUDE.md "Kontrast kuralı"):
+     fuchsia and yellow backgrounds must use black text, never white. */
+  --color-text-on-fuchsia: var(--color-brand-black);
+  --color-text-on-yellow: var(--color-brand-black);
+  --color-text-on-black: var(--color-brand-white);
+  --color-text-on-white: var(--color-brand-black);
+
+  /* MONA-only palette (neon mint on baby pink) is defined in Faz 4 once
+     exact hex values are confirmed against the character sheet — not set here. */
+
+  /* Typography */
+  --font-brand: var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  --font-weight-brand: 800; /* Montserrat Extra Bold — hero/dev başlık */
+  --font-weight-heading-bold: 700; /* Montserrat Bold — H1-H3 */
+  --font-weight-heading-semibold: 600; /* Montserrat SemiBold — H1-H3 */
+  --font-weight-body-regular: 400;
+  --font-weight-body-medium: 500;
+
+  /* Gövde metni: 16-18px, satır yüksekliği 1.5 (CLAUDE.md) */
+  --font-size-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --line-height-body: 1.5;
+
+  /* Spacing scale (8px base — engineering default, not a brand constraint) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Layout */
+  --content-max-width: 1440px;
+  --header-height: 4.5rem;
+}
