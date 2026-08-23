@@ -44,11 +44,7 @@ export function SolarSystem() {
     if (!canvas || !stage) return;
 
     const holder = Symbol("solar-system");
-    if (!acquireSceneLock(holder)) {
-      // Başka bir WebGL sahnesi zaten çalışıyor — bu sahne açılmaz.
-      setWebglFailed(true);
-      return;
-    }
+    let holdsLock = false;
 
     let scene: SceneHandle | null = null;
     try {
@@ -58,7 +54,6 @@ export function SolarSystem() {
     }
 
     if (!scene) {
-      releaseSceneLock(holder);
       setWebglFailed(true);
       return;
     }
@@ -98,15 +93,34 @@ export function SolarSystem() {
       frameId = requestAnimationFrame(loop);
     };
 
+    // Sahne kilidi görünürlükle alınır ve bırakılır: hero'daki HIBRID
+    // sahnesi ekrandan çıkınca kilidi serbest bırakır, bu sahne de kendi
+    // sırası gelince alır. Böylece "aynı anda en fazla BİR WebGL sahnesi"
+    // kuralı korunurken ikisi de çalışabilir.
     const observer = new IntersectionObserver(
       ([entry]) => {
-        visible = entry.isIntersecting;
-        if (visible && frameId === null) {
-          loop();
-        } else if (!visible && frameId !== null) {
+        const nowVisible = entry.isIntersecting;
+        if (nowVisible === visible) return;
+
+        if (nowVisible) {
+          if (!holdsLock) holdsLock = acquireSceneLock(holder);
+          // Kilit hâlâ başkasındaysa bu turda çizim yapılmaz; bir sonraki
+          // görünürlük değişiminde tekrar denenir (kalıcı yedeğe düşmez).
+          if (!holdsLock) return;
+          visible = true;
+          scene?.resize();
+          if (frameId === null) loop();
+        } else {
           // Ekrandan çıktı — döngü durur (CLAUDE.md performans kuralı).
-          cancelAnimationFrame(frameId);
-          frameId = null;
+          visible = false;
+          if (frameId !== null) {
+            cancelAnimationFrame(frameId);
+            frameId = null;
+          }
+          if (holdsLock) {
+            releaseSceneLock(holder);
+            holdsLock = false;
+          }
         }
       },
       { threshold: 0.05 },

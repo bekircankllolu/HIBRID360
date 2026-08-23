@@ -73,8 +73,8 @@ export const reductionMeasures: Array<{ tr: string; en: string }> = [
     tr: "Otomatik oynatma yerine talebe bağlı video: poster kare, preload=\"none\", yalnızca görünür alana girince yükleme.",
   },
   {
-    en: "No unused fonts or scripts; one variable font file per family, and the hero wordmark ships as vector paths instead of a font download.",
-    tr: "Kullanılmayan font ve script yok; aile başına tek değişken font dosyası, hero yazısı font indirmesi yerine vektör path olarak geliyor.",
+    en: "No unused fonts or scripts; one variable font file per family, and the hero wordmark ships as a 17KB alpha mask instead of a font download.",
+    tr: "Kullanılmayan font ve script yok; aile başına tek değişken font dosyası, hero yazısı font indirmesi yerine 17KB'lık alfa maskesi olarak geliyor.",
   },
   {
     en: "At most one WebGL scene runs at a time, and it stops as soon as it leaves the viewport.",

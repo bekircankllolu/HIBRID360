@@ -1,0 +1,57 @@
+/**
+ * HIBRID sıvı tipografi sahnesi.
+ *
+ * Ölçüler src/lib/hibrid-wordmark-scene.ts'teki sabitlerle eşleşir:
+ * maske 1920x528, üstte ve altta 30px pay (smear/swirl harf sınırının
+ * dışına taşabildiği için kırpılmasın diye) → kutu oranı 1920/588.
+ * aspect-ratio sabit tutuluyor ki görsel yüklenmeden de yer ayrılsın
+ * (CLS = 0).
+ */
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 588;
+}
+
+/*
+ * Statik PNG yedeği — LCP elemanı. Maske canvas kutusunun dikey
+ * ortasında, üstte/altta 30/588 = %5.102 pay bırakacak şekilde oturur;
+ * bu, shader'daki u_imageOffset ile birebir aynı hizadır, dolayısıyla
+ * WebGL açıldığında harfler yerinden oynamaz.
+ */
+.fallback {
+  position: absolute;
+  top: 5.102%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 220ms ease;
+}
+
+/* WebGL devreye girince yedek gizlenir — ikisi üst üste görünmez. */
+.fallbackHidden {
+  opacity: 0;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.canvasLive {
+  opacity: 1;
+}
+
+/* Hareket azaltma açıkken geçişler de kapanır (CLAUDE.md zorunlu kural). */
+@media (prefers-reduced-motion: reduce) {
+  .fallback,
+  .canvas {
+    transition: none;
+  }
+}

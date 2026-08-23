@@ -31,29 +31,8 @@
   opacity: 0.85;
 }
 
-/* brief 4.1 — "HIBRID" dev tipografi. Harf içleri video/degrade dolgulu.
-   Video varlığı gelene kadar degrade dolgu tek başına çalışır. */
-.wordmark {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Harflerin elastik fare tepkisi — her harf ayrı transform alır.
-   prefers-reduced-motion açıkken JS hiç transform yazmaz (bkz. bileşen). */
-.letter {
-  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .letter {
-    transition: none;
-  }
-}
-
-.sheen {
-  mix-blend-mode: screen;
-}
+/* brief 4.1 — "HIBRID" dev tipografi artık WebGL sahnesi olarak render
+   ediliyor; ölçü ve yerleşim kuralları HibridWebGL.module.css'te. */
 
 /* HOME-03 — "AI SHOWREEL" film alanı etiketi, sağ üst / menünün altı.
    Film A varlığı gelene kadar tam ekrana büyüyen etkileşim yok, yalnızca
