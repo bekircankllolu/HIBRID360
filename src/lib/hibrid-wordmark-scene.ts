@@ -264,8 +264,8 @@ export function createHibridWordmarkScene(
 
   const maskImage = new Image();
   maskImage.decoding = "async";
-  maskImage.onload = () => {
-    if (disposed) return;
+  const uploadMask = () => {
+    if (disposed || ready || !maskImage.naturalWidth) return;
     maskWidth = maskImage.naturalWidth || maskWidth;
     maskHeight = maskImage.naturalHeight || maskHeight;
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -274,10 +274,19 @@ export function createHibridWordmarkScene(
     ready = true;
     onReady?.();
   };
+  maskImage.onload = uploadMask;
   maskImage.onerror = () => {
     console.error("HIBRID mask image could not be loaded:", maskUrl);
   };
   maskImage.src = maskUrl;
+  if (maskImage.complete) {
+    uploadMask();
+  } else {
+    maskImage.decode?.().then(uploadMask).catch(() => {
+      // onerror/onload covers the visible fallback path; decode can reject
+      // on browsers that do not support async image decoding for this asset.
+    });
+  }
 
   /**
    * Canvas'ın çizim tamponunu CSS kutusuna göre ayarlar. Referans

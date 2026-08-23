@@ -1,6 +1,7 @@
 {
   "common": {
-    "pendingLabel": "İçerik hazırlanıyor"
+    "pendingLabel": "İçerik hazırlanıyor",
+    "skipToContent": "İçeriğe geç"
   },
   "nav": {
     "work": "WORK",
@@ -9,8 +10,9 @@
     "insights": "INSIGHTS",
     "friends": "FRIENDS",
     "contact": "CONTACT",
-    "menuOpen": "Menüyü aç",
-    "menuClose": "Menüyü kapat"
+    "menuLabel": "Ana menü",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
   },
   "languageSwitcher": {
     "label": "Dil"
@@ -68,6 +70,7 @@
   },
   "work": {
     "empty": "İş envanteri hazırlanıyor.",
+    "emptyDetail": "İşler; yayın izni, müşteri, yıl, format ve dosya konumu doğrulandıktan sonra eklenecek.",
     "showreelBody": "Hem kalpleri hem rakamları hareket ettiren bütünleşik marka deneyimleri.",
     "tagline": "Gerisini işlerimiz anlatsın!",
     "recentTitle": "Son İşler",

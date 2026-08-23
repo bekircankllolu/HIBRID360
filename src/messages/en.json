@@ -1,6 +1,7 @@
 {
   "common": {
-    "pendingLabel": "Content in progress"
+    "pendingLabel": "Content in progress",
+    "skipToContent": "Skip to content"
   },
   "nav": {
     "work": "WORK",
@@ -9,8 +10,9 @@
     "insights": "INSIGHTS",
     "friends": "FRIENDS",
     "contact": "CONTACT",
-    "menuOpen": "Open menu",
-    "menuClose": "Close menu"
+    "menuLabel": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "languageSwitcher": {
     "label": "Language"
@@ -67,7 +69,8 @@
     "readMore": "Read more"
   },
   "work": {
-    "empty": "The work inventory is on the way.",
+    "empty": "Work inventory is being prepared.",
+    "emptyDetail": "Projects will be added after publication permission, client, year, format and asset location are verified.",
     "showreelBody": "Integrated brand experiences that move hearts — and the needle.",
     "tagline": "And we let our work speak for itself!",
     "recentTitle": "Recent Works",

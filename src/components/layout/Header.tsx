@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./Header.module.css";
+
+const MENU_ID = "main-navigation";
 
 // GEN-01 (nihai copy deck, Ağustos 2026): ana menü tam olarak beş madde —
 // WORK · WHAT WE DO · CULTURE · FRIENDS · CONTACT. Insights bu listede
@@ -13,11 +15,16 @@ import styles from "./Header.module.css";
 // silinmedi — sadece ana menüden çıkarıldı, footer'a taşındı. TODO:
 // müşteriye sorulacak — Insights kalıcı olarak ana menüden mi çıktı, yoksa
 // bu deck'te unutuldu mu?
+//
+// 390px'te 5 madde + dil seçici tek satıra sığmıyordu (header taşıyordu).
+// ≤767px'te aynı <nav> CSS ile tam ekran panele dönüşür (bkz.
+// Header.module.css .navOpen) — masaüstünde ayrı bir DOM ağacı yok,
+// yalnızca stil değişiyor.
 export function Header() {
   const t = useTranslations("nav");
-  const [open, setOpen] = useState(false);
-  const menuId = useId();
-  const toggleRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const wasOpen = useRef(false);
 
@@ -29,96 +36,83 @@ export function Header() {
     { href: "/contact", label: t("contact") },
   ];
 
-  // 390px genişlikte header taşıyordu (5 madde + dil seçici tek satırda
-  // sığmıyordu) — mobilde tam ekran açılır menüye geçildi. Desktop nav
-  // (.nav/.desktopSwitcher) CSS ile değişmeden kalıyor, yalnızca ≤767px'te
-  // gizlenip yerini hamburger + panel alıyor.
   useEffect(() => {
-    if (open) {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isMenuOpen]);
+
+  // Panel açıkken arka plan kaymasın (tam ekran overlay) + odak ilk
+  // linke gitsin; kapanınca odak hamburger düğmesine dönsün (klavye
+  // kullanıcısı kaybolmasın).
+  useEffect(() => {
+    if (isMenuOpen) {
       firstLinkRef.current?.focus();
       const { overflow } = document.body.style;
       document.body.style.overflow = "hidden";
-      const onKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Escape") setOpen(false);
-      };
-      document.addEventListener("keydown", onKeyDown);
       wasOpen.current = true;
       return () => {
         document.body.style.overflow = overflow;
-        document.removeEventListener("keydown", onKeyDown);
       };
     }
     if (wasOpen.current) {
       wasOpen.current = false;
-      toggleRef.current?.focus();
+      menuButtonRef.current?.focus();
     }
-  }, [open]);
-
-  // Masaüstüne büyütülürken panel açık kalmasın (yalnızca mobil breakpoint
-  // için var).
-  useEffect(() => {
-    const query = window.matchMedia("(min-width: 768px)");
-    const onChange = () => setOpen(false);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
+  }, [isMenuOpen]);
 
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.logo} onClick={() => setOpen(false)}>
+        <Link href="/" className={styles.logo}>
           HIBRID 360
         </Link>
-        <nav className={styles.nav} aria-label="Main">
+
+        <nav
+          id={MENU_ID}
+          className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`}
+          aria-label={t("menuLabel")}
+        >
           <ul className={styles.navList}>
-            {items.map((item) => (
+            {items.map((item, index) => (
               <li key={item.href}>
-                <Link href={item.href}>{item.label}</Link>
+                <Link
+                  href={item.href}
+                  ref={index === 0 ? firstLinkRef : undefined}
+                >
+                  {item.label}
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
-        <div className={styles.desktopSwitcher}>
-          <LanguageSwitcher />
-        </div>
-        <button
-          ref={toggleRef}
-          type="button"
-          className={styles.menuToggle}
-          aria-expanded={open}
-          aria-controls={menuId}
-          aria-label={open ? t("menuClose") : t("menuOpen")}
-          onClick={() => setOpen((value) => !value)}
-        >
-          <span className={styles.menuToggleBar} aria-hidden="true" />
-          <span className={styles.menuToggleBar} aria-hidden="true" />
-          <span className={styles.menuToggleBar} aria-hidden="true" />
-        </button>
-      </div>
 
-      <div
-        id={menuId}
-        className={`${styles.mobileMenu} ${open ? styles.mobileMenuOpen : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={t("menuOpen")}
-        aria-hidden={open ? undefined : true}
-      >
-        <ul className={styles.mobileNavList}>
-          {items.map((item, index) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                ref={index === 0 ? firstLinkRef : undefined}
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className={styles.mobileSwitcher}>
+        <div className={styles.controls}>
           <LanguageSwitcher />
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className={styles.menuButton}
+            aria-expanded={isMenuOpen}
+            aria-controls={MENU_ID}
+            aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
+            onClick={() => setIsMenuOpen((current) => !current)}
+          >
+            <span className={styles.menuLine} />
+            <span className={styles.menuLine} />
+            <span className={styles.menuLine} />
+          </button>
         </div>
       </div>
     </header>

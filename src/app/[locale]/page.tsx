@@ -71,10 +71,11 @@ export default async function HomePage({
       {/* Görsel hero "MAKE IT MATTER / HIBRID" WebGL tipografisi h1 değil
           (SEO/GEO ve ekran okuyucu için gerekli semantik h1'i taşımıyor —
           bkz. HeroTypography). Tasarımı bozmadan sayfanın gerçek h1'i burada,
-          .srOnly ile ekranda görünmez ama başlık hiyerarşisinde birinci. */}
+          .srOnly ile ekranda görünmez ama başlık hiyerarşisinde birinci.
+          Locale'e göre çevrilir — TR sayfada çevrilmemiş İngilizce başlık
+          kalmasın (CLAUDE.md "Karışık dil yasak"). */}
       <h1 className="srOnly">
-        {SITE_NAME} —{" "}
-        {locale === "en" ? SITE_TAGLINE : SITE_TAGLINE_TR}
+        {SITE_NAME} — {locale === "en" ? SITE_TAGLINE : SITE_TAGLINE_TR}
       </h1>
       <HeroTypography />
       <RotatingSlogans />

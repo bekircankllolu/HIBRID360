@@ -104,7 +104,7 @@ export default async function WorkPage({
 
       <h2 className={styles.gridIntro}>{t("recentTitle")}</h2>
       {recent.length === 0 ? (
-        <EmptyState message={t("empty")} />
+        <EmptyState message={t("empty")} detail={t("emptyDetail")} />
       ) : (
         <div className={styles.grid}>
           {recent.map((work) => (
@@ -117,7 +117,9 @@ export default async function WorkPage({
         </div>
       )}
 
-      <WorkArchive works={works} confidentialLabel={t("confidentialClient")} />
+      {works.length > 0 && (
+        <WorkArchive works={works} confidentialLabel={t("confidentialClient")} />
+      )}
 
       <h2 className={styles.seoHeading}>{t("seoHeading")}</h2>
 

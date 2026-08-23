@@ -16,10 +16,6 @@
   background: var(--color-brand-white);
   color: var(--color-text-on-white);
   border-top: 2px solid var(--color-brand-fuchsia);
-  /* Güvenlik sınırı: bant hiçbir durumda ekranın büyük kısmını kaplamasın —
-     uzun TR metin + ayarlar paneli açıkken bile kaydırılabilir kalır. */
-  max-height: 70vh;
-  overflow-y: auto;
 }
 
 .inner {
@@ -96,11 +92,14 @@
   color: var(--color-brand-fuchsia);
 }
 
-/* Mobilde bant ilk ekranın büyük kısmını kaplıyordu (3 buton alt alta
-   sarıyordu). Daha sıkı boşluk + 2 sütunlu buton düzeni ile yükseklik
-   azaltıldı; erişilebilirlik (buton boyutu, kontrast, klavye odağı)
-   korunuyor. */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
+  .banner {
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: var(--space-3);
+    border: 1px solid var(--color-brand-fuchsia);
+  }
+
   .inner {
     padding: var(--space-3);
     gap: var(--space-3);
@@ -108,34 +107,31 @@
 
   .text {
     font-size: 0.8125rem;
-    max-width: none;
+    line-height: 1.35;
   }
 
   .settings {
-    gap: var(--space-3);
+    gap: var(--space-2);
     font-size: 0.8125rem;
   }
 
   .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-2);
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
   }
 
   .primary,
   .secondary {
-    padding: var(--space-3) var(--space-2);
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
     font-size: 0.8125rem;
-    text-align: center;
-    /* Dokunma hedefi WCAG 2.5.5 önerisi — en az 44px yükseklik. */
-    min-height: 2.75rem;
   }
+}
 
-  /* Üç buton varken (kabul/reddet/ayarlar) üçüncüsü tam genişlik ikinci
-     satıra düşer; tek buton (kaydet) kaldığında da tam genişlik olur. */
-  .actions > button:nth-child(3),
-  .actions > button:only-child {
-    grid-column: 1 / -1;
+@media (min-width: 768px) {
+  .actions {
+    flex: 0 0 auto;
   }
 }

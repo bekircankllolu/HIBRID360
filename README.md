@@ -1,17 +1,18 @@
 # Hibrid 360 — Web Sitesi
 
-Bağlam ve karar dosyaları için bkz. `CLAUDE.md` ve `docs/`. Faz durumu ve
-kalan işler için bkz. `docs/ROADMAP.md` ve `docs/DECISIONS.md`.
+Bağlam ve karar dosyaları için bkz. `CLAUDE.md` ve `docs/`.
 
-Canlı site **Vercel** üzerinde çalışır (bkz. "Vercel'e deploy" altında).
-Cloudflare Workers/Pages bu depoda hâlâ desteklenir ama şu an kullanılan
-platform değildir — bkz. "Alternatif: Cloudflare'e deploy".
+Bu depo **Faz 0 / erken canlı iskelet** aşamasındadır: routing, marka sistemi,
+hero/MONA iskeleti ve temel yasal/SEO sayfaları çalışır; Works, gerçek video
+varlıkları ve bazı kurumsal/yasal bilgiler hâlâ müşteri girdisi bekler.
+Faz planı: `docs/ROADMAP.md`.
 
 ## Stack
 
 - Next.js 14 (App Router) + TypeScript
 - next-intl ile `/tr` ve `/en` routing
-- **Hosting: Vercel** (canlı deploy) — bkz. "Vercel'e deploy"
+- Canlı ortam: Vercel (`https://hibrid-360.vercel.app/tr`)
+- Opsiyonel/önceki deploy planı: Cloudflare Workers (`@opennextjs/cloudflare`)
 - Lighthouse CI (performans bütçesi kontrolü)
 
 ## Geliştirme
@@ -31,45 +32,36 @@ npm run lint    # eslint
 npm run lhci    # Lighthouse CI (önce `npm run build && npm run start` gerekir)
 ```
 
-## Vercel'e deploy
+## Vercel deploy
 
-Canlı site (hibrid360.com) Vercel'de çalışıyor. Next.js 14 App Router,
-next-intl middleware'i ve SSR Vercel'de ek konfigürasyon gerekmeden
-desteklenir — proje Vercel'in standart Next.js build'iyle deploy edilir.
-
-1. Vercel'de projeyi bu repo'ya bağlayın (Import Project → GitHub).
-2. Build ayarları varsayılan Next.js algılamasıyla çalışır:
-   - Build command: `next build` (varsayılan, `package.json`'daki
-     `npm run build` ile aynı)
-   - Output: Vercel'in Next.js runtime'ı otomatik yönetir (ayrı bir
-     output dizini ayarlamaya gerek yok)
-3. Ortam değişkenleri (Vercel proje ayarları → Environment Variables):
-   - `NEXT_PUBLIC_SITE_URL` — **production** ortamında mutlaka
-     `https://hibrid360.com` olarak ayarlanmalı. Bu değişken
-     `src/lib/site.ts`'teki `SITE_URL` sabitinin tek girdisidir; robots.txt,
-     sitemap.xml, canonical/hreflang etiketleri ve schema.org verisi hepsi
-     buradan besleniyor (bkz. o dosyadaki öncelik sırası açıklaması).
-   - Preview/staging deploy'larda bu değişken ayarlanmazsa `SITE_URL`
-     otomatik olarak Vercel'in kendi verdiği önizleme domainine
-     (`VERCEL_PROJECT_PRODUCTION_URL`/`VERCEL_URL`) düşer — yanlışlıkla
-     `hibrid360.com` domainiyle indexlenmiş bir önizleme linki üretilmez.
-4. Her push'ta otomatik deploy (main/production branch → production,
-   diğer branch'ler → preview) — Vercel'in standart Git entegrasyonu.
-
-Yerelde Vercel CLI ile deploy/önizleme (opsiyonel, gerekli değil):
+Mevcut canlı site Vercel üzerinde çalışır. Vercel import/deploy akışı için
+standart Next.js build komutları kullanılır:
 
 ```bash
-npx vercel        # preview deploy
-npx vercel --prod # production deploy
+npm install
+npm run build
 ```
 
-## Alternatif: Cloudflare'e deploy
+Production domain netleştiğinde Vercel Project Settings → Environment
+Variables altında şunu ayarlayın:
 
-CLAUDE.md, hosting seçeneği olarak "Cloudflare Pages / Workers"ı da
-listeler; bu depo hâlâ [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare)
-adaptörüyle Cloudflare Workers'a deploy edilebilecek şekilde kurulu
-duruyor, fakat **şu an canlı site bu platformda çalışmıyor** — yalnızca
-Vercel'e alternatif/yedek bir yol olarak tutulur.
+```bash
+NEXT_PUBLIC_SITE_URL=https://hibrid360.com
+```
+
+`NEXT_PUBLIC_SITE_URL` verilirse canonical, sitemap, robots ve JSON-LD URL'leri
+her zaman bu değeri kullanır. Verilmezse kod sırasıyla Vercel'in
+`VERCEL_PROJECT_PRODUCTION_URL` ve `VERCEL_URL` değerlerini kullanır; bunlar da
+yoksa fallback `https://hibrid360.com` olur. Vercel'in verdiği domainsiz env
+değerlerine kod otomatik `https://` ekler.
+
+## Cloudflare deploy (opsiyonel / önceki plan)
+
+Bu repoda Cloudflare Workers yapılandırması hâlâ korunur, ancak mevcut canlı
+site Vercel'dedir. Cloudflare yoluna dönülürse proje Cloudflare Pages'in
+klasik statik build'i yerine
+[`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) adaptörüyle
+**Cloudflare Workers**'a deploy edilir.
 
 ```bash
 npm run preview   # yerelde wrangler ile önizleme
@@ -90,9 +82,10 @@ Konfigürasyon: `wrangler.jsonc`, `open-next.config.ts`.
 - Çeviri metinleri: `src/messages/tr.json`, `src/messages/en.json`.
 - hreflang etiketleri her sayfada `generateMetadata` → `alternates.languages`
   ile otomatik üretilir.
-- Ana menü kelimeleri (WORK, WHAT WE DO, CULTURE, INSIGHTS, FRIENDS,
-  CONTACT) marka dili olarak her iki dilde de İngilizce sabit kalır —
-  CLAUDE.md'deki slogan kuralıyla tutarlı bir varsayım.
+- Ana menü kelimeleri (WORK, WHAT WE DO, CULTURE, FRIENDS, CONTACT) marka
+  dili olarak her iki dilde de İngilizce sabit kalır — CLAUDE.md'deki slogan
+  kuralıyla tutarlı bir varsayım. INSIGHTS rotası korunur ve footer'da
+  erişilebilir kalır.
 
 ## Design tokens
 

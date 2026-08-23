@@ -26,3 +26,14 @@
   color: var(--color-text-on-fuchsia);
   cursor: default;
 }
+
+@media (max-width: 767px) {
+  .wrapper {
+    gap: var(--space-1);
+  }
+
+  .option {
+    min-width: 2.25rem;
+    padding: var(--space-1);
+  }
+}

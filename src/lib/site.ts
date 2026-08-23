@@ -5,36 +5,22 @@
 // kodlarla anılır). Bu dosya brief-rev12.md'deki daha eski değerlerin
 // yerini alır.
 
-// SITE_URL — robots.txt, sitemap.xml, canonical/hreflang ve schema.org
-// için TEK kaynak (bkz. src/app/robots.ts, src/app/sitemap.ts,
-// src/app/[locale]/layout.tsx metadataBase, src/lib/schema.ts — hepsi
-// bu sabiti kullanır, kendi domain mantığını türetmez).
-//
-// Öncelik sırası:
-//   1) NEXT_PUBLIC_SITE_URL — açıkça ayarlanmışsa (üretim domaini).
-//   2) Vercel'in kendi sağladığı önizleme/prod URL'i
-//      (VERCEL_PROJECT_PRODUCTION_URL, yoksa VERCEL_URL) — şema eksikse
-//      https:// eklenir. Bu olmadan preview/staging deploy'lar canlı
-//      hibrid360.com domainini sitemap/robots'a yazıyordu.
-//   3) https://hibrid360.com — yerel geliştirme ve env değişkeni hiç
-//      tanımlanmamışsa son çare.
-function resolveSiteUrl(): string {
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
-  if (explicit) return explicit.replace(/\/$/, "");
+function normalizeSiteUrl(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
 
-  const vercelHost =
-    process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-  if (vercelHost) {
-    const withScheme = /^https?:\/\//.test(vercelHost)
-      ? vercelHost
-      : `https://${vercelHost}`;
-    return withScheme.replace(/\/$/, "");
-  }
+  const withProtocol = /^https?:\/\//i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
 
-  return "https://hibrid360.com";
+  return withProtocol.replace(/\/+$/, "");
 }
 
-export const SITE_URL = resolveSiteUrl();
+export const SITE_URL =
+  normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ??
+  normalizeSiteUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
+  normalizeSiteUrl(process.env.VERCEL_URL) ??
+  "https://hibrid360.com";
 
 export const SITE_NAME = "Hibrid 360";
 
@@ -78,7 +64,8 @@ export const SOCIAL_PLATFORMS = [
   "Spotify",
 ] as const;
 
-// TODO: brief 16 (video ve görsel varlık listesi) — marka favicon'u ve
-// og:image görseli teslim edilince public/ altına eklenecek. create-next-app
-// ile gelen 26KB'lık varsayılan favicon kaldırıldı (CLAUDE.md: placeholder
-// varlık production'a gitmez).
+// Geçici marka favicon'u src/app/icon.svg — gerçek marka varlığı (brief 16)
+// teslim edilince değiştirilecek. create-next-app'in 26KB'lık varsayılan
+// favicon'u kaldırılmıştı (CLAUDE.md: placeholder varlık production'a
+// gitmez); bu SVG uydurma değil, marka renkleriyle kurulmuş minimal bir
+// yer tutucu. TODO: brief 16 — og:image görseli hâlâ eksik.

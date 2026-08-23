@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
@@ -69,6 +69,7 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale as Locale);
   const messages = await getMessages();
+  const t = await getTranslations("common");
 
   return (
     <html lang={locale}>
@@ -88,16 +89,18 @@ export default async function LocaleLayout({
       <body>
         <JsonLd data={organizationJsonLd(locale as Locale)} />
         <NextIntlClientProvider messages={messages}>
+          <a href="#main-content" className="skipLink">
+            {t("skipToContent")}
+          </a>
           <Header />
-          {/* Tek anlamlı <main> landmark: sayfa gövdesi (Header/Footer/CtaBand
-              dışında kalan her şey) burada. Bireysel page.tsx dosyaları kendi
-              <main> etiketini eklemez — kaynak tek buradadır. */}
-          <main>{children}</main>
-          {/* GEN-08/09 — sitenin tek birincil eylemi, her sayfanın altı,
-              footer'dan önce. Ayrıca ana sayfada HOME-12 kendi Work
-              linkine sahip; bu ikisi farklı hedeflere gider, birbirinin
-              yerini tutmaz. */}
-          <CtaBand />
+          <main id="main-content" tabIndex={-1}>
+            {children}
+            {/* GEN-08/09 — sitenin tek birincil eylemi, her sayfanın altı,
+                footer'dan önce. Ayrıca ana sayfada HOME-12 kendi Work
+                linkine sahip; bu ikisi farklı hedeflere gider, birbirinin
+                yerini tutmaz. */}
+            <CtaBand />
+          </main>
           <Footer />
           {/* DECISIONS #3 (VARSAYILANLA İLERLE) — derece işareti imleci.
               prefers-reduced-motion ve dokunmatik cihazlarda kapalı. */}
