@@ -1,0 +1,222 @@
+/**
+ * Culture alt sayfaları (Who We Are / What We Believe / Partners) için
+ * paylaşılan stil — service-page.module.css ile aynı desen, alıntı ve
+ * kurucu bloğu gibi Culture'a özgü sınıflar eklendi.
+ */
+.page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-4);
+}
+
+.heroTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2.25rem, 7vw, 5rem);
+  line-height: 1.05;
+  margin: 0 0 var(--space-8);
+}
+
+.heroQuotes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 40rem;
+  margin-bottom: var(--space-6);
+}
+
+.heroQuote {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  margin: 0;
+  font-style: italic;
+}
+
+.heroLead {
+  max-width: 44rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 46rem;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+  margin-top: var(--space-8);
+}
+
+.body p {
+  margin: 0;
+}
+
+.bodyTight {
+  margin-top: 0;
+}
+
+.section {
+  margin-top: var(--space-16);
+}
+
+.sectionTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+  margin-bottom: var(--space-6);
+}
+
+.blockTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  margin: 0 0 var(--space-4);
+}
+
+/* Kurucu bloğu (CUL-03/04) */
+.founder {
+  margin-top: var(--space-16);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  align-items: flex-start;
+}
+
+.founderPhoto {
+  width: 160px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  opacity: 0.5;
+  text-align: center;
+  padding: var(--space-2);
+}
+
+.founderInfo {
+  flex: 1;
+  min-width: 220px;
+}
+
+.founderName {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.founderTitle {
+  font-size: 0.8125rem;
+  opacity: 0.7;
+  margin: var(--space-1) 0 var(--space-4);
+}
+
+.founderQuote {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  max-width: 32rem;
+  margin: 0 0 var(--space-2);
+}
+
+.founderDisclaimer {
+  font-size: 0.6875rem;
+  opacity: 0.6;
+}
+
+/* Numaralı/etiketli liste blokları (WWB-02..05) */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.listTag {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.9375rem;
+  letter-spacing: 0.04em;
+}
+
+.listSentence {
+  max-width: 44rem;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+}
+
+.band {
+  margin-top: var(--space-16);
+  padding: var(--space-8) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.bandLead {
+  max-width: 44rem;
+  margin: 0 0 var(--space-4);
+  opacity: 0.85;
+}
+
+.manifesto {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  margin: 0 0 var(--space-8);
+}
+
+.quote {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-style: italic;
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  max-width: 40rem;
+  margin: 0 0 var(--space-2);
+}
+
+.quoteAuthor {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+/* Partners */
+.partnerItem {
+  margin-top: var(--space-16);
+  padding: var(--space-6) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.partnerName {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1.25rem;
+  margin: 0 0 var(--space-2);
+}
+
+.partnerBody {
+  margin: 0 0 var(--space-2);
+  opacity: 0.85;
+}
+
+.partnerLink {
+  font-size: 0.875rem;
+  color: var(--color-brand-fuchsia);
+}
+
+.partnerLink:hover {
+  text-decoration: underline;
+}

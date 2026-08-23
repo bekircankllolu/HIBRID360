@@ -100,6 +100,82 @@
       { "title": "AI Creative Production", "body": "AI films, AI photography, AI design and hybrid workflows." }
     ]
   },
+  "culture": {
+    "whoWeAre": {
+      "heroTitle": "WHO WE ARE",
+      "quote1": "“We are creating the visual experiences of the future.”",
+      "quote2": "“We don’t just create content, we design how brands will communicate in the future.”",
+      "heroLead": "We’re focused on creating and transforming brands and cultural value — across the world.",
+      "body": [
+        "Here at Hibrid 360, we believe your brand does not belong to you, it belongs to your customers.",
+        "It is your customers who take your brand to heart and enjoy what it offers.",
+        "That’s exactly why we’d rather hear our customers’ wants and needs than come up with the words you would want to hear.",
+        "We believe in a true partnership established through a meaningful collaboration — not unlike the trust that is inherent between travel companions on a long journey.",
+        "We are on the road for the long haul, looking for like-minded companions."
+      ],
+      "founderQuote": "“Before AI, this work took months. Now it takes seconds — and the time we save goes back into ideas.”",
+      "secondTitle": "WE ARE WHAT WE DO!",
+      "secondBody": [
+        "When you bring us your dream project, you would expect us to put our hearts and souls into it — and here at Hibrid 360 that’s exactly what we do.",
+        "We immerse ourselves in your project, brainstorm, and come up with the right concept for you, aesthetically and functionally.",
+        "You are not just an account for us: we open all lines of communication, and all our clients are understandably impressed by our dedication.",
+        "We look forward to showing you what we can achieve together!"
+      ],
+      "filmNote": "The crew film is on the way.",
+      "filmCta": "Meet the crew →"
+    },
+    "whatWeBelieve": {
+      "vision": {
+        "title": "OUR VISION",
+        "items": [
+          "INNOVATIVE CREATION",
+          "ACTIVE COLLABORATION",
+          "PROVIDING YOU WITH THE TOOLS YOU NEED",
+          "DELIVERING THE BEST SERVICES",
+          "SOLUTION, SOLUTION, SOLUTION"
+        ]
+      },
+      "mission": {
+        "title": "OUR MISSION",
+        "items": [
+          "RIGHT TEAM — EXPERIENCED TEAM",
+          "RIGHT TIMING — RELIABLE TIMING",
+          "RIGHT QUALITY — UNCOMPROMISING QUALITY",
+          "RIGHT PRICE — COMPETITIVE PRICES",
+          "RIGHT SOLUTIONS — ALWAYS THE RIGHT SOLUTIONS"
+        ]
+      },
+      "inspires": {
+        "title": "WHAT INSPIRES US",
+        "items": [
+          "Adapting and embracing proactive solutions and high-tech methods,",
+          "A youthful perspective that is evident in everything we do,",
+          "The energy of a Gen X spirit that even revives an old-school approach."
+        ]
+      },
+      "edict": {
+        "title": "OUR EDICT",
+        "items": [
+          "The term “thinking outside the box” was coined to describe us. We knit your solution detail by detail, and the end result fits you perfectly.",
+          "Less is more. Period. Your brand should be uncomplicated and concise.",
+          "A well-executed design is worth a thousand words.",
+          "Brands are living souls; they reflect how they are nurtured.",
+          "Timeless minimalism is perfection at its finest."
+        ]
+      },
+      "bandLead": "From idea to impact: Faster · Smarter · More Flexible · More Sustainable · More Human",
+      "manifesto": "We don’t replace creativity. We expand it.",
+      "quote": "“It is the time you have wasted for your rose that makes your rose so important.”",
+      "quoteAuthor": "— The Little Prince, Antoine de Saint-Exupéry"
+    },
+    "partners": {
+      "quote": "“First, make yourself a reputation for being a creative genius. Second, surround yourself with partners who are better than you are. Third, leave them to go get on with it.”",
+      "quoteAuthor": "— David Ogilvy",
+      "partnerName": "STUDIO FOOD ROOM",
+      "partnerBody": "An independent kitchen and photo studio within the group.",
+      "partnerUrl": "studiofoodroom.com"
+    }
+  },
   "services": {
     "evidenceTitle": "Evidence",
     "creative": {

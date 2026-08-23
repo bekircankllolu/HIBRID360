@@ -100,6 +100,82 @@
       { "title": "AI Creative Production", "body": "AI film, AI fotoğraf, AI tasarım ve hibrit iş akışları." }
     ]
   },
+  "culture": {
+    "whoWeAre": {
+      "heroTitle": "BİZ KİMİZ",
+      "quote1": "“Geleceğin görsel deneyimlerini üretiyoruz.”",
+      "quote2": "“Sadece içerik üretmiyoruz; markaların gelecekte nasıl iletişim kuracağını tasarlıyoruz.”",
+      "heroLead": "Dünyanın her yerinde markalar ve kültürel değer üretmeye ve dönüştürmeye odaklıyız.",
+      "body": [
+        "Hibrid 360’ta markanızın size değil, müşterilerinize ait olduğuna inanıyoruz.",
+        "Markanızı sahiplenen ve sunduğu şeyden keyif alan, sizin müşterileriniz.",
+        "Tam da bu yüzden duymak istediğiniz sözleri kurmak yerine müşterilerin ne istediğini, neye ihtiyacı olduğunu dinlemeyi tercih ediyoruz.",
+        "Uzun bir yolculukta yol arkadaşları arasındaki güvene benzeyen, anlamlı bir iş birliğiyle kurulmuş gerçek bir ortaklığa inanıyoruz.",
+        "Uzun yol için yoldayız ve aynı bakışa sahip yol arkadaşları arıyoruz."
+      ],
+      "founderQuote": "“Yapay zekâdan önce aylar süren işi şimdi saniyelerde yapıyoruz. Kazandığımız zamanı fikre geri koyuyoruz.”",
+      "secondTitle": "NE YAPIYORSAK OYUZ!",
+      "secondBody": [
+        "Hayalinizdeki projeyi bize getirdiğinizde, ona yüreğimizi koymamızı beklersiniz — Hibrid 360’ta tam olarak bunu yapıyoruz.",
+        "Projenizin içine giriyor, beyin fırtınası yapıyor ve size hem estetik hem işlevsel olarak doğru konsepti çıkarıyoruz.",
+        "Bizim için sadece bir müşteri hesabı değilsiniz: bütün iletişim kanallarını açıyoruz ve müşterilerimiz bu bağlılığı fark ediyor.",
+        "Birlikte neler başarabileceğimizi göstermek için sabırsızlanıyoruz!"
+      ],
+      "filmNote": "Ekip filmi hazırlanıyor.",
+      "filmCta": "Ekiple tanışın →"
+    },
+    "whatWeBelieve": {
+      "vision": {
+        "title": "VİZYONUMUZ",
+        "items": [
+          "YENİLİKÇİ ÜRETİM",
+          "AKTİF İŞ BİRLİĞİ",
+          "İHTİYACINIZ OLAN ARAÇLARI SUNMAK",
+          "EN İYİ HİZMETİ TESLİM ETMEK",
+          "ÇÖZÜM, ÇÖZÜM, ÇÖZÜM"
+        ]
+      },
+      "mission": {
+        "title": "MİSYONUMUZ",
+        "items": [
+          "DOĞRU EKİP — DENEYİMLİ EKİP",
+          "DOĞRU ZAMANLAMA — GÜVENİLİR ZAMANLAMA",
+          "DOĞRU KALİTE — ÖDÜN VERMEYEN KALİTE",
+          "DOĞRU FİYAT — REKABETÇİ FİYAT",
+          "DOĞRU ÇÖZÜM — HER ZAMAN DOĞRU ÇÖZÜM"
+        ]
+      },
+      "inspires": {
+        "title": "BİZE İLHAM VERENLER",
+        "items": [
+          "Proaktif çözümleri ve ileri teknolojiyi benimsemek,",
+          "Yaptığımız her işte görünen genç bir bakış,",
+          "Eski usulü bile canlandıran Gen X enerjisi."
+        ]
+      },
+      "edict": {
+        "title": "İLKELERİMİZ",
+        "items": [
+          "“Kalıpların dışında düşünmek” tabiri bizi anlatmak için icat edilmiş. Çözümünüzü ilmek ilmek örüyoruz; sonuç size tam oturuyor.",
+          "Az çoktur. Nokta. Markanız sade ve net olmalı.",
+          "İyi uygulanmış bir tasarım bin kelimeye bedeldir.",
+          "Markalar canlıdır; nasıl beslendiklerini yansıtırlar.",
+          "Zamansız minimalizm, mükemmelliğin en saf hâlidir."
+        ]
+      },
+      "bandLead": "Fikirden etkiye: Daha hızlı · Daha akıllı · Daha esnek · Daha sürdürülebilir · Daha insan",
+      "manifesto": "Yaratıcılığın yerini almıyoruz; alanını genişletiyoruz.",
+      "quote": "“Gülünü bu kadar önemli kılan, ona harcadığın zamandır.”",
+      "quoteAuthor": "— Küçük Prens, Antoine de Saint-Exupéry"
+    },
+    "partners": {
+      "quote": "“Önce kendine yaratıcı bir deha ünü kazandır. Sonra kendinden daha iyi ortaklarla çevrele. Üçüncüsü, işi onlara bırak.”",
+      "quoteAuthor": "— David Ogilvy",
+      "partnerName": "STUDIO FOOD ROOM",
+      "partnerBody": "Grup bünyesinde bağımsız bir mutfak ve çekim stüdyosu.",
+      "partnerUrl": "studiofoodroom.com"
+    }
+  },
   "services": {
     "evidenceTitle": "Kanıt",
     "creative": {
