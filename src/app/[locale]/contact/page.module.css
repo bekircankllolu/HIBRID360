@@ -1,0 +1,166 @@
+.page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-4);
+}
+
+.heroTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.05;
+  margin: 0 0 var(--space-8);
+  max-width: 50rem;
+}
+
+.heroLead {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  margin: 0 0 var(--space-2);
+}
+
+.heroBody {
+  max-width: 44rem;
+  margin: var(--space-4) 0 0;
+  opacity: 0.9;
+}
+
+.addressGrid {
+  margin-top: var(--space-16);
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .addressGrid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.addressLead {
+  max-width: 32rem;
+  margin: 0 0 var(--space-6);
+  opacity: 0.9;
+}
+
+.addressBlock address {
+  font-style: normal;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.addressBlock a {
+  color: var(--color-brand-fuchsia);
+}
+
+/* brief CON-03: "Harita siyah zemin üzerine sarı (#FFFC00) olacak." */
+.map {
+  background: var(--color-brand-black);
+  border: 1px solid var(--color-brand-yellow);
+  color: var(--color-brand-yellow);
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-6);
+  font-size: 0.8125rem;
+}
+
+.section {
+  margin-top: var(--space-24);
+}
+
+.sectionTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  margin: 0 0 var(--space-6);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 46rem;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+}
+
+.body p {
+  margin: 0;
+}
+
+.motionQuestion {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 1.125rem;
+  margin: var(--space-12) 0 var(--space-4);
+}
+
+.motionIntro {
+  max-width: 46rem;
+  margin: 0 0 var(--space-8);
+  opacity: 0.9;
+}
+
+.teams {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.teamTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1rem;
+  color: var(--color-brand-yellow);
+  margin: 0 0 var(--space-2);
+}
+
+.teamBody {
+  margin: 0;
+  font-size: 0.9375rem;
+  opacity: 0.85;
+}
+
+.formSection {
+  margin-top: var(--space-24);
+}
+
+.bookingRow {
+  margin-top: var(--space-24);
+  padding-top: var(--space-12);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
+}
+
+.bookingLead {
+  margin: 0;
+}
+
+.bookingLinks {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.bookingLinks a {
+  color: var(--color-brand-fuchsia);
+}
+
+.bookingLinks a:hover {
+  text-decoration: underline;
+}
+
+.socialInvite {
+  margin-top: var(--space-8);
+  font-size: 0.875rem;
+  opacity: 0.7;
+}

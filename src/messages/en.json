@@ -100,6 +100,35 @@
       { "title": "AI Creative Production", "body": "AI films, AI photography, AI design and hybrid workflows." }
     ]
   },
+  "contact": {
+    "heroTitle": "GET IN TOUCH AND LET’S START SOMETHING GREAT TOGETHER",
+    "heroLead1": "We would love to hear from you.",
+    "heroLead2": "Say HI",
+    "heroBody": "We’re all about connection — whether it’s a quick hello, a deep creative collab, or a follow on social media. Say hi and keep up with the magic we’re creating!",
+    "motionTitle": "WELCOME TO THE “MOTION OFFICE”",
+    "motionBody": [
+      "We are an Istanbul-based agency, and we are in the office wherever we are. Our team is international and informal.",
+      "You could say we have the biggest office in the world — with no walls and no limitations. This gives us all the benefits and advantages of Hibrid 360: our services go beyond the surface. We use art, design, technology and interactive, proactive storytelling to communicate the essence of your brand."
+    ],
+    "motionQuestion": "What is the Motion Office?",
+    "motionIntro": "Here at Hibrid 360, we believe the office starts and lives in the mind — and yet the basics of an office need to be anchored down. We have therefore divided our team into three levels:",
+    "teams": [
+      {
+        "title": "TEAM 1",
+        "body": "Based in our actual office and manages operations. This place is our think tank: design is created here, and application strategies are performed by this team."
+      },
+      {
+        "title": "TEAM 2",
+        "body": "Comes into play when it is needed. This team does not report to the office on a daily basis, but jumps into action depending on project requirements. We have a perfect working relationship going back ten years, and they are all professionals in their respective fields."
+      },
+      {
+        "title": "TEAM 3",
+        "body": "Called into action for long-term and complex projects, allowing us to readily fulfil whatever technology and advertising needs may arise. The products and services we provide in collaboration with Team 3 are generally more exclusive and “boutique” in nature."
+      }
+    ],
+    "bookingLead": "Prefer to talk?",
+    "socialInvite": "Follow the work"
+  },
   "culture": {
     "whoWeAre": {
       "heroTitle": "WHO WE ARE",

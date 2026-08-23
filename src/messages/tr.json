@@ -100,6 +100,35 @@
       { "title": "AI Creative Production", "body": "AI film, AI fotoğraf, AI tasarım ve hibrit iş akışları." }
     ]
   },
+  "contact": {
+    "heroTitle": "GET IN TOUCH AND LET’S START SOMETHING GREAT TOGETHER",
+    "heroLead1": "Sizden haber almak isteriz.",
+    "heroLead2": "Merhaba deyin",
+    "heroBody": "Bağlantı kurmayı seviyoruz — kısa bir merhaba, derin bir yaratıcı iş birliği ya da sosyal medyada bir takip; hepsi olur. Merhaba deyin, ürettiklerimizi takipte kalın!",
+    "motionTitle": "“MOTION OFFICE”A HOŞ GELDİNİZ",
+    "motionBody": [
+      "İstanbul merkezli bir ajansız ve nerede olursak olalım ofisteyiz. Ekibimiz uluslararası ve resmiyetten uzak.",
+      "Dünyanın en büyük ofisine sahibiz diyebilirsiniz — duvarsız ve sınırsız. Bu bize Hibrid 360’ın bütün avantajlarını veriyor: hizmetimiz yüzeyin ötesine geçiyor. Markanızın özünü anlatmak için sanatı, tasarımı, teknolojiyi ve etkileşimli, proaktif hikâye anlatımını kullanıyoruz."
+    ],
+    "motionQuestion": "Motion Office nedir?",
+    "motionIntro": "Hibrid 360’ta ofisin zihinde başladığına ve orada yaşadığına inanıyoruz — yine de bir ofisin temellerinin yere sabitlenmesi gerekir. Bu yüzden ekibimizi üç kademeye ayırdık:",
+    "teams": [
+      {
+        "title": "EKİP 1",
+        "body": "Fiilî ofisimizde çalışır ve operasyonu yönetir. Burası düşünce merkezimizdir: tasarım burada üretilir, uygulama stratejileri bu ekip tarafından yürütülür."
+      },
+      {
+        "title": "EKİP 2",
+        "body": "İhtiyaç olduğunda devreye girer. Bu ekip her gün ofise gelmez; projenin gereğine göre sahaya iner. On yıla dayanan kusursuz bir çalışma ilişkimiz var ve hepsi kendi alanında profesyonel."
+      },
+      {
+        "title": "EKİP 3",
+        "body": "Uzun soluklu ve karmaşık projeler için devreye alınır; ortaya çıkan her teknoloji ve reklam ihtiyacını karşılamamızı sağlar. Ekip 3 ile birlikte ürettiğimiz iş ve hizmetler genellikle daha özel ve “butik” niteliktedir."
+      }
+    ],
+    "bookingLead": "Konuşmayı mı tercih edersiniz?",
+    "socialInvite": "İşleri takip edin"
+  },
   "culture": {
     "whoWeAre": {
       "heroTitle": "BİZ KİMİZ",
