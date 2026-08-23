@@ -54,3 +54,31 @@
 .sheen {
   mix-blend-mode: screen;
 }
+
+/* HOME-03 — "AI SHOWREEL" film alanı etiketi, sağ üst / menünün altı.
+   Film A varlığı gelene kadar tam ekrana büyüyen etkileşim yok, yalnızca
+   etiket görünür (bkz. bileşen üstündeki TODO notu). */
+.showreel {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  text-align: right;
+  z-index: 1;
+}
+
+.showreelLabel {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--color-brand-yellow);
+}
+
+.showreelCta {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}

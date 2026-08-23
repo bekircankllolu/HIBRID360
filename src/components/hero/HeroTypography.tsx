@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   WORDMARK_GLYPHS,
@@ -35,11 +36,18 @@ import styles from "./HeroTypography.module.css";
  * alfa video dışa aktarımı prodüksiyon işi; varlık teslim edilince
  * <defs> içindeki degrade, path'lerden üretilen maske + video ile
  * değiştirilecek.
+ *
+ * HOME-03 — "AI SHOWREEL" film alanı etiketi sağ üstte, menünün altında.
+ * Deck: "Fare hareket ettikçe alan büyüyerek tam ekrana oturur." Film A
+ * varlığı henüz teslim edilmedi (bkz. what-we-do/ai-creative-production
+ * TODO'su) — bu yüzden yalnızca etiket render ediliyor, tam ekrana
+ * büyüyen etkileşim video geldiğinde eklenecek.
  */
 
 const VIEW_HEIGHT = WORDMARK_ASCENDER - WORDMARK_DESCENDER;
 
 export function HeroTypography() {
+  const t = useTranslations("home");
   const reducedMotion = usePrefersReducedMotion();
   const svgRef = useRef<SVGSVGElement>(null);
   const letterRefs = useRef<Array<SVGGElement | null>>([]);
@@ -108,6 +116,11 @@ export function HeroTypography() {
 
   return (
     <div className={styles.hero}>
+      <div className={styles.showreel}>
+        <span className={styles.showreelLabel}>{t("showreel.label")}</span>
+        <span className={styles.showreelCta}>{t("showreel.cta")}</span>
+      </div>
+
       <div className={styles.inner}>
         {/* brief 4.2 — SİTEYE GİRECEK METİN, TR sürümde de aynı. */}
         <p className={styles.kicker}>

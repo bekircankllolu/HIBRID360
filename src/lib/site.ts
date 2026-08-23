@@ -1,21 +1,24 @@
-// Site geneli sabitler — brief-rev12.md'den birebir alınan gerçek veriler.
-// Kaynak: Bölüm 13 (Contact — adres kutucuğu), Bölüm 2.2 (marka imzası),
-// Bölüm 5 (rakam filmi altı tanım cümlesi — meta description'da da aynısı
-// kullanılır).
+// Site geneli sabitler.
+// Kaynak: Hibrid360_Yeni_Site_Tum_Metinler.pdf (19 Ağustos 2026, Zühre
+// Didem Gödek onaylı nihai copy deck — brief-rev12.md'den sonra gelen,
+// "sitenin metin kaynağı" ilan edilmiş doküman; bloklar GEN-xx/HOME-xx vb.
+// kodlarla anılır). Bu dosya brief-rev12.md'deki daha eski değerlerin
+// yerini alır.
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hibrid360.com";
 
 export const SITE_NAME = "Hibrid 360";
 
-// brief-rev12.md Bölüm 5: "aynı cümle meta description ve LinkedIn bio'da
-// kullanılır" — bu yüzden schema.org description ve <meta name="description">
-// için de bu cümle tekil kaynak olarak kullanılıyor.
+// HOME-09: "aynı cümle ana sayfanın meta description'ında ve LinkedIn
+// biyografisinde de kullanılır" — bu yüzden schema.org description ve
+// <meta name="description"> için de bu cümle tekil kaynak.
 export const SITE_TAGLINE = "Türkiye's AI-native Creative Production Studio";
+export const SITE_TAGLINE_TR = "Türkiye'nin AI-native kreatif prodüksiyon stüdyosu";
 
-// brief-rev12.md Bölüm 2.2 — marka imzası, her sayfanın footer'ında, değişmez.
+// GEN-04 — marka imzası, her sayfanın footer'ında, değişmez, iki dilde de İngilizce.
 export const BRAND_SIGNATURE = "The future of creativity isn't artificial. It's hybrid.";
 
-// brief-rev12.md Bölüm 13 — Contact "Adres kutucuğu" SİYEGE GİRECEK METİN.
+// GEN-05 / CON-03 — footer ve Contact adres kutucuğu, birebir.
 export const CONTACT = {
   addressLines: [
     "Feneryolu Mahallesi, Ebru Sk.",
@@ -25,9 +28,10 @@ export const CONTACT = {
   streetAddress: "Feneryolu Mahallesi, Ebru Sk. Manolya Apt. No: 3A / 3B",
   addressLocality: "Kadıköy, İstanbul",
   addressCountry: "TR",
-  phone: "+90 216 606 88 98",
-  // DECISIONS.md #5: e-posta adresi resmi olarak AÇIK, ancak brief'in
-  // "SİTEYE GİRECEK METİN" kutusunda zaten bu adresle geçiyor.
+  // Nihai copy deck'te telefon numarası değişti (brief-rev12'deki sabit
+  // hat +90 216 606 88 98 yerine bu cep numarası geldi) — GEN-05 ve
+  // CON-03'te aynı numara iki kez teyit ediliyor.
+  phone: "+90 532 613 50 45",
   email: "contact@hibrid360.com",
 } as const;
 

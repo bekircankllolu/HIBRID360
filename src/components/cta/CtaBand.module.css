@@ -1,0 +1,29 @@
+.band {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.secondary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3) var(--space-6);
+}
+
+.secondaryLink {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.875rem;
+  border-bottom: 1px solid transparent;
+}
+
+.secondaryLink:hover {
+  color: var(--color-brand-fuchsia);
+  border-bottom-color: var(--color-brand-fuchsia);
+}

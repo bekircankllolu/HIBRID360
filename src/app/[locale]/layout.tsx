@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CtaBand } from "@/components/cta/CtaBand";
 import { CustomCursor } from "@/components/CustomCursor";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { ConsentInitScript } from "@/components/consent/ConsentInitScript";
@@ -87,6 +88,11 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <Header />
           {children}
+          {/* GEN-08/09 — sitenin tek birincil eylemi, her sayfanın altı,
+              footer'dan önce. Ayrıca ana sayfada HOME-12 kendi Work
+              linkine sahip; bu ikisi farklı hedeflere gider, birbirinin
+              yerini tutmaz. */}
+          <CtaBand />
           <Footer />
           {/* DECISIONS #3 (VARSAYILANLA İLERLE) — derece işareti imleci.
               prefers-reduced-motion ve dokunmatik cihazlarda kapalı. */}

@@ -1,26 +1,40 @@
 import { HeroTypography } from "@/components/hero/HeroTypography";
 import { RotatingSlogans } from "@/components/hero/RotatingSlogans";
 import { SolarSystem } from "@/components/hero/SolarSystem";
+import { LessTalk } from "@/components/home/LessTalk";
+import { ServiceLinksRow } from "@/components/home/ServiceLinksRow";
+import { MakeBrandBand } from "@/components/home/MakeBrandBand";
+import { Tagline } from "@/components/home/Tagline";
+import { ReachOut } from "@/components/home/ReachOut";
+import { ClosingBand } from "@/components/home/ClosingBand";
+import { ClosingBody } from "@/components/home/ClosingBody";
 import { Mona } from "@/components/mona/Mona";
 import { homepageLines } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
 
 /**
- * Ana sayfa — brief-rev12.md Bölüm 4 ve 5.
+ * Ana sayfa — HOME-01..13 (nihai copy deck, Ağustos 2026).
  *
  * Landing katmanı ayrı bir URL değil, ana sayfanın hero bölümü (brief
  * Bölüm 4 KARAR kutusu: ayrı splash sayfa Google'a "içeriksiz sayfa"
  * sinyali verir).
  *
- * TODO: brief 4.3 — menü altındaki film gösterim alanı (AI Showreel
- * Film A) varlık teslim edilince eklenecek; ses varsayılan kapalı,
- * ses açma düğmesi görünür olacak.
- * TODO: brief 4.6 — scroll ortasındaki iletişim ikonları + tek soruluk
- * adımlarla ilerleyen pop-up. Form akışı Brief Builder ile aynı mantıkta
- * kurulacak (bkz. src/components/brief/BriefBuilder.tsx).
+ * Ekran sırası deck'teki HOME-01..13 numaralamasıyla birebir:
+ *   01-03 HeroTypography (dev tipografi + hero sloganı + showreel etiketi)
+ *   04    RotatingSlogans
+ *   05    LessTalk
+ *   06    ServiceLinksRow
+ *   07    MakeBrandBand
+ *   08    SolarSystem
+ *   09    Tagline
+ *   10    Mona (compact)
+ *   11    ReachOut
+ *   12    ClosingBand
+ *   13    ClosingBody
+ *
  * TODO: brief Bölüm 4 KARAR — "İlk ziyaretten sonra animasyonun kısa
- * sürümü gösterilir (çerezle hatırlanır)": çerez onay bandı Faz 6'da
- * kurulunca, rıza durumuna bağlı olarak eklenecek.
+ * sürümü gösterilir (çerezle hatırlanır)": çerez onay bandı kuruldu, rıza
+ * durumuna bağlı kısa sürüm mantığı henüz eklenmedi.
  */
 export default async function HomePage({
   params,
@@ -33,10 +47,17 @@ export default async function HomePage({
     <div>
       <HeroTypography />
       <RotatingSlogans />
+      <LessTalk />
+      <ServiceLinksRow />
+      <MakeBrandBand />
       <SolarSystem />
+      <Tagline />
       {/* brief 11.5 — ana sayfadaki kısa MONA sürümü: iki replik, uzun
           konuşma yok, ziyaretçi AI sayfasına davet edilir. */}
       <Mona locale={locale} lines={homepageLines} variant="compact" />
+      <ReachOut />
+      <ClosingBand />
+      <ClosingBody />
     </div>
   );
 }

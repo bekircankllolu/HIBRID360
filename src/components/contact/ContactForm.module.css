@@ -1,0 +1,67 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 32rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: 0.875rem;
+}
+
+.field input,
+.field textarea {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--color-brand-white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: var(--space-3);
+}
+
+.field textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--color-brand-fuchsia);
+  outline-offset: 1px;
+}
+
+.consent {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  font-size: 0.8125rem;
+}
+
+.submit {
+  align-self: flex-start;
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  border: none;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  padding: var(--space-3) var(--space-6);
+  cursor: pointer;
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.success {
+  font-size: 1.125rem;
+}
+
+.error {
+  border-left: 2px solid var(--color-brand-fuchsia);
+  padding-left: var(--space-4);
+  font-size: 0.875rem;
+}

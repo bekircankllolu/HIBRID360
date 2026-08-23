@@ -27,7 +27,31 @@
     "carbonNeutral": "🌱 Carbon neutral"
   },
   "home": {
-    "placeholder": "TODO: brief-rev12.md Section 1 — homepage content"
+    "showreel": {
+      "label": "AI SHOWREEL",
+      "cta": "Move your cursor"
+    },
+    "lessTalk": {
+      "title": "Less Talk, More Work",
+      "paragraphs": [
+        "Hibrid 360 believes in proactive collaboration. That is our way for a solution. There is a reason our name has “360” in it.",
+        "360 does not merely imply strategic positioning, branding and design, but expresses everything we deliver — development, sourcing, manufacturing and launching — a true holistic, again, 360 approach to building companies.",
+        "We love diving deep into your brand, past the figures and bottom lines, to re-think and re-shape your in-store experience while rebranding “your brand”."
+      ]
+    },
+    "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
+    "tagline": "Türkiye's AI-native Creative Production Studio",
+    "reachOut": {
+      "title": "What can we do for you?",
+      "cta": "Reach out",
+      "popupIntro": "Hi. Tell us what you’re making and when — we’ll take it from there.",
+      "close": "Close"
+    },
+    "closing": {
+      "title": "THE BEST WORK DOESN’T FEEL LIKE WORK",
+      "subtitle": "Wanna Know What Keeps Us Busy?"
+    },
+    "closingBody": "Here at Hibrid 360, we are serious about the final touch for that gleaming finish of your product. That’s exactly why we create a distinct production model, a tailor-made solution that fits your needs."
   },
   "insights": {
     "heroTitle": "WHAT WE LEARNED MAKING IT.",
@@ -141,13 +165,39 @@
   },
   "consent": {
     "label": "Cookie preferences",
-    "message": "We use only necessary cookies on this site; we ask for your consent before any analytics cookies.",
+    "message": "We use cookies to understand how this site is used and to improve it.",
     "policyLink": "Cookie Policy",
-    "accept": "Accept",
-    "reject": "Reject",
-    "settings": "Settings",
+    "accept": "Accept all",
+    "reject": "Reject non-essential",
+    "settings": "Cookie settings",
     "save": "Save preference",
     "necessary": "Necessary cookies (cannot be disabled)",
     "analytics": "Analytics cookies"
+  },
+  "cta": {
+    "primary": "Let's Build Something Extraordinary.",
+    "bookCall": "Book a 30-minute intro call",
+    "whatsapp": "WhatsApp"
+  },
+  "video": {
+    "soundOn": "Sound on",
+    "soundOff": "Sound off",
+    "subtitles": "Subtitles",
+    "playShowreel": "Play showreel",
+    "watchFilm": "Watch the film",
+    "aiGenerated": "AI-generated animation"
+  },
+  "contactForm": {
+    "name": "Your name",
+    "brand": "Brand / company",
+    "message": "What would you like to make?",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "consent": "I have read and accept the Privacy Policy and the KVKK notice.",
+    "send": "Send",
+    "sending": "Sending…",
+    "success": "Thank you — we've got it. We reply within one working day.",
+    "error": "Something didn't go through. Please try again or write to contact@hibrid360.com.",
+    "errorConsent": "You must tick the consent box to continue."
   }
 }

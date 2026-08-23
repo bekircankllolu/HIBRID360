@@ -27,7 +27,31 @@
     "carbonNeutral": "🌱 Karbon nötr"
   },
   "home": {
-    "placeholder": "TODO: brief-rev12.md Bölüm 1 — ana sayfa içeriği"
+    "showreel": {
+      "label": "AI SHOWREEL",
+      "cta": "İmleci hareket ettirin"
+    },
+    "lessTalk": {
+      "title": "Az Laf, Çok İş",
+      "paragraphs": [
+        "Hibrid 360 proaktif iş birliğine inanır. Çözüme giden yol budur. Adımızda “360” olmasının bir sebebi var.",
+        "360 yalnızca stratejik konumlandırma, marka ve tasarım demek değil; geliştirme, tedarik, üretim ve lansmana kadar teslim ettiğimiz her şeyi anlatır — markaları kurarken uçtan uca, yani 360 bir yaklaşım.",
+        "Markanızın içine girmeyi seviyoruz: rakamların ve bilançonun ötesine geçip, markanızı yeniden konumlandırırken mağaza deneyiminizi de yeniden düşünüp yeniden kuruyoruz."
+      ]
+    },
+    "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
+    "tagline": "Türkiye'nin AI-native kreatif prodüksiyon stüdyosu",
+    "reachOut": {
+      "title": "Sizin için ne yapabiliriz?",
+      "cta": "Bize ulaşın",
+      "popupIntro": "Merhaba. Neyi, ne zaman yapmak istediğinizi yazın — gerisini biz hallederiz.",
+      "close": "Kapat"
+    },
+    "closing": {
+      "title": "EN İYİ İŞ, İŞ GİBİ HİSSETTİRMEZ",
+      "subtitle": "Neyle meşgulüz, görmek ister misiniz?"
+    },
+    "closingBody": "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz. Tam da bu yüzden her iş için ayrı bir prodüksiyon modeli, size özel bir çözüm kuruyoruz."
   },
   "insights": {
     "heroTitle": "WHAT WE LEARNED MAKING IT.",
@@ -141,13 +165,39 @@
   },
   "consent": {
     "label": "Çerez tercihleri",
-    "message": "Bu sitede yalnızca zorunlu çerezleri kullanıyoruz; analitik çerezler için onayınızı istiyoruz.",
+    "message": "Bu siteyi nasıl kullandığınızı anlamak ve geliştirmek için çerez kullanıyoruz.",
     "policyLink": "Çerez Politikası",
-    "accept": "Kabul et",
-    "reject": "Reddet",
-    "settings": "Ayarlar",
+    "accept": "Tümünü kabul et",
+    "reject": "Zorunlu olmayanları reddet",
+    "settings": "Çerez ayarları",
     "save": "Tercihi kaydet",
     "necessary": "Zorunlu çerezler (kapatılamaz)",
     "analytics": "Analitik çerezler"
+  },
+  "cta": {
+    "primary": "Birlikte sıra dışı bir şey üretelim.",
+    "bookCall": "30 dakikalık tanışma görüşmesi ayarla",
+    "whatsapp": "WhatsApp"
+  },
+  "video": {
+    "soundOn": "Sesi aç",
+    "soundOff": "Sesi kapat",
+    "subtitles": "Altyazı",
+    "playShowreel": "Showreel'i oynat",
+    "watchFilm": "Filmi izle",
+    "aiGenerated": "AI ile canlandırılmıştır"
+  },
+  "contactForm": {
+    "name": "Adınız",
+    "brand": "Marka / şirket",
+    "message": "Ne yapmak istiyorsunuz?",
+    "email": "E-posta",
+    "phone": "Telefon (opsiyonel)",
+    "consent": "Gizlilik Politikası'nı ve KVKK Aydınlatma Metni'ni okudum, kabul ediyorum.",
+    "send": "Gönder",
+    "sending": "Gönderiliyor…",
+    "success": "Teşekkürler — ulaştı. Bir iş günü içinde dönüyoruz.",
+    "error": "Bir sorun oldu. Tekrar deneyin veya contact@hibrid360.com adresine yazın.",
+    "errorConsent": "Devam etmek için onay kutucuğunu işaretlemelisiniz."
   }
 }

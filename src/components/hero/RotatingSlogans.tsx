@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale } from "next-intl";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import styles from "./RotatingSlogans.module.css";
 
 /**
- * Dönüşümlü slogan bloğu — brief-rev12.md Bölüm 4.4.
+ * Dönüşümlü slogan bloğu — HOME-04 (nihai copy deck, Ağustos 2026).
  *
- * Üç slogan SİTEYE GİRECEK METİN kutularından birebir; marka dili olduğu
- * için TR sürümde de İngilizce kalır (CLAUDE.md i18n kuralı).
+ * "lead" (büyük harf slogan satırı) marka dili olduğu için her iki dilde de
+ * İngilizce kalır. "body" (alt satır) deck'te TR çevirisiyle birlikte
+ * verilmiş — 1. ve 2. slogan için TR'de çevrilir, 3. slogan'ın hiç body'si
+ * yok (her iki dilde de).
  *
  * Zamanlama brief'in önerdiği gibi: her blok 4,5 sn ekranda kalır,
  * 0,6 sn'de yazılır, 0,4 sn'de çıkar. Kullanıcı scroll ederse döngü durur.
@@ -19,15 +22,21 @@ import styles from "./RotatingSlogans.module.css";
 const SLOGANS = [
   {
     lead: "PRECISE. VISIONARY. HUMAN.",
-    body: "We design digital experiences people remember.",
+    body: {
+      en: "We design digital experiences people remember.",
+      tr: "Akılda kalan dijital deneyimler tasarlıyoruz.",
+    },
   },
   {
     lead: "PURE. SIMPLE. POWERFUL.",
-    body: "AI-native creative production for brands that shape what's next.",
+    body: {
+      en: "AI-native creative production for brands that shape what's next.",
+      tr: "Sıradakini belirleyen markalar için AI-native kreatif prodüksiyon.",
+    },
   },
   {
     lead: "Human creativity. AI precision. Real impact.",
-    body: "",
+    body: null,
   },
 ];
 
@@ -35,6 +44,7 @@ const HOLD_MS = 4500;
 const EXIT_MS = 400;
 
 export function RotatingSlogans() {
+  const locale = useLocale() as "tr" | "en";
   const reducedMotion = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   const [exiting, setExiting] = useState(false);
@@ -71,7 +81,7 @@ export function RotatingSlogans() {
           {SLOGANS.map((slogan) => (
             <li key={slogan.lead}>
               <p className={styles.lead}>{slogan.lead}</p>
-              {slogan.body && <p className={styles.body}>{slogan.body}</p>}
+              {slogan.body && <p className={styles.body}>{slogan.body[locale]}</p>}
             </li>
           ))}
         </ul>
@@ -89,7 +99,7 @@ export function RotatingSlogans() {
         aria-live="polite"
       >
         <p className={styles.lead}>{slogan.lead}</p>
-        {slogan.body && <p className={styles.body}>{slogan.body}</p>}
+        {slogan.body && <p className={styles.body}>{slogan.body[locale]}</p>}
       </div>
     </section>
   );

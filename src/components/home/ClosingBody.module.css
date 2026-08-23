@@ -1,0 +1,13 @@
+.section {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-24);
+}
+
+.body {
+  max-width: 40rem;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+  margin: 0;
+}
