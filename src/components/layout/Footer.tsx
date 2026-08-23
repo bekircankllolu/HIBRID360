@@ -16,6 +16,7 @@ export function Footer() {
     { href: "/privacy", label: t("legal.privacy") },
     { href: "/cookie-policy", label: t("legal.cookie") },
     { href: "/kvkk", label: t("legal.kvkk") },
+    { href: "/terms", label: t("legal.terms") },
     { href: "/ai-policy", label: t("legal.aiUsage") },
     { href: "/accessibility", label: t("legal.accessibility") },
     { href: "/culture/sustainability", label: t("legal.sustainability") },

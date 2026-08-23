@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { orbitStones, SOLAR_SYSTEM_TITLE } from "@/data/solar-system";
@@ -19,19 +18,18 @@ import styles from "./SolarSystem.module.css";
  *
  * Performans (CLAUDE.md, sözleşme maddesi):
  *   - Aynı anda en fazla BİR WebGL sahnesi: modül seviyesindeki kilit
- *     (acquireSceneLock) ikinci sahnenin başlamasını engeller.
+ *     (acquireSceneLock) ikinci sahnenin başlamasını engeller. Taşların
+ *     kendisi WebGL dokusu DEĞİL — gerçek <img> (bkz. aşağı); WebGL
+ *     yalnızca güneş ışıması ve yörünge halkalarını çiziyor.
  *   - Ekrandan çıkınca durur: IntersectionObserver rAF döngüsünü durdurur.
  *   - prefers-reduced-motion: sahne hiç başlatılmaz, erişilebilir statik
  *     liste gösterilir.
  *   - WebGL yoksa (eski cihaz, bağlam kaybı) aynı statik liste devreye girer.
- *
- * TODO: brief 4.5 — "AI ile üretilmiş Hibrid taşı (sarı) ve fuşya varyantı"
- * görselleri teslim edilince shader'daki prosedürel taşlar bu doku (texture)
- * ile değiştirilecek. Şu anki sahne gerçek görsel varlık olmadan da
- * eksiksiz çalışıyor.
+ *   - Taş görselleri yalnızca 2 dosya (fuşya + sarı, ~15-35KB), 8 kez
+ *     tekrar kullanılıyor — tarayıcı ilk istekten sonra önbellekten
+ *     okuyor, aynı anda birden fazla ağ isteği olmuyor.
  */
 export function SolarSystem() {
-  const t = useTranslations("solarSystem");
   const reducedMotion = usePrefersReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -67,10 +65,14 @@ export function SolarSystem() {
 
     let frameId: number | null = null;
     let visible = false;
+    let pointerNdcX = 0;
+    let pointerNdcY = 0;
     const start = performance.now();
 
     // HTML link katmanını shader'daki taş konumlarıyla aynı matematikten
-    // besler — böylece etiketler taşlarla birlikte hareket eder.
+    // besler — böylece taş görseli ve etiketi WebGL'deki halka ile
+    // birlikte hareket eder. İmleç yaklaştıkça taş hafifçe büyür (aynı
+    // "elastik fare tepkisi" hissi, shader'daki ışıma boost'uyla eşleşir).
     const positionLinks = (seconds: number) => {
       const rect = stage.getBoundingClientRect();
       const scale = Math.min(rect.width, rect.height);
@@ -80,6 +82,11 @@ export function SolarSystem() {
         const { x, y } = stoneScreenPosition(index, seconds);
         link.style.left = `${rect.width / 2 + x * scale}px`;
         link.style.top = `${rect.height / 2 - y * scale}px`;
+
+        const dx = pointerNdcX - x;
+        const dy = pointerNdcY - y;
+        const boost = Math.max(0, 1 - Math.hypot(dx, dy) / 0.35);
+        link.style.setProperty("--stone-boost", boost.toFixed(3));
       });
     };
 
@@ -116,10 +123,9 @@ export function SolarSystem() {
     const onPointerMove = (event: PointerEvent) => {
       const rect = stage.getBoundingClientRect();
       const scale = Math.min(rect.width, rect.height);
-      scene?.setPointer(
-        (event.clientX - rect.left - rect.width / 2) / scale,
-        -(event.clientY - rect.top - rect.height / 2) / scale,
-      );
+      pointerNdcX = (event.clientX - rect.left - rect.width / 2) / scale;
+      pointerNdcY = -(event.clientY - rect.top - rect.height / 2) / scale;
+      scene?.setPointer(pointerNdcX, pointerNdcY);
     };
     stage.addEventListener("pointermove", onPointerMove);
 
@@ -166,13 +172,29 @@ export function SolarSystem() {
                 linkRefs.current[index] = node;
               }}
             >
-              {stone.label}
+              {/* next/image kasıtlı olarak kullanılmıyor: bu görsel zaten
+                  önceden optimize edilmiş WebP (bkz. public/images/stones/,
+                  hazırlık script'i commit mesajında), sabit boyutlu ve
+                  konumu JS ile mutlak (absolute) piksele yazılıyor —
+                  next/image'ın sunucu tarafı yeniden boyutlandırması burada
+                  fayda sağlamaz ve Cloudflare Workers'ta ayrı bir görsel
+                  optimizasyon binding'i gerektirirdi. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/images/stones/stone-${stone.color}.webp`}
+                srcSet={`/images/stones/stone-${stone.color}.webp 1x, /images/stones/stone-${stone.color}@2x.webp 2x`}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width={72}
+                height={72}
+                className={styles.stoneImage}
+              />
+              <span className={styles.stoneLabel}>{stone.label}</span>
             </Link>
           ))}
         </div>
       )}
-
-      <p className={styles.assetNote}>{t("assetNote")}</p>
     </section>
   );
 }

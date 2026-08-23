@@ -17,7 +17,8 @@
       "kvkk": "KVKK Disclosure Notice",
       "aiUsage": "AI Usage & Rights",
       "accessibility": "Accessibility Statement",
-      "sustainability": "Sustainability"
+      "sustainability": "Sustainability",
+      "terms": "Terms of Use"
     },
     "social": {
       "label": "Social"
@@ -120,15 +121,8 @@
       "error": "Something went wrong while sending. Please try again."
     }
   },
-  "solarSystem": {
-    "assetNote": "The Hibrid stone artwork is in production; the scene is drawn in brand colours for now."
-  },
   "notFound": {
     "cta": "Go to the work"
-  },
-  "legal": {
-    "pendingCounsel": "The text of this page is being prepared with legal counsel. The headings below show what the page will cover.",
-    "sectionPending": "Text in preparation."
   },
   "accessibilityPage": {
     "knownLimitations": "Known limitations",

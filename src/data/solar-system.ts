@@ -14,28 +14,35 @@
  * TODO: brief Bölüm 12 — Production, Digital, Creative, Live Broadcast,
  * Photography sayfaları mevcut siteden taşınınca href'ler kendi
  * sayfalarına çevrilip ready:true yapılacak.
+ *
+ * Taş görseli: müşteriden teslim edildi (hibrid360_hibridtaslar paketi) —
+ * AI ile üretilmiş, düşük poligonlu Hibrid taşı; sarı ve fuşya varyantı
+ * brief'in istediğiyle birebir eşleşiyor (bkz. public/images/stones/).
+ * `color` alanı sekiz yörüngede iki rengi sırayla dağıtır.
  */
 export interface OrbitStone {
   orbit: number;
   label: string;
   href: string;
   ready: boolean;
+  color: "fuchsia" | "yellow";
 }
 
 export const orbitStones: OrbitStone[] = [
-  { orbit: 1, label: "PRODUCTION", href: "/what-we-do", ready: false },
-  { orbit: 2, label: "DIGITAL", href: "/what-we-do", ready: false },
-  { orbit: 3, label: "CREATIVE", href: "/what-we-do", ready: false },
+  { orbit: 1, label: "PRODUCTION", href: "/what-we-do", ready: false, color: "yellow" },
+  { orbit: 2, label: "DIGITAL", href: "/what-we-do", ready: false, color: "fuchsia" },
+  { orbit: 3, label: "CREATIVE", href: "/what-we-do", ready: false, color: "yellow" },
   {
     orbit: 4,
     label: "AI",
     href: "/what-we-do/ai-creative-production",
     ready: true,
+    color: "fuchsia",
   },
-  { orbit: 5, label: "LIVE BROADCAST", href: "/what-we-do", ready: false },
-  { orbit: 6, label: "PHOTOGRAPHY", href: "/what-we-do", ready: false },
-  { orbit: 7, label: "POST PRODUCTION", href: "/what-we-do", ready: false },
-  { orbit: 8, label: "EVENTS", href: "/what-we-do", ready: false },
+  { orbit: 5, label: "LIVE BROADCAST", href: "/what-we-do", ready: false, color: "yellow" },
+  { orbit: 6, label: "PHOTOGRAPHY", href: "/what-we-do", ready: false, color: "fuchsia" },
+  { orbit: 7, label: "POST PRODUCTION", href: "/what-we-do", ready: false, color: "yellow" },
+  { orbit: 8, label: "EVENTS", href: "/what-we-do", ready: false, color: "fuchsia" },
 ];
 
 /** brief Bölüm 4.5 — bölüm başlığı sloganı. */

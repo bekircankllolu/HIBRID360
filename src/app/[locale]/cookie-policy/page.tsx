@@ -1,32 +1,36 @@
-import { getTranslations } from "next-intl/server";
-import { LegalPage } from "@/components/legal/LegalPage";
-import { cookieSections } from "@/data/legal";
+import type { Metadata } from "next";
+import { PolicyPage } from "@/components/legal/PolicyPage";
+import { cookiePolicyTr, cookiePolicyEn } from "@/data/policies/cookie";
 import type { Locale } from "@/i18n/routing";
 
-// brief-rev12.md Bölüm 14 — yasal sayfa, iki dilli.
+// brief-rev12.md Bölüm 14 — Cookie Policy. Metin
+// HIBRID360_Corporate_Policies_Pack'ten birebir (bkz. src/data/policies/cookie.ts).
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "footer.legal" });
-  return { title: t("cookie") };
+  const doc = locale === "tr" ? cookiePolicyTr : cookiePolicyEn;
+  return { title: doc.title };
 }
 
-export default async function Page({
+export default async function CookiePolicyPage({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations("footer.legal");
+  const doc = locale === "tr" ? cookiePolicyTr : cookiePolicyEn;
+
   return (
-    <LegalPage
+    <PolicyPage
+      doc={doc}
       locale={locale}
-      title={t("cookie")}
-      path="/cookie-policy"
-      sections={cookieSections}
+      breadcrumb={[
+        { name: "Home", path: "" },
+        { name: doc.title, path: "/cookie-policy" },
+      ]}
     />
   );
 }

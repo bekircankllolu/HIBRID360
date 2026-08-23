@@ -41,23 +41,48 @@
   pointer-events: none;
 }
 
-/* Taş etiketleri gerçek <a> olarak HTML katmanında duruyor: WebGL içinde
-   çizilen metin ne klavyeyle gezilebilir ne de ekran okuyucuya görünür. */
+/* Taşlar gerçek <a> + <img> olarak HTML katmanında duruyor (brief 4.5:
+   AI ile üretilmiş Hibrid taşı, sarı ve fuşya varyantı — bkz.
+   public/images/stones/): WebGL içine çizilmiş bir doku olsaydı ne
+   klavyeyle gezilebilir ne ekran okuyucuya görünür olurdu. Konumu ve
+   --stone-boost değişkenini SolarSystem.tsx, WebGL sahnesiyle aynı
+   matematikten (stoneScreenPosition) besliyor. */
 .stoneLink {
+  --stone-boost: 0;
   position: absolute;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(0.625rem, 1.4vw, 0.8125rem);
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  padding: var(--space-1) var(--space-2);
-  color: var(--color-brand-white);
-  background: rgba(0, 0, 0, 0.55);
+  transform: translate(-50%, -50%) scale(calc(1 + var(--stone-boost) * 0.16));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  transition: transform 120ms ease-out;
 }
 
-.stoneLink:hover,
-.stoneLink:focus-visible {
+@media (prefers-reduced-motion: reduce) {
+  .stoneLink {
+    transition: none;
+  }
+}
+
+.stoneImage {
+  width: clamp(2.75rem, 6vw, 4.5rem);
+  height: auto;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+.stoneLabel {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(0.5625rem, 1.2vw, 0.75rem);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: var(--color-brand-white);
+  background: rgba(0, 0, 0, 0.55);
+  padding: 0.1em 0.5em;
+}
+
+.stoneLink:hover .stoneLabel,
+.stoneLink:focus-visible .stoneLabel {
   background: var(--color-brand-fuchsia);
   color: var(--color-text-on-fuchsia);
 }

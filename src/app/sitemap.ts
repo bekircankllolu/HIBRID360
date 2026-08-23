@@ -28,6 +28,7 @@ const STATIC_PATHS = [
   "/privacy",
   "/cookie-policy",
   "/kvkk",
+  "/terms",
   "/ai-policy",
   "/accessibility",
 ];

@@ -1,32 +1,37 @@
-import { getTranslations } from "next-intl/server";
-import { LegalPage } from "@/components/legal/LegalPage";
-import { kvkkSections } from "@/data/legal";
+import type { Metadata } from "next";
+import { PolicyPage } from "@/components/legal/PolicyPage";
+import { kvkkNoticeTr, kvkkNoticeEn } from "@/data/policies/kvkk";
 import type { Locale } from "@/i18n/routing";
 
-// brief-rev12.md Bölüm 14 — yasal sayfa, iki dilli.
+// brief-rev12.md Bölüm 14 — KVKK Aydınlatma Metni. Bkz.
+// src/data/policies/kvkk.ts — Gizlilik Politikası'ndan derlenmiş, KVKK
+// madde 10'un istediği üç unsura karşılık gelen bölümler.
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "footer.legal" });
-  return { title: t("kvkk") };
+  const doc = locale === "tr" ? kvkkNoticeTr : kvkkNoticeEn;
+  return { title: doc.title };
 }
 
-export default async function Page({
+export default async function KvkkPage({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations("footer.legal");
+  const doc = locale === "tr" ? kvkkNoticeTr : kvkkNoticeEn;
+
   return (
-    <LegalPage
+    <PolicyPage
+      doc={doc}
       locale={locale}
-      title={t("kvkk")}
-      path="/kvkk"
-      sections={kvkkSections}
+      breadcrumb={[
+        { name: "Home", path: "" },
+        { name: doc.title, path: "/kvkk" },
+      ]}
     />
   );
 }

@@ -11,7 +11,14 @@ import { orbitStones } from "@/data/solar-system";
  *
  * Kütüphane yerine native WebGL tercih edildi: Three.js ilk yükleme
  * bütçesine (<2MB, pratikte çok daha azı hedefleniyor) ~150KB ekliyordu.
- * Tüm sahne tek quad + tek fragment shader ile çiziliyor.
+ * Sahne yalnızca merkez (güneş) ışıması + yörünge halkalarını çiziyor;
+ * taşların kendisi artık gerçek görsel varlık (public/images/stones/,
+ * brief 4.5'in AI ile üretilmiş sarı ve fuşya varyantı) — bkz.
+ * src/components/hero/SolarSystem.tsx, HTML katmanında <img> olarak
+ * render ediliyor ve konumu bu dosyadaki stoneScreenPosition ile
+ * senkron. Görüntüler WebGL dokusu değil, gerçek <img>: ekran
+ * okuyucuya erişilebilir kalması ve ayrı ayrı lazy-load edilebilmesi
+ * için.
  */
 
 let sceneLockHolder: symbol | null = null;
@@ -76,19 +83,17 @@ void main() {
     float ring = smoothstep(0.004, 0.0, abs(dist - r));
     color += uYellow * ring * 0.12;
 
-    // Taş.
+    // Taşın konumunda hafif bir zemin ışıması — gerçek görsel (HTML <img>)
+    // bu koordinatın üstüne bindiriliyor, bu ışıma ona bir "oturma" hissi
+    // veriyor. uPointer, imleç yaklaşınca ışımayı güçlendirir (brief 4.1
+    // "elastik fare tepkisi"nin güneş sistemindeki karşılığı).
     float angle = orbitAngle(i, uTime);
     vec2 stone = vec2(cos(angle), sin(angle) * 0.42) * r;
     float d = length(uv - stone);
-
-    // İmleç yaklaştıkça taş parlar (brief 4.1 "elastik fare tepkisi"nin
-    // güneş sistemindeki karşılığı).
     float pointerBoost = 1.0 - smoothstep(0.0, 0.35, length(uPointer - stone));
-
-    float core = smoothstep(0.022, 0.006, d);
-    float glow = smoothstep(0.075, 0.0, d);
+    float glow = smoothstep(0.09, 0.0, d);
     vec3 stoneColor = mix(uYellow, uFuchsia, float(i) / float(ORBIT_COUNT));
-    color += stoneColor * (core * 0.95 + glow * (0.20 + pointerBoost * 0.35));
+    color += stoneColor * glow * (0.10 + pointerBoost * 0.22);
   }
 
   gl_FragColor = vec4(color, 1.0);

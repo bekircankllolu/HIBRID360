@@ -17,7 +17,8 @@
       "kvkk": "KVKK Aydınlatma Metni",
       "aiUsage": "AI Kullanımı ve Haklar",
       "accessibility": "Erişilebilirlik Beyanı",
-      "sustainability": "Sürdürülebilirlik"
+      "sustainability": "Sürdürülebilirlik",
+      "terms": "Kullanım Koşulları"
     },
     "social": {
       "label": "Sosyal Medya"
@@ -120,15 +121,8 @@
       "error": "Gönderim sırasında bir sorun oldu. Lütfen tekrar deneyin."
     }
   },
-  "solarSystem": {
-    "assetNote": "Hibrid taşlarının görselleri prodüksiyonda; sahne şimdilik marka renkleriyle çiziliyor."
-  },
   "notFound": {
     "cta": "İşlere git"
-  },
-  "legal": {
-    "pendingCounsel": "Bu sayfanın metni hukuk danışmanıyla birlikte hazırlanıyor. Aşağıdaki başlıklar sayfanın kapsayacağı konuları gösterir.",
-    "sectionPending": "Metin hazırlanıyor."
   },
   "accessibilityPage": {
     "knownLimitations": "Known limitations — bilinen sınırlamalar",
