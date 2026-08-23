@@ -31,8 +31,8 @@ export const knownLimitations: Array<{ tr: string; en: string }> = [
     tr: "MONA'nın seslendirmesi ve VTT altyazı dosyaları henüz üretilmedi. Her replik ekranda tam metin olarak okunuyor ve sitede hiçbir yerde ses çalmıyor.",
   },
   {
-    en: "The orbital WebGL scene on the homepage is treated as decorative and hidden from screen readers; the same links are available as a plain list, which is also what loads when reduced motion is on or WebGL is unavailable.",
-    tr: "Ana sayfadaki yörünge WebGL sahnesi dekoratif kabul edilip ekran okuyuculardan gizlendi; aynı bağlantılar düz liste olarak da sunuluyor — hareket azaltma açıkken veya WebGL yokken zaten bu liste yükleniyor.",
+    en: "The homepage ecosystem scene uses decorative crystal artwork plus keyboard-accessible service buttons. Motion effects are disabled when reduced motion is requested.",
+    tr: "Ana sayfadaki ekosistem sahnesi dekoratif kristal görseli ve klavyeyle erişilebilen servis düğmeleri kullanıyor. Hareket azaltma istendiğinde animasyon efektleri kapatılıyor.",
   },
   {
     en: "Video assets are not published yet. Each video will ship with TR and EN VTT captions before it goes live; until then this claim cannot be verified on the site.",

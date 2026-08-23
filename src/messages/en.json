@@ -1,6 +1,7 @@
 {
   "common": {
     "pendingLabel": "Content in progress",
+    "learnMore": "View details",
     "skipToContent": "Skip to content"
   },
   "nav": {

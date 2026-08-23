@@ -1,15 +1,15 @@
 /**
- * Güneş sistemi — brief-rev12.md Bölüm 4.5 "Hibrid taşları".
+ * Hibrid ekosistem sahnesi — brief-rev12.md Bölüm 4.5 "Hibrid taşları".
  *
- * Merkezde HİBRİD (güneş), sekiz yörüngede birer taş; her taş bir iş
- * alanını temsil eder ve tıklanınca ilgili hizmet sayfasına gider.
- * Yörünge sırası ve etiketler brief'teki tablodan birebir.
+ * Merkezde büyük sarı Hibrid taşı, etrafında sekiz tıklanabilir servis
+ * noktası bulunur. Noktaya tıklanınca önce detay paneli açılır; ilgili
+ * hizmet sayfasına paneldeki bağlantıdan gidilir.
  *
  * `href` alanı bu kod tabanındaki gerçek rota yapısına uyarlanmıştır
  * (brief tabloda /production, /digital gibi kök yollar veriyor; sitede
  * bu sayfalar WHAT WE DO altında toplanıyor — bkz. brief Bölüm 3.1 menü
- * kararı). Sekiz alt sayfanın tamamı task #18 ile açıldı; tüm taşlar artık
- * kendi gerçek sayfasına gidiyor.
+ * kararı). Sekiz alt sayfanın tamamı task #18 ile açıldı; tüm noktalar
+ * kendi gerçek sayfasına bağlanıyor.
  *
  * Taş görseli: müşteriden teslim edildi (hibrid360_hibridtaslar paketi) —
  * AI ile üretilmiş, düşük poligonlu Hibrid taşı; sarı ve fuşya varyantı
@@ -23,7 +23,7 @@ export interface OrbitStone {
   ready: boolean;
   color: "fuchsia" | "yellow";
   /**
-   * Taşın hover/tap etiketinde gösterilecek alt başlığın kaynağı:
+   * Detay panelinde gösterilecek alt başlığın kaynağı:
    * WWD-02'deki (What We Do hub listesi) hizmet başlığı. Alt başlık metni
    * uydurulmuyor, o listedeki onaylı tek satır tanım locale'e göre
    * okunuyor — bkz. messages `whatWeDo.list`.
