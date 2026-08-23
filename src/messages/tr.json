@@ -63,11 +63,23 @@
   },
   "work": {
     "empty": "İş envanteri hazırlanıyor.",
+    "showreelBody": "Hem kalpleri hem rakamları hareket ettiren bütünleşik marka deneyimleri.",
+    "tagline": "Gerisini işlerimiz anlatsın!",
+    "recentTitle": "Son İşler",
     "archiveTitle": "Arşiv",
+    "filter": {
+      "label": "Filtre",
+      "year": "Yıl",
+      "client": "Müşteri",
+      "format": "Format",
+      "all": "Tümü"
+    },
+    "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz — özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",
+    "seoHeading": "HİBRİD 360 — İDDİALI MARKALAR İÇİN KREATİF HİKÂYE ANLATICILIĞI",
     "confidentialClient": "Gizli müşteri",
     "case": {
       "problem": "Sorun",
-      "solution": "Çözüm",
+      "solution": "Ne Yaptık",
       "result": "Sonuç",
       "evidence": "Kanıt",
       "evidenceEmpty": "Görsel malzeme hazırlanıyor."

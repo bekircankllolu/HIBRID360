@@ -4,15 +4,17 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
 import { getPublishedWorks } from "@/lib/content";
+import { WorkArchive } from "@/components/work/WorkArchive";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { Work } from "@/types/content";
 import styles from "./page.module.css";
 
 /**
- * brief-rev12.md Bölüm 7 — Works.
- * Sayfa metinleri 7.1'deki "SİTEYE GİRECEK METİN" kutularından birebir
- * alınmıştır; marka dili olduğu için TR sürümde de İngilizce kalır.
+ * WORK-01..08 (nihai copy deck, Ağustos 2026) — Work sayfası.
+ * WORK-01/02 slogan satırları marka dili olduğu için iki dilde de
+ * İngilizce kalır; gövde metinleri (WORK-02/03/07/08) locale'e göre
+ * next-intl "work" namespace'inden geliyor.
  *
  * TODO: docs/DECISIONS.md #16 bekleniyor — Works içerik envanteri (iş adı ·
  * müşteri · yıl · format · yayın izni · dosya konumu) gelmeden grid'in kaç
@@ -60,14 +62,6 @@ export default async function WorkPage({
   const featured = works.filter((work) => work.is_featured);
   const recent = featured.length > 0 ? featured : works;
 
-  const byYear = works.reduce<Record<number, Work[]>>((acc, work) => {
-    (acc[work.year] ??= []).push(work);
-    return acc;
-  }, {});
-  const years = Object.keys(byYear)
-    .map(Number)
-    .sort((a, b) => b - a);
-
   return (
     <div className={styles.page}>
       <JsonLd
@@ -84,14 +78,16 @@ export default async function WorkPage({
 
       <section className={styles.showreel}>
         {/* TODO: brief 7.2 — prodüksiyon reel'i videosu (medya varlığı yok) */}
-        <p className={styles.showreelBody}>
-          MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT. Integrated brand
-          experiences that move hearts — and the needle.
+        <p className={styles.showreelSlogan}>
+          MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.
         </p>
+        <p className={styles.showreelBody}>{t("showreelBody")}</p>
       </section>
 
-      <h2 className={styles.gridIntro}>And we let our work speak for itself!</h2>
+      {/* WORK-03 — "tek satır", H2 değil. */}
+      <p className={styles.tagline}>{t("tagline")}</p>
 
+      <h2 className={styles.gridIntro}>{t("recentTitle")}</h2>
       {recent.length === 0 ? (
         <EmptyState message={t("empty")} />
       ) : (
@@ -106,37 +102,12 @@ export default async function WorkPage({
         </div>
       )}
 
-      {years.length > 0 && (
-        <section className={styles.archive}>
-          <h2 className={styles.gridIntro}>{t("archiveTitle")}</h2>
-          {years.map((year) => (
-            <div key={year}>
-              <h3 className={styles.archiveYear}>{year}</h3>
-              <ul className={styles.archiveList}>
-                {byYear[year].map((work) => (
-                  <li key={work.id}>
-                    <Link href={`/work/${work.slug}`}>
-                      {work.client_name_confidential
-                        ? t("confidentialClient")
-                        : work.client_name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </section>
-      )}
+      <WorkArchive works={works} confidentialLabel={t("confidentialClient")} />
+
+      <h2 className={styles.seoHeading}>{t("seoHeading")}</h2>
 
       <section className={styles.closing}>
-        <p className={styles.closingLead}>
-          If our work aligns with your frequency, we would love to meet you —
-          especially if you are on the SAME FREQUENCY, same mindset as us.
-        </p>
-        <h2 className={styles.closingHeading}>
-          AT HIBRID 360, CREATIVE STORYTELLING AGENCY SERVICES FOR AMBITIOUS
-          BRANDS
-        </h2>
+        <p className={styles.closingLead}>{t("ctaLead")}</p>
       </section>
     </div>
   );

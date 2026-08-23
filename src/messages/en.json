@@ -63,12 +63,24 @@
   },
   "work": {
     "empty": "The work inventory is on the way.",
+    "showreelBody": "Integrated brand experiences that move hearts — and the needle.",
+    "tagline": "And we let our work speak for itself!",
+    "recentTitle": "Recent Works",
     "archiveTitle": "Archive",
+    "filter": {
+      "label": "Filter",
+      "year": "Year",
+      "client": "Client",
+      "format": "Format",
+      "all": "All"
+    },
+    "ctaLead": "If our work aligns with your frequency, we would love to meet you — especially if you are on the SAME FREQUENCY, same mindset as us.",
+    "seoHeading": "AT HIBRID 360, CREATIVE STORYTELLING AGENCY SERVICES FOR AMBITIOUS BRANDS",
     "confidentialClient": "Confidential client",
     "case": {
-      "problem": "Problem",
-      "solution": "Solution",
-      "result": "Result",
+      "problem": "The Challenge",
+      "solution": "What We Did",
+      "result": "The Result",
       "evidence": "Evidence",
       "evidenceEmpty": "Visual material is on the way."
     }
