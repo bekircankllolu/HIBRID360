@@ -5,7 +5,22 @@
 // kodlarla anılır). Bu dosya brief-rev12.md'deki daha eski değerlerin
 // yerini alır.
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hibrid360.com";
+function normalizeSiteUrl(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
+
+  const withProtocol = /^https?:\/\//i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
+
+  return withProtocol.replace(/\/+$/, "");
+}
+
+export const SITE_URL =
+  normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ??
+  normalizeSiteUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
+  normalizeSiteUrl(process.env.VERCEL_URL) ??
+  "https://hibrid360.com";
 
 export const SITE_NAME = "Hibrid 360";
 

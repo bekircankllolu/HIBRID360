@@ -67,6 +67,7 @@ export default async function HomePage({
 
   return (
     <div>
+      <h1 className="srOnly">Hibrid 360 — AI-Native Creative Production Studio</h1>
       <HeroTypography />
       <RotatingSlogans />
       <LessTalk />

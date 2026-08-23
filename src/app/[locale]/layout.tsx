@@ -88,13 +88,18 @@ export default async function LocaleLayout({
       <body>
         <JsonLd data={organizationJsonLd(locale as Locale)} />
         <NextIntlClientProvider messages={messages}>
+          <a href="#main-content" className="skipLink">
+            Skip to content
+          </a>
           <Header />
-          {children}
-          {/* GEN-08/09 — sitenin tek birincil eylemi, her sayfanın altı,
-              footer'dan önce. Ayrıca ana sayfada HOME-12 kendi Work
-              linkine sahip; bu ikisi farklı hedeflere gider, birbirinin
-              yerini tutmaz. */}
-          <CtaBand />
+          <main id="main-content" tabIndex={-1}>
+            {children}
+            {/* GEN-08/09 — sitenin tek birincil eylemi, her sayfanın altı,
+                footer'dan önce. Ayrıca ana sayfada HOME-12 kendi Work
+                linkine sahip; bu ikisi farklı hedeflere gider, birbirinin
+                yerini tutmaz. */}
+            <CtaBand />
+          </main>
           <Footer />
           {/* DECISIONS #3 (VARSAYILANLA İLERLE) — derece işareti imleci.
               prefers-reduced-motion ve dokunmatik cihazlarda kapalı. */}

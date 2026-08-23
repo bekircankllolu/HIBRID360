@@ -25,7 +25,7 @@ Durum sütunu: `AÇIK` / `VARSAYILANLA İLERLE` / `KAPANDI`
 | 13 | Insights menü konumu | 18.1 / 20.1 | Ana menüde 6. madde (brief'in gerekçesi güçlü: gömülü içerik taranmaz) | VARSAYILANLA İLERLE |
 | 14 | Directors & Crew — kaç kişi, çekim tarihi | 20.3 | Müşteriden liste + çekim günü planlanmalı | AÇIK |
 | 15 | How We Work bütçe bandı rakamları | 20.5 | Somut rakam yerine süre bandı ("3-6 hafta") + form yönlendirme | AÇIK — ticari karar, müşteride kalmalı |
-| 16 | Works içerik envanteri (iş adı, müşteri, yıl, format, yayın izni) | 7.3 | Yok — bu liste olmadan grid tasarımı kesinleşmez | AÇIK — blocker |
+| 16 | Works içerik envanteri (iş adı, müşteri, yıl, format, yayın izni, dosya/video/görsel konumu, vaka sayfası açılacak mı?) | 7.3 | Yok — bu liste olmadan grid tasarımı ve yayınlanacak işler kesinleşmez | AÇIK — blocker |
 
 ## Öncelik: Hangi kararlar gerçek blocker?
 
@@ -39,3 +39,17 @@ Bunlar olmadan **ilgili bölüm** başlamaz (ama diğer bölümler paralel gider
 
 Geri kalan kararlar "VARSAYILANLA İLERLE" ile iskelet aşamasında
 kapatılabilir, sonradan değiştirmek maliyetsiz.
+
+## Works içerik envanteri için gereken minimum veri
+
+Faz 2'ye geçmeden önce her iş için aşağıdaki alanlar müşteri tarafından
+doğrulanmalı. Bu bilgiler gelmeden sitede fake iş, fake müşteri veya stok
+görsel yayınlanmaz.
+
+- İş adı
+- Müşteri
+- Yıl
+- Format
+- Yayın izni durumu
+- Dosya/video/görsel konumu
+- Vaka sayfası açılacak mı?

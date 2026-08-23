@@ -2,9 +2,21 @@
   border: 1px dashed rgba(255, 255, 255, 0.25);
   padding: var(--space-12) var(--space-6);
   text-align: center;
-  opacity: 0.75;
 }
 
 .emptyState p {
   margin: 0;
+}
+
+.message {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+}
+
+.detail {
+  max-width: 42rem;
+  margin: var(--space-3) auto 0;
+  font-size: 0.875rem;
+  opacity: 0.72;
 }

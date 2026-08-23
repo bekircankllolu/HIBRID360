@@ -5,10 +5,17 @@ import styles from "./EmptyState.module.css";
  * placeholder/lorem metin yasak — bunun yerine dürüst bir "hazırlanıyor"
  * durumu gösterilir.
  */
-export function EmptyState({ message }: { message: string }) {
+export function EmptyState({
+  message,
+  detail,
+}: {
+  message: string;
+  detail?: string;
+}) {
   return (
     <div className={styles.emptyState}>
-      <p>{message}</p>
+      <p className={styles.message}>{message}</p>
+      {detail ? <p className={styles.detail}>{detail}</p> : null}
     </div>
   );
 }

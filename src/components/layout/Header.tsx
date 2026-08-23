@@ -1,7 +1,12 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./Header.module.css";
+
+const MENU_ID = "main-navigation";
 
 // GEN-01 (nihai copy deck, Ağustos 2026): ana menü tam olarak beş madde —
 // WORK · WHAT WE DO · CULTURE · FRIENDS · CONTACT. Insights bu listede
@@ -12,6 +17,8 @@ import styles from "./Header.module.css";
 // bu deck'te unutuldu mu?
 export function Header() {
   const t = useTranslations("nav");
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const items: Array<{ href: string; label: string }> = [
     { href: "/work", label: t("work") },
@@ -21,13 +28,35 @@ export function Header() {
     { href: "/contact", label: t("contact") },
   ];
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isMenuOpen]);
+
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo}>
           HIBRID 360
         </Link>
-        <nav className={styles.nav} aria-label="Main">
+
+        <nav
+          id={MENU_ID}
+          className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`}
+          aria-label={t("menuLabel")}
+        >
           <ul className={styles.navList}>
             {items.map((item) => (
               <li key={item.href}>
@@ -36,7 +65,22 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <LanguageSwitcher />
+
+        <div className={styles.controls}>
+          <LanguageSwitcher />
+          <button
+            type="button"
+            className={styles.menuButton}
+            aria-expanded={isMenuOpen}
+            aria-controls={MENU_ID}
+            aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
+            onClick={() => setIsMenuOpen((current) => !current)}
+          >
+            <span className={styles.menuLine} />
+            <span className={styles.menuLine} />
+            <span className={styles.menuLine} />
+          </button>
+        </div>
       </div>
     </header>
   );

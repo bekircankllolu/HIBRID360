@@ -28,7 +28,6 @@
 
 .nav {
   flex: 1;
-  overflow-x: auto;
 }
 
 .navList {
@@ -50,4 +49,100 @@
 
 .navList a:hover {
   color: var(--color-brand-fuchsia);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.menuButton {
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  cursor: pointer;
+}
+
+.menuLine {
+  display: block;
+  width: 1.25rem;
+  height: 2px;
+  margin: 0.25rem auto;
+  background: currentColor;
+}
+
+.menuButton:hover {
+  border-color: var(--color-brand-fuchsia);
+  color: var(--color-brand-fuchsia);
+}
+
+@media (max-width: 767px) {
+  .inner {
+    padding: 0 var(--space-3);
+    gap: var(--space-3);
+  }
+
+  .logo {
+    font-size: 1rem;
+  }
+
+  .nav {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 45;
+    background: var(--color-brand-black);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    overflow-y: auto;
+  }
+
+  .navOpen {
+    display: block;
+  }
+
+  .navList {
+    min-height: calc(100dvh - var(--header-height));
+    padding: var(--space-8) var(--space-4);
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-6);
+    white-space: normal;
+  }
+
+  .navList a {
+    display: block;
+    font-family: var(--font-brand);
+    font-weight: var(--font-weight-heading-bold);
+    font-size: clamp(1.75rem, 10vw, 3rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .menuButton {
+    display: block;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 389px) {
+  .inner {
+    padding: 0 var(--space-2);
+    gap: var(--space-2);
+  }
+
+  .logo {
+    font-size: 0.875rem;
+  }
+
+  .controls {
+    gap: var(--space-2);
+  }
 }

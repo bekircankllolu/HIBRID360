@@ -6,7 +6,8 @@ ayrı bir oturumda/prompt olarak verilebilir.
 ## Faz 0 — İskelet kurulumu (bugün başlanabilir, karar beklemez)
 
 - [ ] Next.js 14 + TypeScript proje kurulumu
-- [ ] Cloudflare Pages deploy pipeline (GitHub → Cloudflare Pages otomatik build)
+- [ ] Vercel canlı deploy hattı (mevcut canlı URL: `https://hibrid-360.vercel.app/tr`)
+- [ ] Cloudflare Workers deploy hattı (opsiyonel / önceki plan, `@opennextjs/cloudflare`)
 - [ ] Supabase proje kurulumu + `docs/supabase-schema.sql` migration'ı çalıştır
 - [ ] i18n routing iskeleti (`/tr`, `/en`), hreflang meta yapısı
 - [ ] Design token sistemi: CSS custom properties (renkler, tipografi, spacing)
@@ -28,7 +29,7 @@ sahip bir iskelet. Hiçbir gerçek içerik yok, ama teknik temel hazır.
 
 ## Faz 2 — Works + Directors & Crew + müşteri sözleri
 
-- [ ] **Blocker: Works içerik envanteri** (DECISIONS.md #16) — müşteriden gelmeden grid tasarlanamaz
+- [ ] **Blocker: Works içerik envanteri** (DECISIONS.md #16) — iş adı, müşteri, yıl, format, yayın izni, dosya/video/görsel konumu ve vaka sayfası kararı gelmeden grid yayınlanamaz
 - [ ] **Blocker: Directors & Crew kadrosu + çekim tarihi** (DECISIONS.md #14)
 - [ ] Works sayfası: Recent Works, yıl bazlı arşiv, iş envanteri grid
 - [ ] Vaka sayfası şablonu (Sorun/Çözüm/Sonuç/Kanıt) — Supabase `works` tablosundan besleniyor

@@ -2,15 +2,17 @@
 
 Bağlam ve karar dosyaları için bkz. `CLAUDE.md` ve `docs/`.
 
-Bu depo **Faz 0** (iskelet) aşamasındadır: gerçek içerik yoktur, yalnızca
-doğru routing'e ve marka sistemine sahip çalışan bir teknik temel vardır.
+Bu depo **Faz 0 / erken canlı iskelet** aşamasındadır: routing, marka sistemi,
+hero/MONA iskeleti ve temel yasal/SEO sayfaları çalışır; Works, gerçek video
+varlıkları ve bazı kurumsal/yasal bilgiler hâlâ müşteri girdisi bekler.
 Faz planı: `docs/ROADMAP.md`.
 
 ## Stack
 
 - Next.js 14 (App Router) + TypeScript
 - next-intl ile `/tr` ve `/en` routing
-- Cloudflare Workers deploy: `@opennextjs/cloudflare`
+- Canlı ortam: Vercel (`https://hibrid-360.vercel.app/tr`)
+- Opsiyonel/önceki deploy planı: Cloudflare Workers (`@opennextjs/cloudflare`)
 - Lighthouse CI (performans bütçesi kontrolü)
 
 ## Geliştirme
@@ -30,13 +32,36 @@ npm run lint    # eslint
 npm run lhci    # Lighthouse CI (önce `npm run build && npm run start` gerekir)
 ```
 
-## Cloudflare'e deploy
+## Vercel deploy
 
-Bu proje Cloudflare Pages'in klasik statik build'i yerine
+Mevcut canlı site Vercel üzerinde çalışır. Vercel import/deploy akışı için
+standart Next.js build komutları kullanılır:
+
+```bash
+npm install
+npm run build
+```
+
+Production domain netleştiğinde Vercel Project Settings → Environment
+Variables altında şunu ayarlayın:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://hibrid360.com
+```
+
+`NEXT_PUBLIC_SITE_URL` verilirse canonical, sitemap, robots ve JSON-LD URL'leri
+her zaman bu değeri kullanır. Verilmezse kod sırasıyla Vercel'in
+`VERCEL_PROJECT_PRODUCTION_URL` ve `VERCEL_URL` değerlerini kullanır; bunlar da
+yoksa fallback `https://hibrid360.com` olur. Vercel'in verdiği domainsiz env
+değerlerine kod otomatik `https://` ekler.
+
+## Cloudflare deploy (opsiyonel / önceki plan)
+
+Bu repoda Cloudflare Workers yapılandırması hâlâ korunur, ancak mevcut canlı
+site Vercel'dedir. Cloudflare yoluna dönülürse proje Cloudflare Pages'in
+klasik statik build'i yerine
 [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) adaptörüyle
-**Cloudflare Workers**'a deploy edilir (CLAUDE.md: "Hosting: Cloudflare
-Pages / Workers"). Next.js middleware (i18n routing) ve SSR bu şekilde
-tam desteklenir.
+**Cloudflare Workers**'a deploy edilir.
 
 ```bash
 npm run preview   # yerelde wrangler ile önizleme
@@ -57,9 +82,10 @@ Konfigürasyon: `wrangler.jsonc`, `open-next.config.ts`.
 - Çeviri metinleri: `src/messages/tr.json`, `src/messages/en.json`.
 - hreflang etiketleri her sayfada `generateMetadata` → `alternates.languages`
   ile otomatik üretilir.
-- Ana menü kelimeleri (WORK, WHAT WE DO, CULTURE, INSIGHTS, FRIENDS,
-  CONTACT) marka dili olarak her iki dilde de İngilizce sabit kalır —
-  CLAUDE.md'deki slogan kuralıyla tutarlı bir varsayım.
+- Ana menü kelimeleri (WORK, WHAT WE DO, CULTURE, FRIENDS, CONTACT) marka
+  dili olarak her iki dilde de İngilizce sabit kalır — CLAUDE.md'deki slogan
+  kuralıyla tutarlı bir varsayım. INSIGHTS rotası korunur ve footer'da
+  erişilebilir kalır.
 
 ## Design tokens
 

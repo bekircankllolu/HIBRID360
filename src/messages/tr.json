@@ -5,7 +5,10 @@
     "culture": "CULTURE",
     "insights": "INSIGHTS",
     "friends": "FRIENDS",
-    "contact": "CONTACT"
+    "contact": "CONTACT",
+    "menuLabel": "Ana menü",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
   },
   "languageSwitcher": {
     "label": "Dil"
@@ -63,6 +66,7 @@
   },
   "work": {
     "empty": "İş envanteri hazırlanıyor.",
+    "emptyDetail": "İşler; yayın izni, müşteri, yıl, format ve dosya konumu doğrulandıktan sonra eklenecek.",
     "showreelBody": "Hem kalpleri hem rakamları hareket ettiren bütünleşik marka deneyimleri.",
     "tagline": "Gerisini işlerimiz anlatsın!",
     "recentTitle": "Son İşler",
