@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Montserrat, Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -8,37 +7,12 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
 import { CookieBanner } from "@/components/consent/CookieBanner";
+import { ConsentInitScript } from "@/components/consent/ConsentInitScript";
 import { Analytics } from "@/components/consent/Analytics";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/schema";
 import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 import "@/styles/globals.css";
-
-/**
- * Fontlar — CLAUDE.md marka sistemi: Montserrat (marka/başlık),
- * Inter (gövde, DECISIONS #2 VARSAYILANLA İLERLE).
- *
- * Performans notu (CLAUDE.md bütçesi):
- *   - `weight` dizisi verilmediğinde next/font her ailenin DEĞİŞKEN
- *     (variable) sürümünü tek dosya olarak yükler.
- *   - `latin-ext` alt kümesi Türkçe glifleri (ğ ş ı İ) için zorunlu.
- *   - Montserrat `preload: false`: hero'daki dev "HIBRID" yazısı artık
- *     glif path'i olduğu için (bkz. src/data/wordmark.ts) ilk boyama bu
- *     fontu beklemiyor. Preload'dan çıkarılınca ~130KB kritik yoldan
- *     kalkıyor; başlıklar display:swap ile hemen sonra yerine oturuyor.
- */
-const montserrat = Montserrat({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-montserrat",
-  display: "swap",
-  preload: false,
-});
-
-const inter = Inter({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -94,7 +68,20 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${montserrat.variable} ${inter.variable}`}>
+    <html lang={locale}>
+      <head>
+        {/* Gövde fontu ilk boyamada gereken tek font — preload edilir.
+            Montserrat (başlık) preload EDİLMEZ: kritik yolu meşgul
+            etmesin, display:swap ile hemen sonra yerine oturur. */}
+        <link
+          rel="preload"
+          href="/fonts/inter-latin-tr.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <ConsentInitScript />
+      </head>
       <body>
         <JsonLd data={organizationJsonLd(locale as Locale)} />
         <NextIntlClientProvider messages={messages}>

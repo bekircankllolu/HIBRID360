@@ -24,6 +24,9 @@
   width: 100%;
   height: 100%;
   display: block;
+  /* Çizim tamponu güncellenmeden önceki karede canvas'ın varsayılan beyaz
+     zemini görünmesin — sahne zaten siyah üzerine çiziliyor. */
+  background: var(--color-brand-black);
 }
 
 .center {

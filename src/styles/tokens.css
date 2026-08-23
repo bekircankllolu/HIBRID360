@@ -29,8 +29,8 @@
   --color-mona-lilac: #b49bd8;
 
   /* Typography */
-  --font-brand: var(--font-montserrat), "Montserrat", system-ui, sans-serif;
-  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-brand: "Montserrat", "Montserrat Fallback", system-ui, sans-serif;
+  --font-body: "Inter", "Inter Fallback", system-ui, sans-serif;
 
   --font-weight-brand: 800; /* Montserrat Extra Bold — hero/dev başlık */
   --font-weight-heading-bold: 700; /* Montserrat Bold — H1-H3 */

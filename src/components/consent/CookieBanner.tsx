@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { readConsent, writeConsent } from "@/lib/consent";
+import { writeConsent } from "@/lib/consent";
 import styles from "./CookieBanner.module.css";
 
 /**
@@ -13,24 +13,27 @@ import styles from "./CookieBanner.module.css";
  * Reddetme, kabul etmek kadar kolay: iki buton yan yana, aynı görsel
  * ağırlıkta. "Ayarlar" analitik çerezini ayrı ayrı açıp kapatır.
  * Karar verilene kadar hiçbir analytics scripti yüklenmez.
+ *
+ * Görünürlük React state'iyle DEĞİL, <html data-consent> özniteliğiyle
+ * yönetiliyor (bkz. ConsentInitScript + CookieBanner.module.css): bandın
+ * işaretlemesi ilk HTML'de geliyor, boyamadan önce çalışan script rıza
+ * kaydı varsa CSS ile gizliyor. Böylece bant gecikmeli girip LCP'yi
+ * kendine çekmiyor ve geri gelen ziyaretçide yanıp sönmüyor.
  */
 export function CookieBanner() {
   const t = useTranslations("consent");
-  const [visible, setVisible] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [analytics, setAnalytics] = useState(false);
-
-  useEffect(() => {
-    // Rıza kaydı yoksa bandı göster.
-    setVisible(readConsent() === null);
-  }, []);
-
-  if (!visible) return null;
+  const [decided, setDecided] = useState(false);
 
   const decide = (allowAnalytics: boolean) => {
     writeConsent(allowAnalytics);
-    setVisible(false);
+    // Karar verilince aynı mekanizmayla gizlenir.
+    document.documentElement.dataset.consent = "set";
+    setDecided(true);
   };
+
+  if (decided) return null;
 
   return (
     <div className={styles.banner} role="dialog" aria-label={t("label")}>

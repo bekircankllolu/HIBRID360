@@ -106,8 +106,12 @@ export function SolarSystem() {
     );
     observer.observe(stage);
 
-    const onResize = () => scene?.resize();
-    window.addEventListener("resize", onResize);
+    // Canvas'ın çizim tamponu, CSS boyutu her değiştiğinde yeniden
+    // ayarlanmalı. Yalnızca window resize dinlemek yetmiyor: aspect-ratio
+    // ve font yüklemesi layout'u sahne kurulduktan SONRA da değiştirebiliyor
+    // ve tampon eski kalınca canvas'ın bir şeridi hiç çizilmemiş görünüyordu.
+    const resizeObserver = new ResizeObserver(() => scene?.resize());
+    resizeObserver.observe(stage);
 
     const onPointerMove = (event: PointerEvent) => {
       const rect = stage.getBoundingClientRect();
@@ -121,7 +125,7 @@ export function SolarSystem() {
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", onResize);
+      resizeObserver.disconnect();
       stage.removeEventListener("pointermove", onPointerMove);
       if (frameId !== null) cancelAnimationFrame(frameId);
       scene?.dispose();

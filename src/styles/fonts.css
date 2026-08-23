@@ -1,0 +1,67 @@
+/**
+ * Marka fontları — kendi barındırdığımız alt kümeler.
+ *
+ * CLAUDE.md marka sistemi: başlık/marka = Montserrat (Extra Bold dahil),
+ * gövde = Inter (DECISIONS #2, VARSAYILANLA İLERLE).
+ *
+ * Neden next/font yerine kendi alt kümemiz:
+ * Google'ın hazır alt kümelerinde Türkçe için gereken beş glif (ğ Ğ İ ş Ş)
+ * yalnızca "latin-ext" dosyasında bulunuyor ve o dosya bu beş glif için
+ * 733 glif birden indiriyordu. TR ve EN sayfalarda toplam font yükü 164KB
+ * çıkıyor, LCP'yi (bütçe: mobilde <2,5sn) font indirmesine bağlıyordu.
+ *
+ * Buradaki dosyalar Google Fonts'un variable kaynaklarından fontTools ile
+ * üretildi: Latin temel aralık + Türkçe glifler, ve yalnızca gerçekten
+ * kullanılan ağırlık aralıkları (Inter 400-500, Montserrat 600-800).
+ * Sonuç: 164KB -> 50KB.
+ *
+ * Lisans: her iki aile de SIL Open Font License 1.1 — yeniden dağıtım
+ * serbest, lisans metinleri public/fonts/ altında birlikte taşınıyor.
+ *
+ * Üretim komutu (yeniden üretmek gerekirse):
+ *   pyftsubset <variable.ttf> --output-file=<ad>.woff2 --flavor=woff2 \
+ *     --unicodes="U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,\
+ *     U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,\
+ *     U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD,U+011E-011F,U+0130,\
+ *     U+015E-015F" --layout-features='kern,liga,calt' --name-IDs='*'
+ * (ağırlık aralığı önce fontTools.varLib.instancer ile daraltılır)
+ */
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat-latin-tr.woff2") format("woff2-variations");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin-tr.woff2") format("woff2-variations");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
+ * Metrik uyumlu yedek aileler — font inene kadar yazı sistem fontuyla
+ * çizilir; ascent/descent override'ları gerçek fontun metrikleriyle
+ * eşleştiği için yer değiştirme (CLS) oluşmaz.
+ */
+@font-face {
+  font-family: "Montserrat Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  ascent-override: 96.8%;
+  descent-override: 25.1%;
+  line-gap-override: 0%;
+  size-adjust: 106%;
+}
+
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  ascent-override: 96.88%;
+  descent-override: 24.12%;
+  line-gap-override: 0%;
+  size-adjust: 107%;
+}

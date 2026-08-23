@@ -1,3 +1,12 @@
+/* Rıza kaydı varsa bant hiç gösterilmez. data-consent özniteliğini
+   boyamadan önce çalışan satır içi script yazıyor (ConsentInitScript) —
+   bu yüzden ne gecikmeli giriş ne yanıp sönme oluyor. Öznitelik hiç
+   yazılamadıysa (script engellendi) bant görünür kalır: rıza sorulmadan
+   analytics yüklenmemesi, bandın gizlenmesinden önemli. */
+:global(html[data-consent="set"]) .banner {
+  display: none;
+}
+
 .banner {
   position: fixed;
   bottom: 0;
