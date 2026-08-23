@@ -222,7 +222,31 @@
     "next": "Devam"
   },
   "aiCreativeProduction": {
-    "transcriptTitle": "Tüm replikler (metin)"
+    "transcriptTitle": "Tüm replikler (metin)",
+    "heroLead": "Yarını şekillendiren markalar için yenilikçi görsel deneyimler üretiyoruz. İnsan içgüdüsünü, AI-native yaratıcılığı ve geleceğe dönük prodüksiyonu birleştirip fikirleri kültürel ve ticari etkiye çeviriyoruz.",
+    "slogans": [
+      "Human Creativity. Artificial Intelligence. Extraordinary Brand Experiences.",
+      "Hibrid AI brings stories and experiences to life through art, design and technology."
+    ],
+    "diffTitle": "Hibrid 360 sadece bir video prodüksiyon şirketi mi?",
+    "diffBody": "Hayır. Yüksek kaliteli prodüksiyon genlerimizde olsa da Hibrid 360 bir AI-Native Kreatif ve Prodüksiyon Stüdyosu olarak çalışır. Stratejiyi, markayı, tasarımı, dijital içeriği, fotoğrafı, sesi ve analitiği uçtan uca tek bir AI Kreatif İşletim Sistemi'nde birleştirerek hayal ile uygulama arasındaki mesafeyi kapatıyoruz. Yapay zekâyı yalnızca araç olarak kullanmıyor; kültürde iz bırakan, ölçeklenebilir ve teknolojiyle kurulmuş yaratıcı iş akışları inşa ediyoruz.",
+    "proofTitle": "NEDEN HİBRİD 360?",
+    "proofLead": "Fikirden etkiye: Daha hızlı · Daha akıllı · Daha esnek · Daha sürdürülebilir · Daha insan",
+    "proofList": [
+      "10 kat hızlı prodüksiyon",
+      "Daha çok yaratıcı seçenek",
+      "Premium görsel kalite",
+      "Global markalar için kurulmuş"
+    ],
+    "flowSteps": [
+      "Kreatif Strateji",
+      "Kreatif Direksiyon",
+      "AI Prodüksiyon",
+      "İnsan Rötuşu",
+      "Nihai Teslim"
+    ],
+    "closingBody": "Teknoloji tek başına duygu üretmez. Hikâyeler üretir. Fikirler üretir. İnsanlar üretir. Teknoloji aracımız. Yaratıcılık dilimiz. Duygu sonucumuz.",
+    "closingQuestion": "Sıradakini yaratmaya hazır mısınız?"
   },
   "brief": {
     "progress": "Soru {current} / {total}",

@@ -1,20 +1,20 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Mona } from "@/components/mona/Mona";
 import { monaQuestions, openingLine } from "@/data/mona";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import styles from "./page.module.css";
 
 /**
- * AI Creative Production — brief-rev12.md Bölüm 11.
- *
- * Sayfadaki uzun metinlerin tamamı MONA'nın repliklerine dönüştürülmüştür
- * (Bölüm 11.4). Sabit metin olarak yalnızca Bölüm 11.8'deki dört blok
- * kalır — aşağıdakiler o kutulardan birebir alınmıştır, marka dili olduğu
- * için her iki locale'de de İngilizcedir.
+ * AI-01..09 (nihai copy deck, Ağustos 2026) — AI Creative Production
+ * sayfası sabit blokları. Uzun metinlerin çoğu MONA'nın repliklerine
+ * dönüştürülmüştür (5.2 MONA); burada kalan dokuz blok artık locale'e
+ * göre next-intl "aiCreativeProduction" namespace'inden geliyor (önceki
+ * sürüm brief-rev12'nin İngilizce-kalır varsayımıyla hardcoded İngilizceydi
+ * — yeni deck AI-01/03/04/09 için ayrı TR çevirisi veriyor).
  *
  * TODO: brief 11.9 — AI Showreel filmi (Film A "Henüz Değil") teslim
  * edilince bu sayfaya tam sürüm olarak eklenecek; VideoObject JSON-LD
@@ -42,6 +42,9 @@ export default async function AiCreativeProductionPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("aiCreativeProduction");
+  const slogans = t.raw("slogans") as string[];
+  const proofList = t.raw("proofList") as string[];
+  const flowSteps = t.raw("flowSteps") as string[];
 
   return (
     <div>
@@ -56,59 +59,87 @@ export default async function AiCreativeProductionPage({
         ])}
       />
 
-      {/* brief 11.8 — blok 1: Açılış */}
+      {/* AI-01 */}
       <div className={styles.hero}>
         <h1 className={styles.heroTitle}>CREATE THE FUTURE.</h1>
-        <p className={styles.heroLead}>
-          We create innovative visual experiences for brands that shape tomorrow.
-          We combine human instinct, AI-native creativity and future-facing
-          production to turn ideas into cultural and commercial impact.
-        </p>
+        <p className={styles.heroLead}>{t("heroLead")}</p>
+      </div>
+
+      {/* AI-02 */}
+      <div className={styles.slogans}>
+        {slogans.map((slogan, index) => (
+          <p key={index} className={styles.sloganLine}>
+            {slogan}
+          </p>
+        ))}
       </div>
 
       <Mona locale={locale} />
 
-      {/* brief 11.8 — blok 2: Ayrıştırıcı soru */}
+      {/* AI-03 — ayrıştırıcı soru bloğu */}
       <section className={styles.block}>
-        <h2 className={styles.blockTitle}>
-          Is Hibrid 360 just a video production company?
-        </h2>
-        <p className={styles.blockBody}>
-          No. While high-end production is in our DNA, Hibrid 360 operates as an
-          AI-Native Creative &amp; Production Studio. By unifying strategy,
-          branding, design, digital content, photography, audio, and analytics
-          into an end-to-end AI Creative Operating System, we bridge the gap
-          between imagination and execution. We don&apos;t just use AI as a
-          tool — we build scalable, tech-driven creative workflows that leave a
-          lasting mark on culture.
-        </p>
+        <h2 className={styles.blockTitle}>{t("diffTitle")}</h2>
+        <p className={styles.blockBody}>{t("diffBody")}</p>
       </section>
 
-      {/* brief 11.8 — blok 3: Kanıt */}
+      {/* AI-04 — kanıt */}
       <section className={`${styles.block} ${styles.proof}`}>
-        <h2 className={styles.blockTitle}>WHY HIBRID 360?</h2>
-        <p className={styles.blockBody}>
-          From idea to impact: Faster · Smarter · More Flexible · More
-          Sustainable · More Human
-        </p>
+        <h2 className={styles.blockTitle}>{t("proofTitle")}</h2>
+        <p className={styles.blockBody}>{t("proofLead")}</p>
         <ul className={styles.proofList}>
-          <li>10x Faster Production</li>
-          <li>Higher Creativity</li>
-          <li>Premium Visual Quality</li>
-          <li>Built for Global Brands</li>
+          {proofList.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
       </section>
 
-      {/* brief 11.8 — blok 4: Kapanış + CTA */}
+      {/* AI-05 — akış şeması */}
       <section className={styles.block}>
-        <p className={styles.closing}>
-          Technology alone doesn&apos;t create emotion. Stories do. Ideas do.
-          People do. The future of creativity isn&apos;t artificial. It&apos;s
-          hybrid. Ready to Create What&apos;s Next?
+        <div className={styles.flow}>
+          {flowSteps.map((step, index) => (
+            <Fragment key={step}>
+              <span className={styles.flowStep}>{step}</span>
+              {index < flowSteps.length - 1 && (
+                <span className={styles.flowArrow}>→</span>
+              )}
+            </Fragment>
+          ))}
+        </div>
+      </section>
+
+      {/* AI-06 — manifesto bandı */}
+      <section className={`${styles.block} ${styles.manifesto}`}>
+        <p className={styles.manifestoText}>
+          We don&rsquo;t replace creativity. We expand it.
         </p>
-        <Link href="/brief" className={styles.cta}>
-          Let&apos;s Build Something Extraordinary.
-        </Link>
+      </section>
+
+      {/* AI-07 — ara bant */}
+      <section className={styles.block}>
+        <p className={styles.bandText}>
+          AI is Changing Production. We are Redefining It.
+        </p>
+      </section>
+
+      {/* AI-08 — What We Build */}
+      <section className={styles.block}>
+        <h2 className={styles.blockTitle}>What We Build</h2>
+        <ul className={styles.buildList}>
+          <li>AI Films</li>
+          <li>AI Photography</li>
+          <li>AI Design</li>
+          <li>AI Experiences</li>
+          <li>AI Innovation</li>
+        </ul>
+      </section>
+
+      {/* AI-09 — kapanış + CTA (buton layout'taki global CtaBand'dan gelir) */}
+      <section className={styles.block}>
+        <p className={styles.closing}>{t("closingBody")}</p>
+        <p className={styles.closing}>
+          The future of creativity isn&rsquo;t artificial. It&rsquo;s hybrid.
+        </p>
+        <p className={styles.closingQuestion}>{t("closingQuestion")}</p>
       </section>
 
       {/* brief 11.6: "Altyazı dosyaları ... SEO için sayfada metin olarak da

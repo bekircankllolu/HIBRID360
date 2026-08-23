@@ -222,7 +222,31 @@
     "next": "Next"
   },
   "aiCreativeProduction": {
-    "transcriptTitle": "All lines (text)"
+    "transcriptTitle": "All lines (text)",
+    "heroLead": "We create innovative visual experiences for brands that shape tomorrow. We combine human instinct, AI-native creativity and future-facing production to turn ideas into cultural and commercial impact.",
+    "slogans": [
+      "Human Creativity. Artificial Intelligence. Extraordinary Brand Experiences.",
+      "Hibrid AI brings stories and experiences to life through art, design and technology."
+    ],
+    "diffTitle": "Is Hibrid 360 just a video production company?",
+    "diffBody": "No. While high-end production is in our DNA, Hibrid 360 operates as an AI-Native Creative & Production Studio. By unifying strategy, branding, design, digital content, photography, audio and analytics into an end-to-end AI Creative Operating System, we bridge the gap between imagination and execution. We don't just use AI as a tool — we build scalable, tech-driven creative workflows that leave a lasting mark on culture.",
+    "proofTitle": "WHY HIBRID 360?",
+    "proofLead": "From idea to impact: Faster · Smarter · More Flexible · More Sustainable · More Human",
+    "proofList": [
+      "10x Faster Production",
+      "Higher Creativity",
+      "Premium Visual Quality",
+      "Built for Global Brands"
+    ],
+    "flowSteps": [
+      "Creative Strategy",
+      "Creative Direction",
+      "AI Production",
+      "Human Refinement",
+      "Final Delivery"
+    ],
+    "closingBody": "Technology alone doesn't create emotion. Stories do. Ideas do. People do. Technology is our tool. Creativity is our language. Emotion is our outcome.",
+    "closingQuestion": "Ready to Create What's Next?"
   },
   "brief": {
     "progress": "Question {current} of {total}",

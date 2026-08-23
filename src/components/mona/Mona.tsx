@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useMonaMachine } from "@/hooks/useMonaMachine";
-import { monaQuestions, type MonaLine, type MonaQuestion } from "@/data/mona";
+import { monaQuestions, AI_DISCLAIMER, type MonaLine, type MonaQuestion } from "@/data/mona";
 import styles from "./Mona.module.css";
 
 /**
@@ -202,6 +202,9 @@ export function Mona({
           )}
         </div>
       </div>
+
+      {/* MONA-16 — zorunlu ibare, konum/dil değişmez. */}
+      <p className={styles.disclaimer}>{AI_DISCLAIMER}</p>
     </section>
   );
 }

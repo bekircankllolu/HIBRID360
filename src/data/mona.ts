@@ -98,9 +98,12 @@ export const monaQuestions: MonaQuestion[] = [
   },
   {
     id: "q2",
+    // MONA-15 — ekranda görünen etiket, MONA-05'in tam soru metninden
+    // daha kısa: "Is this just a production company?" / "Burası sadece
+    // prodüksiyon şirketi mi?"
     question: {
-      en: "Is Hibrid 360 just a video production company?",
-      tr: "Hibrid 360 sadece bir video prodüksiyon şirketi mi?",
+      en: "Is this just a production company?",
+      tr: "Burası sadece prodüksiyon şirketi mi?",
     },
     text: {
       en: "No. High-end production is in our DNA, but Hibrid 360 runs as an AI-Native Creative & Production Studio. Strategy, branding, design, digital content, photography, audio and analytics sit in one system — an AI Creative Operating System. We don't just use AI as a tool. We build the workflow around it.",
@@ -110,7 +113,8 @@ export const monaQuestions: MonaQuestion[] = [
   },
   {
     id: "q3",
-    question: { en: "What do you actually build?", tr: "Ne üretiyorsunuz?" },
+    // MONA-15 — etiket "actually" olmadan.
+    question: { en: "What do you build?", tr: "Ne üretiyorsunuz?" },
     text: {
       en: "AI films. AI photography. AI design. AI experiences. AI innovation. And everything that still needs a camera, a set and a crew — because a lot of it still does.",
       tr: "AI filmler. AI fotoğraf. AI tasarım. AI deneyimler. AI inovasyon. Bir de hâlâ kamera, set ve ekip isteyen her şey — çünkü çoğu hâlâ istiyor.",
@@ -128,8 +132,9 @@ export const monaQuestions: MonaQuestion[] = [
   },
   {
     id: "q5",
+    // MONA-15 — etiket "creative people" yerine "creatives".
     question: {
-      en: "Will AI replace creative people?",
+      en: "Will AI replace creatives?",
       tr: "Yapay zekâ yaratıcıların yerini alacak mı?",
     },
     text: {
@@ -140,9 +145,11 @@ export const monaQuestions: MonaQuestion[] = [
   },
   {
     id: "q6",
+    // MONA-15 — ekranda görünen kısa etiket, MONA-09'un tam soru
+    // metninden farklı.
     question: {
-      en: "How do we use AI without losing our brand's voice?",
-      tr: "Markamızın sesini kaybetmeden yapay zekâyı nasıl kullanırız?",
+      en: "How do we keep our brand voice?",
+      tr: "Marka sesimizi nasıl koruruz?",
     },
     text: {
       en: "Your brand's DNA is the differentiator — not the model you use. Every project starts with strategy, grows through creativity, and only then gets amplified by AI. If you start with the tool, everything comes out looking like everyone else.",
@@ -232,3 +239,10 @@ export const homepageLines: MonaLine[] = [
 export function lineText(line: MonaLine, locale: Locale): string {
   return line.text[locale];
 }
+
+/**
+ * MONA-16 — MONA'nın altında zorunlu ibare. Deck'te "EN + TR" olarak
+ * tek bir iki dilli satır verilmiş (locale'e göre ayrılmıyor), bu yüzden
+ * her iki dilde de aynı, sabit metin.
+ */
+export const AI_DISCLAIMER = "AI-generated character · AI ile üretilmiş karakter";
