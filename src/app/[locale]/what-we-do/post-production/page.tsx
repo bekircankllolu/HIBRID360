@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
+import { ServiceVisual } from "@/components/ServiceVisual";
+import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
 import styles from "@/styles/service-page.module.css";
 
@@ -65,6 +67,11 @@ export default async function PostProductionPage({
 
       <h1 className={styles.heroTitle}>POST PRODUCTION</h1>
       <p className={styles.heroSubtitle}>Off We Go!</p>
+      <ServiceVisual
+        src={siteImages.services.postProduction.src}
+        alt={siteImages.services.postProduction.alt}
+        priority
+      />
 
       <div className={styles.body}>
         {body.map((paragraph, index) => (

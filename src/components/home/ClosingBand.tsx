@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { siteImages } from "@/data/site-images";
 import styles from "./ClosingBand.module.css";
 
 /**
@@ -7,18 +9,27 @@ import styles from "./ClosingBand.module.css";
  * düzeltilmiş ("works doesn't" → "work doesn't"). Buton artık plug-ad.co'ya
  * değil, WORK sayfasına gider.
  *
- * TODO: brief 16 — "mevcut video loop" varlığı (arka plan videosu) henüz
- * teslim edilmedi; poster kare + preload="none" ile eklenecek.
+ * Video loop hâlâ prodüksiyon bekliyor; eski sitedeki bisiklet görsel hissi
+ * geçici poster olarak kullanılıyor.
  */
 export function ClosingBand() {
   const t = useTranslations("home.closing");
 
   return (
     <section className={styles.band}>
-      <h2 className={styles.title}>{t("title")}</h2>
-      <Link href="/work" className={styles.button}>
-        {t("subtitle")}
-      </Link>
+      <Image
+        className={styles.image}
+        src={siteImages.home.closing.src}
+        alt=""
+        fill
+        sizes="100vw"
+      />
+      <div className={styles.content}>
+        <h2 className={styles.title}>{t("title")}</h2>
+        <Link href="/work" className={styles.button}>
+          {t("subtitle")}
+        </Link>
+      </div>
     </section>
   );
 }

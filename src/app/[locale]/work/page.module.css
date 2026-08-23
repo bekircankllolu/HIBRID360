@@ -21,6 +21,29 @@
   margin: var(--space-16) 0;
 }
 
+.showreelMedia {
+  position: relative;
+  min-height: clamp(18rem, 48vw, 34rem);
+  margin-bottom: var(--space-8);
+  overflow: hidden;
+  background: #080808;
+}
+
+.showreelMedia::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.58), transparent 54%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.44), transparent 48%);
+  pointer-events: none;
+}
+
+.showreelImage {
+  object-fit: cover;
+  filter: contrast(1.1) saturate(0.94);
+}
+
 .showreelSlogan {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);

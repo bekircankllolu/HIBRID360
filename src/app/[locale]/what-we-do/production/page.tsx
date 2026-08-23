@@ -3,7 +3,9 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
+import { ServiceVisual } from "@/components/ServiceVisual";
 import { hibridSolutions } from "@/data/hibrid-solutions";
+import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
 import styles from "@/styles/service-page.module.css";
 
@@ -68,6 +70,11 @@ export default async function ProductionPage({
 
       <h1 className={styles.heroTitle}>PRODUCTION</h1>
       <p className={styles.heroSubtitle}>PURE. SIMPLE. POWERFUL.</p>
+      <ServiceVisual
+        src={siteImages.services.production.src}
+        alt={siteImages.services.production.alt}
+        priority
+      />
 
       <div className={styles.body}>
         {body.map((paragraph, index) => (

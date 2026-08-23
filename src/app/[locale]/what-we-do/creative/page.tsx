@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
+import { ServiceVisual } from "@/components/ServiceVisual";
+import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
 import styles from "@/styles/service-page.module.css";
 
@@ -65,6 +67,11 @@ export default async function CreativePage({
 
       <h1 className={styles.heroTitle}>CREATIVITY WITHOUT LIMITS</h1>
       <p className={styles.heroSubtitle}>{t("heroSubtitle")}</p>
+      <ServiceVisual
+        src={siteImages.services.creative.src}
+        alt={siteImages.services.creative.alt}
+        priority
+      />
 
       <div className={styles.body}>
         {body.map((paragraph, index) => (

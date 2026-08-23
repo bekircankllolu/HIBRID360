@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
+import { ServiceVisual } from "@/components/ServiceVisual";
 import { hibridSolutions } from "@/data/hibrid-solutions";
+import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
 import styles from "@/styles/service-page.module.css";
 
@@ -53,6 +55,11 @@ export default async function CloudTvPage({
 
       <h1 className={styles.heroTitle}>CLOUD TV</h1>
       <p className={styles.heroSubtitle}>There Is No Time Like Right Now</p>
+      <ServiceVisual
+        src={siteImages.services.cloudTv.src}
+        alt={siteImages.services.cloudTv.alt}
+        priority
+      />
 
       <p className={styles.body}>{t("body")}</p>
 

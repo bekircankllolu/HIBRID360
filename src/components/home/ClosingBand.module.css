@@ -1,8 +1,35 @@
 .band {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
+  position: relative;
+  min-height: 56vh;
+  margin: 0;
   padding: var(--space-24) var(--space-4);
   text-align: center;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.24)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent 50%);
+  pointer-events: none;
+}
+
+.image {
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.08);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
 }
 
 .title {

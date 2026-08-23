@@ -12,6 +12,8 @@ ayrı bir oturumda/prompt olarak verilebilir.
 - [ ] i18n routing iskeleti (`/tr`, `/en`), hreflang meta yapısı
 - [ ] Design token sistemi: CSS custom properties (renkler, tipografi, spacing)
 - [ ] Layout iskeleti: header (menü + dil seçici), footer (yasal linkler + sosyal ikonlar)
+- [x] Eski site görsel setinden seçilmiş statik WebP görsellerinin ana sayfa,
+      Work bekleme alanı ve servis sayfalarına yerleştirilmesi
 - [ ] Performans bütçesi CI kontrolü (Lighthouse CI, LCP/CLS eşiği)
 
 **Çıktı:** Boş ama canlıda çalışan, doğru routing'e ve doğru marka sistemine

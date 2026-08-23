@@ -28,6 +28,29 @@
   opacity: 0.9;
 }
 
+.visual {
+  position: relative;
+  min-height: clamp(17rem, 46vw, 34rem);
+  margin: var(--space-12) 0 var(--space-12);
+  overflow: hidden;
+  background: #080808;
+}
+
+.visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 46%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.3), transparent 42%);
+  pointer-events: none;
+}
+
+.visualImage {
+  object-fit: cover;
+  filter: contrast(1.08) saturate(0.92);
+}
+
 .body {
   display: flex;
   flex-direction: column;
@@ -199,4 +222,11 @@
 .ctaButton:hover {
   background: var(--color-brand-yellow);
   color: var(--color-text-on-yellow);
+}
+
+@media (max-width: 640px) {
+  .visual {
+    min-height: 18rem;
+    margin: var(--space-8) calc(var(--space-4) * -1) var(--space-10);
+  }
 }

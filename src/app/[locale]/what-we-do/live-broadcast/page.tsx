@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
+import { ServiceVisual } from "@/components/ServiceVisual";
+import { siteImages } from "@/data/site-images";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import styles from "@/styles/service-page.module.css";
@@ -66,6 +68,11 @@ export default async function LiveBroadcastPage({
       <p className={styles.heroSubtitle}>
         LIVE IS THE HARDEST FORMAT. IT&rsquo;S OUR FAVOURITE.
       </p>
+      <ServiceVisual
+        src={siteImages.services.liveBroadcast.src}
+        alt={siteImages.services.liveBroadcast.alt}
+        priority
+      />
 
       <div className={styles.body}>
         {body.map((paragraph, index) => (

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
 import { getPublishedWorks } from "@/lib/content";
 import { WorkArchive } from "@/components/work/WorkArchive";
+import { siteImages } from "@/data/site-images";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { Work } from "@/types/content";
@@ -22,9 +24,9 @@ import styles from "./page.module.css";
  * bilinemez. Envanter geldiğinde Supabase `works` tablosuna girilecek;
  * aşağıdaki arayüz o veriyle çalışacak şekilde hazır.
  *
- * TODO: brief 7.2 — prodüksiyon reel'i (10 işten kesilmiş tam ekran video)
- * medya varlığı olmadan eklenemez; poster + preload="none" kuralıyla
- * (CLAUDE.md performans bütçesi) varlık geldiğinde bağlanacak.
+       * TODO: brief 7.2 — prodüksiyon reel'i (10 işten kesilmiş tam ekran video)
+       * medya varlığı olmadan eklenemez. Şimdilik eski site görsel setinden
+       * statik "story" görseli poster hissiyle kullanılıyor.
  */
 
 // META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
@@ -93,6 +95,16 @@ export default async function WorkPage({
 
       <section className={styles.showreel}>
         {/* TODO: brief 7.2 — prodüksiyon reel'i videosu (medya varlığı yok) */}
+        <div className={styles.showreelMedia}>
+          <Image
+            className={styles.showreelImage}
+            src={siteImages.work.story.src}
+            alt={siteImages.work.story.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 1120px"
+            priority
+          />
+        </div>
         <p className={styles.showreelSlogan}>
           MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.
         </p>
