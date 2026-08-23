@@ -85,6 +85,98 @@
       "evidenceEmpty": "Görsel malzeme hazırlanıyor."
     }
   },
+  "whatWeDo": {
+    "heroTitle": "NE YAPIYORUZ",
+    "heroBody": "Tek fikir, uçtan uca üretim: strateji, film, fotoğraf, canlı yayın, dijital ve AI — tek çatı, tek ekip.",
+    "list": [
+      { "title": "Creative", "body": "Marka düşüncesi, konsept ve kampanya fikirleri." },
+      { "title": "Production", "body": "Film, reklam filmi ve ürün içeriği; uçtan uca çekim." },
+      { "title": "Post Production", "body": "Kurgu, renk, ses, motion ve 3D." },
+      { "title": "Digital", "body": "Sosyal medya öncelikli içerik, web ve sürekli üretim." },
+      { "title": "Live Broadcast", "body": "Çok kameralı canlı yayın, etkinlik ve medikal yayın." },
+      { "title": "Cloud TV", "body": "Bulut portal üzerinde kendi kurumsal TV kanalınız." },
+      { "title": "Event Management", "body": "Etkinlik, kongre, lansman ve roadshow." },
+      { "title": "Photography", "body": "Ürün, yemek, portre ve kampanya fotoğrafı." },
+      { "title": "AI Creative Production", "body": "AI film, AI fotoğraf, AI tasarım ve hibrit iş akışları." }
+    ]
+  },
+  "services": {
+    "evidenceTitle": "Kanıt",
+    "creative": {
+      "heroSubtitle": "Her fikir insanla başlar. Her ihtimal yapay zekâyla büyür.",
+      "body": [
+        "Markanız için yaratıcı bir yol açıyoruz.",
+        "Trafikte sıkışmış markalara yaratıcı kestirmeler kuruyoruz."
+      ],
+      "band": "Markanızın DNA’sı, yapay zekâ çağının asıl ayrıştırıcısıdır.",
+      "galleryEmpty": "Kampanya galerisi hazırlanıyor."
+    },
+    "production": {
+      "body": [
+        "Hibrid 360, etkinlikleriniz için ses, ışık ve sahne prodüksiyonlarını kendi bünyesindeki imkânlarla üreten, yeni nesil çözümler sunan deneyimli bir prodüksiyon ve post prodüksiyon ajansıdır.",
+        "Prodüksiyonda 20 yılı aşkın deneyimimizle; yönetmen ve kamera ekibi, fotoğrafçı, senarist ve metin yazarı, ışık ekibi ve After Effects ile Illustrator gibi programlarda çalışan uzmanlarla — ışık ve renk düzeltme, green screen ve seslendirme dahil — kendi ekibimizle çalışıyoruz."
+      ],
+      "evidenceEmpty": "Doğrulanmış rakam ve iş adı hazırlanıyor."
+    },
+    "postProduction": {
+      "body": [
+        "Ajansımız, projenin hem dijital hem prodüksiyon tarafındaki tüm post prodüksiyon işlerini yapar. Tam kapsamlı bir post prodüksiyon ajansıyız.",
+        "Hibrid 360 ayrıca 3D mimari render, kinetik tipografi, karakter tasarımı ve AutoCAD animasyonunda deneyimli genç YouTube kuşağı sanatçılarla çalışır.",
+        "Masaüstü filmler, sosyal medya videoları, fabrika tanıtım filmleri, ürün videoları, lansman konsept videoları ve şirket toplantıları için ekip ve ekipman sağlamakla kalmıyor; tasarım ve uygulama hizmetleri de veriyoruz."
+      ],
+      "microHeadingNote": "Sondan bir önceki plan — ama bizde iş orada bitmiyor."
+    },
+    "digital": {
+      "body": [
+        "İnsanların bugün nasıl izlediğini, kaydırdığını, paylaştığını ve etkileşime girdiğini düşünerek dijital içerik üretiyoruz.",
+        "Sosyal medya öncelikli ve gündeme anında yanıt veren içerikten CGI filmlere, motion tasarıma ve yapay zekâ destekli görsel üretime kadar; fikirleri hızlı hareket eden, her platformda performans gösteren dijital varlıklara çeviriyoruz."
+      ],
+      "bandBody": [
+        "İnsanların içinde dolaşabileceği dijital dünyalar kuruyoruz.",
+        "Hibrid 360’ta dijital; stratejinin, tasarımın, hikâye anlatımının ve teknolojinin deneyime dönüştüğü yerdir. Markanıza keşfedilecek, anlaşılacak, güvenilecek ve hatırlanacak bir yer verir.",
+        "Cilalı bir arayüzden fazlasına ihtiyacı olan markalar için dijital deneyimler kuruyoruz: yapı, hareket, netlik ve insanı ilk izlenimden anlamlı bir eyleme götüren bir sistem."
+      ],
+      "closingBody": "Tek seferlik içerikten sürekli çalışan içerik sistemlerine kadar; dijital üretimi bugünün izleyicisinin hızına, ölçeğine ve alışkanlığına göre kuruyoruz."
+    },
+    "liveBroadcast": {
+      "body": [
+        "Markanız veya şirketiniz için profesyonel online canlı yayın hizmetleri sunuyoruz. Etkinliğinizi hem web sitenizde hem de sosyal medya hesaplarınızda (Facebook, X, YouTube, Instagram, LinkedIn) eş zamanlı yayınlayarak daha geniş bir kitleye ulaştırıyoruz.",
+        "Canlı yayın ihtiyacınızı; anket, veri toplama ve etkileşimli soru-cevap modülleriyle güçlendirilmiş proaktif bir yayın akışıyla destekliyoruz.",
+        "Tek kameralı çekimden yönetmen masasına bağlı çok kameralı kurulumlara kadar, en güncel ekipman ve profesyonel ekiple webcast hizmeti veriyoruz.",
+        "Sahada kamera ekibi gerektirmeyen robotik canlı yayın da yapıyoruz.",
+        "Kongre ve webinar gibi etkinliklerin canlı yayınının yanı sıra ameliyathaneden canlı yayın yapıyor; Türkiye’deki veya başka bir ülkedeki ameliyathane ile kongre salonu arasında canlı bağlantı kuruyoruz. Tıp dünyasının ihtiyacına göre çift yönlü ses ve görüntülü canlı yayın altyapısını kurabiliyoruz. Laparoskopi dahil canlı cerrahi yayınlar ve entegre yayın hizmetleri de veriyoruz."
+      ],
+      "cloudBody": "İçeriklerinizi ve videolarınızı kolay erişilebilir, kullanışlı bir portalda saklıyor; 7/24 çalışan bir sistemle içerikleriniz için sürdürülebilir ve büyüyen bir altyapı kuruyoruz. Çözüm ortağımızla birlikte size özel, bulut tabanlı ve kapalı devre bir TV altyapısı geliştiriyoruz.",
+      "cloudLink": "Cloud TV",
+      "evidenceEmpty": "Doğrulanmış rakam ve iş adı hazırlanıyor."
+    },
+    "cloudTv": {
+      "body": "Hibrid 360, şirketinize özel TV kanalınızı — “Cloudtivi” — bulut tabanlı bir kurumsal portal üzerinde kurar. Şirket TV kanalınız; iç iletişiminiz için şirket içinde ya da üyelik sistemiyle kullanıcılarınız için kullanabileceğiniz etkili bir platformdur.",
+      "steps": [
+        "İçeriği düzenlemek için web portal ve yönetim paneli kuruyoruz,",
+        "bulut tabanlı içerik yayını için gerekli altyapıyı hazırlıyoruz,",
+        "sistemin kullanımı için eğitim veriyor, yönetiminize anahtar teslim çözüm sunuyor ve isterseniz operasyon ortağınız olarak yanınızda çalışıyoruz."
+      ],
+      "bandBody": [
+        "Giderek daha çok şirket; “Cloudtivi” üzerinden çalışanlarına, bayi ağına ve kullanıcılarına doğrudan ulaşıyor — kendi mekânında ve hibrit video içerikle, profesyonel bir yönetmen ekibiyle yapılan canlı yayınlarla.",
+        "Hibrid 360, sürükleyici bir TV kanalının yaptığı her şeyi markanız adına yapar — dahasını da."
+      ],
+      "solutionsTitle": "WHAT ARE HIBRID SOLUTIONS?"
+    },
+    "eventManagement": {
+      "body": [
+        "Hibrid 360 olarak ulusal ve uluslararası kurumsal müşterilerin etkinlik, toplantı ve lansman organizasyonlarına yaratıcı bir bakış ve yenilikçi fikirlerle hizmet veriyoruz.",
+        "Farkı unutulmayan etkinliklerle yaratıyoruz.",
+        "Konsept projelerden saha aktivitelerine, roadshow’lardan test sürüşlerine; fuarlardan festivallere, şirket partilerinden açılışlara, ödül törenlerinden sosyal sorumluluk projelerine kadar sıra dışı bir hizmet yelpazesi sunuyoruz."
+      ]
+    },
+    "photography": {
+      "body": [
+        "Ürün, yemek, portre ve kampanya fotoğrafı — kendi stüdyolarımızda çekilir, kendi ekibimizle stillenir, kendi bünyemizde rötuşlanır.",
+        "Tek çekim günü, tek set; kampanyanızın ihtiyaç duyduğu bütün görseller: key visual, packshot, sosyal medya kadrajları ve kamera arkası."
+      ]
+    }
+  },
   "directors": {
     "heroTitle": "KADRAJIN ARKASINDAKİLER.",
     "heroSubtitle": "Filmleri şirketler çekmez, insanlar çeker — ve bunlar bizimkiler.",

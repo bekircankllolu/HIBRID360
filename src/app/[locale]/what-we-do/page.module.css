@@ -8,7 +8,15 @@
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
   font-size: clamp(2.25rem, 7vw, 5rem);
-  margin: 0 0 var(--space-16);
+  margin: 0;
+}
+
+.heroBody {
+  max-width: 44rem;
+  margin: var(--space-6) 0 var(--space-16);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
 }
 
 .subPages {
@@ -17,22 +25,37 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
 }
 
-.subPages a {
+.subPages li {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.subPages li:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-6) 0;
+}
+
+.itemTitle {
   font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
 }
 
-.subPages a:hover {
+.itemBody {
+  font-size: 0.9375rem;
+  opacity: 0.7;
+  max-width: 28rem;
+}
+
+.item:hover .itemTitle {
   color: var(--color-brand-fuchsia);
-}
-
-.pending {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-  opacity: 0.4;
 }

@@ -8,12 +8,8 @@
  * `href` alanı bu kod tabanındaki gerçek rota yapısına uyarlanmıştır
  * (brief tabloda /production, /digital gibi kök yollar veriyor; sitede
  * bu sayfalar WHAT WE DO altında toplanıyor — bkz. brief Bölüm 3.1 menü
- * kararı). Henüz açılmamış sayfalar `ready: false` ile işaretli ve
- * WHAT WE DO listesine bağlanıyor — kırık link üretilmiyor.
- *
- * TODO: brief Bölüm 12 — Production, Digital, Creative, Live Broadcast,
- * Photography sayfaları mevcut siteden taşınınca href'ler kendi
- * sayfalarına çevrilip ready:true yapılacak.
+ * kararı). Sekiz alt sayfanın tamamı task #18 ile açıldı; tüm taşlar artık
+ * kendi gerçek sayfasına gidiyor.
  *
  * Taş görseli: müşteriden teslim edildi (hibrid360_hibridtaslar paketi) —
  * AI ile üretilmiş, düşük poligonlu Hibrid taşı; sarı ve fuşya varyantı
@@ -29,9 +25,9 @@ export interface OrbitStone {
 }
 
 export const orbitStones: OrbitStone[] = [
-  { orbit: 1, label: "PRODUCTION", href: "/what-we-do", ready: false, color: "yellow" },
-  { orbit: 2, label: "DIGITAL", href: "/what-we-do", ready: false, color: "fuchsia" },
-  { orbit: 3, label: "CREATIVE", href: "/what-we-do", ready: false, color: "yellow" },
+  { orbit: 1, label: "PRODUCTION", href: "/what-we-do/production", ready: true, color: "yellow" },
+  { orbit: 2, label: "DIGITAL", href: "/what-we-do/digital", ready: true, color: "fuchsia" },
+  { orbit: 3, label: "CREATIVE", href: "/what-we-do/creative", ready: true, color: "yellow" },
   {
     orbit: 4,
     label: "AI",
@@ -39,10 +35,28 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "fuchsia",
   },
-  { orbit: 5, label: "LIVE BROADCAST", href: "/what-we-do", ready: false, color: "yellow" },
-  { orbit: 6, label: "PHOTOGRAPHY", href: "/what-we-do", ready: false, color: "fuchsia" },
-  { orbit: 7, label: "POST PRODUCTION", href: "/what-we-do", ready: false, color: "yellow" },
-  { orbit: 8, label: "EVENTS", href: "/what-we-do", ready: false, color: "fuchsia" },
+  {
+    orbit: 5,
+    label: "LIVE BROADCAST",
+    href: "/what-we-do/live-broadcast",
+    ready: true,
+    color: "yellow",
+  },
+  { orbit: 6, label: "PHOTOGRAPHY", href: "/what-we-do/photography", ready: true, color: "fuchsia" },
+  {
+    orbit: 7,
+    label: "POST PRODUCTION",
+    href: "/what-we-do/post-production",
+    ready: true,
+    color: "yellow",
+  },
+  {
+    orbit: 8,
+    label: "EVENTS",
+    href: "/what-we-do/event-management",
+    ready: true,
+    color: "fuchsia",
+  },
 ];
 
 /** brief Bölüm 4.5 — bölüm başlığı sloganı. */

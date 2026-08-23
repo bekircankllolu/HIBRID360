@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Link } from "@/i18n/navigation";
@@ -5,32 +7,24 @@ import type { Locale } from "@/i18n/routing";
 import styles from "./page.module.css";
 
 /**
- * brief-rev12.md Bölüm 3.1 — WHAT WE DO listesi: Creative · Production ·
- * Post Production · Digital · Live Broadcast · Cloud TV · Event Management ·
- * Photography · AI Creative Production · Service Production (International) ·
- * How We Work.
- *
- * Faz 3'te Service Production ve How We Work, Faz 4'te AI Creative
- * Production açıldı. Kalan maddeler mevcut siteden taşınacak.
+ * WWD-01/02 (nihai copy deck, Ağustos 2026) — What We Do hub sayfası.
+ * Eski "Solutions" sayfasının yerini alıyor; dokuz hizmet WWD-02'deki
+ * sıraya ve başlık+tek satır tanım biçimine birebir uyuyor.
  */
-export const metadata = { title: "What We Do" };
 
-const OPEN_PAGES = [
-  { href: "/what-we-do/ai-creative-production", label: "AI Creative Production" },
-  { href: "/what-we-do/service-production", label: "Service Production (International)" },
-  { href: "/what-we-do/how-we-work", label: "How We Work" },
-];
+const HREFS: Record<string, string> = {
+  Creative: "/what-we-do/creative",
+  Production: "/what-we-do/production",
+  "Post Production": "/what-we-do/post-production",
+  Digital: "/what-we-do/digital",
+  "Live Broadcast": "/what-we-do/live-broadcast",
+  "Cloud TV": "/what-we-do/cloud-tv",
+  "Event Management": "/what-we-do/event-management",
+  Photography: "/what-we-do/photography",
+  "AI Creative Production": "/what-we-do/ai-creative-production",
+};
 
-const PENDING_PAGES = [
-  "Creative",
-  "Production",
-  "Post Production",
-  "Digital",
-  "Live Broadcast",
-  "Cloud TV",
-  "Event Management",
-  "Photography",
-];
+export const metadata: Metadata = { title: "What We Do" };
 
 export default async function WhatWeDoPage({
   params,
@@ -38,6 +32,8 @@ export default async function WhatWeDoPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations("whatWeDo");
+  const list = t.raw("list") as Array<{ title: string; body: string }>;
 
   return (
     <div className={styles.page}>
@@ -47,17 +43,16 @@ export default async function WhatWeDoPage({
           { name: "What We Do", path: "/what-we-do" },
         ])}
       />
-      <h1 className={styles.title}>WHAT WE DO</h1>
+      <h1 className={styles.title}>{t("heroTitle")}</h1>
+      <p className={styles.heroBody}>{t("heroBody")}</p>
+
       <ul className={styles.subPages}>
-        {PENDING_PAGES.map((label) => (
-          // TODO: brief Bölüm 9-10 — bu sayfalar mevcut siteden taşınacak.
-          <li key={label} className={styles.pending}>
-            {label}
-          </li>
-        ))}
-        {OPEN_PAGES.map((page) => (
-          <li key={page.href}>
-            <Link href={page.href}>{page.label}</Link>
+        {list.map((item) => (
+          <li key={item.title}>
+            <Link href={HREFS[item.title] ?? "/what-we-do"} className={styles.item}>
+              <span className={styles.itemTitle}>{item.title}</span>
+              <span className={styles.itemBody}>{item.body}</span>
+            </Link>
           </li>
         ))}
       </ul>

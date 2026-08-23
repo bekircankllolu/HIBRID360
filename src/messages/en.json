@@ -85,6 +85,98 @@
       "evidenceEmpty": "Visual material is on the way."
     }
   },
+  "whatWeDo": {
+    "heroTitle": "WHAT WE DO",
+    "heroBody": "One idea, produced end to end: strategy, film, photography, live broadcast, digital and AI — under one roof, with one crew.",
+    "list": [
+      { "title": "Creative", "body": "Brand thinking, concept and campaign ideas." },
+      { "title": "Production", "body": "Films, commercials and product content, shot end to end." },
+      { "title": "Post Production", "body": "Editing, colour, sound, motion and 3D." },
+      { "title": "Digital", "body": "Social-first content, web and always-on production." },
+      { "title": "Live Broadcast", "body": "Multi-camera live streams, events and medical broadcasts." },
+      { "title": "Cloud TV", "body": "Your own corporate TV channel on a cloud portal." },
+      { "title": "Event Management", "body": "Events, conventions, launches and roadshows." },
+      { "title": "Photography", "body": "Product, food, portrait and campaign photography." },
+      { "title": "AI Creative Production", "body": "AI films, AI photography, AI design and hybrid workflows." }
+    ]
+  },
+  "services": {
+    "evidenceTitle": "Evidence",
+    "creative": {
+      "heroSubtitle": "Every idea begins with people. Every possibility expands with AI.",
+      "body": [
+        "We clear a creative path for your brand.",
+        "We pave creative shortcuts for brands stuck in traffic jams."
+      ],
+      "band": "Your Brand’s DNA is the Ultimate AI Differentiator.",
+      "galleryEmpty": "The campaign gallery is on the way."
+    },
+    "production": {
+      "body": [
+        "Hibrid 360 is an experienced all-around production and post-production agency that offers new-generation solutions with in-house capabilities for a plethora of sound, light and stage productions for your events.",
+        "With more than 20 years of experience in production, we work with in-house assets such as directors and camera crews, photographers, fiction and screenwriters, lighting crews, and specialists working with video editing software such as After Effects and Illustrator for light and colour correction, green screen effects and dubbing."
+      ],
+      "evidenceEmpty": "Verified figures and the work they belong to are on the way."
+    },
+    "postProduction": {
+      "body": [
+        "Our agency does all post-production work for both the digital and the production side of a project. We are a full-service post-production agency.",
+        "Hibrid 360 also works with young YouTube-generation artists who are experienced in 3D architectural rendering, kinetic typography, character creation and AutoCAD animation.",
+        "Not only do we provide crews and equipment for all desktop films, social media videos, factory promotional films, product videos, product launch concept videos and company meetings, but we are also experienced in offering hands-on design and construction services."
+      ],
+      "microHeadingNote": "The second-to-last shot — but here, the work doesn’t stop there."
+    },
+    "digital": {
+      "body": [
+        "We create digital content designed for how people watch, scroll, share and engage today.",
+        "From social-first content and reactive content to CGI films, motion design and AI-powered visual production, we turn ideas into high-impact digital assets built to move fast and perform across platforms."
+      ],
+      "bandBody": [
+        "We build digital worlds people can move through.",
+        "At Hibrid 360, digital is where strategy, design, storytelling and technology become an experience. It gives your brand a place to be explored, understood, trusted and remembered.",
+        "We build digital experiences for brands that need more than a polished interface. They need structure, movement, clarity, and a system that can guide people from first impression to meaningful action."
+      ],
+      "closingBody": "From one-off content to always-on content systems, we build digital production around the speed, scale and behavior of modern audiences."
+    },
+    "liveBroadcast": {
+      "body": [
+        "We offer a multitude of online professional live broadcast services for your brand or your company. We can stream your events live on your website and simultaneously on your social media accounts (Facebook, X, YouTube, Instagram, LinkedIn) to reach a wider audience.",
+        "We provide support for your live broadcast needs in the form of a proactive live stream enhanced with software featuring polling, data collection and interactive Q&A modules.",
+        "We offer state-of-the-art webcasting using the highest-technology equipment and a professional crew — from a single-camera shoot all the way to multiple camera set-ups connected to a director’s desk.",
+        "We also offer robotic live broadcasting that requires no camera crew on site.",
+        "In addition to live streaming of events such as conventions and webinars, we can also broadcast live from operating theatres and establish live connections between an operating theatre — in Türkiye or in any other country — and the convention hall. We can expertly set up live streaming infrastructure with two-way audio and video for broadcasting from an operating theatre as needed by the medical world. Live surgical procedures, including laparoscopy and integrated streaming, are among the services we offer."
+      ],
+      "cloudBody": "We can even store your content and videos on an easily accessible, user-friendly portal and create a sustainable, ever-growing infrastructure for your content using a flawless system designed to run 24/7. We collaborate with our solution partner to develop a cloud-based, closed-circuit custom TV infrastructure for you.",
+      "cloudLink": "Cloud TV",
+      "evidenceEmpty": "Verified figures and the work they belong to are on the way."
+    },
+    "cloudTv": {
+      "body": "Hibrid 360 sets up your own company TV station — “Cloudtivi” — on a cloud-based corporate portal. Your company TV station is an effective platform you can use within your company for internal communications, or for your users through a membership registration system.",
+      "steps": [
+        "We set up a web portal and an admin panel to organise content,",
+        "install the necessary infrastructure to stream cloud-based content,",
+        "and provide training for operating the system, delivering a turnkey solution to your management — and working alongside you as an operating partner if you so choose."
+      ],
+      "bandBody": [
+        "More and more companies reach their employees, their dealership network and their users directly through “Cloudtivi”, with on-premise and hybrid video content and live broadcasts featuring a dedicated professional directing crew.",
+        "Hibrid 360 does everything a riveting TV channel does — and more — on behalf of your brand."
+      ],
+      "solutionsTitle": "WHAT ARE HIBRID SOLUTIONS?"
+    },
+    "eventManagement": {
+      "body": [
+        "Here at Hibrid 360, we provide services with a creative outlook and innovative ideas for the events, meetings and launch organisations of national and international corporate clients.",
+        "We make a difference through unforgettable events.",
+        "We provide a plethora of out-of-the-ordinary services ranging from concept projects, field activities and roadshows to test drives; from exhibitions, festivals, company parties and opening events to award ceremonies and social responsibility projects."
+      ]
+    },
+    "photography": {
+      "body": [
+        "Product, food, portrait and campaign photography — shot in our own studios, styled by our own team, retouched in-house.",
+        "One shoot day, one set, and the full set of assets your campaign needs: key visuals, packshots, social crops and behind-the-scenes."
+      ]
+    }
+  },
   "directors": {
     "heroTitle": "THE PEOPLE BEHIND THE FRAME.",
     "heroSubtitle": "Films are not made by companies. They are made by people — and these are ours.",

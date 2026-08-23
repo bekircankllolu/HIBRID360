@@ -1,0 +1,202 @@
+/**
+ * What We Do alt sayfaları (Creative/Production/Post Production/Digital/
+ * Live Broadcast/Cloud TV/Event Management/Photography) için paylaşılan
+ * stil — how-we-work/service-production sayfalarındaki sınıf adları ve
+ * görsel dilinden türetildi. Sekiz sayfa neredeyse aynı bölüm tiplerini
+ * (hero, gövde, hizmet listesi, ara bant, CTA) tekrar ettiği için tek
+ * modül paylaşılıyor; her page.tsx kendi JSX kompozisyonunu yapıyor.
+ */
+.page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-4);
+}
+
+.heroTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2.25rem, 7vw, 5rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.heroSubtitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(1rem, 2.2vw, 1.375rem);
+  margin: var(--space-4) 0 0;
+  opacity: 0.9;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 46rem;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+  margin-top: var(--space-8);
+}
+
+.body p {
+  margin: 0;
+}
+
+.section {
+  margin-top: var(--space-16);
+}
+
+.sectionTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+  margin-bottom: var(--space-6);
+}
+
+/* Hizmet etiketleri satırı (CRE-03, PRO-04, POST-03, DIG-05, EVT-03,
+   PHO-03 vb.) — EN + TR aynı, marka dili. */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  list-style: none;
+  margin: var(--space-16) 0 0;
+  padding: var(--space-6) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tag {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+/* Ara bant — sayfa ortasında vurgulu tek/iki satırlık ifade. */
+.band {
+  margin-top: var(--space-16);
+  padding: var(--space-8) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.bandText {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 3.5vw, 2.25rem);
+  max-width: 44rem;
+  margin: 0;
+}
+
+.bandBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 46rem;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+}
+
+.bandBody p {
+  margin: 0;
+}
+
+.microHeading {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  margin: var(--space-16) 0 0;
+}
+
+.list {
+  list-style: none;
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.listItem {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.listNumber {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: 1.5rem;
+  color: var(--color-brand-fuchsia);
+  flex-shrink: 0;
+}
+
+.quad {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: var(--space-8);
+}
+
+.quadTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  color: var(--color-brand-yellow);
+  margin: 0 0 var(--space-2);
+}
+
+.quadBody {
+  margin: 0;
+  font-size: 0.9375rem;
+  opacity: 0.85;
+}
+
+.inlineLink {
+  color: var(--color-brand-fuchsia);
+}
+
+.inlineLink:hover {
+  text-decoration: underline;
+}
+
+/* Karar bekleyen rakamlar için görünür işaretçi — sahte rakam yazılmaz. */
+.pending {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.12);
+  border-bottom: 1px dashed var(--color-brand-yellow);
+  padding: 0 var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.cta {
+  margin-top: var(--space-24);
+  padding-top: var(--space-12);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ctaLead {
+  max-width: 46rem;
+  margin: 0;
+}
+
+.ctaButton {
+  display: inline-block;
+  margin-top: var(--space-6);
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  padding: var(--space-3) var(--space-6);
+}
+
+.ctaButton:hover {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}
