@@ -1,11 +1,16 @@
 {
+  "common": {
+    "pendingLabel": "Content in progress"
+  },
   "nav": {
     "work": "WORK",
     "whatWeDo": "WHAT WE DO",
     "culture": "CULTURE",
     "insights": "INSIGHTS",
     "friends": "FRIENDS",
-    "contact": "CONTACT"
+    "contact": "CONTACT",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
   },
   "languageSwitcher": {
     "label": "Language"

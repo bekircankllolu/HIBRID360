@@ -12,6 +12,7 @@ import { ClosingBody } from "@/components/home/ClosingBody";
 import { Mona } from "@/components/mona/Mona";
 import { homepageLines } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
+import { SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@/lib/site";
 
 /**
  * Ana sayfa — HOME-01..13 (nihai copy deck, Ağustos 2026).
@@ -67,6 +68,14 @@ export default async function HomePage({
 
   return (
     <div>
+      {/* Görsel hero "MAKE IT MATTER / HIBRID" WebGL tipografisi h1 değil
+          (SEO/GEO ve ekran okuyucu için gerekli semantik h1'i taşımıyor —
+          bkz. HeroTypography). Tasarımı bozmadan sayfanın gerçek h1'i burada,
+          .srOnly ile ekranda görünmez ama başlık hiyerarşisinde birinci. */}
+      <h1 className="srOnly">
+        {SITE_NAME} —{" "}
+        {locale === "en" ? SITE_TAGLINE : SITE_TAGLINE_TR}
+      </h1>
       <HeroTypography />
       <RotatingSlogans />
       <LessTalk />

@@ -25,7 +25,7 @@ Durum sütunu: `AÇIK` / `VARSAYILANLA İLERLE` / `KAPANDI`
 | 13 | Insights menü konumu | 18.1 / 20.1 | Ana menüde 6. madde (brief'in gerekçesi güçlü: gömülü içerik taranmaz) | VARSAYILANLA İLERLE |
 | 14 | Directors & Crew — kaç kişi, çekim tarihi | 20.3 | Müşteriden liste + çekim günü planlanmalı | AÇIK |
 | 15 | How We Work bütçe bandı rakamları | 20.5 | Somut rakam yerine süre bandı ("3-6 hafta") + form yönlendirme | AÇIK — ticari karar, müşteride kalmalı |
-| 16 | Works içerik envanteri (iş adı, müşteri, yıl, format, yayın izni) | 7.3 | Yok — bu liste olmadan grid tasarımı kesinleşmez | AÇIK — blocker |
+| 16 | Works içerik envanteri (iş adı, müşteri, yıl, format, yayın izni, dosya konumu) | 7.3 | Sayfa iskeleti + "content pending" durumu kuruldu (bkz. `src/app/[locale]/work/page.tsx` TODO), grid Supabase `works` tablosuna bağlanmaya hazır — envanter gelmeden gerçek kart/arşiv içeriği eklenemez | AÇIK — blocker |
 
 ## Öncelik: Hangi kararlar gerçek blocker?
 

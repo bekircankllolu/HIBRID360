@@ -1,11 +1,16 @@
 {
+  "common": {
+    "pendingLabel": "İçerik hazırlanıyor"
+  },
   "nav": {
     "work": "WORK",
     "whatWeDo": "WHAT WE DO",
     "culture": "CULTURE",
     "insights": "INSIGHTS",
     "friends": "FRIENDS",
-    "contact": "CONTACT"
+    "contact": "CONTACT",
+    "menuOpen": "Menüyü aç",
+    "menuClose": "Menüyü kapat"
   },
   "languageSwitcher": {
     "label": "Dil"

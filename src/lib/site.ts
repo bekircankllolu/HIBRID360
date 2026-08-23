@@ -5,7 +5,36 @@
 // kodlarla anılır). Bu dosya brief-rev12.md'deki daha eski değerlerin
 // yerini alır.
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hibrid360.com";
+// SITE_URL — robots.txt, sitemap.xml, canonical/hreflang ve schema.org
+// için TEK kaynak (bkz. src/app/robots.ts, src/app/sitemap.ts,
+// src/app/[locale]/layout.tsx metadataBase, src/lib/schema.ts — hepsi
+// bu sabiti kullanır, kendi domain mantığını türetmez).
+//
+// Öncelik sırası:
+//   1) NEXT_PUBLIC_SITE_URL — açıkça ayarlanmışsa (üretim domaini).
+//   2) Vercel'in kendi sağladığı önizleme/prod URL'i
+//      (VERCEL_PROJECT_PRODUCTION_URL, yoksa VERCEL_URL) — şema eksikse
+//      https:// eklenir. Bu olmadan preview/staging deploy'lar canlı
+//      hibrid360.com domainini sitemap/robots'a yazıyordu.
+//   3) https://hibrid360.com — yerel geliştirme ve env değişkeni hiç
+//      tanımlanmamışsa son çare.
+function resolveSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const vercelHost =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  if (vercelHost) {
+    const withScheme = /^https?:\/\//.test(vercelHost)
+      ? vercelHost
+      : `https://${vercelHost}`;
+    return withScheme.replace(/\/$/, "");
+  }
+
+  return "https://hibrid360.com";
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 export const SITE_NAME = "Hibrid 360";
 

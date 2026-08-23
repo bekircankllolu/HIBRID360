@@ -89,7 +89,10 @@ export default async function LocaleLayout({
         <JsonLd data={organizationJsonLd(locale as Locale)} />
         <NextIntlClientProvider messages={messages}>
           <Header />
-          {children}
+          {/* Tek anlamlı <main> landmark: sayfa gövdesi (Header/Footer/CtaBand
+              dışında kalan her şey) burada. Bireysel page.tsx dosyaları kendi
+              <main> etiketini eklemez — kaynak tek buradadır. */}
+          <main>{children}</main>
           {/* GEN-08/09 — sitenin tek birincil eylemi, her sayfanın altı,
               footer'dan önce. Ayrıca ana sayfada HOME-12 kendi Work
               linkine sahip; bu ikisi farklı hedeflere gider, birbirinin

@@ -17,6 +17,104 @@
   gap: var(--space-4);
 }
 
+.desktopSwitcher {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Hamburger — yalnızca mobilde görünür (bkz. medya sorgusu altta).
+   390px'te 5 menü maddesi + dil seçici tek satıra sığmadığı için
+   masaüstü nav'ın yerini bu düğme + tam ekran panel alıyor. */
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.menuToggleBar {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--color-brand-white);
+  transition:
+    transform 180ms ease-out,
+    opacity 180ms ease-out;
+}
+
+.menuToggle[aria-expanded="true"] .menuToggleBar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menuToggle[aria-expanded="true"] .menuToggleBar:nth-child(2) {
+  opacity: 0;
+}
+
+.menuToggle[aria-expanded="true"] .menuToggleBar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Tam ekran mobil menü paneli — yalnızca ≤767px'te devrede (bkz. medya
+   sorgusu). Kapalıyken visibility:hidden ile hem görsel olarak hem tab
+   sırasından çıkar; aria-hidden ekran okuyucudan da gizler. */
+.mobileMenu {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 49;
+  background: var(--color-brand-black);
+  display: none;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  overflow-y: auto;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out,
+    visibility 0s linear 180ms;
+}
+
+.mobileNavList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.mobileNavList a {
+  display: block;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+  color: var(--color-brand-white);
+}
+
+.mobileNavList a:hover,
+.mobileNavList a:focus-visible {
+  color: var(--color-brand-fuchsia);
+}
+
+.mobileSwitcher {
+  margin-top: auto;
+}
+
 .logo {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
@@ -50,4 +148,38 @@
 
 .navList a:hover {
   color: var(--color-brand-fuchsia);
+}
+
+@media (max-width: 767px) {
+  .nav,
+  .desktopSwitcher {
+    display: none;
+  }
+
+  .menuToggle {
+    display: inline-flex;
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
+
+  .mobileMenuOpen {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 180ms ease-out,
+      transform 180ms ease-out,
+      visibility 0s linear 0s;
+  }
+}
+
+/* CLAUDE.md zorunlu kuralı: hareket azaltmada geçişler anlık, sade. */
+@media (prefers-reduced-motion: reduce) {
+  .menuToggleBar,
+  .mobileMenu,
+  .mobileMenuOpen {
+    transition: none;
+  }
 }

@@ -1,16 +1,17 @@
 # Hibrid 360 — Web Sitesi
 
-Bağlam ve karar dosyaları için bkz. `CLAUDE.md` ve `docs/`.
+Bağlam ve karar dosyaları için bkz. `CLAUDE.md` ve `docs/`. Faz durumu ve
+kalan işler için bkz. `docs/ROADMAP.md` ve `docs/DECISIONS.md`.
 
-Bu depo **Faz 0** (iskelet) aşamasındadır: gerçek içerik yoktur, yalnızca
-doğru routing'e ve marka sistemine sahip çalışan bir teknik temel vardır.
-Faz planı: `docs/ROADMAP.md`.
+Canlı site **Vercel** üzerinde çalışır (bkz. "Vercel'e deploy" altında).
+Cloudflare Workers/Pages bu depoda hâlâ desteklenir ama şu an kullanılan
+platform değildir — bkz. "Alternatif: Cloudflare'e deploy".
 
 ## Stack
 
 - Next.js 14 (App Router) + TypeScript
 - next-intl ile `/tr` ve `/en` routing
-- Cloudflare Workers deploy: `@opennextjs/cloudflare`
+- **Hosting: Vercel** (canlı deploy) — bkz. "Vercel'e deploy"
 - Lighthouse CI (performans bütçesi kontrolü)
 
 ## Geliştirme
@@ -30,13 +31,45 @@ npm run lint    # eslint
 npm run lhci    # Lighthouse CI (önce `npm run build && npm run start` gerekir)
 ```
 
-## Cloudflare'e deploy
+## Vercel'e deploy
 
-Bu proje Cloudflare Pages'in klasik statik build'i yerine
-[`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) adaptörüyle
-**Cloudflare Workers**'a deploy edilir (CLAUDE.md: "Hosting: Cloudflare
-Pages / Workers"). Next.js middleware (i18n routing) ve SSR bu şekilde
-tam desteklenir.
+Canlı site (hibrid360.com) Vercel'de çalışıyor. Next.js 14 App Router,
+next-intl middleware'i ve SSR Vercel'de ek konfigürasyon gerekmeden
+desteklenir — proje Vercel'in standart Next.js build'iyle deploy edilir.
+
+1. Vercel'de projeyi bu repo'ya bağlayın (Import Project → GitHub).
+2. Build ayarları varsayılan Next.js algılamasıyla çalışır:
+   - Build command: `next build` (varsayılan, `package.json`'daki
+     `npm run build` ile aynı)
+   - Output: Vercel'in Next.js runtime'ı otomatik yönetir (ayrı bir
+     output dizini ayarlamaya gerek yok)
+3. Ortam değişkenleri (Vercel proje ayarları → Environment Variables):
+   - `NEXT_PUBLIC_SITE_URL` — **production** ortamında mutlaka
+     `https://hibrid360.com` olarak ayarlanmalı. Bu değişken
+     `src/lib/site.ts`'teki `SITE_URL` sabitinin tek girdisidir; robots.txt,
+     sitemap.xml, canonical/hreflang etiketleri ve schema.org verisi hepsi
+     buradan besleniyor (bkz. o dosyadaki öncelik sırası açıklaması).
+   - Preview/staging deploy'larda bu değişken ayarlanmazsa `SITE_URL`
+     otomatik olarak Vercel'in kendi verdiği önizleme domainine
+     (`VERCEL_PROJECT_PRODUCTION_URL`/`VERCEL_URL`) düşer — yanlışlıkla
+     `hibrid360.com` domainiyle indexlenmiş bir önizleme linki üretilmez.
+4. Her push'ta otomatik deploy (main/production branch → production,
+   diğer branch'ler → preview) — Vercel'in standart Git entegrasyonu.
+
+Yerelde Vercel CLI ile deploy/önizleme (opsiyonel, gerekli değil):
+
+```bash
+npx vercel        # preview deploy
+npx vercel --prod # production deploy
+```
+
+## Alternatif: Cloudflare'e deploy
+
+CLAUDE.md, hosting seçeneği olarak "Cloudflare Pages / Workers"ı da
+listeler; bu depo hâlâ [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare)
+adaptörüyle Cloudflare Workers'a deploy edilebilecek şekilde kurulu
+duruyor, fakat **şu an canlı site bu platformda çalışmıyor** — yalnızca
+Vercel'e alternatif/yedek bir yol olarak tutulur.
 
 ```bash
 npm run preview   # yerelde wrangler ile önizleme
