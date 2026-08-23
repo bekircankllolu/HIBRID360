@@ -267,6 +267,9 @@
     }
   },
   "friends": {
+    "heroTitle": "DOSTLARIMIZ",
+    "heroBody": "Birlikte çalıştığımız insanları seviyoruz. O kadar ki ajansımızda onlara müşteri değil, dost diyoruz — ancak en yakın dostlarınızla kurabileceğiniz türden dürüst ve sadık bir kimya. Cesur iş birlikleri. Global ikonlar. Ortak yaratıcı enerji.",
+    "ctaLead": "Birlikte ne ürettiğimizi görmek ister misiniz?",
     "testimonialsTitle": "Ne diyorlar",
     "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."
   },

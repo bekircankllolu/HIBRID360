@@ -37,6 +37,15 @@
   min-height: 5.5rem;
 }
 
+/* FRD-02 [DOĞRULA] — deck'in yayın öncesi teyit istediği beş isim,
+   görünmez değil ama görsel olarak işaretli (sahte veri değil, sadece
+   henüz teyit edilmemiş gerçek veri). */
+.logoItemUnverified {
+  border-style: dashed;
+  border-color: var(--color-brand-yellow);
+  opacity: 0.75;
+}
+
 .testimonials {
   margin-top: var(--space-24);
 }
@@ -46,4 +55,15 @@
   font-weight: var(--font-weight-heading-bold);
   font-size: clamp(1.25rem, 3vw, 2rem);
   margin-bottom: var(--space-8);
+}
+
+.cta {
+  margin-top: var(--space-24);
+  padding-top: var(--space-12);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ctaLead {
+  max-width: 40rem;
+  margin: 0;
 }
