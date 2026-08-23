@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { HeroTypography } from "@/components/hero/HeroTypography";
 import { RotatingSlogans } from "@/components/hero/RotatingSlogans";
 import { SolarSystem } from "@/components/hero/SolarSystem";
@@ -36,6 +37,27 @@ import type { Locale } from "@/i18n/routing";
  * sürümü gösterilir (çerezle hatırlanır)": çerez onay bandı kuruldu, rıza
  * durumuna bağlı kısa sürüm mantığı henüz eklenmedi.
  */
+
+// META tablosu (Bölüm 10, nihai copy deck) — TR sürümü henüz yazılmadı
+// ("TR sürümü yazılacak" notu), bu yüzden description yalnızca EN'de
+// ayarlanıyor; TR kök layout'taki SITE_TAGLINE varsayılanını kullanmaya
+// devam ediyor.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: { absolute: "Hibrid 360 | AI-Native Creative Production Studio" },
+    description:
+      locale === "en"
+        ? "Films, campaigns, live broadcast and AI production for global brands. Istanbul-based, 20+ years, one crew end to end."
+        : undefined,
+    alternates: { canonical: `/${locale}` },
+  };
+}
+
 export default async function HomePage({
   params,
 }: {

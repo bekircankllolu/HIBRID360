@@ -17,6 +17,9 @@ export const cookiePolicyTr: LegalDoc = {
   title: "ÇEREZ POLİTİKASI",
   subtitle: "HIBRID360 Web Deneyimi ve Dijital Takip Şeffaflık Metni",
   lastUpdated: "Tarih: Temmuz 2026",
+  // LEG-02 — nihai copy deck, Ağustos 2026.
+  intro:
+    "Az sayıda çerez kullanıyoruz: sitenin çalışması için zorunlu olanlar ve hangi sayfaların işe yaradığını gösterenler. İkinci grubu istediğiniz zaman kabul edebilir veya reddedebilirsiniz.",
   blocks: [
     { kind: "heading", text: "1. Genel Bilgilendirme" },
     {
@@ -88,6 +91,9 @@ export const cookiePolicyEn: LegalDoc = {
   title: "COOKIE POLICY",
   subtitle: "HIBRID360 Web Experience & Digital Tracking Transparency Framework",
   lastUpdated: "Last Updated: July 2026",
+  // LEG-02 — final copy deck, August 2026.
+  intro:
+    "We use a small number of cookies: the ones this site needs to work, and the ones that tell us which pages are useful. You can accept or reject the second group at any time.",
   blocks: [
     { kind: "heading", text: "1. Overview of Cookie Usage" },
     {

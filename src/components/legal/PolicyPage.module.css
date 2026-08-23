@@ -18,9 +18,20 @@
 }
 
 .lastUpdated {
-  margin: 0 0 var(--space-16);
+  margin: 0 0 var(--space-6);
   font-size: 0.8125rem;
   opacity: 0.6;
+}
+
+/* LEG-01/02/03 — sadeleştirilmiş açılış paragrafı, hukuk metninin
+   üstünde, gövdeden görsel olarak ayrık. */
+.intro {
+  font-size: 1.0625rem;
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+  margin: 0 0 var(--space-16);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .heading {

@@ -21,6 +21,11 @@ export const kvkkNoticeTr: LegalDoc = {
   title: "KVKK AYDINLATMA METNİ",
   subtitle: "6698 Sayılı Kişisel Verilerin Korunması Kanunu Madde 10 Uyarınca",
   lastUpdated: "Son Güncelleme: Temmuz 2026",
+  // LEG-03 — nihai copy deck, Ağustos 2026. TODO: "[şirket ünvanı]"
+  // deck'teki gibi köşeli parantezle bırakıldı — DECISIONS.md #1/#4
+  // (resmî şirket ünvanı A.Ş./Ltd. Şti.) kapanmadan uydurulmadı.
+  intro:
+    "Veri sorumlusu sıfatıyla Hibrid 360 [şirket ünvanı] tarafından, iletişim formu ve site kullanımı yoluyla toplanan kişisel verilerin işlenme amaçları, hukuki sebebi, saklama süresi ve başvuru yollarına ilişkin bilgilendirmedir.",
   blocks: [
     { kind: "heading", text: "1. Veri Sorumlusunun Kimliği" },
     {
@@ -89,6 +94,12 @@ export const kvkkNoticeEn: LegalDoc = {
   title: "KVKK DISCLOSURE NOTICE",
   subtitle: "Pursuant to Article 10 of Turkish Law No. 6698 on the Protection of Personal Data",
   lastUpdated: "Effective Date: July 2026",
+  // LEG-03 says only "GDPR Notice — English version of the same text" —
+  // an instruction to translate, not literal copy. Faithful EN mirror of
+  // the TR intro below; "[company legal name]" left open for the same
+  // reason as the TR bracket (DECISIONS.md #1/#4 not yet closed).
+  intro:
+    "As the data controller, Hibrid 360 [company legal name] provides this notice regarding the purposes, legal basis, retention period and application procedures for personal data collected through the contact form and use of this site.",
   blocks: [
     { kind: "heading", text: "1. Identity of the Data Controller" },
     {

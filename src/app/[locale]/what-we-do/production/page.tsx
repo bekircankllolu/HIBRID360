@@ -36,7 +36,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: "Production",
+    title: "Video Production Istanbul",
+    description:
+      locale === "en"
+        ? "Commercials, product films and how-to content, shot end to end with an in-house crew. 20+ years of production experience."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/production` },
   };
 }

@@ -36,6 +36,10 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Creative",
+    description:
+      locale === "en"
+        ? "Brand thinking, concept and campaign ideas — from strategy to key visual and packaging."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/creative` },
   };
 }

@@ -29,6 +29,10 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Contact",
+    description:
+      locale === "en"
+        ? "Tell us what you're making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
+        : undefined,
     alternates: { canonical: `/${locale}/contact` },
   };
 }

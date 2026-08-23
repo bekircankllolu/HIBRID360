@@ -24,7 +24,22 @@ const HREFS: Record<string, string> = {
   "AI Creative Production": "/what-we-do/ai-creative-production",
 };
 
-export const metadata: Metadata = { title: "What We Do" };
+// META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: "What We Do",
+    description:
+      locale === "en"
+        ? "Creative, production, post production, digital, live broadcast, Cloud TV, events, photography and AI production."
+        : undefined,
+    alternates: { canonical: `/${locale}/what-we-do` },
+  };
+}
 
 export default async function WhatWeDoPage({
   params,

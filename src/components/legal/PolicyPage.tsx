@@ -24,6 +24,7 @@ export function PolicyPage({
       <h1 className={styles.title}>{doc.title}</h1>
       {doc.subtitle && <p className={styles.subtitle}>{doc.subtitle}</p>}
       {doc.lastUpdated && <p className={styles.lastUpdated}>{doc.lastUpdated}</p>}
+      {doc.intro && <p className={styles.intro}>{doc.intro}</p>}
 
       {doc.blocks.map((block, index) => {
         switch (block.kind) {

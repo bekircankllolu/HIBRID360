@@ -30,7 +30,9 @@ export async function generateMetadata({
   return {
     title: "AI Creative Production",
     description:
-      "We create innovative visual experiences for brands that shape tomorrow.",
+      locale === "en"
+        ? "AI films, AI photography and hybrid production workflows — human creativity, AI precision, real impact."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/ai-creative-production` },
   };
 }

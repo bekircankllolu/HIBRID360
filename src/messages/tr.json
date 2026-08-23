@@ -382,7 +382,9 @@
     }
   },
   "notFound": {
-    "cta": "İşlere git"
+    "title": "BU SAYFA FREKANS DIŞINDA.",
+    "body": "Aradığınız sayfa burada değil. Ama işler burada.",
+    "cta": "WORK sayfasına git"
   },
   "accessibilityPage": {
     "knownLimitations": "Known limitations — bilinen sınırlamalar",

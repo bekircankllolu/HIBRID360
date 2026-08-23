@@ -36,6 +36,10 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Post Production",
+    description:
+      locale === "en"
+        ? "Editing, colour, sound, motion graphics, 3D and retouch — full-service post production in-house."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/post-production` },
   };
 }

@@ -33,6 +33,10 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Event Management",
+    description:
+      locale === "en"
+        ? "Conventions, launches, roadshows and brand events — concept, production and on-site execution."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/event-management` },
   };
 }

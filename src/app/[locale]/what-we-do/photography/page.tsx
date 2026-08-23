@@ -28,7 +28,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: "Photography",
+    title: "Product & Food Photography Istanbul",
+    description:
+      locale === "en"
+        ? "Product, food, portrait and campaign photography shot in our own studios, styled and retouched in-house."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/photography` },
   };
 }

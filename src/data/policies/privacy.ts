@@ -22,6 +22,9 @@ export const privacyPolicyTr: LegalDoc = {
   subtitle:
     "HIBRID360 Kreatif Prodüksiyon, Yapay Zekâ, Marka & Web Deneyimi, Film Prodüksiyon Uyum Standardı",
   lastUpdated: "Son Güncelleme: Temmuz 2026",
+  // LEG-01 — nihai copy deck, Ağustos 2026.
+  intro:
+    "Bu sayfa, hibrid360.com üzerinde hangi verileri topladığımızı, neden topladığımızı, ne kadar sakladığımızı, kimlerle paylaştığımızı ve haklarınızı nasıl kullanabileceğinizi açıklar.",
   blocks: [
     { kind: "heading", text: "1. Giriş ve Kurumsal Kapsam" },
     {
@@ -140,6 +143,9 @@ export const privacyPolicyEn: LegalDoc = {
   subtitle:
     "HIBRID360 Creative Production, AI, Brand & Web Experience, Film Production — Governance Standard",
   lastUpdated: "Effective Date: July 2026",
+  // LEG-01 — final copy deck, August 2026.
+  intro:
+    "This page explains what data we collect on hibrid360.com, why we collect it, how long we keep it, who we share it with, and how you can exercise your rights.",
   blocks: [
     { kind: "heading", text: "1. Introduction & Organizational Context" },
     {

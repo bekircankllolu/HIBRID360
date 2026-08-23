@@ -382,7 +382,9 @@
     }
   },
   "notFound": {
-    "cta": "Go to the work"
+    "title": "THIS PAGE IS OFF FREQUENCY.",
+    "body": "The page you’re looking for isn’t here. The work, however, is.",
+    "cta": "Go to WORK"
   },
   "accessibilityPage": {
     "knownLimitations": "Known limitations",

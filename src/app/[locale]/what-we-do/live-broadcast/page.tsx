@@ -33,7 +33,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: "Live Broadcast",
+    title: "Corporate Live Broadcast",
+    description:
+      locale === "en"
+        ? "Multi-camera live streaming for events, conventions and medical broadcasts — with satellite uplink and remote production."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/live-broadcast` },
   };
 }

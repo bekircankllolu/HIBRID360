@@ -21,5 +21,7 @@ export interface LegalDoc {
   title: string;
   subtitle?: string;
   lastUpdated?: string;
+  /** LEG-01/02/03 — sadeleştirilmiş açılış paragrafı, hukuk metninden önce. */
+  intro?: string;
   blocks: LegalBlock[];
 }

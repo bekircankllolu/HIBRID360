@@ -21,7 +21,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: "Cloud TV",
+    title: "Cloud TV & Corporate Channel",
+    description:
+      locale === "en"
+        ? "Your own corporate TV channel on a cloud portal: content, infrastructure, training and turnkey operation."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/cloud-tv` },
   };
 }

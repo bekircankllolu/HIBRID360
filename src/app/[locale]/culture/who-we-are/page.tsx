@@ -28,6 +28,10 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Who We Are",
+    description:
+      locale === "en"
+        ? "An Istanbul-based creative production studio building the visual experiences of the future — meet the crew."
+        : undefined,
     alternates: { canonical: `/${locale}/culture/who-we-are` },
   };
 }

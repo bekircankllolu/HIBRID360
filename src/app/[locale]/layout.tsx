@@ -30,7 +30,9 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_URL),
     title: {
       default: SITE_NAME,
-      template: `%s · ${SITE_NAME}`,
+      // META tablosu (nihai copy deck, Ağustos 2026): "Sayfa | Hibrid 360"
+      // biçimi — önceki orta nokta ayracı bu formatla değiştirildi.
+      template: `%s | ${SITE_NAME}`,
     },
     // brief-rev12.md Bölüm 1.7: anahtar kelime istifi temizlendi — tek,
     // doğal cümle. Sayfa özelinde farklı bir açıklama hazır olduğunda

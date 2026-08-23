@@ -54,7 +54,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: "Digital",
+    title: "Digital Content Production",
+    description:
+      locale === "en"
+        ? "Social-first content, short-form video, CGI and AI-powered production built to perform across platforms."
+        : undefined,
     alternates: { canonical: `/${locale}/what-we-do/digital` },
   };
 }

@@ -27,7 +27,22 @@ import styles from "./page.module.css";
  * (CLAUDE.md performans bütçesi) varlık geldiğinde bağlanacak.
  */
 
-export const metadata: Metadata = { title: "Work" };
+// META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: "Work",
+    description:
+      locale === "en"
+        ? "Selected films, campaigns and live productions — with the problem, the work and the result for each project."
+        : undefined,
+    alternates: { canonical: `/${locale}/work` },
+  };
+}
 
 function WorkCard({
   work,

@@ -37,7 +37,9 @@ export async function generateMetadata({
   return {
     title: "Friends",
     description:
-      "We love the folks we work with. So much so, at our creative agency we call them friends, not clients.",
+      locale === "en"
+        ? "The brands we work with — from holdings and global appliance brands to hotels, restaurants and start-ups."
+        : undefined,
     alternates: { canonical: `/${locale}/friends` },
   };
 }
