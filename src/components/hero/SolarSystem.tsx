@@ -1,14 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { orbitStones, SOLAR_SYSTEM_TITLE } from "@/data/solar-system";
+import {
+  orbitStones,
+  STONE_INTRINSIC,
+  SOLAR_SYSTEM_TITLE,
+} from "@/data/solar-system";
 import {
   createSolarSystemScene,
   stoneScreenPosition,
   acquireSceneLock,
   releaseSceneLock,
+  onSceneLockReleased,
   type SceneHandle,
 } from "@/lib/webgl-scene";
 import styles from "./SolarSystem.module.css";
@@ -25,9 +31,14 @@ import styles from "./SolarSystem.module.css";
  *   - prefers-reduced-motion: sahne hiç başlatılmaz, erişilebilir statik
  *     liste gösterilir.
  *   - WebGL yoksa (eski cihaz, bağlam kaybı) aynı statik liste devreye girer.
- *   - Taş görselleri yalnızca 2 dosya (fuşya + sarı, ~15-35KB), 8 kez
+ *   - Taş görselleri yalnızca 2 dosya (fuşya + sarı, ~10-27KB), 8 kez
  *     tekrar kullanılıyor — tarayıcı ilk istekten sonra önbellekten
  *     okuyor, aynı anda birden fazla ağ isteği olmuyor.
+ *
+ * Etiket davranışı: varsayılanda yalnızca taş görünür. Hizmet adı ve
+ * onaylı tek satır tanımı (WWD-02) yalnızca hover / klavye odağı /
+ * dokunmada o taş için açılır — sekiz etiket aynı anda açıkken üst üste
+ * binip okunaksız oluyordu. Merkezdeki HİBRİD düğümü istisna, hep açık.
  */
 export function SolarSystem() {
   const reducedMotion = usePrefersReducedMotion();
@@ -35,6 +46,77 @@ export function SolarSystem() {
   const stageRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const [webglFailed, setWebglFailed] = useState(false);
+  /** Etiketi açık olan taşın indeksi — aynı anda yalnızca biri. */
+  const [activeStone, setActiveStone] = useState<number | null>(null);
+
+  const tWwd = useTranslations("whatWeDo");
+  const wwdList = tWwd.raw("list") as Array<{ title: string; body: string }>;
+  const subtitleFor = useCallback(
+    (wwdTitle: string) =>
+      wwdList.find((item) => item.title === wwdTitle)?.body ?? "",
+    [wwdList],
+  );
+
+  /**
+   * Dokunmatik cihazda :hover güvenilir çalışmaz; ilk dokunuş etiketi
+   * açar, aynı taşa ikinci dokunuş sayfaya gider.
+   *
+   * State (ref değil): "açılmadan gezinme yok" kuralı href'i render
+   * sırasında kaldırarak uygulanıyor, dolayısıyla değeri değişince
+   * yeniden render gerekiyor. Sunucuda false başlar — SSR HTML'inde
+   * bütün taşlar gerçek link olarak kalır (tarayıcı/arama motoru
+   * tarafında bağlantılar kaybolmaz).
+   */
+  const [coarsePointer, setCoarsePointer] = useState(false);
+  useEffect(() => {
+    setCoarsePointer(window.matchMedia("(hover: none)").matches);
+  }, []);
+  const coarsePointerRef = useRef(false);
+  coarsePointerRef.current = coarsePointer;
+
+  // Dokunmatikte pointerenter de tetiklendiği için etiketi ORADA açmıyoruz:
+  // açsaydık click anında "zaten açıktı" sayılıp ilk dokunuş doğrudan
+  // gezinirdi. Dokunmatikte açma işi yalnızca click'e ait.
+  const isCoarse = () => coarsePointerRef.current;
+
+  const onStoneEnter = (index: number) => {
+    if (isCoarse()) return;
+    setActiveStone(index);
+  };
+
+  const clearStone = (index: number) => {
+    if (isCoarse()) return;
+    setActiveStone((current) => (current === index ? null : current));
+  };
+
+  /**
+   * Taşlar sürekli döndüğü için imleç sabitken taş altından kayabiliyor;
+   * bu durumda pointerleave tetiklenmiyor ve etiket havada asılı kalıyor.
+   * Sahne üzerindeki her gerçek imleç hareketinde hedef aktif taşın
+   * dışındaysa etiketi kapatarak durumu kendi kendine düzeltiyoruz.
+   */
+  const onStagePointerMove = (event: React.PointerEvent) => {
+    if (activeStone === null || isCoarse()) return;
+    const active = linkRefs.current[activeStone];
+    if (active && event.target instanceof Node && active.contains(event.target)) {
+      return;
+    }
+    setActiveStone(null);
+  };
+
+  // Taş dışına dokunulunca/tıklanınca açık etiket kapanır.
+  useEffect(() => {
+    if (activeStone === null) return;
+    const onDocPointerDown = (event: PointerEvent) => {
+      const stage = stageRef.current;
+      if (!stage) return;
+      if (!(event.target instanceof Node) || !stage.contains(event.target)) {
+        setActiveStone(null);
+      }
+    };
+    document.addEventListener("pointerdown", onDocPointerDown);
+    return () => document.removeEventListener("pointerdown", onDocPointerDown);
+  }, [activeStone]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -97,19 +179,30 @@ export function SolarSystem() {
     // sahnesi ekrandan çıkınca kilidi serbest bırakır, bu sahne de kendi
     // sırası gelince alır. Böylece "aynı anda en fazla BİR WebGL sahnesi"
     // kuralı korunurken ikisi de çalışabilir.
+    let inView = false;
+    let unsubscribeWait: (() => void) | null = null;
+
+    const startIfPossible = () => {
+      if (!inView || visible) return;
+      if (!holdsLock) holdsLock = acquireSceneLock(holder);
+      if (!holdsLock) {
+        // Kilit başkasında: sıraya gir, boşalınca otomatik başla.
+        unsubscribeWait ??= onSceneLockReleased(() => {
+          unsubscribeWait = null;
+          startIfPossible();
+        });
+        return;
+      }
+      visible = true;
+      scene?.resize();
+      if (frameId === null) loop();
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const nowVisible = entry.isIntersecting;
-        if (nowVisible === visible) return;
-
-        if (nowVisible) {
-          if (!holdsLock) holdsLock = acquireSceneLock(holder);
-          // Kilit hâlâ başkasındaysa bu turda çizim yapılmaz; bir sonraki
-          // görünürlük değişiminde tekrar denenir (kalıcı yedeğe düşmez).
-          if (!holdsLock) return;
-          visible = true;
-          scene?.resize();
-          if (frameId === null) loop();
+        inView = entry.isIntersecting;
+        if (inView) {
+          startIfPossible();
         } else {
           // Ekrandan çıktı — döngü durur (CLAUDE.md performans kuralı).
           visible = false;
@@ -117,6 +210,8 @@ export function SolarSystem() {
             cancelAnimationFrame(frameId);
             frameId = null;
           }
+          unsubscribeWait?.();
+          unsubscribeWait = null;
           if (holdsLock) {
             releaseSceneLock(holder);
             holdsLock = false;
@@ -147,6 +242,7 @@ export function SolarSystem() {
       observer.disconnect();
       resizeObserver.disconnect();
       stage.removeEventListener("pointermove", onPointerMove);
+      unsubscribeWait?.();
       if (frameId !== null) cancelAnimationFrame(frameId);
       scene?.dispose();
       releaseSceneLock(holder);
@@ -172,41 +268,110 @@ export function SolarSystem() {
           ))}
         </ul>
       ) : (
-        <div className={styles.stage} ref={stageRef}>
+        <div
+          className={styles.stage}
+          ref={stageRef}
+          onPointerMove={onStagePointerMove}
+          onPointerLeave={() => !isCoarse() && setActiveStone(null)}
+        >
           <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
           <span className={styles.center} aria-hidden="true">
             HIBRID
           </span>
-          {orbitStones.map((stone, index) => (
-            <Link
-              key={stone.orbit}
-              href={stone.href}
-              className={styles.stoneLink}
-              ref={(node) => {
+          {orbitStones.map((stone, index) => {
+            const isActive = activeStone === index;
+            // Dokunmatikte etiket açılmadan gezinme yok. Bu, href'i hiç
+            // render etmeyerek uygulanıyor: preventDefault/stopPropagation
+            // ile Link'in gezinmesini durdurmak güvenilir değildi (test
+            // edildi, sayfa yine değişiyordu). href yoksa gidilecek bir
+            // hedef de yok — davranış olay sırasına bağlı kalmıyor.
+            const navigable = !coarsePointer || isActive;
+
+            const shared = {
+              className: `${styles.stoneLink} ${isActive ? styles.stoneLinkActive : ""}`,
+              // Taşın kendi marka rengi — hover glow'u bu renkten türer,
+              // marka dışı renk eklenmez (CLAUDE.md).
+              style: {
+                "--stone-glow":
+                  stone.color === "yellow"
+                    ? "var(--color-brand-yellow)"
+                    : "var(--color-brand-fuchsia)",
+              } as React.CSSProperties,
+              ref: (node: HTMLAnchorElement | null) => {
                 linkRefs.current[index] = node;
-              }}
-            >
-              {/* next/image kasıtlı olarak kullanılmıyor: bu görsel zaten
-                  önceden optimize edilmiş WebP (bkz. public/images/stones/,
-                  hazırlık script'i commit mesajında), sabit boyutlu ve
-                  konumu JS ile mutlak (absolute) piksele yazılıyor —
-                  next/image'ın sunucu tarafı yeniden boyutlandırması burada
-                  fayda sağlamaz ve Cloudflare Workers'ta ayrı bir görsel
-                  optimizasyon binding'i gerektirirdi. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`/images/stones/stone-${stone.color}.webp`}
-                srcSet={`/images/stones/stone-${stone.color}.webp 1x, /images/stones/stone-${stone.color}@2x.webp 2x`}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                width={72}
-                height={72}
-                className={styles.stoneImage}
-              />
-              <span className={styles.stoneLabel}>{stone.label}</span>
-            </Link>
-          ))}
+              },
+              onPointerEnter: () => onStoneEnter(index),
+              onPointerLeave: () => clearStone(index),
+              // Klavye odağı işaretleme tipinden bağımsız çalışır.
+              onFocus: () => setActiveStone(index),
+              onBlur: () =>
+                setActiveStone((current) => (current === index ? null : current)),
+            };
+
+            const body = (
+              <>
+                {/* next/image kasıtlı olarak kullanılmıyor: bu görsel zaten
+                    önceden optimize edilmiş WebP (bkz. public/images/stones/,
+                    hazırlık script'i commit mesajında), sabit boyutlu ve
+                    konumu JS ile mutlak (absolute) piksele yazılıyor —
+                    next/image'ın sunucu tarafı yeniden boyutlandırması burada
+                    fayda sağlamaz ve Cloudflare Workers'ta ayrı bir görsel
+                    optimizasyon binding'i gerektirirdi. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/images/stones/stone-${stone.color}.webp`}
+                  srcSet={`/images/stones/stone-${stone.color}.webp 1x, /images/stones/stone-${stone.color}@2x.webp 2x`}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  width={STONE_INTRINSIC[stone.color].width}
+                  height={STONE_INTRINSIC[stone.color].height}
+                  className={styles.stoneImage}
+                />
+                {/* Etiket akış dışında (absolute): link kutusu yalnızca
+                    taş görselinden oluşsun ki translate(-50%,-50%) taşın
+                    kendi merkezini yörüngeye otursun. Daha önce etiket
+                    kutunun içindeydi ve taşı yukarı kaydırıyordu. */}
+                <span className={styles.stoneLabel}>
+                  <span className={styles.stoneLabelName}>{stone.label}</span>
+                  <span className={styles.stoneLabelBody}>
+                    {subtitleFor(stone.wwdTitle)}
+                  </span>
+                </span>
+              </>
+            );
+
+            if (navigable) {
+              return (
+                <Link key={stone.orbit} href={stone.href} {...shared}>
+                  {body}
+                </Link>
+              );
+            }
+
+            // Dokunmatik + henüz açılmamış: gezinmeyen, etiketi açan düğme.
+            // SSR'da coarsePointer false olduğu için bu dal sunucuda hiç
+            // render edilmez; HTML'de tüm taşlar gerçek <a href> kalır.
+            return (
+              <a
+                key={stone.orbit}
+                {...shared}
+                role="button"
+                tabIndex={0}
+                aria-expanded={false}
+                aria-label={stone.label}
+                onClick={() => setActiveStone(index)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setActiveStone(index);
+                  }
+                }}
+              >
+                {body}
+              </a>
+            );
+          })}
         </div>
       )}
     </section>

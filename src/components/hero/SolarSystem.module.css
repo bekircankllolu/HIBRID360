@@ -47,44 +47,114 @@
    klavyeyle gezilebilir ne ekran okuyucuya görünür olurdu. Konumu ve
    --stone-boost değişkenini SolarSystem.tsx, WebGL sahnesiyle aynı
    matematikten (stoneScreenPosition) besliyor. */
+/* Link kutusu YALNIZCA taş görselinden oluşur — etiket akış dışında
+   (absolute). Böylece translate(-50%,-50%) taşın kendi merkezini
+   yörüngeye oturtur. Etiket kutunun içindeyken kutu "taş + boşluk +
+   etiket" kadar uzuyor ve taş yörüngenin üstünde kalıyordu. */
 .stoneLink {
   --stone-boost: 0;
   position: absolute;
   transform: translate(-50%, -50%) scale(calc(1 + var(--stone-boost) * 0.16));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
+  display: block;
+  line-height: 0;
   transition: transform 120ms ease-out;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .stoneLink {
-    transition: none;
-  }
-}
-
+/* Görseller gem'in alfa sınırına kırpıldı; öncesinde kutunun ~%29'u boş
+   paydı. Aynı görünür taş boyutunu korumak için genişlik o oranda
+   küçültüldü (eski clamp(2.75rem, 6vw, 4.5rem) × ~0.71). */
 .stoneImage {
-  width: clamp(2.75rem, 6vw, 4.5rem);
+  width: clamp(1.9rem, 4.25vw, 3.2rem);
   height: auto;
+  display: block;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+  transition:
+    filter 180ms ease-out,
+    transform 180ms ease-out;
 }
 
+/* Hover/odak/dokunma vurgusu: taşın kendi marka rengiyle ışıma + hafif
+   büyüme. --stone-glow bileşenden geliyor (fuşya ya da sarı), marka
+   dışı renk kullanılmıyor. */
+.stoneLink:hover .stoneImage,
+.stoneLink:focus-visible .stoneImage,
+.stoneLinkActive .stoneImage {
+  transform: scale(1.08);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 6px var(--stone-glow))
+    drop-shadow(0 0 16px var(--stone-glow)) brightness(1.12);
+}
+
+/* Etiket: varsayılanda gizli. Taşın ALTINDA, yatayda ortalanmış. */
 .stoneLabel {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(0.5625rem, 1.2vw, 0.75rem);
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  color: var(--color-brand-white);
-  background: rgba(0, 0, 0, 0.55);
-  padding: 0.1em 0.5em;
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
+  width: max-content;
+  max-width: 11rem;
+  padding: 0.35em 0.6em;
+  background: rgba(0, 0, 0, 0.82);
+  border: 1px solid var(--stone-glow);
+  text-align: center;
+  line-height: 1.3;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 180ms ease-out,
+    visibility 180ms;
+  /* Etiket imleci yakalayıp titremeye yol açmasın. */
+  pointer-events: none;
+  /* Açık etiket komşu taşların altında kalmasın. */
+  z-index: 2;
 }
 
 .stoneLink:hover .stoneLabel,
-.stoneLink:focus-visible .stoneLabel {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+.stoneLink:focus-visible .stoneLabel,
+.stoneLinkActive .stoneLabel {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Açık taş her zaman komşularının üstünde çizilsin. */
+.stoneLink:hover,
+.stoneLink:focus-visible,
+.stoneLinkActive {
+  z-index: 3;
+}
+
+.stoneLabelName {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(0.625rem, 1.2vw, 0.8125rem);
+  letter-spacing: 0.06em;
+  color: var(--stone-glow);
+  white-space: nowrap;
+}
+
+.stoneLabelBody {
+  font-size: clamp(0.5625rem, 1vw, 0.6875rem);
+  color: var(--color-brand-white);
+  opacity: 0.85;
+}
+
+/* CLAUDE.md zorunlu kuralı: hareket azaltmada geçişler anlık, sade. */
+@media (prefers-reduced-motion: reduce) {
+  .stoneLink,
+  .stoneImage,
+  .stoneLabel {
+    transition: none;
+  }
+
+  .stoneLink:hover .stoneImage,
+  .stoneLink:focus-visible .stoneImage,
+  .stoneLinkActive .stoneImage {
+    transform: none;
+  }
 }
 
 /* WebGL yoksa veya prefers-reduced-motion açıksa: hareketsiz, erişilebilir

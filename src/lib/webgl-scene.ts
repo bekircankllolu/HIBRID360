@@ -22,6 +22,7 @@ import { orbitStones } from "@/data/solar-system";
  */
 
 let sceneLockHolder: symbol | null = null;
+const lockWaiters = new Set<() => void>();
 
 export function acquireSceneLock(holder: symbol): boolean {
   if (sceneLockHolder && sceneLockHolder !== holder) return false;
@@ -30,7 +31,27 @@ export function acquireSceneLock(holder: symbol): boolean {
 }
 
 export function releaseSceneLock(holder: symbol): void {
-  if (sceneLockHolder === holder) sceneLockHolder = null;
+  if (sceneLockHolder !== holder) return;
+  sceneLockHolder = null;
+  // Bekleyenlere haber ver. Bu olmadan devir zamanlamaya kalıyordu:
+  // sayfa hızlı kaydırıldığında iki sahnenin IntersectionObserver
+  // callback'leri aynı partide tetikleniyor, sıradaki sahne kilidi dolu
+  // bulup vazgeçiyor ve bir daha görünürlük değişimi olmadığı için
+  // hiç açılmıyordu (sahne siyah kalıyordu).
+  const pending = Array.from(lockWaiters);
+  lockWaiters.clear();
+  pending.forEach((notify) => notify());
+}
+
+/**
+ * Kilit doluyken sıraya girer; kilit boşaldığında `notify` çağrılır.
+ * Dönen fonksiyon sıradan çıkarır (unmount/temizlik için).
+ */
+export function onSceneLockReleased(notify: () => void): () => void {
+  lockWaiters.add(notify);
+  return () => {
+    lockWaiters.delete(notify);
+  };
 }
 
 const VERTEX_SHADER = `
@@ -42,6 +63,18 @@ void main() {
 
 const ORBIT_COUNT = orbitStones.length;
 
+/**
+ * Yörünge eğimi — sistem tepeden değil, hafif eğik bir açıdan görünüyor,
+ * bu yüzden yörüngeler daire değil ELİPS. Dikey eksen bu oranda basılır.
+ *
+ * Bu sabit tek kaynaktır: hem shader'daki halka çizimi hem HTML taş
+ * katmanını besleyen stoneScreenPosition aynı değeri kullanır. Daha önce
+ * halkalar daire (length(uv)), taşlar elips olarak hesaplanıyordu; taş
+ * yalnızca yatay uçlarda halkaya oturuyor, diğer açılarda merkeze doğru
+ * kayıyordu. İkisi artık aynı geometriden türüyor.
+ */
+export const ORBIT_TILT = 0.42;
+
 const FRAGMENT_SHADER = `
 precision mediump float;
 
@@ -52,10 +85,24 @@ uniform vec3 uYellow;
 uniform vec2 uPointer;
 
 const int ORBIT_COUNT = ${ORBIT_COUNT};
+const float ORBIT_TILT = ${ORBIT_TILT.toFixed(4)};
 
 // Yörünge yarıçapı — merkezden dışa doğru eşit aralıklı.
 float orbitRadius(int index) {
   return 0.16 + float(index) * 0.085;
+}
+
+// Elips halkaya yaklaşık işaretli mesafe. Basitçe length(p/ab) - 1
+// kullanılsaydı çizgi kalınlığı elipsin dar ucunda incelir, geniş ucunda
+// kalınlaşırdı; gradyana bölme kalınlığı her açıda eşitler.
+float ellipseRingDist(vec2 p, float r) {
+  vec2 ab = vec2(r, r * ORBIT_TILT);
+  vec2 q = p / ab;
+  float k1 = length(q);
+  // Merkez: halkadan uzak olduğunu bildir, 0/0 üretme.
+  if (k1 < 1e-4) return -min(ab.x, ab.y);
+  float k2 = length(p / (ab * ab));
+  return (k1 - 1.0) * k1 / k2;
 }
 
 // Her yörünge farklı hızda döner; dıştaki yavaş (güneş sistemi mantığı).
@@ -79,8 +126,8 @@ void main() {
   for (int i = 0; i < ORBIT_COUNT; i++) {
     float r = orbitRadius(i);
 
-    // Yörünge halkası — ince, düşük opaklık.
-    float ring = smoothstep(0.004, 0.0, abs(dist - r));
+    // Yörünge halkası — ince, düşük opaklık. Taşlarla aynı elips.
+    float ring = smoothstep(0.004, 0.0, abs(ellipseRingDist(uv, r)));
     color += uYellow * ring * 0.12;
 
     // Taşın konumunda hafif bir zemin ışıması — gerçek görsel (HTML <img>)
@@ -88,7 +135,7 @@ void main() {
     // veriyor. uPointer, imleç yaklaşınca ışımayı güçlendirir (brief 4.1
     // "elastik fare tepkisi"nin güneş sistemindeki karşılığı).
     float angle = orbitAngle(i, uTime);
-    vec2 stone = vec2(cos(angle), sin(angle) * 0.42) * r;
+    vec2 stone = vec2(cos(angle), sin(angle) * ORBIT_TILT) * r;
     float d = length(uv - stone);
     float pointerBoost = 1.0 - smoothstep(0.0, 0.35, length(uPointer - stone));
     float glow = smoothstep(0.09, 0.0, d);
@@ -208,7 +255,12 @@ export function createSolarSystemScene(canvas: HTMLCanvasElement): SceneHandle |
   };
 }
 
-/** Taşın ekran üzerindeki konumu — HTML link katmanını hizalamak için. */
+/**
+ * Taşın ekran üzerindeki konumu — HTML link katmanını hizalamak için.
+ * Shader'daki orbitRadius/orbitAngle/ORBIT_TILT ile birebir aynı
+ * matematiği kullanır; taşın merkezi kendi yörünge elipsinin üzerinde
+ * her açıda tam olarak durur.
+ */
 export function stoneScreenPosition(
   index: number,
   timeSeconds: number,
@@ -216,5 +268,5 @@ export function stoneScreenPosition(
   const r = 0.16 + index * 0.085;
   const speed = 0.32 / (1 + index * 0.42);
   const angle = timeSeconds * speed + index * 0.9;
-  return { x: Math.cos(angle) * r, y: Math.sin(angle) * 0.42 * r };
+  return { x: Math.cos(angle) * r, y: Math.sin(angle) * ORBIT_TILT * r };
 }

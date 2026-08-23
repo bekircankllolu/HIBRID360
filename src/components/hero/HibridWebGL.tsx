@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { acquireSceneLock, releaseSceneLock } from "@/lib/webgl-scene";
+import {
+  acquireSceneLock,
+  releaseSceneLock,
+  onSceneLockReleased,
+} from "@/lib/webgl-scene";
 import {
   createHibridWordmarkScene,
   type HibridSceneHandle,
@@ -131,22 +135,36 @@ export function HibridWebGL() {
 
     // Kilit görünürlükle alınır/bırakılır: hero ekrandan çıkınca güneş
     // sistemi sahnesi kilidi alabilsin diye (aynı anda yalnızca biri çalışır).
+    // Kilit doluysa sıraya girilir — boşaldığında otomatik başlar; aksi
+    // halde devir iki observer'ın tetiklenme sırasına kalıyordu.
+    let inView = false;
+    let unsubscribeWait: (() => void) | null = null;
+
+    const startIfPossible = () => {
+      if (!inView || visible) return;
+      if (!holdsLock) holdsLock = acquireSceneLock(holder);
+      if (!holdsLock) {
+        unsubscribeWait ??= onSceneLockReleased(() => {
+          unsubscribeWait = null;
+          startIfPossible();
+        });
+        return;
+      }
+      visible = true;
+      activeScene.resize();
+      if (frameId === null) loop();
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const nowVisible = entry.isIntersecting;
-        if (nowVisible === visible) return;
-
-        if (nowVisible) {
-          if (!holdsLock) holdsLock = acquireSceneLock(holder);
-          // Kilit başkasındaysa bu turda çizim yapılmaz; bir sonraki
-          // görünürlük değişiminde tekrar denenir (kalıcı yedeğe düşmez).
-          if (!holdsLock) return;
-          visible = true;
-          activeScene.resize();
-          if (frameId === null) loop();
+        inView = entry.isIntersecting;
+        if (inView) {
+          startIfPossible();
         } else {
           visible = false;
           stopLoop();
+          unsubscribeWait?.();
+          unsubscribeWait = null;
           if (holdsLock) {
             releaseSceneLock(holder);
             holdsLock = false;
@@ -169,6 +187,7 @@ export function HibridWebGL() {
     return () => {
       observer.disconnect();
       resizeObserver.disconnect();
+      unsubscribeWait?.();
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("touchmove", onMove);
       stopLoop();
