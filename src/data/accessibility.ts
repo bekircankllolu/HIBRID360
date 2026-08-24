@@ -31,8 +31,8 @@ export const knownLimitations: Array<{ tr: string; en: string }> = [
     tr: "MONA'nın seslendirmesi ve VTT altyazı dosyaları henüz üretilmedi. Her replik ekranda tam metin olarak okunuyor ve sitede hiçbir yerde ses çalmıyor.",
   },
   {
-    en: "The homepage ecosystem scene uses decorative crystal artwork plus keyboard-accessible service buttons. Motion effects are disabled when reduced motion is requested.",
-    tr: "Ana sayfadaki ekosistem sahnesi dekoratif kristal görseli ve klavyeyle erişilebilen servis düğmeleri kullanıyor. Hareket azaltma istendiğinde animasyon efektleri kapatılıyor.",
+    en: "In the homepage ecosystem scene the service links orbit a decorative crystal. Motion pauses on hover or keyboard focus, and with reduced motion enabled the scene is fully static; the rings, starfield and crystal are decorative and hidden from screen readers.",
+    tr: "Ana sayfadaki ekosistem sahnesinde servis bağlantıları dekoratif kristalin etrafında döner. Hareket, imleç veya klavye odağıyla durur; hareket azaltma açıkken sahne tamamen sabittir. Halkalar, yıldız alanı ve kristal dekoratiftir ve ekran okuyuculardan gizlenmiştir.",
   },
   {
     en: "Video assets are not published yet. Each video will ship with TR and EN VTT captions before it goes live; until then this claim cannot be verified on the site.",

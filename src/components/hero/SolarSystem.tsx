@@ -1,39 +1,195 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   orbitStones,
+  stonePoint,
+  ORBIT_VIEW,
+  ORBIT_TILT,
+  ORBIT_RINGS,
   STONE_INTRINSIC,
   SOLAR_SYSTEM_TITLE,
+  type OrbitStone,
 } from "@/data/solar-system";
 import styles from "./SolarSystem.module.css";
 
-const pointPositions = [
-  { x: 28, y: 30 },
-  { x: 72, y: 26 },
-  { x: 18, y: 58 },
-  { x: 82, y: 56 },
-  { x: 38, y: 72 },
-  { x: 62, y: 70 },
-  { x: 48, y: 20 },
-  { x: 55, y: 83 },
-] as const;
-
 /**
- * Hibrid ekosistem sahnesi — ortada büyük sarı kristal, etrafta tıklanabilir
- * servis noktaları. WebGL yörünge demo hissi yerine kontrollü, erişilebilir
- * HTML/CSS sahnesi kullanılır; her nokta detay panelini açar.
+ * Hibrid güneş sistemi — brief-rev12.md Bölüm 4.5 "Hibrid taşları".
+ *
+ * Merkezde sarı Hibrid kristali (güneş), etrafında dört eğik eliptik
+ * yörüngede dönen sekiz servis noktası. Gerçeklik hissi üç şeyden geliyor:
+ *   1. Noktalar halkaların TAM üzerinde döner — halka SVG'si ve nokta
+ *      matematiği aynı sabitlerden türetilir (bkz. data/solar-system.ts).
+ *   2. Derinlik: nokta kristalin arkasından geçerken küçülür, söner ve
+ *      kristalin altına çizilir; önden geçerken büyür ve parlar.
+ *   3. Hover/odak/tap sistemi YAVAŞÇA durdurur (ani donma yok) ve o
+ *      noktanın yanında kompakt bir detay kartı açılır — büyük sabit
+ *      panel yok, ayrıntı noktanın yanında yaşar.
+ *
+ * Erişilebilirlik ve performans:
+ *   - Noktalar gerçek <a href> (SSR'da da) — klavye ve arama motoru tam
+ *     navigasyon görür. Dokunmatikte ilk dokunuş kartı açar (href'siz
+ *     <a> deseni — next-intl Link preventDefault dinlemediği için
+ *     render-time çözümü, bkz. önceki taş etkileşimi), kartın "Detaya
+ *     git" bağlantısı gerçek navigasyondur.
+ *   - Animasyon tek rAF döngüsü + 8 transform; WebGL yok, kilit gerekmez
+ *     (CLAUDE.md "tek WebGL sahnesi" kuralı hero'ya kalır). Bölüm ekrandan
+ *     çıkınca döngü durur.
+ *   - prefers-reduced-motion: döngü hiç kurulmaz, noktalar t=0 dizilişinde
+ *     sabit durur; kart açılışları anlıktır.
  */
+
+const pct = (x: number, y: number) => ({
+  left: `${((x / ORBIT_VIEW.w) * 100).toFixed(3)}%`,
+  top: `${((y / ORBIT_VIEW.h) * 100).toFixed(3)}%`,
+});
+
+/** SSR / hareket-azaltma dizilişi: t=0 konumları. */
+function staticStyle(stone: OrbitStone): CSSProperties {
+  const p = stonePoint(stone, 0);
+  return {
+    ...pct(p.x, p.y),
+    zIndex: p.depth >= 0.5 ? 4 : 1,
+    "--depth-scale": (0.72 + 0.5 * p.depth).toFixed(3),
+    "--depth-fade": (0.5 + 0.5 * p.depth).toFixed(3),
+    "--stone-glow":
+      stone.color === "yellow"
+        ? "var(--color-brand-yellow)"
+        : "var(--color-brand-fuchsia)",
+  } as CSSProperties;
+}
+
 export function SolarSystem() {
-  const [activeStone, setActiveStone] = useState(0);
+  const reducedMotion = usePrefersReducedMotion();
   const tWwd = useTranslations("whatWeDo");
   const tCommon = useTranslations("common");
   const wwdList = tWwd.raw("list") as Array<{ title: string; body: string }>;
-  const active = orbitStones[activeStone];
-  const activeBody =
-    wwdList.find((item) => item.title === active.wwdTitle)?.body ?? "";
+  const bodyFor = useCallback(
+    (wwdTitle: string) =>
+      wwdList.find((item) => item.title === wwdTitle)?.body ?? "",
+    [wwdList],
+  );
+
+  const [activeStone, setActiveStone] = useState<number | null>(null);
+  // SSR her zaman gerçek <a href> üretir; dokunmatik ayrımı hydrate sonrası.
+  const [coarsePointer, setCoarsePointer] = useState(false);
+
+  const stageRef = useRef<HTMLDivElement>(null);
+  const planetRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const activeRef = useRef<number | null>(null);
+  activeRef.current = activeStone;
+
+  useEffect(() => {
+    const query = window.matchMedia("(hover: none)");
+    setCoarsePointer(query.matches);
+    const onChange = (event: MediaQueryListEvent) =>
+      setCoarsePointer(event.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  // Kart açıkken dışarı dokunuş/tık kapatır (özellikle mobil için).
+  useEffect(() => {
+    if (activeStone === null) return;
+    const onPointerDown = (event: PointerEvent) => {
+      const stage = stageRef.current;
+      if (stage && !stage.contains(event.target as Node)) {
+        setActiveStone(null);
+      }
+    };
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") setActiveStone(null);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [activeStone]);
+
+  // Ana animasyon döngüsü. Zamanı doğrudan DOM'a yazar (state değil):
+  // 60fps'te 8 eleman için re-render maliyeti gereksiz.
+  useEffect(() => {
+    if (reducedMotion) return;
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    let frameId: number | null = null;
+    let running = false;
+    let time = 0;
+    let speed = 1;
+    let last = 0;
+
+    const step = (now: number) => {
+      if (!running) return;
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      // Hover/odak varken yumuşak fren, bırakınca yumuşak kalkış.
+      const target = activeRef.current !== null ? 0 : 1;
+      speed += (target - speed) * 0.08;
+      time += dt * speed;
+
+      for (let i = 0; i < orbitStones.length; i++) {
+        const el = planetRefs.current[i];
+        if (!el) continue;
+        const p = stonePoint(orbitStones[i], time);
+        el.style.left = `${(p.x / ORBIT_VIEW.w) * 100}%`;
+        el.style.top = `${(p.y / ORBIT_VIEW.h) * 100}%`;
+        el.style.zIndex = activeRef.current === i ? "6" : p.depth >= 0.5 ? "4" : "1";
+        el.style.setProperty("--depth-scale", (0.72 + 0.5 * p.depth).toFixed(3));
+        el.style.setProperty("--depth-fade", (0.5 + 0.5 * p.depth).toFixed(3));
+        // Kart, noktanın sahnedeki anlık yarısına göre içeri doğru açılır.
+        el.dataset.side = p.x < ORBIT_VIEW.cx ? "right" : "left";
+      }
+
+      frameId = requestAnimationFrame(step);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      last = performance.now();
+      frameId = requestAnimationFrame(step);
+    };
+    const stop = () => {
+      running = false;
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+    };
+
+    // CLAUDE.md: hareket katmanı ekrandan çıkınca durur.
+    const observer = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      { threshold: 0.08 },
+    );
+    observer.observe(stage);
+
+    return () => {
+      observer.disconnect();
+      stop();
+    };
+  }, [reducedMotion]);
+
+  const openStone = useCallback((index: number) => setActiveStone(index), []);
+  const closeStone = useCallback(
+    (index: number) =>
+      setActiveStone((current) => (current === index ? null : current)),
+    [],
+  );
 
   return (
     <section className={styles.section} aria-labelledby="solar-system-title">
@@ -41,14 +197,50 @@ export function SolarSystem() {
         {SOLAR_SYSTEM_TITLE}
       </h2>
 
-      <div className={styles.stage}>
-        <div className={styles.scene} aria-hidden="true">
-          <span className={styles.orbit} />
-          <span className={`${styles.orbit} ${styles.orbitTwo}`} />
-          <span className={`${styles.orbit} ${styles.orbitThree}`} />
-          <span className={styles.beamOne} />
-          <span className={styles.beamTwo} />
-          <span className={styles.glow} />
+      <div className={styles.stage} ref={stageRef}>
+        {/* Dekoratif uzay katmanı: nebula + yıldız alanı. */}
+        <div className={styles.space} aria-hidden="true" />
+
+        {/* Yörünge halkaları — noktalarla aynı geometri, aynı viewBox. */}
+        <svg
+          className={styles.rings}
+          viewBox={`0 0 ${ORBIT_VIEW.w} ${ORBIT_VIEW.h}`}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="ss-ring-sheen" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stopColor="#FFFFFF" stopOpacity="0" />
+              <stop offset="0.5" stopColor="#FFFFFF" stopOpacity="0.34" />
+              <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {ORBIT_RINGS.map((rx) => (
+            <g key={rx}>
+              <ellipse
+                className={styles.ringBase}
+                cx={ORBIT_VIEW.cx}
+                cy={ORBIT_VIEW.cy}
+                rx={rx}
+                ry={rx * ORBIT_TILT}
+                vectorEffect="non-scaling-stroke"
+              />
+              <ellipse
+                className={styles.ringSheen}
+                cx={ORBIT_VIEW.cx}
+                cy={ORBIT_VIEW.cy}
+                rx={rx}
+                ry={rx * ORBIT_TILT}
+                vectorEffect="non-scaling-stroke"
+              />
+            </g>
+          ))}
+        </svg>
+
+        {/* Güneş: Hibrid kristali. pointer-events kapalı — arkasından
+            geçen nokta hover'lanabilsin. */}
+        <div className={styles.sun} aria-hidden="true">
+          <span className={styles.sunGlow} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/stones/stone-yellow.webp"
@@ -61,43 +253,85 @@ export function SolarSystem() {
           <span className={styles.coreLabel}>HIBRID</span>
         </div>
 
-        <div className={styles.points} aria-label="Hibrid 360 service ecosystem">
-          {orbitStones.map((stone, index) => {
-            const position = pointPositions[index];
-            const isActive = index === activeStone;
-            return (
-              <button
-                key={stone.orbit}
-                type="button"
-                className={`${styles.point} ${
-                  stone.color === "yellow" ? styles.pointYellow : styles.pointFuchsia
-                } ${isActive ? styles.pointActive : ""}`}
-                style={
-                  {
-                    "--x": `${position.x}%`,
-                    "--y": `${position.y}%`,
-                  } as CSSProperties
-                }
-                aria-label={stone.label}
-                aria-pressed={isActive}
-                aria-controls="solar-system-detail"
-                onClick={() => setActiveStone(index)}
-              >
-                <span className={styles.pointPulse} />
-                <span className={styles.pointLabel}>{stone.label}</span>
-              </button>
-            );
-          })}
-        </div>
+        {/* Gezegenler: gerçek bağlantılar + noktaya bağlı kompakt kart. */}
+        {orbitStones.map((stone, index) => {
+          const isActive = activeStone === index;
+          const point = stonePoint(stone, 0);
+          // Kart sahne dışına taşmasın: soldaki noktada sağa, sağdakinde
+          // sola açılır. Buradaki değer t=0 (SSR) içindir; animasyon
+          // döngüsü data-side'ı anlık konuma göre günceller.
+          const navigable = !coarsePointer || isActive;
 
-        <aside id="solar-system-detail" className={styles.detail} aria-live="polite">
-          <p className={styles.detailKicker}>HIBRID 360</p>
-          <h3 className={styles.detailTitle}>{active.label}</h3>
-          <p className={styles.detailBody}>{activeBody}</p>
-          <Link href={active.href} className={styles.detailLink}>
-            {tCommon("learnMore")}
-          </Link>
-        </aside>
+          const shared = {
+            className: `${styles.dot} ${isActive ? styles.dotActive : ""}`,
+            onPointerEnter: () => {
+              if (!coarsePointer) openStone(index);
+            },
+            onFocus: () => openStone(index),
+            onBlur: () => closeStone(index),
+            "aria-label": stone.label,
+          };
+
+          const body = (
+            <>
+              <span className={styles.dotCore} aria-hidden="true" />
+              <span className={styles.dotHalo} aria-hidden="true" />
+            </>
+          );
+
+          return (
+            <div
+              key={stone.orbit}
+              ref={(el) => {
+                planetRefs.current[index] = el;
+              }}
+              className={`${styles.planet} ${isActive ? styles.planetActive : ""}`}
+              style={staticStyle(stone)}
+              data-side={point.x < ORBIT_VIEW.cx ? "right" : "left"}
+              onPointerLeave={() => {
+                if (!coarsePointer) closeStone(index);
+              }}
+            >
+              {navigable ? (
+                <Link href={stone.href} {...shared}>
+                  {body}
+                </Link>
+              ) : (
+                <a
+                  {...shared}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isActive}
+                  onClick={() => openStone(index)}
+                  onKeyDown={(event: KeyboardEvent<HTMLAnchorElement>) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openStone(index);
+                    }
+                  }}
+                >
+                  {body}
+                </a>
+              )}
+
+              <div
+                className={`${styles.card} ${isActive ? styles.cardOpen : ""}`}
+                aria-hidden={!isActive}
+              >
+                <p className={styles.cardKicker}>HIBRID 360</p>
+                <p className={styles.cardTitle}>{stone.label}</p>
+                <p className={styles.cardBody}>{bodyFor(stone.wwdTitle)}</p>
+                <Link
+                  href={stone.href}
+                  className={styles.cardLink}
+                  tabIndex={isActive ? 0 : -1}
+                >
+                  {tCommon("learnMore")} →
+                </Link>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

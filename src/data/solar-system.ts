@@ -23,7 +23,7 @@ export interface OrbitStone {
   ready: boolean;
   color: "fuchsia" | "yellow";
   /**
-   * Detay panelinde gösterilecek alt başlığın kaynağı:
+   * Detay kartında gösterilecek alt başlığın kaynağı:
    * WWD-02'deki (What We Do hub listesi) hizmet başlığı. Alt başlık metni
    * uydurulmuyor, o listedeki onaylı tek satır tanım locale'e göre
    * okunuyor — bkz. messages `whatWeDo.list`.
@@ -34,6 +34,10 @@ export interface OrbitStone {
    * gem'in sınırına kırpıldı; etiket artık yalnızca buradan geliyor.
    */
   wwdTitle: string;
+  /** Hangi yörünge halkasında döndüğü (ORBIT_RINGS indeksi). */
+  ring: 0 | 1 | 2 | 3;
+  /** Başlangıç açısı (radyan) — noktalar sahneye dağınık girsin diye. */
+  phase: number;
 }
 
 export const orbitStones: OrbitStone[] = [
@@ -44,6 +48,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "yellow",
     wwdTitle: "Production",
+    ring: 0,
+    phase: 0.7,
   },
   {
     orbit: 2,
@@ -52,6 +58,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "fuchsia",
     wwdTitle: "Digital",
+    ring: 0,
+    phase: 0.7 + Math.PI,
   },
   {
     orbit: 3,
@@ -60,6 +68,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "yellow",
     wwdTitle: "Creative",
+    ring: 1,
+    phase: 2.3,
   },
   {
     orbit: 4,
@@ -68,6 +78,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "fuchsia",
     wwdTitle: "AI Creative Production",
+    ring: 1,
+    phase: 2.3 + Math.PI,
   },
   {
     orbit: 5,
@@ -76,6 +88,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "yellow",
     wwdTitle: "Live Broadcast",
+    ring: 2,
+    phase: 4.1,
   },
   {
     orbit: 6,
@@ -84,6 +98,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "fuchsia",
     wwdTitle: "Photography",
+    ring: 2,
+    phase: 4.1 + Math.PI,
   },
   {
     orbit: 7,
@@ -92,6 +108,8 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "yellow",
     wwdTitle: "Post Production",
+    ring: 3,
+    phase: 5.6,
   },
   {
     orbit: 8,
@@ -100,8 +118,51 @@ export const orbitStones: OrbitStone[] = [
     ready: true,
     color: "fuchsia",
     wwdTitle: "Event Management",
+    ring: 3,
+    phase: 5.6 + Math.PI,
   },
 ];
+
+/**
+ * Yörünge geometrisi — hem SVG halkaları hem nokta konum matematiği bu
+ * sabitlerden türetilir; iki katman ayrı kaynak kullanırsa nokta halkadan
+ * kayar (bu hata bir kez yaşandı, bkz. eski WebGL sahnesindeki
+ * daire/elips uyumsuzluğu).
+ *
+ * Koordinatlar 1000×640'lık sanal sahnede tanımlı; bileşen bunları yüzdeye
+ * çevirip mutlak konumlandırıyor, SVG ise aynı viewBox'ı
+ * preserveAspectRatio="none" ile kullanıyor — kutu oranı değişse de
+ * (mobilde sahne kareye yaklaşır) iki katman birlikte esner.
+ */
+export const ORBIT_VIEW = { w: 1000, h: 640, cx: 500, cy: 324 } as const;
+
+/** Elipsin dikey basıklığı — sistem hafif eğik bir düzlemden görünüyor. */
+export const ORBIT_TILT = 0.36;
+
+/** Halka yarıçapları (rx, sanal birim). */
+export const ORBIT_RINGS = [176, 258, 340, 424] as const;
+
+/** Halka başına açısal hız (rad/s) — içteki hızlı, dıştaki yavaş. */
+export const RING_SPEED = [0.15, 0.105, 0.078, 0.058] as const;
+
+/**
+ * Bir taşın t anındaki konumu ve derinliği. `depth` 0..1: 0 = en arkada
+ * (kristalin arkasından geçerken), 1 = en önde. Bileşen bununla ölçek,
+ * parlaklık ve z-index verip sahneye üç boyut hissi katıyor.
+ */
+export function stonePoint(
+  stone: OrbitStone,
+  tSeconds: number,
+): { x: number; y: number; depth: number } {
+  const angle = stone.phase + tSeconds * RING_SPEED[stone.ring];
+  const rx = ORBIT_RINGS[stone.ring];
+  const sin = Math.sin(angle);
+  return {
+    x: ORBIT_VIEW.cx + Math.cos(angle) * rx,
+    y: ORBIT_VIEW.cy + sin * rx * ORBIT_TILT,
+    depth: (sin + 1) / 2,
+  };
+}
 
 /**
  * Taş görsellerinin gerçek (kırpılmış) piksel boyutları. Görseller gem'in
