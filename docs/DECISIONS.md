@@ -53,3 +53,33 @@ görsel yayınlanmaz.
 - Yayın izni durumu
 - Dosya/video/görsel konumu
 - Vaka sayfası açılacak mı?
+
+## TR çevirisi bekleyen metinler (dil tutarlılığı)
+
+CLAUDE.md kuralı: sloganlar TR sürümde de İngilizce kalır (marka dili),
+**gövde metni Türkçedir** ve "karışık dil yasak". Aşağıdaki bloklar bu
+kuralın istisnası değil — deck (`docs/brief-rev12.md`) bunların yalnızca
+**EN** sürümünü verdi, TR karşılığını vermedi. CLAUDE.md "onaylanmamış
+çeviri uydurulmaz" dediği için kodda İngilizce bırakıldılar; sonuç olarak
+şu an TR sayfalarında İngilizce gövde metni görünüyor.
+
+Müşteriden bu metinlerin TR çevirisi geldiğinde ilgili `tr` alanları
+doldurulacak — kod tarafı hazır, tek eksik onaylı metin.
+
+| Sayfa | Ne eksik | Kaynak / kod |
+|---|---|---|
+| Digital | 10 hizmet açıklaması + 4 değer cümlesi | DIG-03 · `src/data/digital-services.ts`, `what-we-do/digital/page.tsx` |
+| How We Work | Hero cümlesi + 4 süreç adımı açıklaması | Bölüm 20.5 · `src/data/how-we-work.ts`, `what-we-do/how-we-work/page.tsx` |
+| Insights | Hero alt başlığı | Bölüm 20.6 · `messages/tr.json` → `insights.heroSubtitle` |
+| Accessibility | "Our commitment" · "What we have done" · "Feedback" paragrafları | Bölüm 18.10 · `src/data/accessibility.ts` |
+| Cloud TV | "WHAT ARE HIBRID SOLUTIONS?" bölüm başlığı | `messages/tr.json` → `services.cloudTv.solutionsTitle` |
+| How We Work | Bütçe tablosundaki format adları ("Product / how-to film" vb.) | Bölüm 20.5 · `src/data/how-we-work.ts` → `budgetBands[].format` |
+
+**İstisna (çeviri gerekmiyor):** Service Production (International)
+sayfası — CLAUDE.md "öncelikli dil EN; TR'de kısa özet yeterli" diyor,
+bu sayfadaki İngilizce gövde metni kasıtlıdır.
+
+**Kasıtlı olarak İngilizce kalanlar** (marka dili, çevrilmeyecek): ana
+menü maddeleri, hero/bant sloganları, hizmet adları (Creative,
+Production, Cloud TV…), MONA, AI SHOWREEL, footer marka imzası ve telif
+satırı.

@@ -397,17 +397,17 @@
     "cta": "WORK sayfasına git"
   },
   "accessibilityPage": {
-    "knownLimitations": "Known limitations — bilinen sınırlamalar",
-    "lastReviewed": "Last reviewed — {date}",
-    "reviewPending": "Last reviewed — yayın öncesi erişilebilirlik denetimi tamamlandığında girilecek."
+    "knownLimitations": "Bilinen sınırlamalar",
+    "lastReviewed": "Son gözden geçirme — {date}",
+    "reviewPending": "Son gözden geçirme — yayın öncesi erişilebilirlik denetimi tamamlandığında girilecek."
   },
   "sustainability": {
-    "title": "Sustainability",
+    "title": "Sürdürülebilirlik",
     "pendingEvidence": "Karbon nötr iddiası, ölçüm ve sertifika verisi girilmeden yayınlanmaz. Aşağıdaki bölümler tamamlandığında bu sayfa ve footer rozeti yayına açılacak.",
-    "measurement": "Measurement — bu site sayfa görüntüleme başına yaklaşık {grams} g CO₂ salıyor; {tool} ile {date} tarihinde ölçüldü.",
+    "measurement": "Ölçüm — bu site sayfa görüntüleme başına yaklaşık {grams} g CO₂ salıyor; {tool} ile {date} tarihinde ölçüldü.",
     "measurementPending": "Ölçüm bekleniyor: sayfa başına gram CO₂, ölçüm aracı ve tarih.",
     "hostingPending": "Yeşil enerjiyle çalışan hosting sağlayıcısının adı bekleniyor.",
-    "offset": "Offset — kalan salım {program} üzerinden denkleştirildi, sertifika no. {certificate}.",
+    "offset": "Karbon denkleştirme — kalan salım {program} üzerinden denkleştirildi, sertifika no. {certificate}.",
     "offsetPending": "Denkleştirme bekleniyor: program adı ve sertifika numarası.",
     "onSetPending": "Prodüksiyonda ulaşım, catering, atık ve ekipman uygulamaları yazılacak."
   },
