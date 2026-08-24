@@ -16,9 +16,12 @@ import styles from "./page.module.css";
  * gelmeden bu sayfa/footer yayına alınmamalı.
  *
  * TODO: CON-03 — gerçek harita (Google Maps/Mapbox) API anahtarı
- * yapılandırılmadı; "siyah zemin, sarı harita" kuralına uyan statik bir
- * yer tutucu kutu var. API anahtarı geldiğinde gömülü harita ile
- * değiştirilecek.
+ * yapılandırılmadı. Yer tutucu artık boş sarı bir kutu değil: hero'nun sağ
+ * yarısında duran, adresi + telefonu + e-postayı ve gerçek bir yol tarifi
+ * bağlantısını taşıyan bir künye kartı ("siyah zemin, sarı çerçeve" kuralı
+ * korundu). API anahtarı geldiğinde gömülü harita bu kartın üstüne
+ * eklenecek — kart kendisi kalır, çünkü adres/iletişim bilgisi haritadan
+ * bağımsız olarak gerekli.
  */
 
 export async function generateMetadata({
@@ -49,6 +52,11 @@ export default async function ContactPage({
   const motionBody = t.raw("motionBody") as string[];
   const teams = t.raw("teams") as Array<{ title: string; body: string }>;
   const whatsappHref = `https://wa.me/${CONTACT.phone.replace(/[^0-9]/g, "")}`;
+  // Google Maps'in resmi "directions" URL şeması, teyitli adresten
+  // türetiliyor — uydurma bir place-id / kısa link değil.
+  const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    CONTACT.addressLines.join(", "),
+  )}`;
 
   return (
     <div className={styles.page}>
@@ -59,32 +67,53 @@ export default async function ContactPage({
         ])}
       />
 
-      <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-      <p className={styles.heroLead}>{t("heroLead1")}</p>
-      <p className={styles.heroLead}>{t("heroLead2")}</p>
-      <p className={styles.heroBody}>{t("heroBody")}</p>
+      <div className={styles.hero}>
+        <div className={styles.heroMain}>
+          <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
+          <p className={styles.heroLead}>{t("heroLead1")}</p>
+          <p className={styles.heroLead}>{t("heroLead2")}</p>
+          <p className={styles.heroBody}>{t("heroBody")}</p>
+        </div>
 
-      <div className={styles.addressGrid}>
-        <div className={styles.addressBlock}>
+        {/* Hero'nun sağ yarısı eskiden tamamen boştu; künye kartı oraya
+            taşındı. Kartın kendisi de eskiden altta duran, içinde tek bir
+            şehir adı olan boş sarı kutuydu. */}
+        <aside className={styles.locationCard}>
           {/* CON-03 — WORK-07 ile birebir aynı gövde metni, tek kaynak. */}
           <p className={styles.addressLead}>{tWork("ctaLead")}</p>
-          <address>
+          <address className={styles.address}>
             {CONTACT.addressLines.map((line) => (
               <span key={line}>
                 {line}
                 <br />
               </span>
             ))}
-            <br />
-            T: <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>{CONTACT.phone}</a>
-            <br />
-            E: <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
           </address>
-        </div>
-        {/* TODO: gerçek harita varlığı gelince değiştirilecek. */}
-        <div className={styles.map} aria-hidden="true">
-          Kadıköy — İstanbul, Türkiye
-        </div>
+          <dl className={styles.contactRows}>
+            <div className={styles.contactRow}>
+              <dt>T</dt>
+              <dd>
+                <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
+                  {CONTACT.phone}
+                </a>
+              </dd>
+            </div>
+            <div className={styles.contactRow}>
+              <dt>E</dt>
+              <dd>
+                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+              </dd>
+            </div>
+          </dl>
+          <a
+            className={styles.directions}
+            href={directionsHref}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t("directions")} →
+          </a>
+        </aside>
       </div>
 
       <section className={styles.section}>

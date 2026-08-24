@@ -74,6 +74,7 @@ doldurulacak — kod tarafı hazır, tek eksik onaylı metin.
 | Accessibility | "Our commitment" · "What we have done" · "Feedback" paragrafları | Bölüm 18.10 · `src/data/accessibility.ts` |
 | Cloud TV | "WHAT ARE HIBRID SOLUTIONS?" bölüm başlığı | `messages/tr.json` → `services.cloudTv.solutionsTitle` |
 | How We Work | Bütçe tablosundaki format adları ("Product / how-to film" vb.) | Bölüm 20.5 · `src/data/how-we-work.ts` → `budgetBands[].format` |
+| Culture hub | Üç bölüm adı: What We Believe · Directors & Crew · Partners | `messages/tr.json` → `culture.hub.*` (Biz Kimiz ve Sürdürülebilirlik çevrildi) |
 
 **İstisna (çeviri gerekmiyor):** Service Production (International)
 sayfası — CLAUDE.md "öncelikli dil EN; TR'de kısa özet yeterli" diyor,

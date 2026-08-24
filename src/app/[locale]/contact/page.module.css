@@ -4,13 +4,30 @@
   padding: var(--space-24) var(--space-4);
 }
 
+/* Hero iki sütun: solda başlık + giriş metinleri, sağda künye kartı.
+   Önceden başlık soldaydı ve hero'nun sağ yarısı boştu; adres bloğu da
+   sayfanın aşağısında, içinde tek bir şehir adı olan boş sarı kutunun
+   yanında duruyordu. */
+.hero {
+  display: grid;
+  gap: var(--space-10);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.65fr);
+    gap: var(--space-16);
+  }
+}
+
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
   font-size: var(--font-size-display);
   line-height: 1.05;
   margin: 0 0 var(--space-8);
-  max-width: 50rem;
 }
 
 .heroLead {
@@ -26,48 +43,89 @@
   opacity: 0.9;
 }
 
-.addressGrid {
-  margin-top: var(--space-16);
-  display: grid;
-  gap: var(--space-8);
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 900px) {
-  .addressGrid {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
+/* Künye kartı — brief CON-03: "Harita siyah zemin üzerine sarı (#FFFC00)
+   olacak." Çerçeve ve vurgu sarısı korundu; kutunun içi artık boş değil.
+   TODO: harita API anahtarı gelince gömülü harita bu kartın üstüne
+   eklenecek (bkz. page.tsx). */
+.locationCard {
+  background: var(--color-brand-black);
+  border: 1px solid var(--color-brand-yellow);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .addressLead {
-  max-width: 32rem;
-  margin: 0 0 var(--space-6);
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
   opacity: 0.9;
 }
 
-.addressBlock address {
+.address {
   font-style: normal;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
   font-size: 0.9375rem;
-  line-height: 1.6;
+  line-height: 1.7;
+  color: var(--color-brand-yellow);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(255, 252, 0, 0.35);
 }
 
-.addressBlock a {
+.contactRows {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 0.9375rem;
+}
+
+.contactRow {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.contactRow dt {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  line-height: 1.7;
+  color: var(--color-brand-yellow);
+  min-width: 1rem;
+}
+
+.contactRow dd {
+  margin: 0;
+}
+
+.contactRow a {
   color: var(--color-brand-fuchsia);
 }
 
-/* brief CON-03: "Harita siyah zemin üzerine sarı (#FFFC00) olacak." */
-.map {
-  background: var(--color-brand-black);
-  border: 1px solid var(--color-brand-yellow);
-  color: var(--color-brand-yellow);
-  min-height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-6);
+.contactRow a:hover {
+  text-decoration: underline;
+}
+
+/* Gerçek Google Maps "directions" bağlantısı — teyitli adresten
+   türetiliyor, kırık/uydurma link değil. */
+.directions {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
   font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  align-self: flex-start;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-brand-fuchsia);
+  color: var(--color-brand-fuchsia);
+}
+
+.directions:hover {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  border-bottom-color: transparent;
 }
 
 .section {

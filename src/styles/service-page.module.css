@@ -50,10 +50,14 @@
   );
 }
 
+/* Fotoğraf sayfanın en geniş bandı: gövde metni 46rem'lik dar bir sütunda
+   dururken görsel, sayfa dolgusunu da aşıp kenardan kenara uzanıyor. Dar
+   metin / geniş görsel karşıtlığı bu sayfalara ritmi veren şey — daha önce
+   ikisi de aynı hizada bitiyordu. */
 .visual {
   position: relative;
-  min-height: clamp(17rem, 46vw, 34rem);
-  margin: var(--space-12) 0 var(--space-12);
+  min-height: clamp(17rem, 52vw, 38rem);
+  margin: var(--space-12) calc(var(--space-4) * -1);
   overflow: hidden;
   background: #080808;
 }
@@ -102,25 +106,43 @@
   margin-bottom: var(--space-6);
 }
 
-/* Hizmet etiketleri satırı (CRE-03, PRO-04, POST-03, DIG-05, EVT-03,
-   PHO-03 vb.) — EN + TR aynı, marka dili. */
+/* Hizmet kapsamı (CRE-03, PRO-04, POST-03, DIG-05, EVT-03, PHO-03 vb.)
+   — EN + TR aynı, marka dili.
+
+   Eskiden tek satıra sarılan sönük bir etiket dizisiydi; artık numaralı
+   tipografik bir dizin: her kalem kendi satırında, ince ayraçla, çok
+   sütunlu. Numaralar CSS sayacından geliyor — sekiz page.tsx'in JSX'ine
+   dokunmadan, listeye yeni kalem eklendiğinde kendiliğinden ilerliyor. */
 .tagList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3) var(--space-6);
+  counter-reset: service-item;
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: var(--space-12);
   list-style: none;
   margin: var(--space-16) 0 0;
-  padding: var(--space-6) 0;
+  padding: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .tag {
+  counter-increment: service-item;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  opacity: 0.8;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+}
+
+.tag::before {
+  content: counter(service-item, decimal-leading-zero);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: var(--color-brand-fuchsia);
 }
 
 /* Ara bant — sayfa ortasında vurgulu tek/iki satırlık ifade. */
@@ -244,6 +266,21 @@
 .ctaButton:hover {
   background: var(--color-brand-yellow);
   color: var(--color-text-on-yellow);
+}
+
+/* Dizin sütunları: mobilde tek, tablette iki, masaüstünde üç. auto-fit
+   yerine açık eşikler — "MARKETING PLAN AND STRATEGY" gibi uzun kalemler
+   dar sütunda iki satıra kırılıyordu. */
+@media (min-width: 640px) {
+  .tagList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tagList {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 640px) {

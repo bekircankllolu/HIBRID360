@@ -18,6 +18,8 @@
   padding: 0;
   display: grid;
   gap: var(--space-4);
+  /* Beş kart: 24rem eşiği masaüstünde üç sütun veriyor (3 + 2), 20rem
+     dört sütun verip beşinciyi tek başına bırakıyordu. */
   grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
 }
 
@@ -43,15 +45,28 @@
   pointer-events: none;
 }
 
+/* Kartın yüksekliği içeriğine bağlı — sabit bir min-height yok. Deck
+   henüz bölüm açıklamalarını vermediği için kart şu an numara + başlık
+   kadar yer kaplıyor; açıklama geldiğinde (bkz. page.tsx TODO) .cardText
+   ikinci satıra girer ve kart kendiliğinden büyür.
+
+   Izgara: numara üstte tam genişlik, altında başlık ve oku aynı satırda
+   tabana hizalı — başlık bloğu okla kapanıyor. */
 .cardLink {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  min-height: 11rem;
-  padding: var(--space-6) var(--space-5) var(--space-5);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  column-gap: var(--space-4);
+  row-gap: var(--space-3);
+  padding: var(--space-6) var(--space-5);
   height: 100%;
+}
+
+.index,
+.cardText {
+  grid-column: 1 / -1;
 }
 
 .index {
@@ -71,10 +86,10 @@
 }
 
 .arrow {
-  margin-top: auto;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 1.125rem;
+  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  line-height: 1.12;
   color: var(--color-brand-fuchsia);
   transform: translateX(-4px);
   opacity: 0;

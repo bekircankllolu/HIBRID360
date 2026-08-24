@@ -135,10 +135,18 @@
         "body": "Uzun soluklu ve karmaşık projeler için devreye alınır; ortaya çıkan her teknoloji ve reklam ihtiyacını karşılamamızı sağlar. Ekip 3 ile birlikte ürettiğimiz iş ve hizmetler genellikle daha özel ve “butik” niteliktedir."
       }
     ],
+    "directions": "Yol tarifi al",
     "bookingLead": "Konuşmayı mı tercih edersiniz?",
     "socialInvite": "İşleri takip edin"
   },
   "culture": {
+    "hub": {
+      "whoWeAre": "Biz Kimiz",
+      "whatWeBelieve": "What We Believe",
+      "directors": "Directors & Crew",
+      "partners": "Partners",
+      "sustainability": "Sürdürülebilirlik"
+    },
     "whoWeAre": {
       "heroTitle": "BİZ KİMİZ",
       "quote1": "“Geleceğin görsel deneyimlerini üretiyoruz.”",
