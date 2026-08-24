@@ -15,36 +15,8 @@
   max-width: 44rem;
 }
 
-.logoGrid {
-  margin-top: var(--space-16);
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  list-style: none;
-  padding: 0;
-}
-
-.logoItem {
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: var(--space-6) var(--space-4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.9375rem;
-  min-height: 5.5rem;
-}
-
-/* FRD-02 [DOĞRULA] — deck'in yayın öncesi teyit istediği beş isim,
-   görünmez değil ama görsel olarak işaretli (sahte veri değil, sadece
-   henüz teyit edilmemiş gerçek veri). */
-.logoItemUnverified {
-  border-style: dashed;
-  border-color: var(--color-brand-yellow);
-  opacity: 0.75;
-}
+/* Müşteri ızgarasının stilleri bileşeniyle birlikte taşındı:
+   src/components/friends/ClientLogoGrid.module.css */
 
 .testimonials {
   margin-top: var(--space-24);

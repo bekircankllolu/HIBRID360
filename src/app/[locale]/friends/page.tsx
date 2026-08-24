@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
+import { ClientLogoGrid } from "@/components/friends/ClientLogoGrid";
 import { TestimonialList } from "@/components/testimonials/TestimonialList";
 import { Link } from "@/i18n/navigation";
 import { getPublishedTestimonials } from "@/lib/content";
@@ -65,26 +66,14 @@ export default async function FriendsPage({
       <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
       <p className={styles.body}>{t("heroBody")}</p>
 
-      <ul className={styles.logoGrid}>
-        {clients.map((client) => (
-          <li
-            key={client.name}
-            className={
-              client.verified
-                ? styles.logoItem
-                : `${styles.logoItem} ${styles.logoItemUnverified}`
-            }
-          >
-            {client.name}
-          </li>
-        ))}
-        {SHOW_NEW_CLIENTS &&
-          newClients.map((name) => (
-            <li key={name} className={styles.logoItem}>
-              {name}
-            </li>
-          ))}
-      </ul>
+      <ClientLogoGrid
+        clients={[
+          ...clients,
+          ...(SHOW_NEW_CLIENTS
+            ? newClients.map((name) => ({ name, verified: true }))
+            : []),
+        ]}
+      />
 
       <section className={styles.testimonials}>
         <h2 className={styles.sectionTitle}>{t("testimonialsTitle")}</h2>
