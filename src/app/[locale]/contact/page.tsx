@@ -136,27 +136,34 @@ export default async function ContactPage({
         </div>
       </section>
 
+      {/* Form solda, "ya da başka türlü ulaşın" bloğu sağda. İkinci sütun
+          yeni metinle değil, daha önce formun altında tek başına duran
+          randevu/WhatsApp satırı ve sosyal davetin yukarı taşınmasıyla
+          doldu — formun sağ yarısı boş kalmıyor, bu iki öğe de artık
+          formun alternatifi olarak okunuyor. */}
       <section className={styles.formSection}>
-        <ContactForm locale={locale} />
-      </section>
-
-      <div className={styles.bookingRow}>
-        <p className={styles.bookingLead}>{t("bookingLead")}</p>
-        <div className={styles.bookingLinks}>
-          {/* TODO: DECISIONS.md #11 — Cal.com hesabı açılınca gerçek
-              randevu linkine değiştirilecek. Zaten bu sayfadayız, bu
-              yüzden burada (CtaBand'ın aksine) /contact'a self-link
-              vermek yerine metin görünür bırakıldı. */}
-          <span>{tCta("bookCall")}</span>
-          <a href={whatsappHref} target="_blank" rel="noreferrer">
-            {tCta("whatsapp")}
-          </a>
+        <div className={styles.formColumn}>
+          <ContactForm locale={locale} />
         </div>
-      </div>
 
-      <p className={styles.socialInvite}>
-        {t("socialInvite")}: {SOCIAL_PLATFORMS.join(" · ")}
-      </p>
+        <aside className={styles.formAside}>
+          <p className={styles.bookingLead}>{t("bookingLead")}</p>
+          <div className={styles.bookingLinks}>
+            {/* TODO: DECISIONS.md #11 — Cal.com hesabı açılınca gerçek
+                randevu linkine değiştirilecek. Zaten bu sayfadayız, bu
+                yüzden burada (CtaBand'ın aksine) /contact'a self-link
+                vermek yerine metin görünür bırakıldı. */}
+            <span>{tCta("bookCall")}</span>
+            <a href={whatsappHref} target="_blank" rel="noreferrer">
+              {tCta("whatsapp")}
+            </a>
+          </div>
+
+          <p className={styles.socialInvite}>
+            {t("socialInvite")}: {SOCIAL_PLATFORMS.join(" · ")}
+          </p>
+        </aside>
+      </section>
     </div>
   );
 }
