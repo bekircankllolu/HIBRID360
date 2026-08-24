@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   acquireSceneLock,
@@ -23,8 +24,10 @@ const MASK_URL = "/images/hibrid-wordmark.png";
  * src/lib/hibrid-wordmark-scene.ts).
  *
  * Katmanlama — LCP ve yedek aynı anda çözülüyor:
- *   1. Statik PNG (<img>) her zaman render edilir ve sayfanın LCP
- *      elemanıdır. 17KB, fetchPriority="high" — ilk boyama JS'i
+ *   1. Statik PNG (next/image, kaynak 17KB) her zaman render edilir ve
+ *      sayfanın LCP elemanıdır. `priority` prop'u Next'e hem
+ *      fetchPriority="high" hem de optimize edilmiş src'yle birebir
+ *      eşleşen bir <link rel="preload"> ürettirir — ilk boyama JS'i
  *      beklemez. Önceki SVG glif-path yaklaşımı da aynı LCP sorununu
  *      (web font indirmesini bekleyen ilk boyama) çözüyordu; maske
  *      görseli onun yerini alıyor.
@@ -199,15 +202,19 @@ export function HibridWebGL() {
 
   return (
     <div className={styles.stage} ref={stageRef}>
-      {/* LCP elemanı + kalıcı yedek. WebGL devreye girince gizlenir. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* LCP elemanı + kalıcı yedek. WebGL devreye girince gizlenir.
+          next/image: sayfa maks. genişliği 1440px (--content-max-width),
+          altında viewport genişliği kadar — bkz. HeroTypography .inner.
+          priority, sağdaki fetchPriority="high" + otomatik <link
+          rel="preload">'u (URL'i optimize edilmiş src ile birebir eşleşir)
+          kendisi üretir; manuel preload artık gereksiz. */}
+      <Image
         src={MASK_URL}
         alt="HIBRID"
         width={1920}
         height={528}
-        fetchPriority="high"
-        decoding="async"
+        sizes="(min-width: 1440px) 1440px, 100vw"
+        priority
         className={`${styles.fallback} ${live ? styles.fallbackHidden : ""}`}
       />
       {!reducedMotion && (

@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -241,13 +242,15 @@ export function SolarSystem() {
             geçen nokta hover'lanabilsin. */}
         <div className={styles.sun} aria-hidden="true">
           <span className={styles.sunGlow} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* .crystal genişliği clamp(8.5rem, 17vw, 13.5rem) — ekranda hiç
+              216px'i geçmiyor; next/image bu üst sınırla doğru boyut
+              varyantını seçer, otomatik AVIF/WebP üretir. */}
+          <Image
             src="/images/stones/stone-yellow.webp"
-            srcSet="/images/stones/stone-yellow.webp 1x, /images/stones/stone-yellow@2x.webp 2x"
             alt=""
             width={STONE_INTRINSIC.yellow.width}
             height={STONE_INTRINSIC.yellow.height}
+            sizes="220px"
             className={styles.crystal}
           />
           <span className={styles.coreLabel}>HIBRID</span>
