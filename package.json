@@ -22,6 +22,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@lhci/cli": "^0.15.1",
     "@opennextjs/cloudflare": "1.15.0",
     "@playwright/test": "^1.62.1",

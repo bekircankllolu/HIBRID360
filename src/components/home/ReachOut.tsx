@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ContactForm } from "@/components/contact/ContactForm";
 import type { Locale } from "@/i18n/routing";
 import styles from "./ReachOut.module.css";
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
  * HOME-11 — 8. ekran, scroll ortası, iletişim ikonları + pop-up.
@@ -19,14 +22,52 @@ export function ReachOut() {
   const t = useTranslations("home.reachOut");
   const locale = useLocale() as Locale;
   const [open, setOpen] = useState(false);
+  const ctaRef = useRef<HTMLButtonElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
+  // aria-modal="true" bir diyalog açıkken klavye odağı arkadaki sayfaya
+  // kaçmamalı (WAI-ARIA Dialog Pattern) — önceden yalnızca Escape ile
+  // kapanıyordu, Tab ile dışarı çıkılabiliyordu. Açılışta odak popup'a
+  // girer, Tab/Shift+Tab popup içinde döner, kapanışta odak tetikleyici
+  // butona geri döner (klavye kullanıcısı kaybolmaz).
   useEffect(() => {
     if (!open) return;
+
+    const popup = popupRef.current;
+    const trigger = ctaRef.current;
+    const focusFirst = () => {
+      const first = popup?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      first?.focus();
+    };
+    focusFirst();
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !popup) return;
+
+      const focusable = Array.from(
+        popup.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      trigger?.focus();
+    };
   }, [open]);
 
   return (
@@ -34,13 +75,19 @@ export function ReachOut() {
       <h2 id="reach-out-title" className={styles.title}>
         {t("title")}
       </h2>
-      <button type="button" className={styles.cta} onClick={() => setOpen(true)}>
+      <button
+        ref={ctaRef}
+        type="button"
+        className={styles.cta}
+        onClick={() => setOpen(true)}
+      >
         {t("cta")}
       </button>
 
       {open && (
         <div className={styles.overlay} onClick={() => setOpen(false)}>
           <div
+            ref={popupRef}
             className={styles.popup}
             role="dialog"
             aria-modal="true"
