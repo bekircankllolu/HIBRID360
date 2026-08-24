@@ -30,7 +30,24 @@ npm run dev
 npm run build   # next build
 npm run lint    # eslint
 npm run lhci    # Lighthouse CI (önce `npm run build && npm run start` gerekir)
+npm run test:e2e     # Playwright e2e — kritik yollar (bkz. e2e/)
+npm run test:e2e:ui  # aynısı, Playwright'ın UI modunda (hata ayıklama)
 ```
+
+## e2e testleri (Playwright)
+
+`e2e/` klasöründeki testler, tek başına elle QA taramasıyla yakalanması
+zor olan kritik yolları koruma altına alır: çerez rızası + kalıcılığı,
+dil değişimi (aynı sayfada kalma), mobil hamburger menü (390px, taşma +
+panel + Escape), Contact formu (zorunlu alan/onay/sunucu hatası) ve Brief
+Builder sihirbazı (6 soru + özet + rıza kapılı gönderim). Testler
+`npm run dev`'e karşı çalışır ve `playwright.config.ts` webServer'ı
+otomatik başlatır — ayrıca bir sunucu açmanıza gerek yok.
+
+`@playwright/test` tarayıcıyı ilk çalıştırmada kendi indirir
+(`npx playwright install chromium`); bunu engelleyen bir ortamda
+(ör. ağı kısıtlı konteyner) `PLAYWRIGHT_EXECUTABLE_PATH` ortam
+değişkeniyle önceden kurulu bir Chromium'un yolunu verebilirsiniz.
 
 ## Vercel deploy
 
