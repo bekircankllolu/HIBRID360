@@ -11,28 +11,118 @@
   margin: 0 0 var(--space-16);
 }
 
-.subPages {
+/* Beş bölüm — düz bağlantı listesi yerine numaralı kartlar. */
+.grid {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+}
+
+.card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #070707;
+  overflow: hidden;
+}
+
+/* Kartın içinden yükselen marka rengi ışıması — hover'da açılır. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 100% at 50% 118%,
+    rgba(255, 0, 255, 0.22),
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 240ms ease-out;
+  pointer-events: none;
+}
+
+.cardLink {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  min-height: 11rem;
+  padding: var(--space-6) var(--space-5) var(--space-5);
+  height: 100%;
 }
 
-.subPages a {
+.index {
   font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--color-brand-yellow);
 }
 
-.subPages a:hover {
+.cardTitle {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  line-height: 1.12;
+  transition: color 200ms ease-out;
+}
+
+.arrow {
+  margin-top: auto;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1.125rem;
   color: var(--color-brand-fuchsia);
+  transform: translateX(-4px);
+  opacity: 0;
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 240ms ease-out;
 }
 
-.pending {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-  opacity: 0.4;
+@media (hover: hover) {
+  .card:hover,
+  .card:focus-within {
+    border-color: var(--color-brand-fuchsia);
+  }
+
+  .card:hover::after,
+  .card:focus-within::after {
+    opacity: 1;
+  }
+
+  .card:hover .cardTitle,
+  .card:focus-within .cardTitle {
+    color: var(--color-brand-fuchsia);
+  }
+
+  .card:hover .arrow,
+  .card:focus-within .arrow {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .arrow {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* CLAUDE.md zorunlu kuralı: hareket azaltmada geçişler anlık/sade. */
+@media (prefers-reduced-motion: reduce) {
+  .card::after,
+  .cardTitle,
+  .arrow {
+    transition: none;
+  }
+
+  .arrow {
+    opacity: 1;
+    transform: none;
+  }
 }

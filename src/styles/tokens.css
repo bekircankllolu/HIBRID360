@@ -23,9 +23,13 @@
      bölümünde ve büyük puntoda kullanılır, başka hiçbir yerde geçmez.
      TODO: brief 11.7 — kesin hex değerleri karakter sayfası (character
      sheet) üretilince marka ekibiyle teyit edilecek; aşağıdakiler brief'in
-     renk tarifine uyan, WCAG AA kontrastı sağlanmış çalışma değerleridir. */
+     renk tarifine uyan, WCAG AA kontrastı sağlanmış çalışma değerleridir.
+     Mint, baby pink üzerinde 8.38:1 — replik değişirken uygulanan solma
+     (Mona.module.css .speechFading) sırasında bile AA korunsun diye
+     bilerek koyu tutuldu; önceki #0f6b4f tam opaklıkta 4.62 ile sınırdaydı
+     ve solma anında 2.24'e düşüp AA'yı kırıyordu. */
   --color-mona-baby-pink: #f7cfe0;
-  --color-mona-neon-mint: #0f6b4f;
+  --color-mona-neon-mint: #08402f;
   --color-mona-lilac: #b49bd8;
 
   /* Typography */

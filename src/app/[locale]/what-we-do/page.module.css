@@ -19,43 +19,183 @@
   opacity: 0.9;
 }
 
-.subPages {
+/* Hizmet kartları — hub artık düz liste değil, görsel ızgara. */
+.grid {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+}
+
+.card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #070707;
+  overflow: hidden;
+}
+
+.cardLink {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
-.subPages li {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #0b0b0b;
 }
 
-.subPages li:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+.mediaImage {
+  object-fit: cover;
+  filter: contrast(1.06) saturate(0.9) brightness(0.82);
+  transition:
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 320ms ease-out;
 }
 
-.item {
+/* Görselin üstünde alta doğru koyulaşan perde — başlık her fotoğrafta
+   okunur kalsın (WCAG AA; fotoğraflar açık kareler içerebiliyor). */
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.15) 62%);
+}
+
+.cardBody {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-6);
-  padding: var(--space-6) 0;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  flex: 1;
 }
 
-.itemTitle {
+.cardTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+  line-height: 1.15;
+  transition: color 200ms ease-out;
 }
 
-.itemBody {
+.cardText {
   font-size: 0.9375rem;
-  opacity: 0.7;
-  max-width: 28rem;
+  line-height: 1.45;
+  opacity: 0.72;
 }
 
-.item:hover .itemTitle {
+.cardArrow {
+  margin-top: auto;
+  padding-top: var(--space-4);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1.125rem;
   color: var(--color-brand-fuchsia);
+  transform: translateX(-4px);
+  opacity: 0;
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 240ms ease-out;
+}
+
+/* AI Creative Production'ın kendi fotoğrafı yok — kart boş bir görsel
+   kutusuyla değil, marka renkleriyle kurulmuş bir alanla çıkıyor ve
+   ızgarada iki sütun kaplayarak sayfanın kapanışını üstleniyor. */
+.cardFeatured {
+  grid-column: span 2;
+  border-color: rgba(255, 0, 255, 0.4);
+  background:
+    radial-gradient(80% 120% at 12% 0%, rgba(255, 0, 255, 0.16), transparent 62%),
+    radial-gradient(70% 120% at 92% 100%, rgba(255, 252, 0, 0.1), transparent 60%),
+    #070707;
+}
+
+.cardFeatured .media {
+  aspect-ratio: auto;
+  min-height: var(--space-12);
+  background: transparent;
+}
+
+.cardFeatured .media::after {
+  display: none;
+}
+
+.cardFeatured .cardTitle {
+  font-size: clamp(1.5rem, 3.4vw, 2.25rem);
+}
+
+.cardFeatured .cardText {
+  max-width: 34rem;
+  opacity: 0.85;
+}
+
+.cardFeatured .cardBody {
+  padding-bottom: var(--space-8);
+}
+
+/* Yalnızca gerçek imleçte: dokunmatikte :hover bir sonraki dokunuşa
+   kadar yapışık kalıyor. */
+@media (hover: hover) {
+  .card:hover,
+  .card:focus-within {
+    border-color: var(--color-brand-fuchsia);
+  }
+
+  .card:hover .mediaImage {
+    transform: scale(1.05);
+    filter: contrast(1.06) saturate(1) brightness(0.95);
+  }
+
+  .card:hover .cardTitle,
+  .card:focus-within .cardTitle {
+    color: var(--color-brand-fuchsia);
+  }
+
+  .card:hover .cardArrow,
+  .card:focus-within .cardArrow {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Dokunmatikte ok her zaman görünür — hover ipucu yok. */
+@media (hover: none) {
+  .cardArrow {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardFeatured {
+    grid-column: auto;
+  }
+}
+
+/* CLAUDE.md zorunlu kuralı: hareket azaltmada geçişler anlık/sade. */
+@media (prefers-reduced-motion: reduce) {
+  .mediaImage,
+  .cardTitle,
+  .cardArrow {
+    transition: none;
+  }
+
+  .card:hover .mediaImage {
+    transform: none;
+  }
+
+  .cardArrow {
+    opacity: 1;
+    transform: none;
+  }
 }
