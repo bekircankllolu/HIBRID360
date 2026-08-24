@@ -15,17 +15,39 @@
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2.25rem, 7vw, 5rem);
+  font-size: var(--font-size-display);
   line-height: 1.05;
   margin: 0;
 }
 
+/* Hero sloganı marka sarısında — denetimde Photography ve Creative gibi
+   sayfalarda marka rengi kullanan yalnızca bir öğe vardı, sayfalar
+   siyah-beyaz bir belge gibi duruyordu. Siyah üzerinde sarı 19.4:1
+   (WCAG AA sınırı 4.5:1). */
 .heroSubtitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: clamp(1rem, 2.2vw, 1.375rem);
   margin: var(--space-4) 0 0;
-  opacity: 0.9;
+  color: var(--color-brand-yellow);
+}
+
+/* Hero bloğunu kapatan ince marka çizgisi — JSX'e dokunmadan, sloganın
+   kendi ::after'ı olarak. (Digital sayfasında slogan satırı yok; onun
+   hero'su doğrudan tam genişlikte görsele bağlanıyor, ayraca gerek
+   duymuyor.) */
+.heroSubtitle::after {
+  content: "";
+  display: block;
+  width: min(18rem, 42%);
+  height: 2px;
+  margin-top: var(--space-6);
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-fuchsia),
+    var(--color-brand-yellow) 60%,
+    transparent
+  );
 }
 
 .visual {
@@ -133,7 +155,7 @@
 .microHeading {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: var(--font-size-heading);
   margin: var(--space-16) 0 0;
 }
 

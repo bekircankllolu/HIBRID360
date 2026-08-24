@@ -30,7 +30,7 @@
   z-index: 1;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.75rem, 6vw, 4rem);
+  font-size: var(--font-size-display);
   letter-spacing: 0.01em;
   color: var(--color-brand-white);
 }

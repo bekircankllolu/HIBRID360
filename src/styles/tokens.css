@@ -46,6 +46,25 @@
   --font-size-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
   --line-height-body: 1.5;
 
+  /**
+   * Başlık ölçeği — CLAUDE.md: "bir kompozisyonda max 3 punto boyutu".
+   *
+   * Denetimde sayfa başlıkları beş ayrı puntoya dağılmıştı (48 · 56 · 64 ·
+   * 72 · 80 px); sayfalar arası geçişte site tek bir tasarımdan çıkmamış
+   * gibi duruyordu. Üç kademe kaldı ve her sayfa CSS'i doğrudan bu
+   * token'ları kullanıyor — yeni bir sayfa eklendiğinde kendi clamp'ini
+   * uydurmasın diye.
+   *
+   *   display    → sayfa başlığı (h1) ve hero/bant sloganları
+   *   heading    → bölüm başlığı (h2); dar okuma kolonlu yasal sayfaların
+   *                h1'i de bunu kullanır — 736px konteynerde display çok
+   *                büyük kalıyor
+   *   subheading → kart başlığı, öne çıkan giriş cümlesi (h3 / lead)
+   */
+  --font-size-display: clamp(2.25rem, 7vw, 5rem);
+  --font-size-heading: clamp(1.5rem, 4vw, 2.5rem);
+  --font-size-subheading: clamp(1.125rem, 2.5vw, 1.5rem);
+
   /* Spacing scale (8px base — engineering default, not a brand constraint) */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

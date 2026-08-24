@@ -7,7 +7,7 @@
 .article h1 {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-size: var(--font-size-heading);
 }
 
 .body {

@@ -10,7 +10,7 @@
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2.25rem, 7vw, 5rem);
+  font-size: var(--font-size-display);
   margin: 0 0 var(--space-6);
 }
 
@@ -76,7 +76,7 @@
 .manifestoText {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.5rem, 4.5vw, 3rem);
+  font-size: var(--font-size-heading);
   margin: 0;
 }
 

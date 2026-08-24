@@ -7,8 +7,25 @@
 .title {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-size: var(--font-size-heading);
   margin: 0 0 var(--space-6);
+}
+
+/* Yasal ve kurumsal sayfalarda marka rengi neredeyse hiç görünmüyordu
+   (denetimde Accessibility'de tek bir renkli öğe vardı). Başlığı kapatan
+   ince çizgi, sayfayı düz bir belge olmaktan çıkarıyor. */
+.title::after {
+  content: "";
+  display: block;
+  width: min(14rem, 45%);
+  height: 2px;
+  margin-top: var(--space-4);
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-fuchsia),
+    var(--color-brand-yellow) 60%,
+    transparent
+  );
 }
 
 .notice {

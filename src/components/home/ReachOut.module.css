@@ -8,7 +8,7 @@
 .title {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: var(--font-size-heading);
   margin: 0 0 var(--space-6);
 }
 

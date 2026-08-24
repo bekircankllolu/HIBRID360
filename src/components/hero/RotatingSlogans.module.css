@@ -46,7 +46,7 @@
 .lead {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.5rem, 4.5vw, 3.5rem);
+  font-size: var(--font-size-display);
   line-height: 1.1;
   margin: 0;
 }

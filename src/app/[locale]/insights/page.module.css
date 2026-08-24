@@ -7,13 +7,30 @@
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: var(--font-size-display);
   margin: 0 0 var(--space-4);
 }
 
 .heroSubtitle {
   max-width: 40rem;
   opacity: 0.85;
+}
+
+/* Denetimde bu sayfada marka rengi kullanan tek bir öğe vardı — hero
+   bloğunu kapatan çizgi, boş içerik durumundaki sayfayı da markanın
+   içinde tutuyor. */
+.heroSubtitle::after {
+  content: "";
+  display: block;
+  width: min(16rem, 45%);
+  height: 2px;
+  margin-top: var(--space-6);
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-fuchsia),
+    var(--color-brand-yellow) 60%,
+    transparent
+  );
 }
 
 .content {

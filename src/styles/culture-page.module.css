@@ -12,7 +12,7 @@
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2.25rem, 7vw, 5rem);
+  font-size: var(--font-size-display);
   line-height: 1.05;
   margin: 0 0 var(--space-8);
 }
@@ -28,7 +28,7 @@
 .heroQuote {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-size: var(--font-size-subheading);
   margin: 0;
   font-style: italic;
 }
@@ -174,7 +174,7 @@
 .manifesto {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: var(--font-size-heading);
   margin: 0 0 var(--space-8);
 }
 
@@ -182,7 +182,7 @@
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-style: italic;
-  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-size: var(--font-size-subheading);
   max-width: 40rem;
   margin: 0 0 var(--space-2);
 }

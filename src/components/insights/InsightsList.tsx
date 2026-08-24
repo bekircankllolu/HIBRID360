@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { EmptyState } from "@/components/EmptyState";
 import type { Locale } from "@/i18n/routing";
 import type { InsightsPost } from "@/types/content";
 import styles from "./InsightsList.module.css";
@@ -33,8 +34,11 @@ export function InsightsList({
     [posts, activeCategory],
   );
 
+  // Hiç yazı yokken de, filtre sonucu boşken de sitenin geri kalanıyla aynı
+  // "içerik hazırlanıyor" sunumu kullanılır — burada çıplak bir <p> vardı,
+  // Work ve Directors ise rozetli kutuyu gösteriyordu.
   if (posts.length === 0) {
-    return <p className={styles.emptyState}>{t("comingSoon")}</p>;
+    return <EmptyState message={t("comingSoon")} />;
   }
 
   return (
@@ -64,7 +68,7 @@ export function InsightsList({
       )}
 
       {filteredPosts.length === 0 ? (
-        <p className={styles.emptyState}>{t("comingSoon")}</p>
+        <EmptyState message={t("comingSoon")} />
       ) : (
         <div className={styles.grid}>
           {filteredPosts.map((post) => (

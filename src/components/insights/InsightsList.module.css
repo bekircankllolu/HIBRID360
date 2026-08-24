@@ -53,7 +53,5 @@
   font-size: 1.25rem;
 }
 
-.emptyState {
-  opacity: 0.7;
-  padding: var(--space-8) 0;
-}
+/* .emptyState kaldırıldı — boş durum artık ortak EmptyState bileşeninden
+   geliyor (bkz. InsightsList.tsx). */

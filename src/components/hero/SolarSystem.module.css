@@ -10,7 +10,7 @@
   margin: 0 auto var(--space-12);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.75rem, 4.5vw, 4rem);
+  font-size: var(--font-size-heading);
   line-height: 0.98;
   text-align: center;
   overflow-wrap: anywhere;

@@ -21,7 +21,7 @@
   margin: 0;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-size: var(--font-size-subheading);
 }
 
 .emptyStateDetail {
