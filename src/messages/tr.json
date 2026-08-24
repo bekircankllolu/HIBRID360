@@ -366,6 +366,7 @@
     "closingQuestion": "Sıradakini yaratmaya hazır mısınız?"
   },
   "brief": {
+    "pageTitle": "Brief Builder",
     "progress": "Soru {current} / {total}",
     "back": "Geri",
     "next": "İleri",

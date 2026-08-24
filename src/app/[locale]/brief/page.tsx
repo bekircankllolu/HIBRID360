@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { BriefBuilder } from "@/components/brief/BriefBuilder";
@@ -25,6 +26,7 @@ export default async function BriefPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations("brief");
 
   return (
     <div>
@@ -34,6 +36,13 @@ export default async function BriefPage({
           { name: "Brief Builder", path: "/brief" },
         ])}
       />
+      {/* Sayfanın görsel açılışı MONA'nın repliği (bkz. BriefBuilder) —
+          o büyük fuşya satırın üstüne ikinci bir görünür başlık koymak
+          tasarımı kalabalıklaştırır. h1 burada .srOnly: hem sayfanın
+          adım/özet/gönderim durumlarının hepsinde sabit kalır (BriefBuilder
+          kendi içinde birden çok koşullu döngü render ediyor), hem de
+          erişilebilirlik/SEO için gerekli tekil başlığı sağlar. */}
+      <h1 className="srOnly">{t("pageTitle")}</h1>
       <BriefBuilder locale={locale} />
     </div>
   );

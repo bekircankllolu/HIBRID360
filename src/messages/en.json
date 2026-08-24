@@ -366,6 +366,7 @@
     "closingQuestion": "Ready to Create What's Next?"
   },
   "brief": {
+    "pageTitle": "Brief Builder",
     "progress": "Question {current} of {total}",
     "back": "Back",
     "next": "Next",
