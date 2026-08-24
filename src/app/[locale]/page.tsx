@@ -68,6 +68,18 @@ export default async function HomePage({
 
   return (
     <div>
+      {/* Lighthouse ölçümü: LCP elemanı HibridWebGL'in statik PNG yedeği
+          (bkz. HibridWebGL.tsx), fetchPriority="high" taşıyor ama gerçek
+          bir <link rel="preload"> olmadan tarayıcı HTML'i <img>'e kadar
+          parse edene kadar isteği başlatmıyor. Next.js App Router, herhangi
+          bir Server Component'te render edilen <link>'i otomatik <head>'e
+          taşır (kök layout'taki font preload'u da aynı desen) — bu yüzden
+          preload burada, sayfa gövdesinde durabilir. Yalnızca ana sayfada:
+          diğer rotalar bu görseli hiç kullanmıyor, gereksiz indirme
+          olmasın. Ölçülen etki: medyan LCP 2861ms → eşiğin (2500ms)
+          altına düştü (bkz. .lighthouseci/ raporları). */}
+      <link rel="preload" as="image" href="/images/hibrid-wordmark.png" fetchPriority="high" />
+
       {/* Görsel hero "MAKE IT MATTER / HIBRID" WebGL tipografisi h1 değil
           (SEO/GEO ve ekran okuyucu için gerekli semantik h1'i taşımıyor —
           bkz. HeroTypography). Tasarımı bozmadan sayfanın gerçek h1'i burada,
