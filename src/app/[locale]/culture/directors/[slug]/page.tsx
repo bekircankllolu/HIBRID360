@@ -100,9 +100,7 @@ export default async function DirectorProfilePage({
             {selectedWorks.map((work) => (
               <li key={work.id}>
                 <Link href={`/work/${work.slug}`}>
-                  {work.client_name_confidential
-                    ? t("confidentialClient")
-                    : work.client_name}{" "}
+                  {work.client_name ?? t("confidentialClient")}{" "}
                   · {work.year}
                 </Link>
               </li>

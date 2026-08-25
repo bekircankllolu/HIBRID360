@@ -127,32 +127,98 @@ create table contact_submissions (
 );
 
 -- ==========================================================
--- RLS (Row Level Security) — form tabloları yalnızca insert açık,
--- okuma yalnızca service role / admin panel için
+-- RLS (Row Level Security)
+--
+-- Tehdit modeli: NEXT_PUBLIC_SUPABASE_ANON_KEY tanımı gereği tarayıcıya
+-- gönderilir, yani herkese açıktır. Bu anahtarla PostgREST'e doğrudan
+-- istek atılabilir. Dolayısıyla arayüzdeki hiçbir filtre güvenlik önlemi
+-- sayılmaz — neyin gizleneceği burada, veritabanında kararlaştırılır.
 -- ==========================================================
+
 alter table brief_submissions enable row level security;
 alter table contact_submissions enable row level security;
 
+-- Form tabloları: yalnızca insert. select/update/delete için politika
+-- tanımlanmadığından RLS bunları varsayılan olarak reddeder — gönderilen
+-- brief'ler ve iletişim mesajları yalnızca service role ile okunur.
 create policy "public can insert brief" on brief_submissions
-  for insert with check (kvkk_consent = true);
+  for insert to anon, authenticated with check (kvkk_consent = true);
 
 create policy "public can insert contact" on contact_submissions
-  for insert with check (kvkk_consent = true);
+  for insert to anon, authenticated with check (kvkk_consent = true);
 
--- works, directors, testimonials, insights_posts: public read (yalnızca published=true)
 alter table works enable row level security;
 alter table directors enable row level security;
 alter table testimonials enable row level security;
 alter table insights_posts enable row level security;
 
+-- works: published tek başına yeterli değil. permission_status yayın izni
+-- alanı; 'pending'/'not_allowed' bir iş yanlışlıkla published=true
+-- işaretlenirse dışarı sızmamalı (bkz. docs/visual-audit/BLOCKERS.md #1 —
+-- izin envanteri gelmeden hiçbir iş yayınlanmıyor).
 create policy "public can read published works" on works
-  for select using (published = true);
+  for select to anon, authenticated
+  using (published = true and permission_status = 'approved');
 
 create policy "public can read published directors" on directors
-  for select using (is_published = true);
+  for select to anon, authenticated using (is_published = true);
 
+-- testimonials: written_consent_confirmed şema yorumunda "yayın için
+-- zorunlu" deniyor ve TestimonialList.tsx bunu zaten arayüzde süzüyor —
+-- fakat arayüz süzgeci anon anahtarla atılan doğrudan sorguyu durdurmaz.
+-- Yazılı onayı olmayan bir kişinin adı/markası hiçbir koşulda dönmemeli.
 create policy "public can read published testimonials" on testimonials
-  for select using (is_published = true);
+  for select to anon, authenticated
+  using (is_published = true and written_consent_confirmed = true);
 
+-- insights: published_at ileri tarihli bir yazı (planlanmış yayın)
+-- is_published=true iken tarihinden önce okunabilmemeli.
 create policy "public can read published insights" on insights_posts
-  for select using (is_published = true);
+  for select to anon, authenticated
+  using (
+    is_published = true
+    and published_at is not null
+    and published_at <= now()
+  );
+
+-- ==========================================================
+-- works_public — sütun maskeleme
+--
+-- RLS satır düzeyinde çalışır, sütun düzeyinde değil: yukarıdaki politika
+-- bir işi döndürdüğünde o satırın TÜM sütunları döner. client_name_confidential
+-- alanının amacı ise "izin yoksa marka adı gizlenir" (bkz. tablo yorumu) —
+-- yani client_name'in bazı satırlarda hiç dönmemesi gerekiyor. Arayüz bunu
+-- zaten maskeliyor (work/page.tsx, WorkArchive.tsx) ama ham değer yine de
+-- istemciye gidiyordu ve anon anahtarla doğrudan okunabiliyordu.
+--
+-- Çözüm: maskelemeyi yapan bir view ve tabana doğrudan erişimin kapatılması.
+-- View bilinçli olarak security definer (security_invoker = off): invoker
+-- modunda taban tabloya select yetkisi gerekirdi, o yetkiyi verirsek maskeleme
+-- anlamsız olurdu. Bu nedenle satır süzgeci view'in kendi WHERE'inde
+-- tekrarlanıyor — taban tablodaki RLS politikası da savunma derinliği olarak
+-- yerinde bırakıldı.
+-- ==========================================================
+create view works_public as
+  select
+    id,
+    slug,
+    case when client_name_confidential then null else client_name end as client_name,
+    client_name_confidential,
+    year,
+    format,
+    category,
+    is_featured,
+    cover_image_url,
+    video_url,
+    case_problem_tr,
+    case_problem_en,
+    case_solution_tr,
+    case_solution_en,
+    case_result_tr,
+    case_result_en,
+    director_id
+  from works
+  where published = true and permission_status = 'approved';
+
+revoke select on works from anon, authenticated;
+grant select on works_public to anon, authenticated;

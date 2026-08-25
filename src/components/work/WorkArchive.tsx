@@ -38,10 +38,12 @@ export function WorkArchive({
   const clients = useMemo(
     () =>
       Array.from(
+        // Gizli işlerde client_name null gelir (works_public view) — süzgeç
+        // listesinde marka adı görünmemeli.
         new Set(
           works
-            .filter((w) => !w.client_name_confidential)
-            .map((w) => w.client_name),
+            .map((w) => w.client_name)
+            .filter((name): name is string => name !== null),
         ),
       ).sort(),
     [works],
@@ -116,9 +118,7 @@ export function WorkArchive({
               {byYear[y].map((work) => (
                 <li key={work.id}>
                   <Link href={`/work/${work.slug}`}>
-                    {work.client_name_confidential
-                      ? confidentialLabel
-                      : work.client_name}
+                    {work.client_name ?? confidentialLabel}
                   </Link>
                 </li>
               ))}

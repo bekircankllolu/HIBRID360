@@ -1,0 +1,81 @@
+name: CI
+
+# Kalite kapısı: lint + tip kontrolü + e2e/erişilebilirlik testleri.
+#
+# Performans bütçesi ayrı bir workflow'da ölçülüyor (lighthouse.yml) —
+# ikisi kasıtlı olarak ayrı: Lighthouse üretim build'ine karşı çalışır ve
+# yavaştır, buradaki kapı ise hızlı geri bildirim vermeli.
+#
+# CLAUDE.md "Çalışma kuralları": her PR'da kontrol edilmesi gerekenler.
+# Bu workflow'dan önce CI'da yalnızca Lighthouse çalışıyordu; tip hatası
+# veya kırık test içeren bir PR yeşil görünebiliyordu.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # Lint ve tip kontrolü tarayıcı gerektirmiyor; e2e'den ayrı bir job'ta
+  # tutuluyor ki Playwright kurulumu beklenmeden hızlı sonuç dönsün.
+  static:
+    name: Lint & tip kontrolü
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: TypeScript
+        run: npm run typecheck
+
+      # Tarayıcı gerektirmeyen saf mantık: doğrulama guard'ları (KVKK
+      # rızası, e-posta), çerez rızası okuma/yazma, schema.org üreticileri.
+      - name: Birim testleri
+        run: npm test
+
+  e2e:
+    name: Playwright e2e + WCAG AA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Yalnızca chromium: playwright.config.ts tek proje tanımlıyor.
+      # --with-deps olmadan Ubuntu runner'da sistem kütüphaneleri eksik kalır.
+      - name: Playwright tarayıcısını kur
+        run: npx playwright install --with-deps chromium
+
+      # e2e/accessibility.spec.ts axe-core ile WCAG AA taraması yapıyor —
+      # CLAUDE.md'de "standart, tercih değil" olarak tanımlı, bu yüzden
+      # ayrı bir opsiyonel adım değil, testlerin içinde zorunlu koşuyor.
+      - name: Playwright testleri
+        run: npm run test:e2e
+        env:
+          # playwright.config.ts CI'da forbidOnly ve retry:1 davranışını
+          # bu değişkene bakarak açıyor.
+          CI: "true"
+
+      # Kırmızı testte trace/screenshot olmadan uzaktan teşhis zor.
+      - name: Test raporunu yükle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

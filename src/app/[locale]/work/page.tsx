@@ -54,10 +54,11 @@ function WorkCard({
   confidentialLabel: string;
 }) {
   // brief 7.3 izin uyarısı: yayın izni olmayan işlerde marka adı gizlenir.
+  // Maskeleme works_public view'inde yapılıyor — gizli işte client_name null.
   return (
     <Link href={`/work/${work.slug}`} className={styles.card}>
       <span className={styles.cardClient}>
-        {work.client_name_confidential ? confidentialLabel : work.client_name}
+        {work.client_name ?? confidentialLabel}
       </span>
       <span className={styles.cardMeta}>
         {work.year}

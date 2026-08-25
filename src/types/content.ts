@@ -25,16 +25,26 @@ export interface Director {
   sort_order: number;
 }
 
+/**
+ * `works` tablosunun değil, `works_public` view'inin şekli — okuma bu
+ * view üzerinden yapılır (bkz. src/lib/content.ts).
+ *
+ * İki fark bilinçli:
+ *  - `client_name` gizli işlerde null döner; maskeleme veritabanında
+ *    yapılır, arayüzde değil (anon anahtar herkese açık olduğu için
+ *    arayüz maskesi güvenlik sayılmaz).
+ *  - `published` / `permission_status` yok: view yalnızca yayınlanmış ve
+ *    izni onaylı işleri döndürdüğü için bu alanlar okurken anlamsız.
+ */
 export interface Work {
   id: string;
   slug: string;
-  client_name: string;
+  client_name: string | null;
   client_name_confidential: boolean;
   year: number;
   format: "video" | "image" | "case_study";
   category: string | null;
   is_featured: boolean;
-  permission_status: "approved" | "pending" | "not_allowed";
   cover_image_url: string | null;
   video_url: string | null;
   case_problem_tr: string | null;
@@ -44,7 +54,6 @@ export interface Work {
   case_result_tr: string | null;
   case_result_en: string | null;
   director_id: string | null;
-  published: boolean;
 }
 
 export interface Testimonial {
