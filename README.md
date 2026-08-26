@@ -49,6 +49,34 @@ otomatik başlatır — ayrıca bir sunucu açmanıza gerek yok.
 (ör. ağı kısıtlı konteyner) `PLAYWRIGHT_EXECUTABLE_PATH` ortam
 değişkeniyle önceden kurulu bir Chromium'un yolunu verebilirsiniz.
 
+## Supabase altyapısı
+
+Supabase proje bağlantısı müşterinin hesabı açıldıktan sonra yapılır. Repo
+tarafındaki hazır altyapı:
+
+- Migration: `supabase/migrations/20260826212814_initial_hibrid360_schema.sql`
+- Okuma amaçlı doküman kopyası: `docs/supabase-schema.sql`
+- Local seed: `supabase/seed.sql` (bilerek boş; izinli gerçek veri gelmeden
+  seed eklenmez)
+
+Müşteri Supabase projesi açtıktan sonra:
+
+```bash
+npx supabase login
+npx supabase link --project-ref <project-ref>
+npx supabase db push
+```
+
+Vercel Project Settings → Environment Variables altında:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=<project-url>
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable-key>
+```
+
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` eski isim olarak fallback kalır. Service role
+key repoya veya `NEXT_PUBLIC_*` env'e girmez.
+
 ## Vercel deploy
 
 Mevcut canlı site Vercel üzerinde çalışır. Vercel import/deploy akışı için

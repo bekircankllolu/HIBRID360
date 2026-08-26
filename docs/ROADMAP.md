@@ -8,7 +8,8 @@ ayrı bir oturumda/prompt olarak verilebilir.
 - [ ] Next.js 14 + TypeScript proje kurulumu
 - [ ] Vercel canlı deploy hattı (mevcut canlı URL: `https://hibrid-360.vercel.app/tr`)
 - [ ] Cloudflare Workers deploy hattı (opsiyonel / önceki plan, `@opennextjs/cloudflare`)
-- [ ] Supabase proje kurulumu + `docs/supabase-schema.sql` migration'ı çalıştır
+- [x] Supabase migration dosyası hazır (`supabase/migrations/20260826212814_initial_hibrid360_schema.sql`)
+- [ ] Supabase proje bağlantısı + migration'ı müşteri hesabında çalıştır
 - [ ] i18n routing iskeleti (`/tr`, `/en`), hreflang meta yapısı
 - [ ] Design token sistemi: CSS custom properties (renkler, tipografi, spacing)
 - [ ] Layout iskeleti: header (menü + dil seçici), footer (yasal linkler + sosyal ikonlar)

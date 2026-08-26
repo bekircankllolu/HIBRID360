@@ -1,0 +1,2 @@
+-- Hibrid 360 local Supabase seed.
+-- Production verisi müşteri onayı ve yayın izni gelmeden eklenmez.

@@ -25,8 +25,8 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: clamp(var(--space-4), 1.8vw, var(--space-6));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
 }
 
 .card {
@@ -34,6 +34,7 @@
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: #070707;
   overflow: hidden;
+  min-height: 22rem;
 }
 
 .cardLink {
@@ -45,7 +46,7 @@
 .media {
   position: relative;
   display: block;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #0b0b0b;
 }
@@ -71,8 +72,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-5) var(--space-5) var(--space-6);
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-6) var(--space-7);
   flex: 1;
 }
 
@@ -88,6 +89,7 @@
   font-size: 0.9375rem;
   line-height: 1.45;
   opacity: 0.72;
+  max-width: 24rem;
 }
 
 .cardArrow {
@@ -179,6 +181,14 @@
 
   .cardFeatured {
     grid-column: auto;
+  }
+
+  .card {
+    min-height: 20rem;
+  }
+
+  .cardBody {
+    padding: var(--space-5);
   }
 }
 

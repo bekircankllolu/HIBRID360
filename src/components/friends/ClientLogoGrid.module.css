@@ -1,8 +1,8 @@
 .grid {
   margin-top: var(--space-16);
   display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: clamp(var(--space-3), 1.4vw, var(--space-5));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr));
   list-style: none;
   padding: 0;
 }
@@ -14,7 +14,7 @@
   --accent: var(--color-brand-fuchsia);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-7) var(--space-5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +22,8 @@
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: 0.9375rem;
-  min-height: 5.5rem;
+  line-height: 1.28;
+  min-height: 6rem;
   overflow: hidden;
   /* Ekrana girene kadar gizli — .itemVisible ile açılır. JS yoksa
      bileşendeki <noscript> bu iki satırı geri alır. */
@@ -81,6 +82,15 @@
 .itemName {
   position: relative;
   z-index: 1;
+  max-width: 11.5rem;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1180px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(11.75rem, 1fr));
+  }
 }
 
 /* FRD-02 [DOĞRULA] — deck'in yayın öncesi teyit istediği beş isim,
