@@ -40,33 +40,27 @@
     radial-gradient(26% 22% at 78% 68%, rgba(255, 252, 0, 0.05), transparent 70%);
 }
 
+/* Yıldız alanı: tek seferlik, TEKRARSIZ katman (13.5 kB WebP).
+   Önceden tekrarlı `background-size` desenleriyle çiziliyordu; 1440px'de
+   tekrar aralığı gözle seçiliyor ve sahne "CSS deseni" gibi okunuyordu.
+   Dosya 704 yıldız taşıyor, ~%5'i marka sarısı/fuşyası, merkeze doğru
+   seyreliyor (nebula bölgesi yıldızı yutar). */
 .space::before,
 .space::after {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 1px, transparent 1.7px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0 0.8px, transparent 1.4px);
-  background-size:
-    13rem 9rem,
-    7.5rem 5.5rem;
-  background-position:
-    12% 18%,
-    64% 76%;
-  opacity: 0.4;
+  background-image: url("/images/stones/starfield.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.55;
 }
 
+/* İkinci katman: aynı doku, ters çevrilmiş ve büyütülmüş — parallax
+   derinliği için. Tek dosyadan iki katman, ek transfer yok. */
 .space::after {
-  background-image:
-    radial-gradient(circle, rgba(255, 252, 0, 0.5) 0 1px, transparent 1.8px),
-    radial-gradient(circle, rgba(255, 0, 255, 0.45) 0 1px, transparent 1.8px);
-  background-size:
-    19rem 13rem,
-    16rem 11rem;
-  background-position:
-    38% 62%,
-    82% 24%;
+  transform: scale(1.35) rotate(180deg);
   opacity: 0.3;
   animation: twinkle 9s ease-in-out infinite alternate;
 }
@@ -80,10 +74,13 @@
   pointer-events: none;
 }
 
+/* stroke-width ve stroke-opacity artık halka başına inline geliyor
+   (data/solar-system.ts → RING_STYLE): perspektifte uzaktaki yörünge
+   hem incelir hem soluklaşır. Dördünün de 1px/%11 olması sahneyi teknik
+   çizime çeviriyordu. */
 .ringBase {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.11);
-  stroke-width: 1px;
+  stroke: var(--color-brand-white);
 }
 
 /* Halkanın üzerinde soldan sağa süzülen zayıf bir ışık — çizgiye cam/metal
@@ -91,7 +88,6 @@
 .ringSheen {
   fill: none;
   stroke: url(#ss-ring-sheen);
-  stroke-width: 1px;
   opacity: 0.55;
 }
 
@@ -138,15 +134,19 @@
 
 .coreLabel {
   position: relative;
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(0.9rem, 1.7vw, 1.3rem);
-  letter-spacing: 0.04em;
-  color: var(--color-text-on-yellow);
-  background: var(--color-brand-yellow);
-  padding: 0.08em 0.4em;
-  box-shadow: 0 0 1.2rem rgba(255, 252, 0, 0.4);
+  font-size: clamp(0.75rem, 1.35vw, 1.05rem);
+  letter-spacing: 0.22em;
+  text-indent: 0.22em; /* letter-spacing'in sağda bıraktığı boşluğu dengeler */
+  /* Dolu sarı kutu kaldırıldı: yörünge halkalarını kesiyordu ve sahnedeki
+     tek düz-grafik öğe olarak 3B yanılsamasını bozuyordu. Artık zeminsiz
+     ışıklı tipografi — halkalar harflerin arasından geçebiliyor. */
+  color: var(--color-brand-yellow);
+  text-shadow:
+    0 0 0.5rem rgba(0, 0, 0, 0.95),
+    0 0 1.4rem rgba(255, 252, 0, 0.55);
 }
 
 /* ---------- Gezegenler ---------- */
@@ -182,28 +182,25 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.dotCore {
+/* brief 4.5: yörüngede dönen TAŞLAR. Önceden burada CSS radial-gradient
+   ışık noktaları vardı — sahne bu yüzden "diyagram üzerinde hotspot"
+   gibi okunuyordu. Artık merkez kristalle aynı ailenin küçük varyantı
+   dönüyor (orbit-yellow / orbit-fuchsia).
+   Görünen çap 16px'ten 2.15rem'e çıktı; tıklama alanı 2.75rem (44px)
+   olduğu gibi korunuyor. */
+.stone {
   grid-area: 1 / 1;
-  width: 1rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 32% 28%,
-    rgba(255, 255, 255, 0.95),
-    var(--stone-glow) 45%,
-    rgba(0, 0, 0, 0) 74%
-  );
-  box-shadow:
-    0 0 0.45rem var(--stone-glow),
-    0 0 1.5rem color-mix(in srgb, var(--stone-glow) 55%, transparent);
+  width: 2.15rem;
+  height: auto;
   transform: scale(var(--depth-scale, 1));
   opacity: var(--depth-fade, 1);
+  filter: drop-shadow(0 0 0.5rem color-mix(in srgb, var(--stone-glow) 60%, transparent));
   transition: filter 160ms ease-out;
 }
 
 .dotHalo {
   grid-area: 1 / 1;
-  width: 1.9rem;
+  width: 2.6rem;
   aspect-ratio: 1;
   border-radius: 50%;
   border: 1px solid var(--stone-glow);
@@ -214,13 +211,42 @@
     transform 180ms ease-out;
 }
 
-.dot:hover .dotCore,
-.dot:focus-visible .dotCore,
-.dotActive .dotCore {
-  filter: brightness(1.3);
-  box-shadow:
-    0 0 0.6rem var(--stone-glow),
-    0 0 2.4rem var(--stone-glow);
+.dot:hover .stone,
+.dot:focus-visible .stone,
+.dotActive .stone {
+  filter: drop-shadow(0 0 0.7rem var(--stone-glow))
+    drop-shadow(0 0 1.8rem color-mix(in srgb, var(--stone-glow) 70%, transparent));
+}
+
+/* Servis adı her zaman okunur (%55 opaklık), etkileşimde tam görünür.
+   Önceden ad yalnızca kart açıkken görünüyordu — sahnede sekiz anonim
+   nokta duruyordu, mobilde hiçbir etiket yoktu. */
+.dotLabel {
+  position: absolute;
+  left: 50%;
+  top: 1.75rem;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.5625rem;
+  letter-spacing: 0.13em;
+  color: var(--color-brand-white);
+  text-shadow:
+    0 0 0.35rem rgba(0, 0, 0, 1),
+    0 0 0.9rem rgba(0, 0, 0, 0.9);
+  /* --label-fade taş kristalin arkasına geçerken 0'a iner (bkz. döngü):
+     kristalin üstünde yarısı kesilmiş etiket kalmasın. */
+  opacity: calc(0.6 * var(--label-fade, 1));
+  transition: opacity 160ms ease-out;
+}
+
+.planet:hover .dotLabel,
+.planet:focus-within .dotLabel,
+.planetActive .dotLabel {
+  opacity: 1;
+  color: var(--stone-glow, var(--color-brand-white));
 }
 
 .dot:hover .dotHalo,
@@ -242,10 +268,12 @@
   width: max-content;
   max-width: 15.5rem;
   padding: 0.7rem 0.9rem 0.75rem;
-  background: rgba(0, 0, 0, 0.88);
+  /* backdrop-filter kaldırıldı: kart kristalin üstüne bindiğinde bulanık
+     bir leke bırakıyordu ve mobilde pahalı bir katman. Düz, yüksek
+     opaklıklı zemin hem daha okunur hem daha ucuz. */
+  background: rgba(0, 0, 0, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-left: 2px solid var(--stone-glow, var(--color-brand-fuchsia));
-  backdrop-filter: blur(10px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -330,6 +358,23 @@
   text-decoration: underline;
 }
 
+/* ---------- Dar ekran kart şeridi ---------- */
+/* Masaüstünde hiç görünmez; dar ekranda nokta kartının yerini alır.
+   Yüksekliği sabit — kart açılıp kapanırken sayfa kaymaz (CLS 0). */
+.strip {
+  display: none;
+}
+
+/* Seçim yokken şerit boş kalır ama yüksekliğini korur. */
+.stripEmpty {
+  display: block;
+}
+
+.stripCard {
+  border-left: 2px solid var(--stone-glow, var(--color-brand-fuchsia));
+  padding-left: var(--space-3);
+}
+
 /* ---------- Animasyonlar ---------- */
 @keyframes floatCrystal {
   0%,
@@ -358,19 +403,75 @@
     padding: var(--space-16) var(--space-4);
   }
 
-  /* Dar ekranda sahne kareye yaklaşır; halkalar biraz yuvarlaklaşır ama
-     nokta-halka hizası bozulmaz (aynı koordinat sistemi esner). */
+  /* Dört halka yerine iki halka döner (bkz. MOBILE_RINGS).
+     Kutu ORANI kritik: viewBox 1000×640 preserveAspectRatio="none" ile
+     esnediği için kutu ne kadar basıksa sistem o kadar dikeyde açılır.
+     Kare kutuda (390×390) sistem yalnızca ~176px yer kaplıyor ve altta
+     büyük boşluk kalıyordu; 5/4'te dikey ölçek 1.25× artıyor ve boşluk
+     kapanıyor. Taş konumları da aynı kutuyu kullandığı için hizalama
+     bozulmuyor. */
   .stage {
-    aspect-ratio: 10 / 11;
+    aspect-ratio: 5 / 4;
   }
 
+  /* Nokta kartı dar ekranda gizlenir; içerik aşağıdaki şeritte açılır.
+     display:none olduğu için erişilebilirlik ağacından da çıkar —
+     şeritteki kart tek kaynak kalır. */
   .card {
-    max-width: 11.5rem;
-    padding: 0.55rem 0.7rem 0.6rem;
+    display: none;
   }
 
-  .cardBody {
-    font-size: 0.6875rem;
+  .strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1100px;
+    margin: var(--space-6) auto 0;
+    padding: 0 var(--space-2);
+    /* Sabit yükseklik: kart açılıp kapanırken içerik kaymaz. */
+    min-height: 7.5rem;
+  }
+
+  .stripCard {
+    width: 100%;
+  }
+
+  .stripCard .cardTitle {
+    font-size: 1.05rem;
+  }
+
+  .stripCard .cardBody {
+    font-size: 0.8125rem;
+    opacity: 0.85;
+  }
+
+  .stripCard .cardLink {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-size: 0.8125rem;
+  }
+
+  /* Dar ekranda iç halkanın yarıçapı ~90px; kristal 8.5rem (136px)
+     kalırsa yarıçapı 68px olur ve halkayı neredeyse yiyor, taşlar
+     kristalin üstüne biner. 6.5rem'de (104px → 52px yarıçap) iç halka
+     rahat nefes alıyor. */
+  .crystal {
+    width: 6.5rem;
+  }
+
+  .sunGlow {
+    width: 11rem;
+  }
+
+  /* 34px: QA hedefi olan 26px'in üstünde ama kristali boğmuyor.
+     Tıklama alanı 44px olduğu gibi kalıyor (.dot). */
+  .stone {
+    width: 2.1rem;
+  }
+
+  .dotLabel {
+    font-size: 0.5rem;
+    top: 1.85rem;
   }
 }
 
@@ -381,9 +482,16 @@
     animation: none;
   }
 
-  .dotCore,
+  .stone,
   .dotHalo,
+  .dotLabel,
   .card {
     transition: none;
+  }
+
+  /* Hareket kapalıyken etiket tam görünür: nokta sabit durduğu için
+     "üstüne gel de oku" davranışına güvenilemez. */
+  .dotLabel {
+    opacity: 1;
   }
 }

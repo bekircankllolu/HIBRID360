@@ -15,9 +15,11 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   orbitStones,
   stonePoint,
+  visibleRings,
+  orbitStoneSrc,
   ORBIT_VIEW,
-  ORBIT_TILT,
-  ORBIT_RINGS,
+  orbitTilt,
+  RING_STYLE,
   STONE_INTRINSIC,
   SOLAR_SYSTEM_TITLE,
   type OrbitStone,
@@ -56,13 +58,16 @@ const pct = (x: number, y: number) => ({
 });
 
 /** SSR / hareket-azaltma dizilişi: t=0 konumları. */
-function staticStyle(stone: OrbitStone): CSSProperties {
-  const p = stonePoint(stone, 0);
+function staticStyle(stone: OrbitStone, compact: boolean): CSSProperties {
+  const p = stonePoint(stone, 0, compact);
   return {
     ...pct(p.x, p.y),
     zIndex: p.depth >= 0.5 ? 4 : 1,
     "--depth-scale": (0.72 + 0.5 * p.depth).toFixed(3),
     "--depth-fade": (0.5 + 0.5 * p.depth).toFixed(3),
+    // Etiket, taş kristalin ARKASINA geçerken tamamen kaybolur: aksi
+    // hâlde kristalin üstünde yarısı kesilmiş yazılar kalıyordu.
+    "--label-fade": Math.max(0, (p.depth - 0.5) * 2).toFixed(3),
     "--stone-glow":
       stone.color === "yellow"
         ? "var(--color-brand-yellow)"
@@ -84,17 +89,36 @@ export function SolarSystem() {
   const [activeStone, setActiveStone] = useState<number | null>(null);
   // SSR her zaman gerçek <a href> üretir; dokunmatik ayrımı hydrate sonrası.
   const [coarsePointer, setCoarsePointer] = useState(false);
+  // Dar ekran dizilişi (iki halka + alttaki kart şeridi). SSR masaüstü
+  // dizilişini üretir, hydrate sonrası gerçek değere geçer — konumlar
+  // zaten inline stille yazıldığı için uyumsuzluk oluşmuyor.
+  const [compact, setCompact] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const planetRefs = useRef<Array<HTMLDivElement | null>>([]);
   const activeRef = useRef<number | null>(null);
   activeRef.current = activeStone;
+  // İmleç sahnenin üstündeyken sistem yavaşlar (durmaz) — hareketli bir
+  // hedefi yakalamak aksi hâlde çok zordu.
+  const hoveringRef = useRef(false);
+  // Döngü compact değerini ref'ten okur: state'e bağlansaydı her kırılım
+  // değişiminde rAF döngüsü baştan kurulurdu.
+  const compactRef = useRef(false);
+  compactRef.current = compact;
 
   useEffect(() => {
     const query = window.matchMedia("(hover: none)");
     setCoarsePointer(query.matches);
     const onChange = (event: MediaQueryListEvent) =>
       setCoarsePointer(event.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 640px)");
+    setCompact(query.matches);
+    const onChange = (event: MediaQueryListEvent) => setCompact(event.matches);
     query.addEventListener("change", onChange);
     return () => query.removeEventListener("change", onChange);
   }, []);
@@ -137,20 +161,26 @@ export function SolarSystem() {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
-      // Hover/odak varken yumuşak fren, bırakınca yumuşak kalkış.
-      const target = activeRef.current !== null ? 0 : 1;
+      // Üç kademe: kart açıkken tam durur, imleç sahnedeyken %35 hıza
+      // düşer (hedef yakalanabilir olsun), boştayken tam hız.
+      const target =
+        activeRef.current !== null ? 0 : hoveringRef.current ? 0.35 : 1;
       speed += (target - speed) * 0.08;
       time += dt * speed;
 
       for (let i = 0; i < orbitStones.length; i++) {
         const el = planetRefs.current[i];
         if (!el) continue;
-        const p = stonePoint(orbitStones[i], time);
+        const p = stonePoint(orbitStones[i], time, compactRef.current);
         el.style.left = `${(p.x / ORBIT_VIEW.w) * 100}%`;
         el.style.top = `${(p.y / ORBIT_VIEW.h) * 100}%`;
         el.style.zIndex = activeRef.current === i ? "6" : p.depth >= 0.5 ? "4" : "1";
         el.style.setProperty("--depth-scale", (0.72 + 0.5 * p.depth).toFixed(3));
         el.style.setProperty("--depth-fade", (0.5 + 0.5 * p.depth).toFixed(3));
+        el.style.setProperty(
+          "--label-fade",
+          Math.max(0, (p.depth - 0.5) * 2).toFixed(3),
+        );
         // Kart, noktanın sahnedeki anlık yarısına göre içeri doğru açılır.
         el.dataset.side = p.x < ORBIT_VIEW.cx ? "right" : "left";
       }
@@ -198,7 +228,16 @@ export function SolarSystem() {
         {SOLAR_SYSTEM_TITLE}
       </h2>
 
-      <div className={styles.stage} ref={stageRef}>
+      <div
+        className={styles.stage}
+        ref={stageRef}
+        onPointerEnter={() => {
+          hoveringRef.current = true;
+        }}
+        onPointerLeave={() => {
+          hoveringRef.current = false;
+        }}
+      >
         {/* Dekoratif uzay katmanı: nebula + yıldız alanı. */}
         <div className={styles.space} aria-hidden="true" />
 
@@ -216,26 +255,36 @@ export function SolarSystem() {
               <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
             </linearGradient>
           </defs>
-          {ORBIT_RINGS.map((rx) => (
-            <g key={rx}>
-              <ellipse
-                className={styles.ringBase}
-                cx={ORBIT_VIEW.cx}
-                cy={ORBIT_VIEW.cy}
-                rx={rx}
-                ry={rx * ORBIT_TILT}
-                vectorEffect="non-scaling-stroke"
-              />
-              <ellipse
-                className={styles.ringSheen}
-                cx={ORBIT_VIEW.cx}
-                cy={ORBIT_VIEW.cy}
-                rx={rx}
-                ry={rx * ORBIT_TILT}
-                vectorEffect="non-scaling-stroke"
-              />
-            </g>
-          ))}
+          {visibleRings(compact).map((rx, ringIndex) => {
+            // Perspektif: uzaktaki halka hem incelir hem soluklaşır.
+            // Dar ekranda iki halka var, dıştaki ORBIT_RINGS'in üçüncü
+            // ağırlığını alır ki fark okunsun.
+            const weight =
+              RING_STYLE[compact ? ringIndex * 2 : ringIndex] ?? RING_STYLE[3];
+            return (
+              <g key={rx}>
+                <ellipse
+                  className={styles.ringBase}
+                  cx={ORBIT_VIEW.cx}
+                  cy={ORBIT_VIEW.cy}
+                  rx={rx}
+                  ry={rx * orbitTilt(compact)}
+                  strokeWidth={weight.width}
+                  strokeOpacity={weight.opacity}
+                  vectorEffect="non-scaling-stroke"
+                />
+                <ellipse
+                  className={styles.ringSheen}
+                  cx={ORBIT_VIEW.cx}
+                  cy={ORBIT_VIEW.cy}
+                  rx={rx}
+                  ry={rx * orbitTilt(compact)}
+                  strokeWidth={weight.width}
+                  vectorEffect="non-scaling-stroke"
+                />
+              </g>
+            );
+          })}
         </svg>
 
         {/* Güneş: Hibrid kristali. pointer-events kapalı — arkasından
@@ -248,18 +297,21 @@ export function SolarSystem() {
           <Image
             src="/images/stones/stone-yellow.webp"
             alt=""
-            width={STONE_INTRINSIC.yellow.width}
-            height={STONE_INTRINSIC.yellow.height}
+            width={STONE_INTRINSIC.core.width}
+            height={STONE_INTRINSIC.core.height}
             sizes="220px"
             className={styles.crystal}
           />
+          {/* Eskiden dolu sarı bir kutuydu; yörünge halkalarını kesiyor ve
+              sahnedeki tek düz-grafik öğe olarak 3B yanılsamasını
+              kırıyordu. Artık zeminsiz, ışıklı tipografi. */}
           <span className={styles.coreLabel}>HIBRID</span>
         </div>
 
         {/* Gezegenler: gerçek bağlantılar + noktaya bağlı kompakt kart. */}
         {orbitStones.map((stone, index) => {
           const isActive = activeStone === index;
-          const point = stonePoint(stone, 0);
+          const point = stonePoint(stone, 0, compact);
           // Kart sahne dışına taşmasın: soldaki noktada sağa, sağdakinde
           // sola açılır. Buradaki değer t=0 (SSR) içindir; animasyon
           // döngüsü data-side'ı anlık konuma göre günceller.
@@ -275,9 +327,20 @@ export function SolarSystem() {
             "aria-label": stone.label,
           };
 
+          // brief 4.5: yörüngede dönen "taşlar". Önceki sürümde bunlar
+          // CSS ışık noktalarıydı — sahne bu yüzden diyagram gibi
+          // okunuyordu. Artık merkez kristalle aynı ailenin küçük
+          // varyantı dönüyor; fuşya taş da böylece kullanıma giriyor.
           const body = (
             <>
-              <span className={styles.dotCore} aria-hidden="true" />
+              <Image
+                className={styles.stone}
+                src={orbitStoneSrc(stone.color)}
+                alt=""
+                width={STONE_INTRINSIC[stone.color].width}
+                height={STONE_INTRINSIC[stone.color].height}
+                sizes="40px"
+              />
               <span className={styles.dotHalo} aria-hidden="true" />
             </>
           );
@@ -289,7 +352,7 @@ export function SolarSystem() {
                 planetRefs.current[index] = el;
               }}
               className={`${styles.planet} ${isActive ? styles.planetActive : ""}`}
-              style={staticStyle(stone)}
+              style={staticStyle(stone, compact)}
               data-side={point.x < ORBIT_VIEW.cx ? "right" : "left"}
               onPointerLeave={() => {
                 if (!coarsePointer) closeStone(index);
@@ -317,6 +380,15 @@ export function SolarSystem() {
                 </a>
               )}
 
+              {/* Servis adı her zaman okunur. Önceden ad yalnızca kart
+                  açıkken görünüyordu; sahnede sekiz anonim nokta duruyordu
+                  ve mobilde hiçbir etiket yoktu. */}
+              <span className={styles.dotLabel} aria-hidden="true">
+                {stone.label}
+              </span>
+
+              {/* Dar ekranda bu kart gizlenir; içerik sahnenin altındaki
+                  sabit şeritte açılır (bkz. .stripCard). */}
               <div
                 className={`${styles.card} ${isActive ? styles.cardOpen : ""}`}
                 aria-hidden={!isActive}
@@ -335,6 +407,47 @@ export function SolarSystem() {
             </div>
           );
         })}
+      </div>
+
+      {/* Dar ekran kart şeridi. 390px'de noktanın yanında açılan kart
+          sahneden taşıyordu; burada sabit bir alanda açılıyor, sahne
+          kaydırmadan okunuyor. Yer önceden ayrıldığı için kart açılıp
+          kapanırken layout kaymıyor (CLS 0). */}
+      {/* aria-hidden YOK: masaüstünde şerit CSS ile display:none olduğu
+          için okunmaz, dar ekranda ise nokta kartı display:none olur —
+          yani her kırılımda erişilebilir ağaçta tek kart kalır. */}
+      <div className={styles.strip} aria-live="polite">
+        {activeStone === null ? (
+          /* Seçim yokken şerit BOŞ kalır, yalnızca yüksekliğini korur.
+             Buraya "bir taşa dokunun" gibi bir ipucu yazmak yeni bir
+             TR/EN metin uydurmak olurdu — CLAUDE.md onaylanmamış metni
+             yasaklıyor. Taşların üstündeki servis adları zaten
+             dokunulabilirliği gösteriyor. */
+          <span className={styles.stripEmpty} aria-hidden="true" />
+        ) : (
+          <div
+            className={styles.stripCard}
+            style={
+              {
+                "--stone-glow":
+                  orbitStones[activeStone].color === "yellow"
+                    ? "var(--color-brand-yellow)"
+                    : "var(--color-brand-fuchsia)",
+              } as CSSProperties
+            }
+          >
+            <p className={styles.cardTitle}>{orbitStones[activeStone].label}</p>
+            <p className={styles.cardBody}>
+              {bodyFor(orbitStones[activeStone].wwdTitle)}
+            </p>
+            <Link
+              href={orbitStones[activeStone].href}
+              className={styles.cardLink}
+            >
+              {tCommon("learnMore")} →
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
