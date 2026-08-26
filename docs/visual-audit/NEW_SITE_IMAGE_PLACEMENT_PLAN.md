@@ -23,7 +23,7 @@ Hero → MakeBrandBand → SolarSystem → ClosingBand → ...
 | MakeBrandBand | `make-brand.webp` (kamera+boom mic, eski siteyle aynı) | Koru. İyileştirme fırsatı: brief video/hareketli versiyon öneriyor ama statik foto da kabul edilebilir kalitede. |
 | SolarSystem (kristal) | `stone-yellow.webp` / `stone-fuchsia.webp` | Aşağıdaki "Kristal / İnteraktif Sistem" bölümüne bakın — bu zaten tam çalışır durumda, yeni görsel gerekmiyor. |
 | ClosingBand | `closing-bicycle.webp` | Koru — telif riskli E.T. siluetinin yerine geçen güvenli seçim. İsteğe bağlı iyileştirme: BLOCKERS.md'de not edilen "gece/siluet" fikrinin özgün üretimi. |
-| MONA (kısa sürüm) | Yok — brief 11.5 "ana sayfa kısa sürüm" henüz kodda değil | Görsel/video varlığı olmadan eklenemez; BLOCKERS.md. |
+| MONA (kısa sürüm) | `Mona` component'i ana sayfada `compact` varyantla render ediliyor; gerçek video/ses asset'i yok | Koru. CSS karakter sahnesi geçici/pending katman olarak kullanılabilir; final video/ses asset'i hâlâ BLOCKERS.md'ye bağlı. |
 
 Client'ın 119 görsellik arşivinden ana sayfaya **doğrudan aday yok** —
 ana sayfa zaten kendi (yeni üretilmiş/webp) görselleriyle kurulu ve bu

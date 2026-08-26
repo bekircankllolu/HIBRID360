@@ -105,6 +105,7 @@ export default async function WorkPage({
             sizes="(max-width: 768px) 100vw, 1120px"
             priority
           />
+          <span className={styles.showreelStatus}>{t("empty")}</span>
         </div>
         <p className={styles.showreelSlogan}>
           MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.

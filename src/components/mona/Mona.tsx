@@ -117,11 +117,20 @@ export function Mona({
               }
             }}
           >
+            <span className={styles.cameraNotch} aria-hidden="true" />
             <div className={styles.screen}>
               <span className={styles.screenLoop} aria-hidden="true" />
+              <span className={styles.screenGrid} aria-hidden="true" />
               <span className={styles.screenLabel}>hello</span>
             </div>
-            <span className={styles.headBase} aria-hidden="true" />
+            <span className={styles.statusRail} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+            <span className={styles.headBase} aria-hidden="true">
+              <span className={styles.driveSlot} />
+            </span>
           </div>
           <p className={styles.mediaNote}>{t("mediaPending")}</p>
         </div>
