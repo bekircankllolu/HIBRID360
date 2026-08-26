@@ -5,6 +5,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { CONTACT, SOCIAL_PLATFORMS } from "@/lib/site";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -36,7 +37,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Tell us what you're making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
         : undefined,
-    alternates: { canonical: `/${locale}/contact` },
+    alternates: localizedAlternates(locale, "/contact"),
   };
 }
 

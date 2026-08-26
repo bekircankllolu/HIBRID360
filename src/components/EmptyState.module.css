@@ -14,7 +14,7 @@
   font-size: 0.6875rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-brand-fuchsia);
+  color: var(--empty-state-label-color, var(--color-brand-fuchsia));
 }
 
 .emptyStateMessage {

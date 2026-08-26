@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/culture-page.module.css";
 
 /**
@@ -32,7 +33,7 @@ export async function generateMetadata({
       locale === "en"
         ? "An Istanbul-based creative production studio building the visual experiences of the future — meet the crew."
         : undefined,
-    alternates: { canonical: `/${locale}/culture/who-we-are` },
+    alternates: localizedAlternates(locale, "/culture/who-we-are"),
   };
 }
 

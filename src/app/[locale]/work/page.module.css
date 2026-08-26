@@ -131,6 +131,10 @@
 }
 
 @media (max-width: 640px) {
+  .showreelImage {
+    object-position: 62% center;
+  }
+
   .showreelStatus {
     left: var(--space-3);
     right: var(--space-3);

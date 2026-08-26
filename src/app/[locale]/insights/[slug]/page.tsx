@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { insightsPosts } from "@/data/insights";
 import { routing, type Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 // Faz 1 — vaka/yazı detay şablonu. src/data/insights.ts içindeki hiçbir
@@ -35,7 +36,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `/${locale}/insights/${slug}` },
+    alternates: localizedAlternates(locale, `/insights/${slug}`),
   };
 }
 

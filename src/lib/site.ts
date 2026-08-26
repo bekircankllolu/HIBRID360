@@ -22,6 +22,19 @@ export const SITE_URL =
   normalizeSiteUrl(process.env.VERCEL_URL) ??
   "https://hibrid360.com";
 
+export function localizedAlternates(locale: "tr" | "en", path = "") {
+  const suffix = path === "" ? "" : path.startsWith("/") ? path : `/${path}`;
+
+  return {
+    canonical: `/${locale}${suffix}`,
+    languages: {
+      tr: `/tr${suffix}`,
+      en: `/en${suffix}`,
+      "x-default": `/tr${suffix}`,
+    },
+  };
+}
+
 export const SITE_NAME = "Hibrid 360";
 
 // HOME-09: "aynı cümle ana sayfanın meta description'ında ve LinkedIn

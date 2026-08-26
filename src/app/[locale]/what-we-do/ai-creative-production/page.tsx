@@ -6,6 +6,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Mona } from "@/components/mona/Mona";
 import { monaQuestions, openingLine } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -33,7 +34,7 @@ export async function generateMetadata({
       locale === "en"
         ? "AI films, AI photography and hybrid production workflows — human creativity, AI precision, real impact."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/ai-creative-production` },
+    alternates: localizedAlternates(locale, "/what-we-do/ai-creative-production"),
   };
 }
 

@@ -6,6 +6,7 @@ import { InsightsList } from "@/components/insights/InsightsList";
 import { insightsPosts } from "@/data/insights";
 import { getPublishedInsights } from "@/lib/content";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 // brief-rev12.md Bölüm 20.6 — Insights hero metni. Marka dili kuralı
@@ -23,7 +24,7 @@ export async function generateMetadata({
   return {
     title: "Insights",
     description: t("heroSubtitle"),
-    alternates: { canonical: `/${locale}/insights` },
+    alternates: localizedAlternates(locale, "/insights"),
   };
 }
 

@@ -5,6 +5,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { processSteps, budgetBands } from "@/data/how-we-work";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -29,7 +30,7 @@ export async function generateMetadata({
   return {
     title: "How We Work",
     description: "How a project runs here, what it costs, and how long it takes.",
-    alternates: { canonical: `/${locale}/what-we-do/how-we-work` },
+    alternates: localizedAlternates(locale, "/what-we-do/how-we-work"),
   };
 }
 

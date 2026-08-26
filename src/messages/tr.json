@@ -37,7 +37,8 @@
   "home": {
     "showreel": {
       "label": "AI SHOWREEL",
-      "cta": "İmleci hareket ettirin"
+      "cta": "İmleci hareket ettirin",
+      "touchCta": "Ekrana dokunun"
     },
     "lessTalk": {
       "title": "Az Laf, Çok İş",

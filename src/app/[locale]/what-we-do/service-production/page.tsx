@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { serviceProductionOffer } from "@/data/service-production";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -34,7 +35,7 @@ export async function generateMetadata({
     title: "Service Production (International)",
     description:
       "Locations, permits, crew, gear and post — one contact, one contract, one country.",
-    alternates: { canonical: `/${locale}/what-we-do/service-production` },
+    alternates: localizedAlternates(locale, "/what-we-do/service-production"),
   };
 }
 

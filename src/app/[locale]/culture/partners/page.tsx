@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/culture-page.module.css";
 
 /**
@@ -23,7 +24,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Partners",
-    alternates: { canonical: `/${locale}/culture/partners` },
+    alternates: localizedAlternates(locale, "/culture/partners"),
   };
 }
 

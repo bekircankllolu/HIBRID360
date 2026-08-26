@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { getPublishedTestimonials } from "@/lib/content";
 import { clients, newClients, SHOW_NEW_CLIENTS } from "@/data/clients";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -41,7 +42,7 @@ export async function generateMetadata({
       locale === "en"
         ? "The brands we work with — from holdings and global appliance brands to hotels, restaurants and start-ups."
         : undefined,
-    alternates: { canonical: `/${locale}/friends` },
+    alternates: localizedAlternates(locale, "/friends"),
   };
 }
 

@@ -7,6 +7,7 @@ import { ServiceVisual } from "@/components/ServiceVisual";
 import { siteImages } from "@/data/site-images";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/service-page.module.css";
 
 /**
@@ -40,7 +41,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Multi-camera live streaming for events, conventions and medical broadcasts — with satellite uplink and remote production."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/live-broadcast` },
+    alternates: localizedAlternates(locale, "/what-we-do/live-broadcast"),
   };
 }
 

@@ -33,7 +33,12 @@ export function HeroTypography() {
     <div className={styles.hero}>
       <div className={styles.showreel}>
         <span className={styles.showreelLabel}>{t("showreel.label")}</span>
-        <span className={styles.showreelCta}>{t("showreel.cta")}</span>
+        <span className={`${styles.showreelCta} ${styles.pointerCta}`}>
+          {t("showreel.cta")}
+        </span>
+        <span className={`${styles.showreelCta} ${styles.touchCta}`}>
+          {t("showreel.touchCta")}
+        </span>
       </div>
 
       <div className={styles.inner}>

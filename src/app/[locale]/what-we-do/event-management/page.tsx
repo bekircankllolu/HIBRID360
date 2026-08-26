@@ -5,6 +5,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ServiceVisual } from "@/components/ServiceVisual";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/service-page.module.css";
 
 /**
@@ -39,7 +40,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Conventions, launches, roadshows and brand events — concept, production and on-site execution."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/event-management` },
+    alternates: localizedAlternates(locale, "/what-we-do/event-management"),
   };
 }
 

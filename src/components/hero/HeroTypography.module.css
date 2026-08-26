@@ -61,3 +61,27 @@
   font-size: 0.75rem;
   opacity: 0.7;
 }
+
+.touchCta {
+  display: none;
+}
+
+@media (hover: none) {
+  .pointerCta {
+    display: none;
+  }
+
+  .touchCta {
+    display: inline;
+  }
+}
+
+@media (max-width: 640px) {
+  .pointerCta {
+    display: none;
+  }
+
+  .touchCta {
+    display: inline;
+  }
+}

@@ -7,6 +7,7 @@ import { ServiceVisual } from "@/components/ServiceVisual";
 import { hibridSolutions } from "@/data/hibrid-solutions";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/service-page.module.css";
 
 /**
@@ -43,7 +44,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Commercials, product films and how-to content, shot end to end with an in-house crew. 20+ years of production experience."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/production` },
+    alternates: localizedAlternates(locale, "/what-we-do/production"),
   };
 }
 

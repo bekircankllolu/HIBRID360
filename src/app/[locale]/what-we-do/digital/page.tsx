@@ -6,6 +6,7 @@ import { ServiceVisual } from "@/components/ServiceVisual";
 import { digitalServices } from "@/data/digital-services";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/service-page.module.css";
 
 /**
@@ -61,7 +62,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Social-first content, short-form video, CGI and AI-powered production built to perform across platforms."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/digital` },
+    alternates: localizedAlternates(locale, "/what-we-do/digital"),
   };
 }
 

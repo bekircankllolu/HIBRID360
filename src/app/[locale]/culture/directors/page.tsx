@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { getPublishedDirectors } from "@/lib/content";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -30,7 +31,7 @@ export async function generateMetadata({
   return {
     title: "Directors & Crew",
     description: t("heroSubtitle"),
-    alternates: { canonical: `/${locale}/culture/directors` },
+    alternates: localizedAlternates(locale, "/culture/directors"),
   };
 }
 

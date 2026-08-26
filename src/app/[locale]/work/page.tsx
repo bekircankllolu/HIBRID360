@@ -9,6 +9,7 @@ import { WorkArchive } from "@/components/work/WorkArchive";
 import { siteImages } from "@/data/site-images";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import type { Work } from "@/types/content";
 import styles from "./page.module.css";
 
@@ -42,7 +43,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Selected films, campaigns and live productions — with the problem, the work and the result for each project."
         : undefined,
-    alternates: { canonical: `/${locale}/work` },
+    alternates: localizedAlternates(locale, "/work"),
   };
 }
 

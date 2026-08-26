@@ -37,7 +37,8 @@
   "home": {
     "showreel": {
       "label": "AI SHOWREEL",
-      "cta": "Move your cursor"
+      "cta": "Move your cursor",
+      "touchCta": "Tap the screen"
     },
     "lessTalk": {
       "title": "Less Talk, More Work",

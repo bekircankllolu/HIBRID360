@@ -5,6 +5,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ServiceVisual } from "@/components/ServiceVisual";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/service-page.module.css";
 
 /**
@@ -42,7 +43,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Editing, colour, sound, motion graphics, 3D and retouch — full-service post production in-house."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/post-production` },
+    alternates: localizedAlternates(locale, "/what-we-do/post-production"),
   };
 }
 

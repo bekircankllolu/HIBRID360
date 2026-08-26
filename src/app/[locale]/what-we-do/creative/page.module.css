@@ -1,0 +1,122 @@
+.surface {
+  background: #f2d9ec;
+  color: var(--color-brand-black);
+  --empty-state-label-color: var(--color-brand-black);
+}
+
+.page {
+  color: var(--color-brand-black);
+}
+
+.heroTitle {
+  color: var(--color-brand-black);
+}
+
+.heroSubtitle {
+  color: var(--color-brand-black);
+}
+
+.heroSubtitle::after {
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-fuchsia),
+    var(--color-brand-black) 62%,
+    transparent
+  );
+}
+
+.visual {
+  position: relative;
+  min-height: clamp(17rem, 42vw, 31rem);
+  margin: var(--space-12) calc(var(--space-4) * -1);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.88) 0 1px, transparent 2px),
+    radial-gradient(circle at 78% 28%, rgba(255, 252, 0, 0.88) 0 1px, transparent 2px),
+    radial-gradient(circle at 46% 72%, rgba(255, 0, 255, 0.72) 0 1px, transparent 2px),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 0, 255, 0.28) 0 2px,
+      rgba(0, 0, 0, 0.06) 2px 4px,
+      rgba(255, 255, 255, 0.25) 4px 6px
+    ),
+    #e8bfdc;
+  border-top: 2px solid var(--color-brand-black);
+  border-bottom: 2px solid var(--color-brand-black);
+}
+
+.visual::before {
+  content: "";
+  position: absolute;
+  inset: 12% 10%;
+  background:
+    linear-gradient(90deg, var(--color-brand-black) 0 2px, transparent 2px),
+    linear-gradient(0deg, var(--color-brand-black) 0 2px, transparent 2px);
+  background-size: 4.5rem 4.5rem;
+  opacity: 0.16;
+}
+
+.visual::after {
+  content: "CREATIVE";
+  position: absolute;
+  right: clamp(1rem, 6vw, 4rem);
+  bottom: clamp(1rem, 5vw, 3.5rem);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(3rem, 12vw, 9rem);
+  line-height: 0.9;
+  color: var(--color-brand-black);
+  text-shadow:
+    0.06em 0.06em 0 var(--color-brand-fuchsia),
+    -0.025em -0.025em 0 var(--color-brand-yellow);
+}
+
+.sparkle {
+  position: absolute;
+  left: clamp(1rem, 5vw, 4rem);
+  top: clamp(1rem, 5vw, 4rem);
+  width: clamp(5rem, 18vw, 13rem);
+  aspect-ratio: 1;
+  background:
+    linear-gradient(45deg, transparent 48%, var(--color-brand-black) 48% 52%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--color-brand-black) 48% 52%, transparent 52%),
+    var(--color-brand-yellow);
+  clip-path: polygon(50% 0, 62% 36%, 100% 50%, 62% 64%, 50% 100%, 38% 64%, 0 50%, 38% 36%);
+  box-shadow: 1rem 1rem 0 var(--color-brand-fuchsia);
+}
+
+.body {
+  opacity: 0.86;
+}
+
+.tagList {
+  border-top-color: rgba(0, 0, 0, 0.28);
+}
+
+.tag {
+  border-bottom-color: rgba(0, 0, 0, 0.22);
+}
+
+.tag::before {
+  color: var(--color-brand-fuchsia);
+}
+
+.band {
+  border-top-color: rgba(0, 0, 0, 0.28);
+}
+
+.bandText {
+  color: var(--color-brand-black);
+}
+
+@media (max-width: 640px) {
+  .visual {
+    min-height: 19rem;
+  }
+
+  .visual::after {
+    right: var(--space-4);
+    bottom: var(--space-4);
+    font-size: clamp(3.4rem, 19vw, 5.5rem);
+  }
+}

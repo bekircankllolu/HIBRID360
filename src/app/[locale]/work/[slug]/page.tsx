@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { getPublishedWorks, getWorkBySlug, getPublishedDirectors } from "@/lib/content";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -41,7 +42,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `/${locale}/work/${slug}` },
+    alternates: localizedAlternates(locale, `/work/${slug}`),
   };
 }
 

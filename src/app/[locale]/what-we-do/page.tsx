@@ -6,6 +6,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Link } from "@/i18n/navigation";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -55,7 +56,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Creative, production, post production, digital, live broadcast, Cloud TV, events, photography and AI production."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do` },
+    alternates: localizedAlternates(locale, "/what-we-do"),
   };
 }
 

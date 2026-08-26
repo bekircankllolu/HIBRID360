@@ -12,7 +12,7 @@ import { ConsentInitScript } from "@/components/consent/ConsentInitScript";
 import { Analytics } from "@/components/consent/Analytics";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/schema";
-import { SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+import { localizedAlternates, SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 import "@/styles/globals.css";
 
 export function generateStaticParams() {
@@ -43,14 +43,7 @@ export async function generateMetadata({
       locale,
       type: "website",
     },
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        tr: "/tr",
-        en: "/en",
-        "x-default": "/tr",
-      },
-    },
+    alternates: localizedAlternates(locale as Locale),
   };
 }
 

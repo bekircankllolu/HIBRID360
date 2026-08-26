@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { BriefBuilder } from "@/components/brief/BriefBuilder";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 
 // brief-rev12.md Bölüm 18.8 — Brief Builder. URL: /tr/brief · /en/brief
 export async function generateMetadata({
@@ -16,7 +17,7 @@ export async function generateMetadata({
     title: "Brief Builder",
     description:
       "Six questions, about two minutes. You'll get the summary in your inbox — and so will we.",
-    alternates: { canonical: `/${locale}/brief` },
+    alternates: localizedAlternates(locale, "/brief"),
   };
 }
 

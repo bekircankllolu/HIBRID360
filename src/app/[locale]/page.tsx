@@ -12,7 +12,7 @@ import { ClosingBody } from "@/components/home/ClosingBody";
 import { Mona } from "@/components/mona/Mona";
 import { homepageLines } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
-import { SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@/lib/site";
+import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@/lib/site";
 
 /**
  * Ana sayfa — HOME-01..13 (nihai copy deck, Ağustos 2026).
@@ -55,7 +55,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Films, campaigns, live broadcast and AI production for global brands. Istanbul-based, 20+ years, one crew end to end."
         : undefined,
-    alternates: { canonical: `/${locale}` },
+    alternates: localizedAlternates(locale),
   };
 }
 

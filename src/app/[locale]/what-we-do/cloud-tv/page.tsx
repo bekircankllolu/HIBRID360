@@ -6,6 +6,7 @@ import { ServiceVisual } from "@/components/ServiceVisual";
 import { hibridSolutions } from "@/data/hibrid-solutions";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
+import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/service-page.module.css";
 
 /**
@@ -28,7 +29,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Your own corporate TV channel on a cloud portal: content, infrastructure, training and turnkey operation."
         : undefined,
-    alternates: { canonical: `/${locale}/what-we-do/cloud-tv` },
+    alternates: localizedAlternates(locale, "/what-we-do/cloud-tv"),
   };
 }
 
