@@ -1,5 +1,13 @@
 # Visual Asset Audit — 2026-08-25
 
+> **Güncel tur:** Bu doküman 25 Ağustos turunun kaydıdır ve arşiv olarak
+> korunuyor. Sonraki tur ölçümlü ekran görüntüleriyle yapıldı ve bulguların
+> bir kısmını doğruladı, bir kısmını kapattı:
+> **`docs/visual-audit/VISUAL_QA_2026-08-26.md`**.
+> Aşağıdaki maddelerden `3840w` transfer uyarısı ve mobil çerez bandı
+> maddesi o turda ölçülerek **kapatıldı**; Creative/Photography/MONA
+> görselleri ve sarı vurgu maddeleri **hâlâ açık**.
+
 Amaç: eski `hibrid360.com` görsel hafızasını, yeni Next.js sitedeki görsel
 yerleşimlerle karşılaştırmak. Bu doküman uygulama talimatı değil; Claude ve
 Codex'in paralel çalışmasında çakışmayı azaltacak karar kaydıdır.
