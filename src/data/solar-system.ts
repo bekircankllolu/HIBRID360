@@ -11,10 +11,9 @@
  * kararı). Sekiz alt sayfanın tamamı task #18 ile açıldı; tüm noktalar
  * kendi gerçek sayfasına bağlanıyor.
  *
- * Taş görseli: müşteriden teslim edildi (hibrid360_hibridtaslar paketi) —
- * AI ile üretilmiş, düşük poligonlu Hibrid taşı; sarı ve fuşya varyantı
- * brief'in istediğiyle birebir eşleşiyor (bkz. public/images/stones/).
- * `color` alanı sekiz yörüngede iki rengi sırayla dağıtır.
+ * 2026-08-27 kullanıcı revizyonu: merkezde mevcut gerçekçi taş videosu,
+ * çevresinde düz sarı/fuşya servis noktaları ve parçacık izleri.
+ * `color` alanı sekiz noktada iki rengi sırayla dağıtır.
  */
 export interface OrbitStone {
   orbit: number;
@@ -124,14 +123,14 @@ export const orbitStones: OrbitStone[] = [
 ];
 
 /**
- * Yörünge geometrisi — hem SVG halkaları hem nokta konum matematiği bu
+ * Yörünge geometrisi — hem Canvas halkaları hem nokta konum matematiği bu
  * sabitlerden türetilir; iki katman ayrı kaynak kullanırsa nokta halkadan
  * kayar (bu hata bir kez yaşandı, bkz. eski WebGL sahnesindeki
  * daire/elips uyumsuzluğu).
  *
  * Koordinatlar 1000×640'lık sanal sahnede tanımlı; bileşen bunları yüzdeye
- * çevirip mutlak konumlandırıyor, SVG ise aynı viewBox'ı
- * preserveAspectRatio="none" ile kullanıyor — kutu oranı değişse de
+ * çevirip mutlak konumlandırıyor, Canvas ise aynı koordinatları
+ * sahne boyutuna ölçekliyor — kutu oranı değişse de
  * (mobilde sahne kareye yaklaşır) iki katman birlikte esner.
  */
 export const ORBIT_VIEW = { w: 1000, h: 640, cx: 500, cy: 324 } as const;
@@ -145,21 +144,27 @@ export const ORBIT_RINGS = [176, 258, 340, 424] as const;
 /** Halka başına açısal hız (rad/s) — içteki hızlı, dıştaki yavaş. */
 export const RING_SPEED = [0.15, 0.105, 0.078, 0.058] as const;
 
+export const COMPACT_RINGS = [230, 230, 420, 420] as const;
+export const COMPACT_TILT = 0.56;
+const COMPACT_SPEED = [0.062, 0.062, 0.04, 0.04] as const;
+
 /**
  * Bir taşın t anındaki konumu ve derinliği. `depth` 0..1: 0 = en arkada
- * (kristalin arkasından geçerken), 1 = en önde. Bileşen bununla ölçek,
- * parlaklık ve z-index verip sahneye üç boyut hissi katıyor.
+ * (kristalin arkasından geçerken), 1 = en önde. Bileşen bununla nokta
+ * opaklığını ve parçacıkların ön/arka katmanını belirler; noktalar düzdür.
  */
 export function stonePoint(
   stone: OrbitStone,
   tSeconds: number,
+  compact = false,
 ): { x: number; y: number; depth: number } {
-  const angle = stone.phase + tSeconds * RING_SPEED[stone.ring];
-  const rx = ORBIT_RINGS[stone.ring];
+  const angle =
+    stone.phase + tSeconds * (compact ? COMPACT_SPEED : RING_SPEED)[stone.ring];
+  const rx = (compact ? COMPACT_RINGS : ORBIT_RINGS)[stone.ring];
   const sin = Math.sin(angle);
   return {
     x: ORBIT_VIEW.cx + Math.cos(angle) * rx,
-    y: ORBIT_VIEW.cy + sin * rx * ORBIT_TILT,
+    y: ORBIT_VIEW.cy + sin * rx * (compact ? COMPACT_TILT : ORBIT_TILT),
     depth: (sin + 1) / 2,
   };
 }
@@ -251,12 +256,21 @@ export function stoneTrail(
  *     kare adımı olan 3.93'ün altına indi: döngü artık pürüzsüz),
  *   - AV1/WebM 213 kB + H.264/MP4 307 kB olarak kodlandı.
  *
- * Arka planı SAF SİYAH (0,0,0) — bu yüzden CSS'te `mix-blend-mode: screen`
- * ile bindiriliyor: siyah şeffaflaşıyor, taşın ışıması nebulanın üstüne
- * toplamalı biniyor. Alfa kanallı video gerekmiyor, dosya da küçük kalıyor.
+ * Etkileşimli sürüm: 165 karenin tamamı bağımsız H.264 I-frame olarak
+ * kodlandı (~1.65 MB). Tam renk aralığı, WebKit'in siyahı gri çizmesini
+ * önler. Kaydırırken önceki GOP'u çözmeden geri/ileri erişilebilir.
+ * Yalnızca bölüme yaklaşırken yüklenir. Eski optimize video
+ * dosyaları kaynak olarak korunur; bu bileşen yalnızca interactive'ı yükler.
+ * Siyah mat artık CSS katmanlarına değil doğrudan aynı Canvas'taki
+ * sahne piksellerine `screen` ile birleştirilir. Bu gerçek alfa değildir.
  */
 export const CRYSTAL_MEDIA = {
-  /** Tarayıcı sırayla dener: AV1 desteklemeyen Safari MP4'e düşer. */
+  /** All-intra H.264: each frame is independently seekable for scroll control. */
+  interactive: "/videos/hibrid-stone-interactive.mp4",
+  fps: 24,
+  scale: 0.85,
+  playbackRate: 0.8,
+  /** Önceki optimize kaynaklar; etkileşimli bileşen bunları yüklemez. */
   webm: "/videos/hibrid-stone.webm",
   mp4: "/videos/hibrid-stone.mp4",
   /** preload="none" olduğu için ilk kare bu görselden gelir. */

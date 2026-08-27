@@ -84,3 +84,25 @@ bu sayfadaki İngilizce gövde metni kasıtlıdır.
 menü maddeleri, hero/bant sloganları, hizmet adları (Creative,
 Production, Cloud TV…), MONA, AI SHOWREEL, footer marka imzası ve telif
 satırı.
+
+## Ekosistem etkileşimi — 2026-08-27 kullanıcı onayı
+
+Bu bölümde brief 4.5 ve önceki görsel denetimin küçük 3D taş önerisi,
+kullanıcının son revizyonuyla güncellendi:
+
+- Merkezde mevcut gerçekçi sarı kristalin turntable videosu korunur.
+- Çevredeki sekiz hizmet, düz sarı/fuşya noktalarla temsil edilir;
+  kabarık küre gölgelendirmesi kullanılmaz.
+- Boşta döngü, kristalde fareyle beklerken duraklama, kaydırırken
+  ileri/geri dönüş ve aynı kareden devam davranışı uygulanır.
+- Noktalar sürüklenebilir; bırakılınca yumuşak biçimde yörüngeye döner.
+  İnce partikül izleri gerçek hareket yolundan üretilir.
+- Tıklama/dokunma önce hizmet detayını açar; mevcut hizmet rotasına
+  detay bağlantısından gidilir. Hizmet adı ve açıklaması uydurulmaz.
+- Detay, kristalin üzerine kapanan kutu yerine sahne altında ayrılmış
+  alanda gösterilir. Klavye erişimi ve azaltılmış hareket desteği korunur.
+- Yeni WebGL sahnesi eklenmez. Video ve arka plan tek Canvas içinde
+  birleştirilir; CSS katmanlamasından doğan siyah dikdörtgen kaldırılır.
+
+Durum: **KAPANDI — kullanıcı planı onayladı.** Bu karar yalnızca ekosistem
+bölümüne aittir; HIBRID hero animasyonu ve MONA tasarımı değiştirilmez.

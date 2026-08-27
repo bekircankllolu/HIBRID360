@@ -2,7 +2,10 @@
   "common": {
     "pendingLabel": "Content in progress",
     "learnMore": "View details",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "pauseAnimation": "Pause animation",
+    "resumeAnimation": "Resume animation",
+    "closeDetails": "Close details"
   },
   "nav": {
     "work": "WORK",

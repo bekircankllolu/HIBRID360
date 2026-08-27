@@ -1,4 +1,11 @@
 import { describe, expect, it } from "vitest";
+import {
+  createCrystalPlayback,
+  createParticleTrail,
+  returnWeight,
+  RETURN_SECONDS,
+  wrapTime,
+} from "../lib/solar-motion";
 
 import {
   orbitStones,
@@ -13,6 +20,8 @@ import {
   CRYSTAL_MEDIA,
   cardSide,
   CRYSTAL_HALF_WIDTH,
+  COMPACT_RINGS,
+  COMPACT_TILT,
 } from "./solar-system";
 
 /**
@@ -23,11 +32,7 @@ import {
  *
  * Elips denklemi: ((x-cx)/rx)² + ((y-cy)/(rx·tilt))² = 1
  */
-function ellipseResidual(
-  x: number,
-  y: number,
-  rx: number,
-): number {
+function ellipseResidual(x: number, y: number, rx: number): number {
   const dx = (x - ORBIT_VIEW.cx) / rx;
   const dy = (y - ORBIT_VIEW.cy) / (rx * ORBIT_TILT);
   return Math.abs(dx * dx + dy * dy - 1);
@@ -73,6 +78,18 @@ describe("yörünge verisi", () => {
 });
 
 describe("stonePoint", () => {
+  it("compact positions and rings use the same projection", () => {
+    for (const stone of orbitStones) {
+      for (let time = 0; time < 90; time += 0.71) {
+        const p = stonePoint(stone, time, true);
+        const radius = COMPACT_RINGS[stone.ring];
+        const residual =
+          ((p.x - ORBIT_VIEW.cx) / radius) ** 2 +
+          ((p.y - ORBIT_VIEW.cy) / (radius * COMPACT_TILT)) ** 2;
+        expect(residual).toBeCloseTo(1, 9);
+      }
+    }
+  });
   it("her nokta her zaman kendi halkasının TAM üzerindedir", () => {
     for (const stone of orbitStones) {
       for (let t = 0; t < 60; t += 0.37) {
@@ -113,6 +130,182 @@ describe("stonePoint", () => {
       expect(after.x).toBeCloseTo(start.x, 6);
       expect(after.y).toBeCloseTo(start.y, 6);
     }
+  });
+});
+
+describe("interactive motion", () => {
+  it("returns continuously, with a small overshoot and an exact finish", () => {
+    expect(returnWeight(0)).toBe(1);
+    expect(returnWeight(0.0001)).toBeCloseTo(1, 5);
+    expect(returnWeight(0.5)).toBeLessThan(0);
+    expect(Math.abs(returnWeight(0.5))).toBeLessThan(0.03);
+    expect(returnWeight(RETURN_SECONDS)).toBe(0);
+    expect(returnWeight(50)).toBe(0);
+  });
+
+  it("wraps forward and backward without producing invalid media times", () => {
+    expect(wrapTime(-0.25, 7)).toBe(6.75);
+    expect(wrapTime(7.25, 7)).toBe(0.25);
+    expect(wrapTime(1, Number.NaN)).toBe(0);
+    expect(wrapTime(1, 0)).toBe(0);
+  });
+
+  it("emits a bounded trail along a dragged path, then lets it expire at rest", () => {
+    const trail = createParticleTrail(360, 24);
+    const from = { x: 100, y: 80, depth: 0.6 };
+    const to = { x: 500, y: 400, depth: 1 };
+    for (let i = 0; i < 200; i++) trail.step(0.04, from, to, null);
+    expect(trail.particles).toHaveLength(24);
+    expect(
+      trail.particles.some((p) => p.x > 200 && p.x < 450 && p.y > 150),
+    ).toBe(true);
+    for (let i = 0; i < 80; i++) trail.step(0.04, to, to, null);
+    expect(trail.particles.every((p) => p.age >= p.life)).toBe(true);
+  });
+
+  it("nearby particles move away from the pointer", () => {
+    const a = createParticleTrail(360, 24);
+    const b = createParticleTrail(360, 24);
+    const from = { x: 100, y: 100, depth: 1 };
+    const to = { x: 110, y: 100, depth: 1 };
+    for (let i = 0; i < 3; i++) {
+      a.step(0.04, from, to, null);
+      b.step(0.04, from, to, null);
+    }
+    const p = a.particles[0];
+    a.step(0.04, to, to, { x: p.x - 10, y: p.y, depth: 1 }, false);
+    b.step(0.04, to, to, null, false);
+    expect(a.particles[0].x).toBeGreaterThan(b.particles[0].x);
+  });
+});
+
+describe("crystal playback", () => {
+  function fixture() {
+    const video = {
+      currentTime: 3,
+      duration: 7,
+      paused: true,
+      seeking: false,
+      readyState: 4,
+      playCount: 0,
+      play() {
+        this.playCount++;
+        this.paused = false;
+        return Promise.resolve();
+      },
+      pause() {
+        this.paused = true;
+      },
+    };
+    return { video, controller: createCrystalPlayback(video) };
+  }
+
+  it("hover overrides scroll and resumes from the held frame", async () => {
+    const { video, controller } = fixture();
+    controller.step(0, false);
+    await Promise.resolve();
+    controller.step(10, true);
+    controller.scroll(200, 800, 20, true);
+    controller.step(30, true);
+    expect(video.paused).toBe(true);
+    expect(video.currentTime).toBe(3);
+    await Promise.resolve();
+    controller.step(100, false);
+    expect(video.currentTime).toBe(3);
+    expect(video.paused).toBe(false);
+  });
+
+  it("uses the latest scroll target and waits for decoding before seeking again", () => {
+    const { video, controller } = fixture();
+    controller.scroll(100, 1000, 0, false);
+    controller.step(10, false);
+    expect(video.currentTime).toBeCloseTo(Math.round(3.35 * 24) / 24);
+    video.seeking = true;
+    controller.scroll(-200, 1000, 20, false);
+    controller.step(30, false);
+    expect(video.currentTime).toBeCloseTo(Math.round(3.35 * 24) / 24);
+    video.seeking = false;
+    controller.step(40, false);
+    expect(video.currentTime).toBeCloseTo(Math.round(2.65 * 24) / 24);
+    controller.step(250, false);
+    expect(controller.mode).toBe("idle");
+    expect(video.paused).toBe(false);
+  });
+
+  it("resumes when a completed seek still needs playback to decode data", () => {
+    const { video, controller } = fixture();
+    controller.scroll(100, 1000, 0, false);
+    controller.step(10, false);
+    video.readyState = 1;
+    controller.step(250, false);
+    expect(controller.mode).toBe("idle");
+    expect(video.playCount).toBe(1);
+  });
+
+  it("does not repeat a completed seek when a decoder rounds its clock", () => {
+    const { video, controller } = fixture();
+    controller.scroll(100, 1000, 0, false);
+    controller.step(10, false);
+    video.currentTime -= 0.04;
+    const decodedTime = video.currentTime;
+    controller.step(250, false);
+    expect(controller.mode).toBe("idle");
+    expect(video.currentTime).toBe(decodedTime);
+  });
+
+  it("retries a transient aborted play with a bounded backoff", async () => {
+    const { video } = fixture();
+    video.play = function () {
+      this.playCount++;
+      return Promise.reject(
+        new DOMException("Seek interrupted play", "AbortError"),
+      );
+    };
+    const controller = createCrystalPlayback(video);
+    controller.step(0, false);
+    await Promise.resolve();
+    controller.step(100, false);
+    expect(video.playCount).toBe(1);
+    controller.step(150, false);
+    await Promise.resolve();
+    controller.step(449, false);
+    expect(video.playCount).toBe(2);
+    controller.step(450, false);
+    await Promise.resolve();
+    controller.step(1000, false);
+    expect(video.playCount).toBe(3);
+  });
+
+  it("does not repeatedly retry a browser autoplay denial", async () => {
+    const { video } = fixture();
+    video.play = function () {
+      this.playCount++;
+      return Promise.reject(new DOMException("Not allowed", "NotAllowedError"));
+    };
+    const controller = createCrystalPlayback(video);
+    controller.step(0, false);
+    await Promise.resolve();
+    for (let time = 100; time < 2000; time += 100) controller.step(time, false);
+    expect(video.playCount).toBe(1);
+  });
+
+  it("late play resolution cannot restart an offscreen scene", async () => {
+    const { video } = fixture();
+    let resolve!: () => void;
+    video.play = () =>
+      new Promise<void>((done) => {
+        resolve = () => {
+          video.paused = false;
+          done();
+        };
+      });
+    const controller = createCrystalPlayback(video);
+    controller.step(0, false);
+    controller.stop();
+    resolve();
+    await Promise.resolve();
+    expect(video.paused).toBe(true);
+    expect(controller.mode).toBe("paused");
   });
 });
 
@@ -226,6 +419,11 @@ describe("stoneTrail", () => {
 });
 
 describe("CRYSTAL_MEDIA", () => {
+  it("uses the approved smaller crystal and slower idle rotation", () => {
+    expect(CRYSTAL_MEDIA.scale).toBe(0.85);
+    expect(CRYSTAL_MEDIA.playbackRate).toBe(0.8);
+  });
+
   it("iki kaynak da tanımlı — AV1 desteklemeyen tarayıcı MP4'e düşer", () => {
     expect(CRYSTAL_MEDIA.webm.endsWith(".webm")).toBe(true);
     expect(CRYSTAL_MEDIA.mp4.endsWith(".mp4")).toBe(true);

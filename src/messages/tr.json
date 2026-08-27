@@ -2,7 +2,10 @@
   "common": {
     "pendingLabel": "İçerik hazırlanıyor",
     "learnMore": "Detaya git",
-    "skipToContent": "İçeriğe geç"
+    "skipToContent": "İçeriğe geç",
+    "pauseAnimation": "Animasyonu duraklat",
+    "resumeAnimation": "Animasyonu sürdür",
+    "closeDetails": "Detayı kapat"
   },
   "nav": {
     "work": "WORK",
