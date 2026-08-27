@@ -177,3 +177,119 @@ export const STONE_INTRINSIC = {
 
 /** brief Bölüm 4.5 — bölüm başlığı sloganı. */
 export const SOLAR_SYSTEM_TITLE = "One Hybrid Production Ecosystem.";
+
+/**
+ * ---------------------------------------------------------------------
+ * Kuyruklu yıldız izi
+ * ---------------------------------------------------------------------
+ *
+ * Her nokta yörüngesinde ilerlerken arkasında sönerek incelen bir iz
+ * bırakır. İz "geçmişteki konumların" ta kendisi: aynı `stonePoint`
+ * fonksiyonu geriye doğru zamanla çağrılıyor. Böylece iz her zaman
+ * halkanın TAM üzerinde kalır — ayrı bir eğri hesabı olsaydı iz
+ * halkadan kayardı (bu sınıf hata bu dosyada bir kez yaşandı).
+ *
+ * Uzunluk açı değil ZAMAN cinsinden tanımlı. Sebebi fiziksel: halkaların
+ * çizgisel hızı birbirine çok yakın (iç halka 176 × 0.15 ≈ 26.4, dış
+ * halka 424 × 0.058 ≈ 24.6 birim/s), dolayısıyla sabit süre sekiz nokta
+ * için de yaklaşık aynı ekran uzunluğunu verir. Sabit açı verilseydi
+ * dıştaki izler uzun, içtekiler kısa görünürdü.
+ */
+export const TRAIL_SECONDS = 4.6;
+
+/** İzdeki örnek sayısı — baş dahil. */
+export const TRAIL_SAMPLES = 44;
+
+export interface TrailPoint {
+  x: number;
+  y: number;
+  depth: number;
+  /** 0 = baş (noktanın kendisi), 1 = kuyruğun ucu. */
+  t: number;
+}
+
+/**
+ * Bir taşın `tSeconds` anındaki izi, baştan kuyruğa sıralı.
+ *
+ * Her örnek kendi `depth` değerini taşır: iz kristalin arkasından
+ * geçerken sönük ve arka katmana, önünden geçerken parlak ve ön katmana
+ * çizilir. Kuyruğun bir ucu kristalin arkasında, diğer ucu önünde
+ * olabilir — üç boyut hissini asıl veren bu.
+ */
+export function stoneTrail(
+  stone: OrbitStone,
+  tSeconds: number,
+  samples: number = TRAIL_SAMPLES,
+  trailSeconds: number = TRAIL_SECONDS,
+): TrailPoint[] {
+  const points: TrailPoint[] = [];
+  const last = Math.max(1, samples - 1);
+
+  for (let i = 0; i < samples; i++) {
+    const t = i / last;
+    const p = stonePoint(stone, tSeconds - t * trailSeconds);
+    points.push({ x: p.x, y: p.y, depth: p.depth, t });
+  }
+
+  return points;
+}
+
+/**
+ * ---------------------------------------------------------------------
+ * Merkez kristalin kendi ekseninde dönüşü
+ * ---------------------------------------------------------------------
+ *
+ * Düz bir PNG/WebP kendi ekseninde GERÇEKTEN dönemez — `rotateY` ile
+ * çevrilirse profilden bir çizgiye iner ve aynalanır. Gerçek dönüş için
+ * 3B'de render edilmiş bir turntable dizisi (tek WebP şerit hâlinde
+ * sprite sheet) gerekir; o zaman her karede ışık, spekülar ve fasetler
+ * doğru yerde olur.
+ *
+ * Bu yüzden bileşen iki yolu da tanır:
+ *
+ *   frames === 1  → bugünkü tek kare. Sınırlı genlikli 3B eğilme +
+ *                   üzerinden geçen ışık süzülmesi ile canlandırılır.
+ *                   Dürüst bir yer tutucu, gerçek dönüş değil.
+ *   frames  >  1  → sprite şeridi. `turnSeconds`'ta 360° döner, kare
+ *                   atlaması rAF döngüsünden sürülür.
+ *
+ * Turntable teslim edildiğinde değişmesi gereken tek yer burası:
+ * `src`, `frames` ve kare boyutları. Bileşen koduna dokunulmaz.
+ */
+export const CRYSTAL_SPRITE = {
+  src: "/images/stones/stone-yellow.webp",
+  /** TODO: turntable dizisi gelince kare sayısı (36–48 önerilir). */
+  frames: 1,
+  /** Tek karenin piksel boyutu (sprite'ta şeridin bir hücresi). */
+  width: STONE_INTRINSIC.yellow.width,
+  height: STONE_INTRINSIC.yellow.height,
+  /** 360°'lik tam tur süresi. */
+  turnSeconds: 22,
+} as const;
+
+/**
+ * ---------------------------------------------------------------------
+ * Detay kartının açılma yönü
+ * ---------------------------------------------------------------------
+ *
+ * Kart eskiden her zaman İÇERİ (merkeze doğru) açılıyordu: soldaki nokta
+ * sağa, sağdaki sola. Sonuç, merkeze yakın halkalarda kartın doğrudan
+ * Hibrid kristalinin üstüne binmesiydi — sahnenin ana nesnesi kapanıyordu
+ * (görsel denetim §C-05).
+ *
+ * Yeni kural: içeri açmak kristale çarpacaksa DIŞARI açılır. Dış
+ * halkalardaki noktalar kristalden zaten yeterince uzak olduğu için orada
+ * içeri açılış korunuyor — böylece kartlar sahne dışına taşmıyor.
+ */
+
+/** Kristalin yatayda kapladığı yarı genişlik (ışıma payı dahil). */
+export const CRYSTAL_HALF_WIDTH = 115;
+
+export function cardSide(x: number, reach: number): "left" | "right" {
+  const inward: "left" | "right" = x < ORBIT_VIEW.cx ? "right" : "left";
+  const hitsCrystal =
+    inward === "right"
+      ? x + reach > ORBIT_VIEW.cx - CRYSTAL_HALF_WIDTH
+      : x - reach < ORBIT_VIEW.cx + CRYSTAL_HALF_WIDTH;
+  return hitsCrystal ? (inward === "right" ? "left" : "right") : inward;
+}

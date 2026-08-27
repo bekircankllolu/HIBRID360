@@ -17,62 +17,51 @@
 }
 
 /* Sahne — data/solar-system.ts'teki 1000×640 sanal koordinat sisteminin
-   ekrandaki kutusu. Noktalar yüzdeyle, halkalar aynı viewBox'lı SVG ile
-   konumlanır; kutu oranı mobilde değişse de iki katman birlikte esner. */
+   ekrandaki kutusu. Noktalar yüzdeyle, halkalar aynı viewBox'lı SVG ile,
+   izler ve yıldızlar aynı orana kurulmuş canvas ile konumlanır; kutu oranı
+   mobilde değişse de üç katman birlikte esner.
+
+   --par-x / --par-y: imleç paralaksı, rAF döngüsünden yazılır. */
 .stage {
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
   aspect-ratio: 1000 / 640;
+  --par-x: 0px;
+  --par-y: 0px;
+  /* Kristalin 3B eğilmesi için derinlik. */
+  perspective: 900px;
 }
 
-/* ---------- Uzay katmanı: nebula + yıldız alanı ---------- */
-/* Tüm renkler marka paletinden: siyah üzerinde düşük alfa fuşya doğal
-   olarak mor sis, sarı ise sıcak ışık verir — palet dışına çıkılmıyor. */
-.space {
+/* ---------- Nebula ---------- */
+/* Yıldızlar artık canvas'ta; burada yalnızca renkli sis katmanı kalıyor.
+   Tüm renkler marka paletinden: siyah üzerinde düşük alfa fuşya doğal
+   olarak mor sis, sarı ise sıcak ışık verir — palet dışına çıkılmıyor.
+   Paralaksta nebula en yavaş katman (en uzak). */
+.nebula {
   position: absolute;
-  inset: -6% -4%;
+  inset: -8% -6%;
+  z-index: 0;
   pointer-events: none;
+  transform: translate3d(
+    calc(var(--par-x) * 0.35),
+    calc(var(--par-y) * 0.35),
+    0
+  );
   background:
-    radial-gradient(58% 42% at 50% 52%, rgba(255, 0, 255, 0.1), transparent 70%),
-    radial-gradient(34% 26% at 50% 50%, rgba(255, 252, 0, 0.09), transparent 68%),
-    radial-gradient(30% 24% at 24% 30%, rgba(255, 0, 255, 0.07), transparent 70%),
-    radial-gradient(26% 22% at 78% 68%, rgba(255, 252, 0, 0.05), transparent 70%);
+    radial-gradient(46% 34% at 44% 46%, rgba(255, 0, 255, 0.13), transparent 72%),
+    radial-gradient(30% 24% at 50% 52%, rgba(255, 252, 0, 0.1), transparent 68%),
+    radial-gradient(38% 30% at 22% 26%, rgba(255, 0, 255, 0.075), transparent 74%),
+    radial-gradient(34% 26% at 80% 70%, rgba(255, 252, 0, 0.055), transparent 72%),
+    radial-gradient(26% 34% at 72% 22%, rgba(255, 0, 255, 0.05), transparent 76%);
 }
 
-.space::before,
-.space::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 1px, transparent 1.7px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0 0.8px, transparent 1.4px);
-  background-size:
-    13rem 9rem,
-    7.5rem 5.5rem;
-  background-position:
-    12% 18%,
-    64% 76%;
-  opacity: 0.4;
-}
-
-.space::after {
-  background-image:
-    radial-gradient(circle, rgba(255, 252, 0, 0.5) 0 1px, transparent 1.8px),
-    radial-gradient(circle, rgba(255, 0, 255, 0.45) 0 1px, transparent 1.8px);
-  background-size:
-    19rem 13rem,
-    16rem 11rem;
-  background-position:
-    38% 62%,
-    82% 24%;
-  opacity: 0.3;
-  animation: twinkle 9s ease-in-out infinite alternate;
-}
-
-/* ---------- Yörünge halkaları ---------- */
-.rings {
+/* ---------- Canvas katmanları ---------- */
+/* İki canvas, tek döngü. Ayrı olmalarının sebebi derinlik: kristalin
+   ARKASINDAN geçen iz parçaları .canvasBack'e, ÖNÜNDEN geçenler
+   .canvasFront'a çizilir; kristal ikisinin arasında durur. Tek canvas
+   olsaydı iz ya hep önde ya hep arkada kalır, üç boyut hissi kaybolurdu. */
+.canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -80,19 +69,48 @@
   pointer-events: none;
 }
 
-.ringBase {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.11);
-  stroke-width: 1px;
+.canvasBack {
+  z-index: 0;
 }
 
-/* Halkanın üzerinde soldan sağa süzülen zayıf bir ışık — çizgiye cam/metal
-   parlaklığı hissi verir, halkalar "çizilmiş" değil "aydınlanmış" durur. */
-.ringSheen {
+.canvasFront {
+  z-index: 3;
+}
+
+/* ---------- Yörünge halkaları ---------- */
+.rings {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform: translate3d(
+    calc(var(--par-x) * 0.55),
+    calc(var(--par-y) * 0.55),
+    0
+  );
+}
+
+/* Perspektif: --ring-width ve --ring-alpha halka indeksinden gelir
+   (bileşende hesaplanır). İçteki halka kalın ve belirgin, dıştaki ince ve
+   sönük — gerçek perspektifte uzaktaki yörünge böyle görünür. Eskiden
+   dördü de aynı 1px `non-scaling-stroke` idi ve sahne teknik çizim gibi
+   okunuyordu. */
+.ring {
   fill: none;
-  stroke: url(#ss-ring-sheen);
-  stroke-width: 1px;
-  opacity: 0.55;
+  stroke: rgba(255, 255, 255, var(--ring-alpha, 0.14));
+  stroke-width: var(--ring-width, 1);
+  transition:
+    stroke 260ms ease-out,
+    stroke-width 260ms ease-out;
+}
+
+/* Bir noktaya kilitlenince o noktanın halkası aydınlanır — hangi
+   yörüngeye baktığın sahnenin tamamında okunur. */
+.ringActive {
+  stroke: rgba(255, 252, 0, 0.42);
+  stroke-width: calc(var(--ring-width, 1) * 1.7);
 }
 
 /* ---------- Güneş: Hibrid kristali ---------- */
@@ -100,8 +118,9 @@
   position: absolute;
   top: 50.6%;
   left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 2;
+  transform: translate3d(-50%, -50%, 0)
+    translate3d(calc(var(--par-x) * 0.16), calc(var(--par-y) * 0.16), 0);
   display: grid;
   justify-items: center;
   /* Arkasından geçen nokta hover'lanabilsin. */
@@ -123,30 +142,100 @@
     transparent 70%
   );
   filter: blur(18px);
+  animation: sunPulse 7s ease-in-out infinite;
+}
+
+/* Tek kare yer tutucu — düz bir görsel kendi ekseninde gerçekten dönemez
+   (rotateY ile profilden çizgiye iner ve aynalanır). Bu yüzden genlik
+   sınırlı tutuluyor: taş ışıkta hafifçe salınıyor gibi okunur, "dönen
+   kart" gibi değil. Gerçek dönüş için turntable sprite'ı gerekiyor —
+   bkz. data/solar-system.ts CRYSTAL_SPRITE. */
+.crystalStage {
+  position: relative;
+  width: clamp(8.5rem, 17vw, 13.5rem);
+  transform-style: preserve-3d;
+  animation: crystalSway 11s ease-in-out infinite;
 }
 
 .crystal {
-  position: relative;
-  width: clamp(8.5rem, 17vw, 13.5rem);
+  display: block;
+  width: 100%;
   height: auto;
-  transform: rotate(-8deg);
   filter: drop-shadow(0 1.4rem 2.2rem rgba(0, 0, 0, 0.75))
     drop-shadow(0 0 1rem rgba(255, 252, 0, 0.55))
     drop-shadow(0 0 3rem rgba(255, 0, 255, 0.2));
-  animation: floatCrystal 9s ease-in-out infinite;
 }
 
+/* Taşın üzerinden geçen ışık süzülmesi. Düz boyalı fasetlerde spekülar
+   yok (bkz. görsel denetim raporu §1.1); bu katman en azından "ışık bu
+   yüzeyde geziyor" bilgisini veriyor. Turntable geldiğinde kaldırılacak —
+   o zaman spekülar render'ın kendisinden gelir. */
+.crystalSheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Taşın alfasıyla maskeleniyor: maskesiz bırakılınca dikdörtgen katman
+     taşın dışına taşıp gri bir paralelkenar bırakıyor. Maske kaynağı
+     taşın kendi dosyası, o yüzden şekil birebir oturuyor. */
+  -webkit-mask-image: var(--crystal-src);
+  mask-image: var(--crystal-src);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  /* `overlay` doygun sarıyı patlatıyor; `screen` düşük alfayla yalnızca
+     ışığı ekliyor, rengi bozmuyor. */
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    112deg,
+    transparent 36%,
+    rgba(255, 255, 255, 0.32) 48%,
+    transparent 60%
+  );
+  background-size: 260% 100%;
+  animation: crystalGlint 11s ease-in-out infinite;
+}
+
+/* Turntable dalı: CRYSTAL_SPRITE.frames > 1 olduğunda kullanılır.
+   Şerit yatay; --frame rAF döngüsünden yazılır. */
+.crystalSprite {
+  width: clamp(8.5rem, 17vw, 13.5rem);
+  background-image: var(--sprite-src);
+  background-repeat: no-repeat;
+  background-size: calc(var(--sprite-frames) * 100%) 100%;
+  /* background-size N×100% olduğunda yüzde konumlandırma 0% = ilk kare,
+     100% = son kare demektir; N kare için adım 100%/(N-1). */
+  background-position-x: calc(
+    var(--frame, 0) * 100% / (var(--sprite-frames) - 1)
+  );
+  filter: drop-shadow(0 1.4rem 2.2rem rgba(0, 0, 0, 0.75))
+    drop-shadow(0 0 1rem rgba(255, 252, 0, 0.55))
+    drop-shadow(0 0 3rem rgba(255, 0, 255, 0.2));
+}
+
+/* Rozet eskiden düz sarı bir dikdörtgendi ve yörünge halkalarını kesiyordu
+   — sahnedeki 3B yanılsamayı kıran tek öğeydi (görsel denetim §C-04).
+   Artık ışıklı tipografi: halkaların üstünü blok olarak kapatmıyor, kendi
+   parıltısıyla kristale bağlanıyor. Siyah üzerinde marka sarısı 19.4:1. */
 .coreLabel {
-  position: relative;
-  margin-top: var(--space-3);
+  /* Mutlak konumlu: akışta kalırsa `.sun` kutusunu uzatıyor ve
+     translate(-50%,-50%) kristali yörünge merkezinden yukarı kaydırıyordu
+     (halkaların merkezi 324/640 = %50.6, kristal ise %48'e düşüyordu).
+     Etiket kutudan çıkınca kristal halkalarla tam eş merkezli oluyor. */
+  position: absolute;
+  left: 50%;
+  top: calc(100% + var(--space-3));
+  transform: translateX(-50%);
+  white-space: nowrap;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(0.9rem, 1.7vw, 1.3rem);
-  letter-spacing: 0.04em;
-  color: var(--color-text-on-yellow);
-  background: var(--color-brand-yellow);
-  padding: 0.08em 0.4em;
-  box-shadow: 0 0 1.2rem rgba(255, 252, 0, 0.4);
+  font-size: clamp(0.8rem, 1.5vw, 1.15rem);
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  color: var(--color-brand-yellow);
+  text-shadow:
+    0 0 0.7rem rgba(0, 0, 0, 0.95),
+    0 0 1.6rem rgba(255, 252, 0, 0.55);
 }
 
 /* ---------- Gezegenler ---------- */
@@ -164,7 +253,7 @@
    için !important gerekiyor (SSR/hareket-azaltma dizilişinde inline değer
    1 ya da 4 olabiliyor). */
 .planetActive {
-  z-index: 6 !important;
+  z-index: 7 !important;
 }
 
 /* --stone-glow wrapper'ın inline stilinden miras alınır (staticStyle) —
@@ -234,7 +323,10 @@
 /* Noktanın hemen yanında, içeri doğru açılır (data-side döngüde
    güncellenir). Sistem durduğu için kart sabit durur; nokta ile kart
    arasındaki boşluğu ::before köprüsü kapatır ki imleç karta giderken
-   hover düşmesin. */
+   hover düşmesin.
+
+   backdrop-filter kaldırıldı: kristalin üstünde leke yapıyordu ve mobilde
+   pahalıydı (görsel denetim §C-05); yerine opak zemin. */
 .card {
   position: absolute;
   top: 0;
@@ -242,10 +334,9 @@
   width: max-content;
   max-width: 15.5rem;
   padding: 0.7rem 0.9rem 0.75rem;
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(0, 0, 0, 0.93);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-left: 2px solid var(--stone-glow, var(--color-brand-fuchsia));
-  backdrop-filter: blur(10px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -331,24 +422,40 @@
 }
 
 /* ---------- Animasyonlar ---------- */
-@keyframes floatCrystal {
+/* Salınım genliği kasıtlı olarak dar (±11°): düz bir görsel daha fazla
+   çevrilirse profilden çizgiye iner ve sahte durur. */
+@keyframes crystalSway {
   0%,
   100% {
-    transform: rotate(-8deg) translateY(0);
+    transform: rotateY(-11deg) rotateZ(-8deg) translateY(0);
   }
 
   50% {
-    transform: rotate(-5deg) translateY(-0.7rem);
+    transform: rotateY(11deg) rotateZ(-5deg) translateY(-0.7rem);
   }
 }
 
-@keyframes twinkle {
-  from {
-    opacity: 0.18;
+@keyframes crystalGlint {
+  0%,
+  100% {
+    background-position-x: 130%;
   }
 
-  to {
-    opacity: 0.42;
+  50% {
+    background-position-x: -30%;
+  }
+}
+
+@keyframes sunPulse {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
   }
 }
 
@@ -359,9 +466,18 @@
   }
 
   /* Dar ekranda sahne kareye yaklaşır; halkalar biraz yuvarlaklaşır ama
-     nokta-halka hizası bozulmaz (aynı koordinat sistemi esner). */
+     nokta-halka-iz hizası bozulmaz (üç katman aynı koordinat sistemini
+     esnetiyor). */
   .stage {
     aspect-ratio: 10 / 11;
+  }
+
+  /* Dar ekranda halkalar belirgin şekilde yuvarlaklaşıyor (viewBox
+     preserveAspectRatio="none" ile esniyor) ve en dış yörünge kristalin
+     hemen altından geçiyor. Etiket bu banttan aşağı alınıyor, yoksa
+     yörüngedeki nokta yazının üstünden geçiyor. */
+  .coreLabel {
+    top: calc(100% + 3.4rem);
   }
 
   .card {
@@ -375,15 +491,20 @@
 }
 
 /* ---------- CLAUDE.md: prefers-reduced-motion zorunlu ---------- */
+/* Canvas döngüsü bu ayarda hiç kurulmaz (bileşende); burada kalan CSS
+   animasyonları da susturuluyor. Yıldızlar tek kare çizildiği için sahne
+   boş siyah bir kutuya dönmüyor. */
 @media (prefers-reduced-motion: reduce) {
-  .crystal,
-  .space::after {
+  .crystalStage,
+  .crystalSheen,
+  .sunGlow {
     animation: none;
   }
 
   .dotCore,
   .dotHalo,
-  .card {
+  .card,
+  .ring {
     transition: none;
   }
 }
