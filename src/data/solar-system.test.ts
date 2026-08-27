@@ -10,7 +10,7 @@ import {
   RING_SPEED,
   TRAIL_SAMPLES,
   TRAIL_SECONDS,
-  CRYSTAL_SPRITE,
+  CRYSTAL_MEDIA,
   cardSide,
   CRYSTAL_HALF_WIDTH,
 } from "./solar-system";
@@ -225,18 +225,29 @@ describe("stoneTrail", () => {
   });
 });
 
-describe("CRYSTAL_SPRITE", () => {
-  it("kare sayısı en az 1", () => {
-    expect(CRYSTAL_SPRITE.frames).toBeGreaterThanOrEqual(1);
+describe("CRYSTAL_MEDIA", () => {
+  it("iki kaynak da tanımlı — AV1 desteklemeyen tarayıcı MP4'e düşer", () => {
+    expect(CRYSTAL_MEDIA.webm.endsWith(".webm")).toBe(true);
+    expect(CRYSTAL_MEDIA.mp4.endsWith(".mp4")).toBe(true);
   });
 
-  it("tur süresi pozitif — sıfır olursa döngüde bölme hatası olur", () => {
-    expect(CRYSTAL_SPRITE.turnSeconds).toBeGreaterThan(0);
+  it("poster tanımlı — preload=none olduğu için ilk kare oradan gelir", () => {
+    expect(CRYSTAL_MEDIA.poster.length).toBeGreaterThan(0);
   });
 
-  it("kare boyutları tanımlı (CLS 0 için gerekli)", () => {
-    expect(CRYSTAL_SPRITE.width).toBeGreaterThan(0);
-    expect(CRYSTAL_SPRITE.height).toBeGreaterThan(0);
+  it("kare boyutları pozitif (CLS 0 için gerekli)", () => {
+    expect(CRYSTAL_MEDIA.width).toBeGreaterThan(0);
+    expect(CRYSTAL_MEDIA.height).toBeGreaterThan(0);
+  });
+
+  it("taş oranı 0..1 arasında — kutu boyutu buna bölünerek hesaplanıyor", () => {
+    expect(CRYSTAL_MEDIA.stoneRatio).toBeGreaterThan(0);
+    expect(CRYSTAL_MEDIA.stoneRatio).toBeLessThanOrEqual(1);
+  });
+
+  it("merkez kaydırması küçük kalır — büyük kayma taşı yörüngeden çıkarır", () => {
+    expect(Math.abs(CRYSTAL_MEDIA.offsetX)).toBeLessThan(0.1);
+    expect(Math.abs(CRYSTAL_MEDIA.offsetY)).toBeLessThan(0.1);
   });
 });
 
@@ -246,15 +257,13 @@ describe("cardSide", () => {
 
   it("kristale binecekse dışarı açılır", () => {
     // Merkeze yakın bir nokta: içeri açılış (sağa) kristali kapatırdı.
-    const nearLeft = CX - 176;
-    expect(cardSide(nearLeft, REACH)).toBe("left");
+    expect(cardSide(CX - 176, REACH)).toBe("left");
     expect(cardSide(CX + 176, REACH)).toBe("right");
   });
 
   it("uzak noktalarda içeri açılış korunur (sahne dışına taşmasın)", () => {
     // Dış halka: içeri açılan kart kristale ulaşamıyor.
-    const farLeft = CX - 424;
-    expect(cardSide(farLeft, REACH)).toBe("right");
+    expect(cardSide(CX - 424, REACH)).toBe("right");
     expect(cardSide(CX + 424, REACH)).toBe("left");
   });
 
@@ -287,9 +296,9 @@ describe("cardSide", () => {
         if (side !== inward) continue;
         const [from, to] =
           side === "right" ? [p.x, p.x + REACH] : [p.x - REACH, p.x];
-        expect(from < CX + CRYSTAL_HALF_WIDTH && to > CX - CRYSTAL_HALF_WIDTH).toBe(
-          false,
-        );
+        expect(
+          from < CX + CRYSTAL_HALF_WIDTH && to > CX - CRYSTAL_HALF_WIDTH,
+        ).toBe(false);
       }
     }
   });

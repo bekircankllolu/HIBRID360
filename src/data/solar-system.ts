@@ -236,35 +236,46 @@ export function stoneTrail(
 
 /**
  * ---------------------------------------------------------------------
- * Merkez kristalin kendi ekseninde dönüşü
+ * Merkez kristal — dönen video
  * ---------------------------------------------------------------------
  *
- * Düz bir PNG/WebP kendi ekseninde GERÇEKTEN dönemez — `rotateY` ile
- * çevrilirse profilden bir çizgiye iner ve aynalanır. Gerçek dönüş için
- * 3B'de render edilmiş bir turntable dizisi (tek WebP şerit hâlinde
- * sprite sheet) gerekir; o zaman her karede ışık, spekülar ve fasetler
- * doğru yerde olur.
+ * Taş artık gerçekten kendi ekseninde dönüyor: müşteriden 1440×1440,
+ * 7 sn'lik bir turntable render'ı geldi (saydam kırılmalar, iç ışık,
+ * gerçek spekülar). Düz görselin yapamadığı şey buydu — `rotateY` ile
+ * çevrilen bir PNG profilden çizgiye iniyor ve aynalanıyordu.
  *
- * Bu yüzden bileşen iki yolu da tanır:
+ * Kaynak 11.4 MB'lık H.264'tü; siteye girmeden önce:
+ *   - 512×512'ye indirildi (ekranda en fazla ~19.5rem, dpr 2'de 624 px),
+ *   - döngü noktası ölçülerek 165. karede kesildi ve elde kalan fazla
+ *     kareler çapraz geçişle eritildi (dikiş farkı 3.85 → 2.30, normal
+ *     kare adımı olan 3.93'ün altına indi: döngü artık pürüzsüz),
+ *   - AV1/WebM 213 kB + H.264/MP4 307 kB olarak kodlandı.
  *
- *   frames === 1  → bugünkü tek kare. Sınırlı genlikli 3B eğilme +
- *                   üzerinden geçen ışık süzülmesi ile canlandırılır.
- *                   Dürüst bir yer tutucu, gerçek dönüş değil.
- *   frames  >  1  → sprite şeridi. `turnSeconds`'ta 360° döner, kare
- *                   atlaması rAF döngüsünden sürülür.
- *
- * Turntable teslim edildiğinde değişmesi gereken tek yer burası:
- * `src`, `frames` ve kare boyutları. Bileşen koduna dokunulmaz.
+ * Arka planı SAF SİYAH (0,0,0) — bu yüzden CSS'te `mix-blend-mode: screen`
+ * ile bindiriliyor: siyah şeffaflaşıyor, taşın ışıması nebulanın üstüne
+ * toplamalı biniyor. Alfa kanallı video gerekmiyor, dosya da küçük kalıyor.
  */
-export const CRYSTAL_SPRITE = {
-  src: "/images/stones/stone-yellow.webp",
-  /** TODO: turntable dizisi gelince kare sayısı (36–48 önerilir). */
-  frames: 1,
-  /** Tek karenin piksel boyutu (sprite'ta şeridin bir hücresi). */
-  width: STONE_INTRINSIC.yellow.width,
-  height: STONE_INTRINSIC.yellow.height,
-  /** 360°'lik tam tur süresi. */
-  turnSeconds: 22,
+export const CRYSTAL_MEDIA = {
+  /** Tarayıcı sırayla dener: AV1 desteklemeyen Safari MP4'e düşer. */
+  webm: "/videos/hibrid-stone.webm",
+  mp4: "/videos/hibrid-stone.mp4",
+  /** preload="none" olduğu için ilk kare bu görselden gelir. */
+  poster: "/videos/hibrid-stone-poster.webp",
+  width: 512,
+  height: 512,
+  /**
+   * Taş karenin tamamını doldurmuyor: dönerken siluetin kapladığı en
+   * geniş kutu 355×334 piksel, yani karenin %69.3'ü. Video kutusu bu
+   * oranla büyütülüyor ki taş ekranda istenen boyutta görünsün.
+   */
+  stoneRatio: 0.693,
+  /**
+   * Siluetin merkezi karenin merkezinde değil (+15.5 px sağda, 3 px
+   * yukarıda). Video kutusu bu kadar kaydırılıyor ki taş yörünge
+   * merkezine tam otursun.
+   */
+  offsetX: -15.5 / 512,
+  offsetY: 3 / 512,
 } as const;
 
 /**

@@ -125,6 +125,14 @@
   justify-items: center;
   /* Arkasından geçen nokta hover'lanabilsin. */
   pointer-events: none;
+  /* Harman BURADA, videonun kendisinde değil. `.sun` transform'u yüzünden
+     zaten bir istifleme bağlamı kuruyor; harman videoya verilince video
+     yalnızca bu kutunun içiyle karışıyor ve videonun siyah karesi olduğu
+     gibi görünüyordu. Öğenin KENDİ mix-blend-mode'u ise üst bağlamın
+     zeminiyle (nebula, yıldızlar, halkalar) harmanlanır — istenen bu.
+     `screen`de siyah nötr olduğu için videonun siyah zemini yok oluyor,
+     taşın ışıması sahnenin üstüne toplamalı biniyor. */
+  mix-blend-mode: screen;
 }
 
 .sunGlow {
@@ -145,72 +153,25 @@
   animation: sunPulse 7s ease-in-out infinite;
 }
 
-/* Tek kare yer tutucu — düz bir görsel kendi ekseninde gerçekten dönemez
-   (rotateY ile profilden çizgiye iner ve aynalanır). Bu yüzden genlik
-   sınırlı tutuluyor: taş ışıkta hafifçe salınıyor gibi okunur, "dönen
-   kart" gibi değil. Gerçek dönüş için turntable sprite'ı gerekiyor —
-   bkz. data/solar-system.ts CRYSTAL_SPRITE. */
-.crystalStage {
-  position: relative;
-  width: clamp(8.5rem, 17vw, 13.5rem);
-  transform-style: preserve-3d;
-  animation: crystalSway 11s ease-in-out infinite;
-}
+/* Merkez kristal — kendi ekseninde dönen turntable videosu.
+   (Eskiden düz bir PNG + sahte 3B salınım + ışık süzülmesi vardı; taş
+   gerçekten dönmüyordu. Video geldiği için o katmanların hepsi kalktı,
+   spekülar ve kırılma artık render'ın kendisinden geliyor.)
 
-.crystal {
+   `screen` harmanı: videonun arka planı saf siyah (0,0,0), screen'de
+   siyah nötr eleman olduğu için tamamen şeffaflaşıyor ve taşın ışıması
+   nebulanın üstüne toplamalı biniyor. Alfa kanallı video gerekmiyor.
+
+   Boyut: taş karenin yalnızca %69.3'ünü kaplıyor, o yüzden kutu eski
+   taş genişliğinin 1/0.693 = 1.443 katı. Silueti kare merkezinde
+   olmadığı için de küçük bir kaydırma var (bkz. CRYSTAL_MEDIA). */
+.crystalVideo {
   display: block;
-  width: 100%;
+  width: clamp(12.3rem, 24.5vw, 19.5rem);
   height: auto;
-  filter: drop-shadow(0 1.4rem 2.2rem rgba(0, 0, 0, 0.75))
-    drop-shadow(0 0 1rem rgba(255, 252, 0, 0.55))
-    drop-shadow(0 0 3rem rgba(255, 0, 255, 0.2));
-}
-
-/* Taşın üzerinden geçen ışık süzülmesi. Düz boyalı fasetlerde spekülar
-   yok (bkz. görsel denetim raporu §1.1); bu katman en azından "ışık bu
-   yüzeyde geziyor" bilgisini veriyor. Turntable geldiğinde kaldırılacak —
-   o zaman spekülar render'ın kendisinden gelir. */
-.crystalSheen {
-  position: absolute;
-  inset: 0;
+  aspect-ratio: 1;
+  transform: translate(-3.03%, 0.59%);
   pointer-events: none;
-  /* Taşın alfasıyla maskeleniyor: maskesiz bırakılınca dikdörtgen katman
-     taşın dışına taşıp gri bir paralelkenar bırakıyor. Maske kaynağı
-     taşın kendi dosyası, o yüzden şekil birebir oturuyor. */
-  -webkit-mask-image: var(--crystal-src);
-  mask-image: var(--crystal-src);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  /* `overlay` doygun sarıyı patlatıyor; `screen` düşük alfayla yalnızca
-     ışığı ekliyor, rengi bozmuyor. */
-  mix-blend-mode: screen;
-  background: linear-gradient(
-    112deg,
-    transparent 36%,
-    rgba(255, 255, 255, 0.32) 48%,
-    transparent 60%
-  );
-  background-size: 260% 100%;
-  animation: crystalGlint 11s ease-in-out infinite;
-}
-
-/* Turntable dalı: CRYSTAL_SPRITE.frames > 1 olduğunda kullanılır.
-   Şerit yatay; --frame rAF döngüsünden yazılır. */
-.crystalSprite {
-  width: clamp(8.5rem, 17vw, 13.5rem);
-  background-image: var(--sprite-src);
-  background-repeat: no-repeat;
-  background-size: calc(var(--sprite-frames) * 100%) 100%;
-  /* background-size N×100% olduğunda yüzde konumlandırma 0% = ilk kare,
-     100% = son kare demektir; N kare için adım 100%/(N-1). */
-  background-position-x: calc(
-    var(--frame, 0) * 100% / (var(--sprite-frames) - 1)
-  );
-  filter: drop-shadow(0 1.4rem 2.2rem rgba(0, 0, 0, 0.75))
-    drop-shadow(0 0 1rem rgba(255, 252, 0, 0.55))
-    drop-shadow(0 0 3rem rgba(255, 0, 255, 0.2));
 }
 
 /* Rozet eskiden düz sarı bir dikdörtgendi ve yörünge halkalarını kesiyordu
@@ -233,9 +194,10 @@
   letter-spacing: 0.32em;
   text-indent: 0.32em;
   color: var(--color-brand-yellow);
-  text-shadow:
-    0 0 0.7rem rgba(0, 0, 0, 0.95),
-    0 0 1.6rem rgba(255, 252, 0, 0.55);
+  /* `screen` altında siyah gölge nötr eleman olduğu için iş görmez;
+     okunurluk etiketin kendi sarı parıltısından geliyor (siyah üzerinde
+     marka sarısı 19.4:1). */
+  text-shadow: 0 0 1.6rem rgba(255, 252, 0, 0.55);
 }
 
 /* ---------- Gezegenler ---------- */
@@ -422,30 +384,6 @@
 }
 
 /* ---------- Animasyonlar ---------- */
-/* Salınım genliği kasıtlı olarak dar (±11°): düz bir görsel daha fazla
-   çevrilirse profilden çizgiye iner ve sahte durur. */
-@keyframes crystalSway {
-  0%,
-  100% {
-    transform: rotateY(-11deg) rotateZ(-8deg) translateY(0);
-  }
-
-  50% {
-    transform: rotateY(11deg) rotateZ(-5deg) translateY(-0.7rem);
-  }
-}
-
-@keyframes crystalGlint {
-  0%,
-  100% {
-    background-position-x: 130%;
-  }
-
-  50% {
-    background-position-x: -30%;
-  }
-}
-
 @keyframes sunPulse {
   0%,
   100% {
@@ -495,8 +433,6 @@
    animasyonları da susturuluyor. Yıldızlar tek kare çizildiği için sahne
    boş siyah bir kutuya dönmüyor. */
 @media (prefers-reduced-motion: reduce) {
-  .crystalStage,
-  .crystalSheen,
   .sunGlow {
     animation: none;
   }

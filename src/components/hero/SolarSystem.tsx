@@ -9,7 +9,6 @@ import {
   type KeyboardEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -20,7 +19,7 @@ import {
   ORBIT_VIEW,
   ORBIT_TILT,
   ORBIT_RINGS,
-  CRYSTAL_SPRITE,
+  CRYSTAL_MEDIA,
   cardSide,
   SOLAR_SYSTEM_TITLE,
   type OrbitStone,
@@ -135,7 +134,7 @@ export function SolarSystem() {
   const stageRef = useRef<HTMLDivElement>(null);
   const backCanvasRef = useRef<HTMLCanvasElement>(null);
   const frontCanvasRef = useRef<HTMLCanvasElement>(null);
-  const crystalRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const planetRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const activeRef = useRef<number | null>(null);
@@ -218,6 +217,38 @@ export function SolarSystem() {
 
     resize();
     const observer = new ResizeObserver(resize);
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  /**
+   * Poster, SSR HTML'ine YAZILMIYOR; bölüm görünür alana yaklaşınca
+   * atanıyor.
+   *
+   * Sebebi ölçülmüş: `poster` niteliği belgede dururken tarayıcı görseli
+   * hemen, Medium öncelikle indiriyor. Ekran altındaki dekoratif bir
+   * varlık böylece hero görseliyle bant genişliği için yarışıyor ve
+   * mobil LCP 2213 ms'den ~2740 ms'ye çıkıp 2500 ms'lik sözleşme
+   * bütçesini aşıyordu.
+   *
+   * Bu efekt hareket azaltmadan bağımsız: o modda video hiç oynamasa da
+   * poster görünmeli, yoksa sahnenin ortası boş kalır.
+   */
+  useEffect(() => {
+    const video = videoRef.current;
+    const stage = stageRef.current;
+    if (!video || !stage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        if (!video.poster) video.poster = CRYSTAL_MEDIA.poster;
+        observer.disconnect();
+      },
+      // Görünür alana girmeden biraz önce indirilsin ki bölüm açıldığında
+      // kare hazır olsun.
+      { rootMargin: "300px" },
+    );
     observer.observe(stage);
     return () => observer.disconnect();
   }, []);
@@ -432,13 +463,6 @@ export function SolarSystem() {
         nextShot = nextShootingStarDelay(rng);
       }
 
-      // Kristalin turntable karesi (sprite geldiğinde devreye girer).
-      if (CRYSTAL_SPRITE.frames > 1 && crystalRef.current) {
-        const turn = (time / CRYSTAL_SPRITE.turnSeconds) % 1;
-        const frame = Math.floor(turn * CRYSTAL_SPRITE.frames);
-        crystalRef.current.style.setProperty("--frame", String(frame));
-      }
-
       placeStones(time);
       paint(time, true);
 
@@ -450,6 +474,10 @@ export function SolarSystem() {
       running = true;
       last = performance.now();
       frameId = requestAnimationFrame(step);
+      // preload="none" olduğu için video ancak burada yükleniyor:
+      // bölüm ekrana girene kadar tek bayt inmiyor (CLAUDE.md video
+      // kuralı). play() sessiz videoda reddedilmez ama yine de yutuluyor.
+      videoRef.current?.play().catch(() => {});
     };
     const stop = () => {
       running = false;
@@ -457,6 +485,7 @@ export function SolarSystem() {
         cancelAnimationFrame(frameId);
         frameId = null;
       }
+      videoRef.current?.pause();
     };
 
     // CLAUDE.md: hareket katmanı ekrandan çıkınca durur.
@@ -558,41 +587,29 @@ export function SolarSystem() {
         <div className={styles.sun} aria-hidden="true">
           <span className={styles.sunGlow} />
 
-          {/* Tek kare (bugün) → sınırlı genlikli 3B eğilme + ışık
-              süzülmesi. Turntable sprite'ı geldiğinde (CRYSTAL_SPRITE.
-              frames > 1) aşağıdaki sprite dalı devreye girer ve taş
-              gerçekten kendi ekseninde döner. */}
-          {CRYSTAL_SPRITE.frames > 1 ? (
-            <div
-              ref={crystalRef}
-              className={styles.crystalSprite}
-              style={
-                {
-                  "--sprite-src": `url(${CRYSTAL_SPRITE.src})`,
-                  "--sprite-frames": CRYSTAL_SPRITE.frames,
-                  aspectRatio: `${CRYSTAL_SPRITE.width} / ${CRYSTAL_SPRITE.height}`,
-                } as CSSProperties
-              }
-            />
-          ) : (
-            <div
-              ref={crystalRef}
-              className={styles.crystalStage}
-              style={
-                { "--crystal-src": `url(${CRYSTAL_SPRITE.src})` } as CSSProperties
-              }
-            >
-              <Image
-                src={CRYSTAL_SPRITE.src}
-                alt=""
-                width={CRYSTAL_SPRITE.width}
-                height={CRYSTAL_SPRITE.height}
-                sizes="220px"
-                className={styles.crystal}
-              />
-              <span className={styles.crystalSheen} />
-            </div>
-          )}
+          {/* Taş kendi ekseninde dönen turntable videosu. Arka planı saf
+              siyah olduğu için CSS'te `screen` ile bindiriliyor: siyah
+              şeffaflaşıyor, ışıma nebulanın üstüne toplamalı biniyor.
+
+              autoplay YOK — preload="none" ile birlikte bölüm ekrana
+              girene kadar tek bayt inmiyor; oynatmayı IntersectionObserver
+              başlatıyor (yukarıdaki start/stop). Hareket azaltmada döngü
+              hiç kurulmadığı için video da hiç oynamıyor, poster kalıyor. */}
+          <video
+            ref={videoRef}
+            className={styles.crystalVideo}
+            width={CRYSTAL_MEDIA.width}
+            height={CRYSTAL_MEDIA.height}
+            preload="none"
+            muted
+            loop
+            playsInline
+            aria-hidden="true"
+            tabIndex={-1}
+          >
+            <source src={CRYSTAL_MEDIA.webm} type="video/webm" />
+            <source src={CRYSTAL_MEDIA.mp4} type="video/mp4" />
+          </video>
 
           <span className={styles.coreLabel}>HIBRID</span>
         </div>
