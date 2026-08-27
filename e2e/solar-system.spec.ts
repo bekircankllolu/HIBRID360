@@ -2,6 +2,7 @@ import { expect, test, type Page, type Locator } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { acceptCookies } from "./utils";
 import {
+  CRYSTAL_MEDIA,
   orbitStones,
   ORBIT_RINGS,
   ORBIT_TILT,
@@ -330,6 +331,69 @@ test("media remains unloaded above the fold", async ({ page }) => {
   expect(media).toEqual([]);
 });
 
+test("distant stars visibly twinkle in the background", async ({ page }) => {
+  const { stage } = await openScene(page);
+  await page.mouse.move(2, 100);
+  const sample = () =>
+    stage.locator("canvas").evaluate((canvas: HTMLCanvasElement) => {
+      const pixels = canvas
+        .getContext("2d")!
+        .getImageData(0, 0, canvas.width, Math.floor(canvas.height * 0.1)).data;
+      return Array.from(pixels).filter((_, i) => i % 4 !== 3);
+    });
+  const before = await sample();
+  expect(before.filter((channel) => channel > 25).length).toBeGreaterThan(20);
+  await page.waitForTimeout(1400);
+  const after = await sample();
+  expect(
+    after.filter((channel, i) => Math.abs(channel - before[i]) > 2).length,
+  ).toBeGreaterThan(30);
+});
+
+test("point popover stays in the scene, gently focuses the crystal and dismisses", async ({
+  page,
+}) => {
+  const { stage, region } = await openScene(page);
+  const initialStage = (await stage.boundingBox())!;
+  const initialCrystal = (await page.getByTestId("crystal-hit").boundingBox())!;
+  const point = region.getByRole("button", { name: "AI", exact: true });
+  await aimAtMovingPoint(page, point);
+  const pointBounds = (await point.boundingBox())!;
+  await page.mouse.click(
+    pointBounds.x + pointBounds.width / 2,
+    pointBounds.y + pointBounds.height / 2,
+  );
+  const dialog = region.getByRole("dialog", { name: "AI", exact: true });
+  await expect(dialog).toBeFocused();
+  await expect(dialog).toHaveAttribute("aria-modal", "false");
+  const bounds = (await dialog.boundingBox())!;
+  expect(bounds.width).toBeLessThanOrEqual(250);
+  expect(bounds.height).toBeLessThan(190);
+  expect(bounds.y).toBeGreaterThan(initialStage.y);
+  expect(bounds.y + bounds.height).toBeLessThan(
+    initialStage.y + initialStage.height,
+  );
+  expect((await stage.boundingBox())!.height).toBe(initialStage.height);
+  await expect
+    .poll(
+      async () =>
+        (await page.getByTestId("crystal-hit").boundingBox())!.width /
+        initialCrystal.width,
+    )
+    .toBeGreaterThan(1.04);
+  await page.keyboard.press("Tab");
+  await expect(
+    region.getByRole("button", { name: "Detayı kapat" }),
+  ).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(point).toBeFocused();
+  await point.press("Enter");
+  await expect(dialog).toBeVisible();
+  await region.getByRole("heading", { name: title, exact: true }).click();
+  await expect(dialog).toBeHidden();
+});
+
 for (const width of [390, 768, 1440]) {
   test(`${width}px: nonblank scene, flat dots and unclipped details`, async ({
     page,
@@ -349,7 +413,7 @@ for (const width of [390, 768, 1440]) {
       await stage
         .locator("video")
         .evaluate((v: HTMLVideoElement) => v.playbackRate),
-    ).toBe(0.8);
+    ).toBe(1);
     const pixels = await stage
       .locator("canvas")
       .evaluate((c: HTMLCanvasElement) => {
@@ -361,9 +425,8 @@ for (const width of [390, 768, 1440]) {
         return bright;
       });
     expect(pixels).toBeGreaterThan(1000);
-    const frameQuality = await stage
-      .locator("canvas")
-      .evaluate((c: HTMLCanvasElement) => {
+    const frameQuality = await stage.locator("canvas").evaluate(
+      (c: HTMLCanvasElement, offsets) => {
         const ctx = c.getContext("2d")!;
         const w = c.clientWidth;
         const scale = c.width / w;
@@ -371,8 +434,8 @@ for (const width of [390, 768, 1440]) {
           (w <= 640 ? Math.min(178, w * 0.5) : Math.min(350, w * 0.32)) *
           scale *
           0.85;
-        const cx = c.width * 0.5 - (15.5 / 512) * size;
-        const cy = c.height * (324 / 640) + (3 / 512) * size;
+        const cx = c.width * 0.5 + offsets.x * size;
+        const cy = c.height * (324 / 640) + offsets.y * size;
         const corners: number[] = [];
         for (const x of [-0.43, 0.43]) {
           for (const y of [-0.43, 0.43]) {
@@ -402,7 +465,9 @@ for (const width of [390, 768, 1440]) {
               (core[i + 2] >> 3),
           );
         return { corners, colors: colors.size };
-      });
+      },
+      { x: CRYSTAL_MEDIA.offsetX, y: CRYSTAL_MEDIA.offsetY },
+    );
     expect(Math.max(...frameQuality.corners)).toBeLessThan(8);
     expect(frameQuality.colors).toBeGreaterThan(32);
     expect(
@@ -411,12 +476,34 @@ for (const width of [390, 768, 1440]) {
       ),
     ).toBeLessThanOrEqual(0);
     for (const name of services) {
+      if (await region.locator("#ecosystem-detail").isVisible()) {
+        await region.getByRole("button", { name: "Detayı kapat" }).click();
+      }
       const button = region.getByRole("button", { name, exact: true });
       await button.click();
       const detail = region.locator("#ecosystem-detail");
       const bounds = (await detail.boundingBox())!;
       expect(bounds.x).toBeGreaterThanOrEqual(0);
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+      const stageBounds = (await stage.boundingBox())!;
+      const crystal = (await page.getByTestId("crystal-hit").boundingBox())!;
+      expect(bounds.y).toBeGreaterThanOrEqual(stageBounds.y);
+      expect(bounds.y + bounds.height).toBeLessThanOrEqual(
+        stageBounds.y + stageBounds.height,
+      );
+      expect(bounds.width).toBeLessThanOrEqual(250);
+      const overlap =
+        Math.max(
+          0,
+          Math.min(bounds.x + bounds.width, crystal.x + crystal.width) -
+            Math.max(bounds.x, crystal.x),
+        ) *
+        Math.max(
+          0,
+          Math.min(bounds.y + bounds.height, crystal.y + crystal.height) -
+            Math.max(bounds.y, crystal.y),
+        );
+      expect(overlap).toBe(0);
       expect(
         await detail.evaluate((el) => el.scrollWidth <= el.clientWidth),
       ).toBe(true);
@@ -429,6 +516,10 @@ for (const width of [390, 768, 1440]) {
 test("three complete video loops stay rendered", async ({ page }) => {
   test.setTimeout(60_000);
   const { stage, video } = await openScene(page);
+  const cycleMillis = await video.evaluate(
+    (v: HTMLVideoElement) => (v.duration / v.playbackRate) * 1000,
+  );
+  test.setTimeout(Math.max(60_000, cycleMillis * 3 + 30_000));
   await page.mouse.move(2, 100);
   const result = await video.evaluate(async (v: HTMLVideoElement) => {
     let loops = 0;

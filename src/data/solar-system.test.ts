@@ -4,6 +4,8 @@ import {
   createParticleTrail,
   returnWeight,
   RETURN_SECONDS,
+  TRAIL_CAPACITY,
+  PARTICLE_LIFETIME,
   wrapTime,
 } from "../lib/solar-motion";
 
@@ -159,13 +161,13 @@ describe("interactive motion", () => {
     expect(
       trail.particles.some((p) => p.x > 200 && p.x < 450 && p.y > 150),
     ).toBe(true);
-    for (let i = 0; i < 80; i++) trail.step(0.04, to, to, null);
+    for (let i = 0; i < 160; i++) trail.step(0.04, to, to, null);
     expect(trail.particles.every((p) => p.age >= p.life)).toBe(true);
   });
 
   it("nearby particles move away from the pointer", () => {
-    const a = createParticleTrail(360, 24);
-    const b = createParticleTrail(360, 24);
+    const a = createParticleTrail(360, TRAIL_CAPACITY.desktop);
+    const b = createParticleTrail(360, TRAIL_CAPACITY.desktop);
     const from = { x: 100, y: 100, depth: 1 };
     const to = { x: 110, y: 100, depth: 1 };
     for (let i = 0; i < 3; i++) {
@@ -176,6 +178,28 @@ describe("interactive motion", () => {
     a.step(0.04, to, to, { x: p.x - 10, y: p.y, depth: 1 }, false);
     b.step(0.04, to, to, null, false);
     expect(a.particles[0].x).toBeGreaterThan(b.particles[0].x);
+  });
+
+  it("keeps a dense, multi-second trail within the desktop and mobile budgets", () => {
+    for (const capacity of Object.values(TRAIL_CAPACITY)) {
+      const trail = createParticleTrail(360, capacity);
+      for (let i = 0; i < 300; i++) {
+        trail.step(
+          0.02,
+          { x: i, y: 100, depth: 1 },
+          { x: i + 1, y: 100, depth: 1 },
+          null,
+        );
+      }
+      const alive = trail.particles.filter((p) => p.age < p.life);
+      expect(trail.particles).toHaveLength(capacity);
+      expect(alive.length).toBeGreaterThan(capacity * 0.65);
+      expect(alive.some((p) => p.age > 3)).toBe(true);
+      for (const p of alive) {
+        expect(p.life).toBeGreaterThanOrEqual(PARTICLE_LIFETIME.min);
+        expect(p.life).toBeLessThanOrEqual(PARTICLE_LIFETIME.max);
+      }
+    }
   });
 });
 
@@ -419,12 +443,22 @@ describe("stoneTrail", () => {
 });
 
 describe("CRYSTAL_MEDIA", () => {
-  it("uses the approved smaller crystal and slower idle rotation", () => {
+  it("keeps the smaller crystal at the newly requested normal playback rate", () => {
     expect(CRYSTAL_MEDIA.scale).toBe(0.85);
-    expect(CRYSTAL_MEDIA.playbackRate).toBe(0.8);
+    expect(CRYSTAL_MEDIA.playbackRate).toBe(1);
   });
 
-  it("iki kaynak da tanımlı — AV1 desteklemeyen tarayıcı MP4'e düşer", () => {
+  it("uses the new client loop and its matching first-frame poster", () => {
+    expect(CRYSTAL_MEDIA.interactive).toBe(
+      "/videos/hibrid-stone-loop-20260827.mp4",
+    );
+    expect(CRYSTAL_MEDIA.poster).toBe(
+      "/videos/hibrid-stone-loop-20260827.webp",
+    );
+    expect(CRYSTAL_MEDIA.fps).toBe(24);
+  });
+
+  it("retains the earlier source formats for reference", () => {
     expect(CRYSTAL_MEDIA.webm.endsWith(".webm")).toBe(true);
     expect(CRYSTAL_MEDIA.mp4.endsWith(".mp4")).toBe(true);
   });
@@ -438,7 +472,7 @@ describe("CRYSTAL_MEDIA", () => {
     expect(CRYSTAL_MEDIA.height).toBeGreaterThan(0);
   });
 
-  it("taş oranı 0..1 arasında — kutu boyutu buna bölünerek hesaplanıyor", () => {
+  it("taşın belgelenen kadraj oranı 0..1 arasında", () => {
     expect(CRYSTAL_MEDIA.stoneRatio).toBeGreaterThan(0);
     expect(CRYSTAL_MEDIA.stoneRatio).toBeLessThanOrEqual(1);
   });

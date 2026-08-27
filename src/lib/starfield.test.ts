@@ -9,7 +9,8 @@ import {
   spawnShootingStar,
   STAR_DRIFT,
   STAR_PARALLAX,
-  STAR_RGB,
+  STARLIGHT_RGB,
+  starAppearance,
   type ShootingStar,
 } from "./starfield";
 
@@ -65,11 +66,14 @@ describe("createStarfield", () => {
     }
   });
 
-  it("yalnızca marka paletindeki renkleri kullanır", () => {
-    const allowed = new Set(Object.keys(STAR_RGB));
+  it("uses natural white, cool and warm starlight rather than brand-colored stars", () => {
+    const allowed = new Set(Object.keys(STARLIGHT_RGB));
     for (const star of stars) {
       expect(allowed.has(star.tint)).toBe(true);
     }
+    expect(
+      stars.filter((star) => star.tint === "white").length,
+    ).toBeGreaterThan(130);
   });
 
   it("çok sayıda sönük, az sayıda parlak yıldız üretir", () => {
@@ -86,6 +90,42 @@ describe("createStarfield", () => {
       expect(star.radius).toBeLessThanOrEqual(1.4);
       expect(star.alpha).toBeGreaterThan(0);
       expect(star.alpha).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+describe("starAppearance", () => {
+  const stars = createStarfield(0x1b360, 220);
+  it("twinkles continuously without flashing or synchronized peaks", () => {
+    const changes = new Set<number>();
+    for (const star of stars) {
+      for (let time = 0; time < 20; time += 0.1) {
+        const a = starAppearance(star, time);
+        const b = starAppearance(star, time + 1 / 60);
+        expect(a.alpha).toBeGreaterThan(0);
+        expect(a.alpha).toBeLessThanOrEqual(1);
+        expect(Math.abs(a.alpha - b.alpha)).toBeLessThan(0.03);
+        expect(Math.abs(a.x - star.x)).toBeLessThanOrEqual(
+          STAR_DRIFT[star.layer] + 1e-9,
+        );
+        expect(Math.abs(a.y - star.y)).toBeLessThanOrEqual(
+          STAR_DRIFT[star.layer] + 1e-9,
+        );
+      }
+      changes.add(
+        Math.round(
+          (starAppearance(star, 0).alpha - starAppearance(star, 3).alpha) *
+            1000,
+        ),
+      );
+    }
+    expect(changes.size).toBeGreaterThan(80);
+  });
+  it("is completely static with reduced motion", () => {
+    for (const star of stars) {
+      expect(starAppearance(star, 0, true)).toEqual(
+        starAppearance(star, 300, true),
+      );
     }
   });
 });

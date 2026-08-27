@@ -142,11 +142,11 @@ export const ORBIT_TILT = 0.36;
 export const ORBIT_RINGS = [176, 258, 340, 424] as const;
 
 /** Halka başına açısal hız (rad/s) — içteki hızlı, dıştaki yavaş. */
-export const RING_SPEED = [0.15, 0.105, 0.078, 0.058] as const;
+export const RING_SPEED = [0.105, 0.074, 0.055, 0.041] as const;
 
 export const COMPACT_RINGS = [230, 230, 420, 420] as const;
 export const COMPACT_TILT = 0.56;
-const COMPACT_SPEED = [0.062, 0.062, 0.04, 0.04] as const;
+const COMPACT_SPEED = [0.048, 0.048, 0.03, 0.03] as const;
 
 /**
  * Bir taşın t anındaki konumu ve derinliği. `depth` 0..1: 0 = en arkada
@@ -244,52 +244,39 @@ export function stoneTrail(
  * Merkez kristal — dönen video
  * ---------------------------------------------------------------------
  *
- * Taş artık gerçekten kendi ekseninde dönüyor: müşteriden 1440×1440,
- * 7 sn'lik bir turntable render'ı geldi (saydam kırılmalar, iç ışık,
- * gerçek spekülar). Düz görselin yapamadığı şey buydu — `rotateY` ile
- * çevrilen bir PNG profilden çizgiye iniyor ve aynalanıyordu.
- *
- * Kaynak 11.4 MB'lık H.264'tü; siteye girmeden önce:
- *   - 512×512'ye indirildi (ekranda en fazla ~19.5rem, dpr 2'de 624 px),
- *   - döngü noktası ölçülerek 165. karede kesildi ve elde kalan fazla
- *     kareler çapraz geçişle eritildi (dikiş farkı 3.85 → 2.30, normal
- *     kare adımı olan 3.93'ün altına indi: döngü artık pürüzsüz),
- *   - AV1/WebM 213 kB + H.264/MP4 307 kB olarak kodlandı.
- *
- * Etkileşimli sürüm: 165 karenin tamamı bağımsız H.264 I-frame olarak
- * kodlandı (~1.65 MB). Tam renk aralığı, WebKit'in siyahı gri çizmesini
- * önler. Kaydırırken önceki GOP'u çözmeden geri/ileri erişilebilir.
- * Yalnızca bölüme yaklaşırken yüklenir. Eski optimize video
- * dosyaları kaynak olarak korunur; bu bileşen yalnızca interactive'ı yükler.
- * Siyah mat artık CSS katmanlarına değil doğrudan aynı Canvas'taki
- * sahne piksellerine `screen` ile birleştirilir. Bu gerçek alfa değildir.
+ * 2026-08-27: müşterinin `hibtidtas.mp4` adlı yeni video teslimi.
+ * 1440×1440 / 24 fps kaynağın 702 karesi (29.25 sn) kesme, çapraz geçiş
+ * veya hız değişikliği olmadan korunur. Ses kanalı kaldırılır.
+ * 512×512, full-range, all-intra H.264 türevi ~7.12 MB'tır; bağımsız
+ * kareler kaydırırken geri/ileri erişimi korur. Poster aynı türevin ilk
+ * karesidir. Dosya adları sürümlüdür; eski tarayıcı önbelleği kullanılmaz.
+ * Yalnızca bölüme yaklaşırken yüklenir. Siyah mat aynı Canvas'taki sahneye
+ * `screen` ile birleştirilir; bu gerçek alfa değildir.
  */
 export const CRYSTAL_MEDIA = {
   /** All-intra H.264: each frame is independently seekable for scroll control. */
-  interactive: "/videos/hibrid-stone-interactive.mp4",
+  interactive: "/videos/hibrid-stone-loop-20260827.mp4",
   fps: 24,
   scale: 0.85,
-  playbackRate: 0.8,
+  playbackRate: 1,
   /** Önceki optimize kaynaklar; etkileşimli bileşen bunları yüklemez. */
   webm: "/videos/hibrid-stone.webm",
   mp4: "/videos/hibrid-stone.mp4",
   /** preload="none" olduğu için ilk kare bu görselden gelir. */
-  poster: "/videos/hibrid-stone-poster.webp",
+  poster: "/videos/hibrid-stone-loop-20260827.webp",
   width: 512,
   height: 512,
   /**
-   * Taş karenin tamamını doldurmuyor: dönerken siluetin kapladığı en
-   * geniş kutu 355×334 piksel, yani karenin %69.3'ü. Video kutusu bu
-   * oranla büyütülüyor ki taş ekranda istenen boyutta görünsün.
+   * Ölçülen parlak siluet yaklaşık 315×285 pikseldir. Bu bilgi kadrajı
+   * belgeler; sahnenin mevcut boyut ayarı `scale` ile korunur.
    */
-  stoneRatio: 0.693,
+  stoneRatio: 315 / 512,
   /**
-   * Siluetin merkezi karenin merkezinde değil (+15.5 px sağda, 3 px
-   * yukarıda). Video kutusu bu kadar kaydırılıyor ki taş yörünge
-   * merkezine tam otursun.
+   * Yeni siluet merkezi 260×251: yörünge merkezine hizalamak için
+   * kaynak 4 piksel sola ve 5 piksel aşağı kaydırılır.
    */
-  offsetX: -15.5 / 512,
-  offsetY: 3 / 512,
+  offsetX: -4 / 512,
+  offsetY: 5 / 512,
 } as const;
 
 /**

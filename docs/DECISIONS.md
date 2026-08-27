@@ -106,3 +106,21 @@ kullanıcının son revizyonuyla güncellendi:
 
 Durum: **KAPANDI — kullanıcı planı onayladı.** Bu karar yalnızca ekosistem
 bölümüne aittir; HIBRID hero animasyonu ve MONA tasarımı değiştirilmez.
+
+### Son görsel revizyon: yıldızlar ve mini pencereler
+
+2026-08-27 tarihli son kullanıcı isteği, yukarıdaki sahne altı detay
+kararının yerini alır. Detay artık seçilen noktanın yakınında küçük,
+modal olmayan bir pencere olarak açılır; kristali kapatmadan sahne
+sınırlarına göre konumlanır. Escape, dışarı tıklama ve klavye odağı korunur.
+
+- Kullanıcının yeni `hibtidtas.mp4` teslimi, %15 küçük boyutta ve normal
+  `1×` hızda kullanılır. Hover ve kaydırma kontrolü devam eder.
+- Seçimde merkez kristale en fazla %4.5 yakınlaşılır; pencere okunurken
+  paralaks kayması durur. Diğer noktalar yörüngelerinde hareket eder.
+- Arka plan yıldızları doğal beyaz, hafif soğuk/sıcak beyaz tonlardadır;
+  sarı/fuşya servis noktalarına ve partikül izlerine ayrılır.
+- Yıldızlar senkron olmayan yumuşak titreşim ve çok küçük hareket kullanır.
+  Parçacık izleri daha yoğun, 3.8-5.4 saniye ömürlüdür.
+- Azaltılmış hareket tercihi tüm dekoratif hareketi durdurur. Yeni
+  görsel üretimi, kütüphane veya WebGL sahnesi eklenmez.

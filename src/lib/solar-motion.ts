@@ -2,6 +2,8 @@ import { mulberry32 } from "./starfield";
 
 export const RETURN_SECONDS = 0.9;
 export const DRAG_THRESHOLD = 6;
+export const TRAIL_CAPACITY = { desktop: 128, compact: 64 } as const;
+export const PARTICLE_LIFETIME = { min: 3.8, max: 5.4 } as const;
 
 export function wrapTime(time: number, duration: number): number {
   return duration > 0 && Number.isFinite(duration)
@@ -80,20 +82,22 @@ export function createParticleTrail(seed: number, capacity: number) {
         emission = 0;
         return;
       }
-      emission += (elapsed * capacity) / 1.6;
+      emission += (elapsed * capacity) / PARTICLE_LIFETIME.max;
       const count = Math.min(Math.floor(emission), capacity);
       emission -= count;
       for (let i = 0; i < count; i++) {
         const fraction = (i + random()) / count;
         const p = particles[cursor++ % capacity];
-        p.x = from.x + (to.x - from.x) * fraction + (random() - 0.5) * 2;
-        p.y = from.y + (to.y - from.y) * fraction + (random() - 0.5) * 2;
+        p.x = from.x + (to.x - from.x) * fraction + (random() - 0.5) * 2.6;
+        p.y = from.y + (to.y - from.y) * fraction + (random() - 0.5) * 2.6;
         p.depth = from.depth + (to.depth - from.depth) * fraction;
         p.vx = (random() - 0.5) * 5;
         p.vy = (random() - 0.5) * 5;
-        p.radius = 0.45 + random() * 0.65;
+        p.radius = 0.35 + random() * 0.7;
         p.age = 0;
-        p.life = 1.2 + random() * 0.8;
+        p.life =
+          PARTICLE_LIFETIME.min +
+          random() * (PARTICLE_LIFETIME.max - PARTICLE_LIFETIME.min);
       }
     },
     clear() {

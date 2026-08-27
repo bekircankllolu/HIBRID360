@@ -27,7 +27,7 @@ export function mulberry32(seed: number): () => number {
   };
 }
 
-/** Marka paleti dışına çıkılmıyor: beyaz + marka sarısı + marka fuşyası. */
+/** Service points and their trails retain the brand palette. */
 export type StarTint = "white" | "yellow" | "fuchsia";
 
 export const STAR_RGB: Record<StarTint, string> = {
@@ -35,6 +35,12 @@ export const STAR_RGB: Record<StarTint, string> = {
   yellow: "255, 252, 0",
   fuchsia: "255, 0, 255",
 };
+
+export const STARLIGHT_RGB = {
+  white: "248, 249, 255",
+  cool: "202, 218, 255",
+  warm: "255, 232, 207",
+} as const;
 
 export interface Star {
   /** Normalize konum (0..1) — sahne yeniden boyutlanınca oran korunur. */
@@ -60,14 +66,14 @@ export interface Star {
    * derinlik hissi buradan geliyor.
    */
   layer: 0 | 1 | 2;
-  tint: StarTint;
+  tint: keyof typeof STARLIGHT_RGB;
 }
 
 /** Katman başına paralaks çarpanı. */
 export const STAR_PARALLAX = [0.25, 0.6, 1] as const;
 
-/** Katman başına sürüklenme hızı (normalize birim/saniye). */
-export const STAR_DRIFT = [0.0016, 0.0035, 0.0062] as const;
+/** Bounded drift amplitude: distant stars never sweep across the scene. */
+export const STAR_DRIFT = [0.0005, 0.0009, 0.0015] as const;
 
 /**
  * Gerçek bir gökyüzünde çok sayıda sönük, az sayıda parlak yıldız vardır.
@@ -84,8 +90,8 @@ export function createStarfield(seed: number, count: number): Star[] {
     const layer: 0 | 1 | 2 = layerRoll < 0.55 ? 0 : layerRoll < 0.85 ? 1 : 2;
 
     const tintRoll = rng();
-    const tint: StarTint =
-      tintRoll < 0.88 ? "white" : tintRoll < 0.945 ? "yellow" : "fuchsia";
+    const tint: Star["tint"] =
+      tintRoll < 0.78 ? "white" : tintRoll < 0.92 ? "cool" : "warm";
 
     stars.push({
       x: rng(),
@@ -102,6 +108,32 @@ export function createStarfield(seed: number, count: number): Star[] {
   }
 
   return stars;
+}
+
+/** Smooth, unsynchronized scintillation, with a sub-pixel orbital drift. */
+export function starAppearance(star: Star, seconds: number, reduced = false) {
+  if (reduced) return { x: star.x, y: star.y, alpha: star.alpha * 0.78 };
+  const phase = seconds * star.speed + star.phase;
+  const shimmer =
+    0.6 +
+    Math.sin(phase * 0.67) * 0.24 +
+    Math.sin(phase * 1.37 + star.phase * 0.7) * 0.12 +
+    Math.sin(phase * 2.41) * 0.04;
+  const drift = STAR_DRIFT[star.layer];
+  return {
+    x: Math.max(
+      0,
+      Math.min(1, star.x + Math.sin(seconds * 0.045 + star.phase) * drift),
+    ),
+    y: Math.max(
+      0,
+      Math.min(
+        1,
+        star.y + Math.cos(seconds * 0.033 + star.phase) * drift * 0.6,
+      ),
+    ),
+    alpha: star.alpha * shimmer,
+  };
 }
 
 export interface ShootingStar {
