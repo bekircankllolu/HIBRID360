@@ -3,9 +3,9 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { CONTACT, SOCIAL_PLATFORMS } from "@/lib/site";
+import { CONTACT, directionsUrl, telUrl, whatsappUrl } from "@/data/contact";
 import type { Locale } from "@/i18n/routing";
-import { localizedAlternates } from "@/lib/site";
+import { localizedAlternates, SOCIAL_PLATFORMS } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -16,13 +16,20 @@ import styles from "./page.module.css";
  * bu yüzden bu adres kullanıldı, ama TODO olarak bırakıldı: son onay
  * gelmeden bu sayfa/footer yayına alınmamalı.
  *
- * TODO: CON-03 — gerçek harita (Google Maps/Mapbox) API anahtarı
- * yapılandırılmadı. Yer tutucu artık boş sarı bir kutu değil: hero'nun sağ
- * yarısında duran, adresi + telefonu + e-postayı ve gerçek bir yol tarifi
- * bağlantısını taşıyan bir künye kartı ("siyah zemin, sarı çerçeve" kuralı
- * korundu). API anahtarı geldiğinde gömülü harita bu kartın üstüne
- * eklenecek — kart kendisi kalır, çünkü adres/iletişim bilgisi haritadan
- * bağımsız olarak gerekli.
+ * 29 Ağustos 2026 revizyonu: adres/telefon/e-posta ve bağlantı üreticileri
+ * tek içerik kaynağına (`src/data/contact.ts`) taşındı. Harita sağlayıcısı
+ * seçimi orada açık teknik karar olarak belgelendi; koordinat veya
+ * sağlayıcı uydurulmadı, yol tarifi bağlantısı doğrulanmış adres
+ * metninden üretiliyor.
+ *
+ * TODO: CON-03 — gömülü harita yok. Künye kartı hero'nun sağ yarısında
+ * adresi + telefonu + e-postayı ve gerçek bir yol tarifi bağlantısını
+ * taşıyor. Sağlayıcı kararı verilince gömülü harita bu kartın üstüne
+ * eklenecek — kart kalır, çünkü adres/iletişim bilgisi haritadan bağımsız
+ * olarak gerekli.
+ *
+ * TODO: eski sitedeki İstanbul panoraması ve "Motion Office" görseli
+ * (bkz. CONTACT_LEGACY_IMAGES) telif teyidi beklediği için bağlanmadı.
  */
 
 export async function generateMetadata({
@@ -52,12 +59,8 @@ export default async function ContactPage({
   const tCta = await getTranslations("cta");
   const motionBody = t.raw("motionBody") as string[];
   const teams = t.raw("teams") as Array<{ title: string; body: string }>;
-  const whatsappHref = `https://wa.me/${CONTACT.phone.replace(/[^0-9]/g, "")}`;
-  // Google Maps'in resmi "directions" URL şeması, teyitli adresten
-  // türetiliyor — uydurma bir place-id / kısa link değil.
-  const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-    CONTACT.addressLines.join(", "),
-  )}`;
+  const whatsappHref = whatsappUrl();
+  const directionsHref = directionsUrl();
 
   return (
     <div className={styles.page}>
@@ -94,9 +97,7 @@ export default async function ContactPage({
             <div className={styles.contactRow}>
               <dt>T</dt>
               <dd>
-                <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
-                  {CONTACT.phone}
-                </a>
+                <a href={telUrl()}>{CONTACT.phone}</a>
               </dd>
             </div>
             <div className={styles.contactRow}>

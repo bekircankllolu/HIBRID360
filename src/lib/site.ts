@@ -46,29 +46,32 @@ export const SITE_TAGLINE_TR = "Türkiye'nin AI-native kreatif prodüksiyon stü
 // GEN-04 — marka imzası, her sayfanın footer'ında, değişmez, iki dilde de İngilizce.
 export const BRAND_SIGNATURE = "The future of creativity isn't artificial. It's hybrid.";
 
-// GEN-05 / CON-03 — footer ve Contact adres kutucuğu, birebir.
-export const CONTACT = {
-  addressLines: [
-    "Feneryolu Mahallesi, Ebru Sk.",
-    "Manolya Apt. No: 3A / 3B",
-    "Kadıköy — İstanbul, Türkiye",
-  ],
-  streetAddress: "Feneryolu Mahallesi, Ebru Sk. Manolya Apt. No: 3A / 3B",
-  addressLocality: "Kadıköy, İstanbul",
-  addressCountry: "TR",
-  // Nihai copy deck'te telefon numarası değişti (brief-rev12'deki sabit
-  // hat +90 216 606 88 98 yerine bu cep numarası geldi) — GEN-05 ve
-  // CON-03'te aynı numara iki kez teyit ediliyor.
-  phone: "+90 532 613 50 45",
-  email: "contact@hibrid360.com",
-} as const;
+// GEN-05 / CON-03 — footer ve Contact adres kutucuğu.
+//
+// 29 Ağustos 2026 revizyonu: içerik `src/data/contact.ts`'e taşındı (tek
+// veri kaynağı; adres doğrulama notu, harita sağlayıcısı kararı ve yol
+// tarifi/WhatsApp bağlantı üreticileri de orada). Burada yalnızca geriye
+// dönük uyumluluk için yeniden dışa veriliyor — Footer.tsx ve CtaBand.tsx
+// Codex'in sahipliğinde ve `@/lib/site` yolundan import ediyor.
+export { CONTACT } from "@/data/contact";
 
 // TODO: DECISIONS.md #1, #4 — şirket ünvanı (A.Ş./Ltd. Şti.) netleşmeden
 // telif satırı ve schema.org "legalName" alanı eksik kalacak.
 
-// Sosyal medya — brief-rev12.md Bölüm 17.2: hesaplar "var/açılacak" durumda,
-// URL'ler henüz teyit edilmedi. TODO: brief 17.2 — hesaplar netleşince
-// schema.org "sameAs" dizisine eklenecek.
+// Sosyal medya — brief-rev12.md Bölüm 17.2: hesaplar "var/açılacak" durumda.
+//
+// 29 Ağustos 2026 denetimi: eski hibrid360.com'un footer'ında **üç** gerçek
+// hesap bağlantısı bulundu ve üçü de yayında (2026-08-29 itibarıyla 200
+// dönüyor):
+//   https://www.instagram.com/hibrid360
+//   https://www.linkedin.com/company/hibrid-production
+//   https://vimeo.com/hibrid360
+// YouTube ve Spotify hesaplarının URL'si hiçbir kaynakta yok.
+//
+// TODO: brief 17.2 — müşteri bu üç hesabın güncel olduğunu teyit edince
+// (ve varsa YouTube/Spotify URL'lerini verince) schema.org "sameAs"
+// dizisi eklenecek. Teyitsiz hesap bağlanmıyor: ölü veya devredilmiş bir
+// hesabı yapılandırılmış veride ilan etmek marka adına yanlış beyandır.
 export const SOCIAL_PLATFORMS = [
   "Instagram",
   "Vimeo",
