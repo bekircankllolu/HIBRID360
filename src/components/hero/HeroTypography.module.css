@@ -17,6 +17,11 @@
 
 /* brief 4.2 — hero üstü slogan, TR sürümde de aynı (marka dili). */
 .kicker {
+  /* Wordmark kutusu (maskenin şeffaf payı kadar) bu satırın üstüne
+     biniyor; boyama sırasında DOM'da sonra geldiği için üste çıkardı.
+     Başlık üstte kalsın diye kendi katmanına alınıyor. */
+  position: relative;
+  z-index: 1;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   font-size: clamp(0.875rem, 1.8vw, 1.25rem);

@@ -24,17 +24,44 @@
  * geometrisi; canvas ve PNG yedeği aynı kutuyu doldurduğu için animasyon
  * ve fare etkileşimi birebir aynı kalır.
  */
+/*
+ * Dikeyde de aynı sorun vardı: 528px'lik maskede harfler 97..431
+ * aralığında, yani üstte ve altta 97px cam boşluk var. Kutu 588 oranıyla
+ * yerleştiği için başlık satırı ile harflerin arasında ~170px ölü boşluk
+ * kalıyordu.
+ *
+ * Dikey pay negatif margin ile *yerleşimden* düşülüyor — kutunun kendisi
+ * ve dolayısıyla canvas'ın çözünürlüğü/oranı değişmiyor. Yalnızca maskenin
+ * kendi 97px'lik boşluğu düşülür; shader taşması (smear/swirl) için
+ * ayrılmış 30px'lik pay korunur, aksi halde hızlı fare hareketinde etki
+ * harf sınırında kesilirdi.
+ *
+ * Not: dikey margin yüzdeleri CSS'te kapsayıcının *genişliğine* göre
+ * çözülür. Bu yüzden pay, yatay hesapla aynı paydayı kullanır:
+ * kutuYüksekliği * 97/588 = kapsayıcıGenişliği * 97/1683.
+ */
 .stage {
   position: relative;
   width: calc(100% * 1920 / 1683);
   margin-left: calc(-100% * 119 / 1683);
+  margin-block: calc(-100% * 97 / 1683);
   aspect-ratio: 1920 / 588;
+  /* Kutu artık başlık satırının üstüne biniyor. Sahne fareyi window
+     üzerinden dinlediği (bkz. HibridWebGL.tsx) ve canvas'ın kendi olayına
+     ihtiyacı olmadığı için kutu tıklamayı/metin seçimini engellemesin. */
+  pointer-events: none;
 }
 
 @media (max-width: 640px) {
   .stage {
+    /* Mobilde kutu bilinçli olarak taşıyor: harfler sağdan kırpılır,
+       böylece tipografi küçülmeden dolu durur. Taşma sağda kalsın diye
+       sol kenar yine sütun çizgisine oturuyor — paylar 145%'lik kutuya
+       göre hesaplanır (masaüstündeki 1920/1683 oranı burada geçerli
+       değil). */
     width: 145%;
-    margin-left: -2%;
+    margin-left: calc(-100% * 119 * 1.45 / 1920);
+    margin-block: calc(-100% * 97 * 1.45 / 1920);
   }
 }
 
