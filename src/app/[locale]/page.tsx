@@ -9,8 +9,6 @@ import { Tagline } from "@/components/home/Tagline";
 import { ReachOut } from "@/components/home/ReachOut";
 import { ClosingBand } from "@/components/home/ClosingBand";
 import { ClosingBody } from "@/components/home/ClosingBody";
-import { Mona } from "@/components/mona/Mona";
-import { homepageLines } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@/lib/site";
 
@@ -29,10 +27,9 @@ import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@
  *   07    MakeBrandBand
  *   08    SolarSystem
  *   09    Tagline
- *   10    Mona (compact)
- *   11    ReachOut
- *   12    ClosingBand
- *   13    ClosingBody
+ *   10    ReachOut
+ *   11    ClosingBand
+ *   12    ClosingBody
  *
  * TODO: brief Bölüm 4 KARAR — "İlk ziyaretten sonra animasyonun kısa
  * sürümü gösterilir (çerezle hatırlanır)": çerez onay bandı kuruldu, rıza
@@ -84,9 +81,6 @@ export default async function HomePage({
       <MakeBrandBand />
       <SolarSystem />
       <Tagline />
-      {/* brief 11.5 — ana sayfadaki kısa MONA sürümü: iki replik, uzun
-          konuşma yok, ziyaretçi AI sayfasına davet edilir. */}
-      <Mona locale={locale} lines={homepageLines} variant="compact" />
       <ReachOut />
       <ClosingBand />
       <ClosingBody />

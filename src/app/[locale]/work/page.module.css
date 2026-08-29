@@ -1,14 +1,13 @@
 .page {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+  width: 100%;
+  padding: clamp(5rem, 10vw, 10rem) clamp(1rem, 3vw, 3.5rem);
 }
 
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  line-height: 1.05;
+  font-size: clamp(4rem, 10vw, 11rem);
+  line-height: 0.85;
   margin: 0;
 }
 
@@ -23,7 +22,8 @@
 
 .showreelMedia {
   position: relative;
-  min-height: clamp(18rem, 48vw, 34rem);
+  min-height: 100svh;
+  margin-inline: calc(50% - 50vw);
   margin-bottom: var(--space-8);
   overflow: hidden;
   background: #080808;
@@ -87,13 +87,15 @@
 
 .grid {
   display: grid;
-  gap: var(--space-6);
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-inline: calc(50% - 50vw);
 }
 
 .card {
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: var(--space-6);
+  min-height: clamp(15rem, 25vw, 28rem);
+  padding: clamp(1rem, 2vw, 2rem);
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -131,6 +133,13 @@
 }
 
 @media (max-width: 640px) {
+  .showreelMedia {
+    min-height: 75svh;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
   .showreelImage {
     object-position: 62% center;
   }

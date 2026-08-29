@@ -1,79 +1,140 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./Header.module.css";
 
 const MENU_ID = "main-navigation";
+const MEGA_MENU_ID = "desktop-mega-menu";
 
-// GEN-01 (nihai copy deck, Ağustos 2026): ana menü tam olarak beş madde —
-// WORK · WHAT WE DO · CULTURE · FRIENDS · CONTACT. Insights bu listede
-// yok; deck'in 44 sayfasında Insights hiç geçmiyor (brief-rev12.md'nin
-// DECISIONS #13 kararıyla çelişiyor). /insights rotası ve altyapısı
-// silinmedi — sadece ana menüden çıkarıldı, footer'a taşındı. TODO:
-// müşteriye sorulacak — Insights kalıcı olarak ana menüden mi çıktı, yoksa
-// bu deck'te unutuldu mu?
-//
-// 390px'te 5 madde + dil seçici tek satıra sığmıyordu (header taşıyordu).
-// ≤767px'te aynı <nav> CSS ile tam ekran panele dönüşür (bkz.
-// Header.module.css .navOpen) — masaüstünde ayrı bir DOM ağacı yok,
-// yalnızca stil değişiyor.
+const SERVICE_LINKS = [
+  { href: "/what-we-do/creative", en: "Creative", tr: "Creative" },
+  { href: "/what-we-do/production", en: "Production", tr: "Production" },
+  {
+    href: "/what-we-do/post-production",
+    en: "Post Production",
+    tr: "Post Production",
+  },
+  { href: "/what-we-do/digital", en: "Digital", tr: "Digital" },
+  {
+    href: "/what-we-do/live-broadcast",
+    en: "Live Broadcast",
+    tr: "Live Broadcast",
+  },
+  { href: "/what-we-do/cloud-tv", en: "Cloud TV", tr: "Cloud TV" },
+  {
+    href: "/what-we-do/event-management",
+    en: "Event Management",
+    tr: "Event Management",
+  },
+  {
+    href: "/what-we-do/ai-creative-production",
+    en: "AI Creative Production",
+    tr: "AI Creative Production",
+  },
+] as const;
+
+const NAV_ITEMS = [
+  {
+    href: "/culture/who-we-are",
+    en: "Who We Are",
+    tr: "Biz Kimiz",
+  },
+  { href: "/what-we-do", en: "What We Do", tr: "Ne Yapıyoruz" },
+  {
+    href: "/culture/what-we-believe",
+    en: "What We Believe",
+    tr: "Neye İnanıyoruz",
+  },
+  {
+    href: "/what-we-do/how-we-work",
+    en: "Solutions",
+    tr: "Çözümler",
+  },
+  { href: "/friends", en: "Clients", tr: "Müşteriler" },
+  { href: "/culture/partners", en: "Partners", tr: "Partnerler" },
+  { href: "/contact", en: "Contact", tr: "İletişim" },
+] as const;
+
 export function Header() {
   const t = useTranslations("nav");
+  const locale = useLocale();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMegaOpen, setIsMegaOpen] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
-  const wasOpen = useRef(false);
+  const wasMenuOpen = useRef(false);
+  const isTurkish = locale === "tr";
 
-  const items: Array<{ href: string; label: string }> = [
-    { href: "/work", label: t("work") },
-    { href: "/what-we-do", label: t("whatWeDo") },
-    { href: "/culture", label: t("culture") },
-    { href: "/friends", label: t("friends") },
-    { href: "/contact", label: t("contact") },
-  ];
+  const label = (item: { en: string; tr: string }) =>
+    isTurkish ? item.tr : item.en;
 
   useEffect(() => {
     setIsMenuOpen(false);
+    setIsMegaOpen(false);
+    setIsLanguageOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    if (!isMenuOpen) return;
-
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMenuOpen(false);
-      }
+      if (event.key !== "Escape") return;
+      setIsMenuOpen(false);
+      setIsMegaOpen(false);
+      setIsLanguageOpen(false);
     };
 
     window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [isMenuOpen]);
+    const closeOnScroll = () => setIsMegaOpen(false);
+    window.addEventListener("scroll", closeOnScroll, { passive: true });
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("scroll", closeOnScroll);
+    };
+  }, []);
 
-  // Panel açıkken arka plan kaymasın (tam ekran overlay) + odak ilk
-  // linke gitsin; kapanınca odak hamburger düğmesine dönsün (klavye
-  // kullanıcısı kaybolmasın).
+  useEffect(() => {
+    if (!isMenuOpen && !isLanguageOpen) return;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [isLanguageOpen, isMenuOpen]);
+
   useEffect(() => {
     if (isMenuOpen) {
       firstLinkRef.current?.focus();
-      const { overflow } = document.body.style;
-      document.body.style.overflow = "hidden";
-      wasOpen.current = true;
-      return () => {
-        document.body.style.overflow = overflow;
-      };
+      wasMenuOpen.current = true;
+      return;
     }
-    if (wasOpen.current) {
-      wasOpen.current = false;
+
+    if (wasMenuOpen.current) {
+      wasMenuOpen.current = false;
       menuButtonRef.current?.focus();
     }
   }, [isMenuOpen]);
 
+  const closeDesktopMenuWhenFocusLeaves = (
+    event: React.FocusEvent<HTMLElement>,
+  ) => {
+    if (!headerRef.current?.contains(event.relatedTarget as Node | null)) {
+      setIsMegaOpen(false);
+    }
+  };
+
   return (
-    <header className={styles.header}>
+    <header
+      ref={headerRef}
+      className={styles.header}
+      onMouseLeave={() => setIsMegaOpen(false)}
+      onBlur={closeDesktopMenuWhenFocusLeaves}
+    >
       <div className={styles.inner}>
         <Link href="/" className={styles.logo}>
           HIBRID 360
@@ -83,36 +144,114 @@ export function Header() {
           id={MENU_ID}
           className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`}
           aria-label={t("menuLabel")}
+          onMouseEnter={() => setIsMegaOpen(true)}
         >
           <ul className={styles.navList}>
-            {items.map((item, index) => (
-              <li key={item.href}>
+            {NAV_ITEMS.map((item, index) => (
+              <li key={item.href} className={styles.navItem}>
                 <Link
                   href={item.href}
                   ref={index === 0 ? firstLinkRef : undefined}
+                  className={pathname === item.href ? styles.activeLink : undefined}
+                  aria-expanded={item.href === "/what-we-do" ? isMegaOpen : undefined}
+                  aria-controls={
+                    item.href === "/what-we-do" ? MEGA_MENU_ID : undefined
+                  }
+                  onFocus={() => setIsMegaOpen(true)}
                 >
-                  {item.label}
+                  {label(item)}
                 </Link>
+
+                {item.href === "/what-we-do" && (
+                  <ul className={styles.mobileServices}>
+                    {SERVICE_LINKS.map((service) => (
+                      <li key={service.href}>
+                        <Link href={service.href}>{label(service)}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
         </nav>
 
         <div className={styles.controls}>
-          <LanguageSwitcher />
+          <LanguageSwitcher
+            isOpen={isLanguageOpen}
+            onOpenChange={(open) => {
+              setIsLanguageOpen(open);
+              if (open) {
+                setIsMenuOpen(false);
+                setIsMegaOpen(false);
+              }
+            }}
+          />
           <button
             ref={menuButtonRef}
             type="button"
-            className={styles.menuButton}
+            className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
             aria-expanded={isMenuOpen}
             aria-controls={MENU_ID}
             aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
-            onClick={() => setIsMenuOpen((current) => !current)}
+            onClick={() => {
+              setIsLanguageOpen(false);
+              setIsMenuOpen((current) => !current);
+            }}
           >
             <span className={styles.menuLine} />
             <span className={styles.menuLine} />
-            <span className={styles.menuLine} />
           </button>
+        </div>
+      </div>
+
+      <div
+        id={MEGA_MENU_ID}
+        className={`${styles.megaMenu} ${isMegaOpen ? styles.megaMenuOpen : ""}`}
+        aria-hidden={!isMegaOpen}
+        onMouseEnter={() => setIsMegaOpen(true)}
+      >
+        <div className={styles.megaInner}>
+          <p className={styles.megaBrand}>HIBRID 360</p>
+
+          <div className={styles.megaColumnWide}>
+            <Link href="/what-we-do" className={styles.megaHeading}>
+              {isTurkish ? "Ne Yapıyoruz" : "What We Do"}
+            </Link>
+            <ul className={styles.serviceGrid}>
+              {SERVICE_LINKS.map((service) => (
+                <li key={service.href}>
+                  <Link href={service.href}>{label(service)}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={styles.megaColumn}>
+            <p className={styles.megaHeading}>
+              {isTurkish ? "Hakkımızda" : "About"}
+            </p>
+            <Link href="/culture/who-we-are">
+              {isTurkish ? "Biz Kimiz" : "Who We Are"}
+            </Link>
+            <Link href="/culture/what-we-believe">
+              {isTurkish ? "Neye İnanıyoruz" : "What We Believe"}
+            </Link>
+            <Link href="/culture/partners">
+              {isTurkish ? "Partnerler" : "Partners"}
+            </Link>
+          </div>
+
+          <div className={styles.megaColumn}>
+            <p className={styles.megaHeading}>
+              {isTurkish ? "Keşfet" : "Explore"}
+            </p>
+            <Link href="/work">Work</Link>
+            <Link href="/friends">
+              {isTurkish ? "Müşteriler" : "Clients"}
+            </Link>
+            <Link href="/contact">{isTurkish ? "İletişim" : "Contact"}</Link>
+          </div>
         </div>
       </div>
     </header>

@@ -72,6 +72,13 @@ describe("yörünge verisi", () => {
     }
   });
 
+  it("Photography kaldırılır ve Cloud TV ekosistemde yer alır", () => {
+    expect(orbitStones.some((stone) => stone.label === "CLOUD TV")).toBe(true);
+    expect(
+      orbitStones.some((stone) => stone.href.includes("photography")),
+    ).toBe(false);
+  });
+
   it("halkalar dıştan içe hızlanır (fiziksel olarak doğru yön)", () => {
     for (let i = 1; i < RING_SPEED.length; i++) {
       expect(RING_SPEED[i]).toBeLessThan(RING_SPEED[i - 1]);
