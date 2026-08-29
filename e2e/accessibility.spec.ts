@@ -18,6 +18,14 @@ import AxeBuilder from "@axe-core/playwright";
  * reduced-motion'da (CLAUDE.md zaten zorunlu kılıyor) sorun yok. Bu ayrıca
  * reduced-motion'daki statik yolun da erişilebilir olduğunu doğruluyor.
  */
+/**
+ * 29 Ağustos 2026 revizyonu: liste canonical rotalara getirildi. Eskiden
+ * `/friends`, `/culture/who-we-are`, `/culture/what-we-believe`,
+ * `/culture/partners` ve `/what-we-do/photography` buradaydı — hepsi
+ * artık 308 ile yönlendiriliyor ve `page.goto` yönlendirmeyi sessizce
+ * takip ettiği için bu satırlar hedef sayfayı iki kez tarıyordu.
+ * Yönlendirmelerin kendisi e2e/canonical-routes.spec.ts'te doğrulanıyor.
+ */
 const ROUTES = [
   "",
   "/work",
@@ -29,17 +37,17 @@ const ROUTES = [
   "/what-we-do/event-management",
   "/what-we-do/how-we-work",
   "/what-we-do/live-broadcast",
-  "/what-we-do/photography",
   "/what-we-do/post-production",
   "/what-we-do/production",
   "/what-we-do/service-production",
+  "/who-we-are",
+  "/what-we-believe",
+  "/solutions",
+  "/clients",
+  "/partners",
   "/culture",
   "/culture/directors",
-  "/culture/partners",
   "/culture/sustainability",
-  "/culture/what-we-believe",
-  "/culture/who-we-are",
-  "/friends",
   "/insights",
   "/contact",
   "/brief",
@@ -50,7 +58,6 @@ const ROUTES = [
   "/ai-policy",
   "/accessibility",
 ];
-
 for (const locale of ["tr", "en"] as const) {
   for (const route of ROUTES) {
     const url = `/${locale}${route}`;
