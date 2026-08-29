@@ -383,8 +383,13 @@
     ]
   },
   "clients": {
-    "heroTitle": "CLIENTS",
+    "heroTitle": "OUR CLIENTS",
     "heroBody": "We build honest, long-term and ambitious partnerships with the brands we work with. Global icons. Shared creative energy.",
+    "index": {
+      "label": "Client index",
+      "all": "All",
+      "resultCount": "Brands shown: {count}"
+    },
     "ctaLead": "Want to see what we made together?",
     "testimonialsTitle": "What they say",
     "testimonialsEmpty": "Client testimonials are on the way."

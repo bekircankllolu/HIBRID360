@@ -3,19 +3,14 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
-import { ClientLogoGrid } from "@/components/friends/ClientLogoGrid";
+import { ClientNameIndex } from "@/components/friends/ClientNameIndex";
 import { TestimonialList } from "@/components/testimonials/TestimonialList";
 import { Link } from "@/i18n/navigation";
 import { getPublishedTestimonials } from "@/lib/content";
 import { clients, newClients, SHOW_NEW_CLIENTS } from "@/data/clients";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
-// CSS SAHİPLİĞİ: bu modül Codex'e ait, bu yüzden taşınmadı — dosya hâlâ
-// eski rotanın klasöründe duruyor ve buradan göreli yolla çekiliyor.
-// TODO (Codex): src/app/[locale]/friends/page.module.css →
-// src/app/[locale]/clients/page.module.css taşınıp bu import düzeltilecek;
-// boşalan friends/ klasörü o zaman silinebilir.
-import styles from "../friends/page.module.css";
+import styles from "./page.module.css";
 
 /**
  * FRD-01..04 (nihai copy deck, Ağustos 2026) — Clients (deck'teki adı:
@@ -31,10 +26,11 @@ import styles from "../friends/page.module.css";
  * yerine metin uydurulmadı; çelişki
  * docs/content/CURRENT_CONTENT_GAPS.md'de blocker olarak kayıtlı.
  *
- * DECISIONS.md #6: kurucu görseli üstü pop-up sunum yerine düz ızgara.
- * 29 Ağustos revizyonu bunu pekiştiriyor: müşteri logo değil, minimal
- * marka **adı** istiyor — bu yüzden ızgaraya logo alanı eklenmedi ve
- * sektör/kategori filtresi kurulmadı (doğrulanmış kategori verisi yok).
+ * 30 Ağustos Revizyon 13 düzeltmesi: isimler artık çerçeveli kutular
+ * içinde değil. INNOCEAN client index referansının hiyerarşisi, siyah
+ * zemin üzerinde çerçevesiz tipografik marka dizinine uyarlandı. Sektör
+ * verisi doğrulanmadığı için sol ray gerçek veriden türeyen alfabetik
+ * aralıklar kullanır; uydurma kategori eklenmez.
  *
  * FRD-03 [KARAR] kapanmadan `newClients` (src/data/clients.ts) render
  * edilmiyor — sözleşme izni teyit edilmeden marka adı referans olarak
@@ -81,10 +77,12 @@ export default async function ClientsPage({
         ])}
       />
 
-      <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-      <p className={styles.body}>{t("heroBody")}</p>
+      <header className={styles.hero}>
+        <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
+        <p className={styles.body}>{t("heroBody")}</p>
+      </header>
 
-      <ClientLogoGrid
+      <ClientNameIndex
         clients={[
           ...publishableClients,
           ...(SHOW_NEW_CLIENTS

@@ -1,0 +1,67 @@
+.page {
+  width: 100%;
+  padding-top: clamp(5rem, 8vw, 8rem);
+  background: var(--color-brand-black);
+}
+
+.hero {
+  min-height: clamp(22rem, 48svh, 34rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(3rem, 8vw, 8rem);
+  padding: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 3vw, 3.5rem);
+}
+
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(3.25rem, 8vw, 9rem);
+  font-weight: var(--font-weight-brand);
+  line-height: 0.86;
+  letter-spacing: 0;
+}
+
+.body {
+  max-width: 52rem;
+  margin: 0;
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.testimonials,
+.cta {
+  margin-inline: clamp(1rem, 3vw, 3.5rem);
+}
+
+.testimonials {
+  margin-top: var(--space-24);
+}
+
+.sectionTitle {
+  margin-bottom: var(--space-8);
+  font-family: var(--font-brand);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: var(--font-weight-heading-bold);
+}
+
+.cta {
+  margin-top: var(--space-24);
+  padding: var(--space-12) 0 clamp(5rem, 10vw, 10rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ctaLead {
+  max-width: 40rem;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 24rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.8rem, 9vw, 3.25rem);
+  }
+}

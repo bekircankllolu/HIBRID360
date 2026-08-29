@@ -104,13 +104,13 @@ test("service media and client index break out to viewport edges", async ({
   expect(visualBounds.width).toBeGreaterThanOrEqual(1439);
   expect(visualBounds.height).toBeGreaterThanOrEqual(899);
 
-  await page.goto("/tr/friends");
-  const grid = page.locator('[class*="ClientLogoGrid_grid"]');
-  await grid.scrollIntoViewIfNeeded();
-  const gridBounds = (await grid.boundingBox())!;
-  expect(gridBounds.x).toBeLessThanOrEqual(1);
-  expect(gridBounds.width).toBeGreaterThanOrEqual(1439);
-  await expect(grid.locator("li").first()).toHaveClass(/itemVisible/);
+  await page.goto("/tr/clients");
+  const index = page.locator('[class*="ClientNameIndex_index"]');
+  await index.scrollIntoViewIfNeeded();
+  const indexBounds = (await index.boundingBox())!;
+  expect(indexBounds.x).toBeLessThanOrEqual(1);
+  expect(indexBounds.width).toBeGreaterThanOrEqual(1439);
+  await expect(index.locator("li").first()).toBeVisible();
   await page.waitForTimeout(500);
   await page.screenshot({ path: testInfo.outputPath("desktop-clients.png") });
 });
