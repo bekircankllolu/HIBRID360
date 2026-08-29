@@ -97,9 +97,59 @@ için görsel olarak da ayrı, doğru etiketli taş üretimi (yeni bir
 AI-üretim/tasarım turu) planlanacak mı? Bu bir görsel-arşiv sorunu
 değil, bir üretim kapsamı kararı.
 
-## 7. Müşteri logoları eksik (Friends/Partners fırsatı)
+## 7. Müşteri logoları — **SUPERSEDED (29 Ağustos 2026)**
 
-Eski site 60+ müşteriyi düz metin liste olarak gösteriyordu, hiç logo
-yoktu. Client dump'ında da müşteri logosu **yok**. Yeni sitenin
-Friends/Partners sayfalarını güçlendirmek isteniyorsa bu ayrı bir talep
-olarak müşteriden istenmeli — mevcut foto arşivinin kapsamı dışında.
+~~Eski site 60+ müşteriyi düz metin liste olarak gösteriyordu, hiç logo
+yoktu. Yeni sitenin Friends/Partners sayfalarını güçlendirmek isteniyorsa
+bu ayrı bir talep olarak müşteriden istenmeli.~~
+
+**29 Ağustos 2026 müşteri revizyonu bu fırsatı kapattı:** müşteri logo
+değil, **minimal marka adları** istiyor. Clients sayfasına logo alanı
+eklenmeyecek; sektör/kategori bilgisi ve filtre de olmayacak (eski sitede
+de yoktu). Bu artık bir blocker değil, kapanmış bir karar — bkz.
+`docs/DECISIONS.md` #21.
+
+Doğrulama (2026-08-29): eski `/clients` sayfasındaki 70 isim ile
+`src/data/clients.ts`'teki 70 isim **birebir örtüşüyor**; hiçbir isim
+eklenmemiş veya düşmemiş. Ayrıntı:
+`docs/content/LEGACY_CONTENT_ROUTE_MAP.md` bölüm 2.
+
+## 8. What We Believe görselleri ve alıntıları — telif/atıf **AÇIK**
+
+29 Ağustos 2026 denetiminde eski `/what-we-believe` sayfasının üç görseli
+indirildi, ölçüldü ve web türevleri üretildi; **hiçbiri yeni siteye
+bağlanmadı ve ikili dosyalar bu depoya konmadı** (depo herkese açık).
+Ölçüm, sha256 ve tekrarlanabilir dönüşüm betiği:
+`docs/content/LEGACY_CONTENT_ROUTE_MAP.md` bölüm 4 ·
+`scripts/assets/prepare-legacy-images.py`.
+
+- **`ataturk.jpg`** (aslında PNG, 2592×1454) — fotoğrafın kaynağı, çekeni
+  ve arşivi **bilinmiyor**. Tarihî fotoğraf kamu malı olsa bile belirli
+  bir baskı/restorasyon ayrı hak doğurabilir.
+- **`little_prince.png`** (2654×2056) — Küçük Prens illüstrasyonu.
+  Saint-Exupéry 1944'te öldü, eser 1943'te yayımlandı; Fransa'daki savaş
+  dönemi uzatmaları ve ABD'deki 1943 yayın tarihi nedeniyle **hâlâ
+  korumalı**. Ticari kurumsal sitede lisans gerektirir. **En yüksek
+  riskli madde.**
+- **"Everything in the world created by women" alıntısı** — eski sitede
+  Atatürk fotoğrafının üzerine, **imza alanı boş bırakılarak** konulmuş:
+  atıf ima ediliyor ama yazılmıyor. Bu cümlenin birincil kaynağı
+  gösterilemiyor. Kaynak belgelenmeden veya atıf kaldırılmadan yayına
+  giremez.
+- **`kadin.jpg`** (1920×1280, gri tonlama) — kaynağı ve model rızası
+  bilinmiyor; stok görsel olma ihtimali yüksek (bkz. madde 3).
+
+## 9. What We Believe müşteri videosu — prodüksiyon bekliyor
+
+Müşterinin çekeceği konuşma videosu için **hiçbir gerçek dosya yok**.
+Sahte video veya yer tutucu kişi **üretilmedi**; sayfa bu bölüm olmadan
+duruyor. AI showreel filmi (madde 2) ile birlikte iki ayrı prodüksiyon
+blocker'ı.
+
+## 10. Contact görselleri — kaynak doğrulanmadı
+
+Eski `/contact` sayfasının iki görseli (`contact/contact-bg.jpg`,
+2560×750, İstanbul panoraması · `contact/contact-screen01.jpg`, 1273×807,
+Motion Office) **bağlanmadı**. İkisi de gri tonlama; kaynağı ve lisansı
+bilinmiyor. Kod tarafında `CONTACT_LEGACY_IMAGES` altında
+`status: "pending-rights"` olarak kayıtlı (`src/data/contact.ts`).
