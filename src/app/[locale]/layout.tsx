@@ -65,7 +65,20 @@ export default async function LocaleLayout({
   const t = await getTranslations("common");
 
   return (
-    <html lang={locale}>
+    /* suppressHydrationWarning — <html> üzerindeki `data-consent`
+       özniteliğini boyamadan önce çalışan satır içi script yazıyor
+       (ConsentInitScript). Sunucu "pending" gönderiyor; geri gelen
+       ziyaretçide script bunu hidrasyondan ÖNCE "set" yapıyor, dolayısıyla
+       React iki değeri farklı görüyor ve her sayfa açılışında "A tree
+       hydrated but some attributes ... didn't match" hatası veriyordu
+       (dev'de konsola düşüyor, üretimde sessiz ama mismatch gerçek).
+
+       Bayrak yalnızca BU elemanın kendi özniteliklerini kapsar, alt
+       ağacı kapsamaz — yani gerçek içerik uyuşmazlıkları görünür kalır.
+       Rızanın sunucuda okunması mümkün değil (localStorage), bu yüzden
+       uyuşmazlığın kaynağı kaçınılmaz; doğru çözüm onu beklenen ilan
+       etmek. */
+    <html lang={locale} data-consent="pending" suppressHydrationWarning>
       <head>
         {/* Gövde fontu ilk boyamada gereken tek font — preload edilir.
             Montserrat (başlık) preload EDİLMEZ: kritik yolu meşgul
