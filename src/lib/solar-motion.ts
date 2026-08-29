@@ -2,8 +2,8 @@ import { mulberry32 } from "./starfield";
 
 export const RETURN_SECONDS = 0.9;
 export const DRAG_THRESHOLD = 6;
-export const TRAIL_CAPACITY = { desktop: 128, compact: 64 } as const;
-export const PARTICLE_LIFETIME = { min: 3.8, max: 5.4 } as const;
+export const TRAIL_CAPACITY = { desktop: 184, compact: 92 } as const;
+export const PARTICLE_LIFETIME = { min: 4.8, max: 6.2 } as const;
 
 export function wrapTime(time: number, duration: number): number {
   return duration > 0 && Number.isFinite(duration)

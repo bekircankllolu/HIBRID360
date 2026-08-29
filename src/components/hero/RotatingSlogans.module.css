@@ -1,14 +1,15 @@
 .block {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
-  min-height: 16rem;
+  width: 100%;
+  min-height: min(70svh, 50rem);
+  padding: clamp(5rem, 10vw, 10rem) clamp(1rem, 3vw, 3.5rem);
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .slot {
-  max-width: 46rem;
+  max-width: 64rem;
 }
 
 .entering {

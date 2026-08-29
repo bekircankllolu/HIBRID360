@@ -22,7 +22,7 @@ const services = [
   "CREATIVE",
   "AI",
   "LIVE BROADCAST",
-  "PHOTOGRAPHY",
+  "CLOUD TV",
   "POST PRODUCTION",
   "EVENTS",
 ];
@@ -184,10 +184,12 @@ test("all eight points can be dragged and return without opening details", async
         const stone = orbitStones.find((item) => item.label === name)!;
         const radius = ORBIT_RINGS[stone.ring];
         const dx =
-          ((returned.x + 22 - scene.x) / scene.width) * ORBIT_VIEW.w -
+          ((returned.x + returned.width / 2 - scene.x) / scene.width) *
+            ORBIT_VIEW.w -
           ORBIT_VIEW.cx;
         const dy =
-          ((returned.y + 22 - scene.y) / scene.height) * ORBIT_VIEW.h -
+          ((returned.y + returned.height / 2 - scene.y) / scene.height) *
+            ORBIT_VIEW.h -
           ORBIT_VIEW.cy;
         // WebKit does not focus a button on mouse-down, so its orbit keeps moving.
         return Math.abs(
@@ -601,8 +603,8 @@ test.describe("touch", () => {
     const box = (await point.boundingBox())!;
     const client = await page.context().newCDPSession(page);
     const beforeScroll = await page.evaluate(() => scrollY);
-    const x = box.x + 22;
-    const y = box.y + 22;
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
     await client.send("Input.dispatchTouchEvent", {
       type: "touchStart",
       touchPoints: [{ x, y }],

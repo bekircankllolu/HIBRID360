@@ -1,13 +1,13 @@
 .button {
   display: inline-block;
+  min-height: 3.5rem;
   background: var(--color-brand-fuchsia);
   color: var(--color-text-on-fuchsia);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
+  padding: 1rem 2rem;
 }
 
 .button:hover {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
+  transform: translateY(-2px);
 }

@@ -7,7 +7,8 @@ test.describe("Dil değişimi", () => {
     await acceptCookies(page);
     await expect(page.locator("html")).toHaveAttribute("lang", "tr");
 
-    await page.getByRole("button", { name: "EN", exact: true }).click();
+    await page.getByRole("button", { name: "Dil" }).click();
+    await page.getByRole("button", { name: "English", exact: false }).click();
     await expect(page).toHaveURL(/\/en\/what-we-do$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
@@ -16,7 +17,8 @@ test.describe("Dil değişimi", () => {
     await page.goto("/en/contact");
     await acceptCookies(page);
 
-    await page.getByRole("button", { name: "TR", exact: true }).click();
+    await page.getByRole("button", { name: "Language" }).click();
+    await page.getByRole("button", { name: "Türkçe", exact: false }).click();
     await expect(page).toHaveURL(/\/tr\/contact$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "tr");
   });

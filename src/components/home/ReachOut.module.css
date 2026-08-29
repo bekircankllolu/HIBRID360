@@ -1,15 +1,21 @@
 .section {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+  width: 100%;
+  min-height: min(82svh, 58rem);
+  padding: clamp(6rem, 12vw, 12rem) clamp(1rem, 3vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
 .title {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: var(--font-size-heading);
-  margin: 0 0 var(--space-6);
+  max-width: 14ch;
+  font-size: clamp(3rem, 7vw, 7.5rem);
+  line-height: 0.9;
+  margin: 0 0 clamp(2rem, 5vw, 4rem);
 }
 
 .cta {
@@ -18,14 +24,14 @@
   color: var(--color-text-on-fuchsia);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-8);
+  min-height: 3.5rem;
+  padding: 1rem 2.3rem;
   border: none;
   cursor: pointer;
 }
 
 .cta:hover {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
+  transform: translateY(-2px);
 }
 
 .overlay {

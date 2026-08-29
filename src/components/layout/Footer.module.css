@@ -1,93 +1,178 @@
 .footer {
-  background: var(--color-brand-black);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: #242321;
+  color: var(--color-brand-white);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .inner {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-12) var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
+  width: 100%;
+  padding: clamp(3rem, 7vw, 7rem) clamp(1rem, 3vw, 3.5rem) 1.5rem;
+}
+
+.topRow {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(20rem, 1.7fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  align-items: start;
+  margin-bottom: clamp(3rem, 7vw, 7rem);
+}
+
+.wordmark {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-brand);
+}
+
+.statement {
+  max-width: 31ch;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(1.7rem, 3.25vw, 4rem);
+  font-weight: var(--font-weight-heading-semibold);
+  line-height: 0.98;
+}
+
+.email {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 clamp(4rem, 8vw, 8rem);
+  font-family: var(--font-brand);
+  font-size: clamp(1.8rem, 6vw, 7rem);
+  font-weight: var(--font-weight-heading-bold);
+  line-height: 0.9;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-thickness: 0.04em;
+  text-underline-offset: 0.12em;
+}
+
+.email:hover,
+.email:focus-visible {
+  color: var(--color-brand-yellow);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(18rem, 2fr) repeat(3, minmax(9rem, 1fr));
+  gap: clamp(2rem, 5vw, 6rem);
+  padding-block: clamp(2.5rem, 5vw, 5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.column {
+  min-width: 0;
+}
+
+.column h2 {
+  position: relative;
+  margin: 0 0 1.5rem;
+  padding-left: 1rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-body-medium);
+  text-transform: uppercase;
+}
+
+.column h2::before {
+  content: "";
+  position: absolute;
+  top: 0.35em;
+  left: 0;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--color-brand-fuchsia);
+  border-radius: 50%;
+}
+
+.column ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.column li,
+.social span {
+  margin-bottom: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.column a:hover,
+.column a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .contact {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-6);
+  max-width: 33rem;
+  flex-direction: column;
+  gap: 0.75rem;
   font-style: normal;
-  font-size: 0.8125rem;
-  opacity: 0.85;
-  margin-bottom: var(--space-6);
-}
-
-.contact a:hover {
-  color: var(--color-brand-fuchsia);
-}
-
-.legalList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4) var(--space-6);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.legalList a {
-  font-size: 0.8125rem;
-  color: var(--color-brand-white);
-  opacity: 0.8;
-}
-
-.legalList a:hover {
-  opacity: 1;
-  color: var(--color-brand-fuchsia);
+  font-size: clamp(0.95rem, 1.35vw, 1.25rem);
+  line-height: 1.45;
 }
 
 .social {
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
+  flex-direction: column;
 }
 
-.socialIcon {
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
+.social span {
+  width: fit-content;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .bottomRow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: var(--space-4);
-  padding-top: var(--space-6);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .copyright {
-  font-size: 0.75rem;
-  opacity: 0.6;
   margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.7rem;
 }
 
-.signature {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(0.9rem, 1.5vw, 1.125rem);
-  margin: 0;
-}
-
-/* brief 1.9 — karbon nötr rozeti. Yalnızca ölçüm + sertifika verisi
-   girildiğinde render edilir (bkz. Footer.tsx). */
 .carbonBadge {
-  align-self: flex-start;
   border: 1px solid var(--color-brand-yellow);
   color: var(--color-brand-yellow);
+  font-size: 0.7rem;
+  padding: 0.45rem 0.75rem;
+}
+
+.backToTop {
   font-size: 0.75rem;
-  padding: var(--space-1) var(--space-3);
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .topRow {
+    grid-template-columns: 1fr;
+  }
+
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .inner {
+    padding-inline: 1rem;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .bottomRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

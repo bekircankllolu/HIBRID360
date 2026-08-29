@@ -13,6 +13,13 @@
   aspect-ratio: 1920 / 588;
 }
 
+@media (max-width: 640px) {
+  .stage {
+    width: 145%;
+    margin-left: -2%;
+  }
+}
+
 /*
  * Statik PNG yedeği — LCP elemanı. Maske canvas kutusunun dikey
  * ortasında, üstte/altta 30/588 = %5.102 pay bırakacak şekilde oturur;

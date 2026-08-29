@@ -7,16 +7,16 @@
  * modül paylaşılıyor; her page.tsx kendi JSX kompozisyonunu yapıyor.
  */
 .page {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+  width: 100%;
+  padding: clamp(5rem, 10vw, 10rem) clamp(1rem, 3vw, 3.5rem);
 }
 
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  line-height: 1.05;
+  max-width: 14ch;
+  font-size: clamp(4rem, 11vw, 12rem);
+  line-height: 0.85;
   margin: 0;
 }
 
@@ -56,8 +56,8 @@
    ikisi de aynı hizada bitiyordu. */
 .visual {
   position: relative;
-  min-height: clamp(17rem, 52vw, 38rem);
-  margin: var(--space-12) calc(var(--space-4) * -1);
+  min-height: 100svh;
+  margin: clamp(3rem, 7vw, 7rem) calc(50% - 50vw);
   overflow: hidden;
   background: #080808;
 }
@@ -260,12 +260,12 @@
   color: var(--color-text-on-fuchsia);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
+  min-height: 3.5rem;
+  padding: 1rem 2rem;
 }
 
 .ctaButton:hover {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
+  transform: translateY(-2px);
 }
 
 /* Dizin sütunları: mobilde tek, tablette iki, masaüstünde üç. auto-fit
@@ -285,7 +285,7 @@
 
 @media (max-width: 640px) {
   .visual {
-    min-height: 18rem;
-    margin: var(--space-8) calc(var(--space-4) * -1) var(--space-10);
+    min-height: 76svh;
+    margin-block: var(--space-8) var(--space-10);
   }
 }

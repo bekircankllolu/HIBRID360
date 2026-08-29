@@ -22,11 +22,8 @@ test.describe("Mobil menü (390px)", () => {
 
     await toggle.click();
     await expect(nav).toBeVisible();
-    await expect(nav.getByRole("link", { name: "WORK" })).toBeVisible();
-    // Dil seçici panelin İÇİNDE değil, header'da hamburger'in yanında
-    // sabit duruyor (bkz. Header.tsx .controls) — panel açıkken de
-    // erişilebilir ve görünür kalması gereken budur.
-    await expect(page.getByRole("group", { name: "Dil" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Biz Kimiz" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Dil" })).toBeVisible();
 
     await page.keyboard.press("Escape");
     await expect(nav).toBeHidden();
@@ -38,7 +35,7 @@ test.describe("Mobil menü (390px)", () => {
 
     await page.getByRole("button", { name: "Menüyü aç" }).click();
     const nav = page.locator("#main-navigation");
-    await nav.getByRole("link", { name: "CONTACT" }).click();
+    await nav.getByRole("link", { name: "İletişim" }).click();
 
     await expect(page).toHaveURL(/\/tr\/contact$/);
   });

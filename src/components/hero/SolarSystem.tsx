@@ -9,7 +9,7 @@ import {
   type CSSProperties,
   type PointerEvent,
 } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
@@ -70,6 +70,7 @@ function crystalSize(width: number, compact: boolean, focus: number) {
 
 export function SolarSystem() {
   const reducedMotion = usePrefersReducedMotion();
+  const locale = useLocale();
   const t = useTranslations("common");
   const wwd = useTranslations("whatWeDo");
   const descriptions = wwd.raw("list") as Array<{
@@ -712,6 +713,11 @@ export function SolarSystem() {
         <h2 id="solar-system-title" className={styles.title}>
           {SOLAR_SYSTEM_TITLE}
         </h2>
+        <p className={styles.instruction}>
+          {locale === "tr"
+            ? "Servisleri keşfetmek için noktalara tıklayın"
+            : "Click the points to explore each service"}
+        </p>
       </div>
       <div
         className={styles.stage}
@@ -772,7 +778,7 @@ export function SolarSystem() {
           }}
         />
         <span className={styles.coreLabel} aria-hidden="true">
-          HIBRID
+          HIBRID 360
         </span>
         {orbitStones.map((stone, index) => (
           <div
