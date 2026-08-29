@@ -36,25 +36,38 @@ const SERVICE_LINKS = [
   },
 ] as const;
 
+// 29 Ağustos 2026 revizyonu — merge notu: bu bileşen menüyü kendi içinde
+// tanımlıyor. Canonical rotaların ve sıranın asıl kaynağı
+// `src/data/navigation.ts` (MAIN_NAV) ve `src/data/services.ts`
+// (SERVICE_CATALOG). Aşağıdaki hedefler merge sırasında o kaynakla
+// hizalandı: artık 308 yönlendirmeye değil doğrudan canonical rotalara
+// gidiyorlar ve "Solutions" gerçek Solutions sayfasına bakıyor
+// (önceden yanlışlıkla /what-we-do/how-we-work'e gidiyordu).
+//
+// TODO: bu iki dizi MAIN_NAV/SERVICE_CATALOG'dan türetilip kaldırılmalı.
+// Bugün elle senkron: etiketler burada sabit yazılı (nav.* mesaj
+// anahtarları kullanılmıyor) ve e2e/mobile-menu.spec.ts bu sabit
+// etiketlere göre yazıldığı için merge'de yalnızca href'ler düzeltildi,
+// etiketlere dokunulmadı.
 const NAV_ITEMS = [
   {
-    href: "/culture/who-we-are",
+    href: "/who-we-are",
     en: "Who We Are",
     tr: "Biz Kimiz",
   },
   { href: "/what-we-do", en: "What We Do", tr: "Ne Yapıyoruz" },
   {
-    href: "/culture/what-we-believe",
+    href: "/what-we-believe",
     en: "What We Believe",
     tr: "Neye İnanıyoruz",
   },
   {
-    href: "/what-we-do/how-we-work",
+    href: "/solutions",
     en: "Solutions",
     tr: "Çözümler",
   },
-  { href: "/friends", en: "Clients", tr: "Müşteriler" },
-  { href: "/culture/partners", en: "Partners", tr: "Partnerler" },
+  { href: "/clients", en: "Clients", tr: "Müşteriler" },
+  { href: "/partners", en: "Partners", tr: "Partnerler" },
   { href: "/contact", en: "Contact", tr: "İletişim" },
 ] as const;
 
@@ -231,13 +244,13 @@ export function Header() {
             <p className={styles.megaHeading}>
               {isTurkish ? "Hakkımızda" : "About"}
             </p>
-            <Link href="/culture/who-we-are">
+            <Link href="/who-we-are">
               {isTurkish ? "Biz Kimiz" : "Who We Are"}
             </Link>
-            <Link href="/culture/what-we-believe">
+            <Link href="/what-we-believe">
               {isTurkish ? "Neye İnanıyoruz" : "What We Believe"}
             </Link>
-            <Link href="/culture/partners">
+            <Link href="/partners">
               {isTurkish ? "Partnerler" : "Partners"}
             </Link>
           </div>
@@ -247,7 +260,7 @@ export function Header() {
               {isTurkish ? "Keşfet" : "Explore"}
             </p>
             <Link href="/work">Work</Link>
-            <Link href="/friends">
+            <Link href="/clients">
               {isTurkish ? "Müşteriler" : "Clients"}
             </Link>
             <Link href="/contact">{isTurkish ? "İletişim" : "Contact"}</Link>

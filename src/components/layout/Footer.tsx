@@ -4,17 +4,22 @@ import { BRAND_SIGNATURE, SOCIAL_PLATFORMS, CONTACT } from "@/lib/site";
 import { isSustainabilityPublishable } from "@/data/sustainability";
 import styles from "./Footer.module.css";
 
+// 29 Ağustos 2026 revizyonu — merge notu: hedefler canonical rotalarla
+// hizalandı (bkz. src/data/navigation.ts). Work üst menüde yok; footer
+// onun ana giriş noktalarından biri, bu yüzden listede ilk sırada.
+// TODO: MAIN_NAV/SECONDARY_NAV'dan türetilip bu dizi kaldırılmalı —
+// Header.tsx'teki aynı TODO ile birlikte.
 const FOOTER_NAV = [
   { href: "/work", en: "Work", tr: "Work" },
-  { href: "/culture/who-we-are", en: "Who We Are", tr: "Biz Kimiz" },
+  { href: "/who-we-are", en: "Who We Are", tr: "Biz Kimiz" },
   { href: "/what-we-do", en: "What We Do", tr: "Ne Yapıyoruz" },
   {
-    href: "/culture/what-we-believe",
+    href: "/what-we-believe",
     en: "What We Believe",
     tr: "Neye İnanıyoruz",
   },
-  { href: "/friends", en: "Clients", tr: "Müşteriler" },
-  { href: "/culture/partners", en: "Partners", tr: "Partnerler" },
+  { href: "/clients", en: "Clients", tr: "Müşteriler" },
+  { href: "/partners", en: "Partners", tr: "Partnerler" },
   { href: "/contact", en: "Contact", tr: "İletişim" },
 ] as const;
 
