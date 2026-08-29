@@ -7,9 +7,27 @@
  * aspect-ratio sabit tutuluyor ki görsel yüklenmeden de yer ayrılsın
  * (CLS = 0).
  */
+/*
+ * Sol sütun hizası.
+ *
+ * Maskenin içinde cam boşluk var: 1920px'lik dokuda harfler yalnızca
+ * 119..1802 aralığını dolduruyor (solda 119px, sağda 118px şeffaf pay).
+ * Sahne kutusu %100 genişlikte bırakılırsa "H"nin sol kenarı, üstündeki
+ * "MAKE IT MATTER." satırından 119/1920 = %6.2 kadar içeride başlıyordu.
+ *
+ * Çözüm kutuyu görünür harf kutusu oranında (1920/1683) büyütüp aynı
+ * oranda sola kaydırmak: harfler tam olarak içerik genişliğine oturuyor,
+ * sol kenar sütun çizgisine hizalanıyor. Taşan kısım yalnızca maskenin
+ * şeffaf payı.
+ *
+ * Maskeye, shader'a veya u_imageOffset'e DOKUNULMADI — bu tamamen kutu
+ * geometrisi; canvas ve PNG yedeği aynı kutuyu doldurduğu için animasyon
+ * ve fare etkileşimi birebir aynı kalır.
+ */
 .stage {
   position: relative;
-  width: 100%;
+  width: calc(100% * 1920 / 1683);
+  margin-left: calc(-100% * 119 / 1683);
   aspect-ratio: 1920 / 588;
 }
 
