@@ -1,7 +1,9 @@
-# İçerik Eksikleri — Contact · Culture · Friends
+# İçerik Eksikleri — Contact · Culture · Clients
 
-**Tarih:** 2026-08-26
-**Kapsam:** `/contact` · `/culture` (+ alt sayfalar) · `/friends`
+**Tarih:** 2026-08-26 · **Güncelleme:** 2026-08-29 (müşteri revizyonu)
+**Kapsam:** `/contact` · `/culture` (+ alt sayfalar) · `/clients`
+(eski adı `/friends`) · `/solutions` · `/who-we-are` ·
+`/what-we-believe` · `/partners`
 **Kural:** Bu dokümanda **hiçbir içerik uydurulmadı.** Her satır ya kodda
 duran bir `TODO`'nun, ya `docs/DECISIONS.md`'deki bir açık maddenin, ya da
 nihai copy deck'in kendi `[KARAR]` / `[DOĞRULA]` işaretinin karşılığıdır.
@@ -19,6 +21,9 @@ Her madde **kim cevaplayacak**, **ne olmadan ne yayınlanamaz** ve
 | 🔴 **Yayın bloklayıcı** | 5 | Bunlar olmadan site yayına alınamaz |
 | 🟠 **Sayfa bloklayıcı** | 4 | İlgili sayfa eksik/boş kalır, site yayınlanabilir |
 | 🟡 **İyileştirme** | 5 | Sayfa çalışıyor, daha iyi olabilir |
+
+**29 Ağustos 2026 revizyonu üç madde ekledi (18, 19, 20) ve iki maddeyi
+kapattı (6, 14).**
 
 ---
 
@@ -62,6 +67,7 @@ Her madde **kim cevaplayacak**, **ne olmadan ne yayınlanamaz** ve
 | **Neden gerekli** | Adres Contact künye kartında, footer'da, `schema.org` `PostalAddress` alanında ve Google Maps yol tarifi bağlantısında kullanılıyor |
 | **Bugün ne var** | Adres deck'ten alındı ve kullanılıyor. Yol tarifi bağlantısı **uydurma bir place-id değil**, adresten türetilen resmi Google Maps `dir/?api=1` şeması |
 | **Kodda nerede** | `src/lib/site.ts` → `CONTACT.addressLines` · `src/app/[locale]/contact/page.tsx` |
+| **⚠️ 29 Ağu 2026 bulgusu** | Eski site (© 2020) **farklı** bir adres gösteriyor: *Cemil Topuzlu Caddesi Çiftehavuzlar, 18 Mart Sokak Yapı Kredi Evleri B Blok 9/20, Kadıköy / İstanbul*. İkisi de Kadıköy — muhtemelen taşınma olmuş. Kodda deck adresi duruyor (daha yeni ve onaylı); eski adres koda **girmedi** |
 | **Ayrıca sorulacak** | Gömülü harita istiyor musunuz? İsteniyorsa Google Maps veya Mapbox **API anahtarı** gerekiyor — bugün yok (kodda TODO). Şu an yerine adres/telefon/e-posta taşıyan bir künye kartı duruyor, boş bir kutu değil |
 
 ## 5. 🔴 Müşteri listesi — 5 isim doğrulama bekliyor
@@ -72,11 +78,19 @@ Her madde **kim cevaplayacak**, **ne olmadan ne yayınlanamaz** ve
 | **Neden gerekli** | Nihai copy deck bu beş ismi `[DOĞRULA]` olarak işaretledi — yazımları veya varlıkları şüpheli |
 | **Bugün ne var** | Kod bunları `verified: false` olarak ayrı tutuyor; silinmediler ama işaretliler |
 | **Kodda nerede** | `src/data/clients.ts` |
-| **Bu olmadan** | Yanlış yazılmış ya da hiç müşteri olmayan bir marka adı yayınlanma riski |
+| **⚠️ 29 Ağu 2026 bulgusu** | Beş isim de eski `/clients` sayfasında **birebir aynı yazımla** duruyor. Yani şüphe "bu müşteri var mı" değil, **"yazım doğru mu"** — beşi de az bilinen marka adları ve yazımları hatalı görünüyor |
+| **Bugün ne oldu** | Bu beş isim artık public listeye **hiç girmiyor** (`verified` süzgeci, `src/app/[locale]/clients/page.tsx`) — önceden görünüyorlardı |
+| **Bu olmadan** | Yanlış yazılmış bir marka adı yayınlanma riski |
 
 ---
 
-## 6. 🟠 Müşteri logoları — hiç yok
+## 6. ~~🟠 Müşteri logoları — hiç yok~~ · **KAPANDI (29 Ağu 2026)**
+
+> Müşteri revizyonu bu maddeyi kapattı: **logo istenmiyor**, minimal marka
+> adları isteniyor. Clients sayfasına logo alanı eklenmeyecek, sektör/
+> kategori bilgisi ve filtre kurulmayacak — eski sitede de yoktu.
+> Bkz. `docs/DECISIONS.md` #21. Aşağıdaki eski kayıt tarihsel olarak
+> bırakıldı.
 
 | | |
 |---|---|
@@ -150,17 +164,28 @@ Her madde **kim cevaplayacak**, **ne olmadan ne yayınlanamaz** ve
 | **Kodda nerede** | `src/app/[locale]/culture/partners/page.tsx` |
 | **Risk** | Yanlış atıf, reklam sektörüne hitap eden bir sitede itibar kaybı |
 
-## 13. 🟡 Culture hub — üç bölüm adının TR karşılığı
+## 13. 🟡 "Directors & Crew" başlığının TR karşılığı
 
 | | |
 |---|---|
-| **Soru** | "What We Believe", "Directors & Crew", "Partners" başlıklarının TR karşılıkları ne olacak? |
-| **Neden gerekli** | Culture hub'da "Biz Kimiz" ve "Sürdürülebilirlik" çevrildi, bu üçü İngilizce kaldı → aynı ızgarada karışık dil. CLAUDE.md: *"karışık dil yasak"* |
+| **Soru** | "Directors & Crew" başlığının TR karşılığı ne olacak? |
+| **Neden gerekli** | Culture hub'da "Sürdürülebilirlik" çevrildi, bu İngilizce kaldı → aynı ızgarada karışık dil. CLAUDE.md: *"karışık dil yasak"* |
 | **Bugün ne var** | Deck TR karşılığını vermediği için İngilizce bırakıldı (onaysız çeviri uydurulmuyor) |
-| **Kodda nerede** | `messages/tr.json` → `culture.hub.*` |
-| **Not** | Bu, `docs/DECISIONS.md`'deki "TR çevirisi bekleyen metinler" tablosunun bir satırı — o tabloda toplam **7 blok** bekliyor |
+| **Kodda nerede** | `messages/tr.json` → `culture.hub.directors` |
+| **⚠️ 29 Ağu 2026 güncellemesi** | Madde daraldı: "What We Believe" ve "Partners" artık Culture hub'ında değil, üst menüde kendi canonical rotalarıyla ve **TR etiketleri var** ("NEYE İNANIYORUZ", "İŞ ORTAKLARI"). Culture hub'ında yalnızca Directors & Crew ve Sustainability kaldı |
+| **Not** | `docs/DECISIONS.md`'deki "TR çevirisi bekleyen metinler" tablosunun bir satırı |
 
-## 14. 🟡 Sosyal medya hesapları
+## 14. ~~🟡 Sosyal medya hesapları~~ · **KISMEN ÇÖZÜLDÜ (29 Ağu 2026)**
+
+> Eski sitenin footer'ında üç gerçek hesap bulundu ve üçü de yayında
+> (2026-08-29, HTTP 200):
+> `instagram.com/hibrid360` · `linkedin.com/company/hibrid-production` ·
+> `vimeo.com/hibrid360`.
+> **Kalan soru daraldı:** bu üç hesap güncel mi, ve YouTube/Spotify
+> hesaplarının URL'si var mı? (İkisinin URL'si hiçbir kaynakta yok.)
+> Teyit gelmeden `schema.org` `sameAs` eklenmedi — ölü veya devredilmiş
+> bir hesabı yapılandırılmış veride ilan etmek yanlış beyandır.
+> Aşağıdaki eski kayıt tarihsel olarak bırakıldı.
 
 | | |
 |---|---|
@@ -182,23 +207,57 @@ Her madde **kim cevaplayacak**, **ne olmadan ne yayınlanamaz** ve
 
 ---
 
-## 16. Sorumluluk dağılımı
+## 18. 🔴 Clients gövde metni çelişkisi
+
+| | |
+|---|---|
+| **Soru** | Sayfanın adı Clients oldu ama onaylı gövde metni "onlara **müşteri değil, dost** diyoruz" diyor. Metin güncellenecek mi, yoksa böyle mi kalsın? |
+| **Neden gerekli** | Sayfa başlığı "MÜŞTERİLER / CLIENTS", hemen altındaki paragraf bu adı reddediyor — ziyaretçi için görünür bir çelişki |
+| **Bugün ne var** | Onaylı deck metni **silinmedi**, yerine metin **uydurulmadı**. Başlık Clients, gövde deck'teki hâliyle duruyor |
+| **Kodda nerede** | `messages/*.json` → `clients.heroBody` · `src/app/[locale]/clients/page.tsx` |
+| **Bağlı karar** | `docs/DECISIONS.md` #21 |
+| **Seçenekler** | (a) gövdeyi Clients adına uyacak şekilde yeniden yazdırmak, (b) sayfa adını Clients bırakıp gövdeyi kısaltmak, (c) eski sitenin kendi kicker'ını kullanmak: *"Who Believed In Us"* |
+
+## 19. 🟠 Solutions sayfası giriş paragrafı yok
+
+| | |
+|---|---|
+| **Soru** | Solutions sayfası için 1–2 cümlelik bir giriş metni yazılacak mı? |
+| **Neden gerekli** | Sayfa şu an başlık + on beş yetenek maddesinden ibaret. Eski `/solutions` sayfasında da gövde metni **yoktu** — bu yüzden uydurulmadı |
+| **Bugün ne var** | Eski sayfanın on beş maddesi birebir sırayla alındı ve TR'ye çevrildi. Kicker olarak eski sayfanın kendi *"More And More"* ibaresi duruyor |
+| **Kodda nerede** | `messages/*.json` → `solutions.*` · `src/app/[locale]/solutions/page.tsx` |
+| **Not** | Sayfa bilinçli olarak yalnızca semantik iskelet — görsel katman Codex'te |
+
+## 20. 🟡 Who We Are — eski sitenin dört sloganı
+
+| | |
+|---|---|
+| **Soru** | Eski `/who-we-are` sayfasının hero slider'ındaki dört slogan yeni siteye taşınsın mı? |
+| **Neden gerekli** | Deck bunları kullanmıyor; marka sesini taşıyan cümleler ama onaylı yeni metinde yerleri yok |
+| **Sloganlar** | *"We don't just talk the talk, we also walk the walk"* · *"We are not into one night stands"* · *"Come over for a coffee and see if we click"* · *"We believe love at first sight"* |
+| **Bugün ne var** | Yeni siteye **alınmadı** — deck'in vermediği metin kendiliğinden eklenmiyor |
+| **Kodda nerede** | Henüz hiçbir yerde |
+
+---
+
+## 21. Sorumluluk dağılımı
 
 | Kim | Maddeler |
 |---|---|
-| **Müşteri (Hibrid 360)** | 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15 |
+| **Müşteri (Hibrid 360)** | 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 18, 19, 20 |
 | **Hukuk danışmanı** | 1 (ünvan), 6–7 (logo/referans izni), 11 (yazılı onay metni) |
 | **Web ekibi** | 12 (atıf araştırması) · 15 (hesap açılınca entegrasyon) |
 
-## 17. Yayın için minimum set
+## 22. Yayın için minimum set
 
 Site yayına alınabilmesi için **en az** şunlar gerekiyor:
 
 1. Şirket resmi ünvanı (madde 1)
 2. E-posta teyidi (madde 2)
 3. Telefon onayı (madde 3)
-4. Adres teyidi (madde 4)
+4. Adres teyidi (madde 4) — **eski site farklı adres gösteriyor**
 5. Müşteri listesindeki 5 ismin doğrulanması (madde 5)
+6. Clients gövde metni çelişkisinin çözülmesi (madde 18)
 
 Geri kalan maddeler sayfaları **eksik** bırakır ama yayını bloke etmez —
 o sayfalar dürüst boş durumlarıyla yayınlanabilir.
@@ -209,5 +268,6 @@ o sayfalar dürüst boş durumlarıyla yayınlanabilir.
 
 - `docs/DECISIONS.md` — açık kararların ana kaydı (#1, #4, #5, #11, #14) + TR çeviri bekleyen 7 blok
 - `docs/work/WORK_INVENTORY_REQUEST.md` — Work içerik talebi (bu dokümanla **çakışmıyor**, tamamlıyor)
+- `docs/content/LEGACY_CONTENT_ROUTE_MAP.md` — eski site → yeni site içerik ve görsel haritası (29 Ağu 2026)
 - `docs/visual-audit/BLOCKERS.md` — görsel/telif blocker'ları
 - `docs/mona/MONA_ART_DIRECTION.md` — MONA prodüksiyon kararları

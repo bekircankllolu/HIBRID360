@@ -8,6 +8,10 @@ import styles from "@/styles/culture-page.module.css";
 
 /**
  * PAR-01..03 (nihai copy deck, Ağustos 2026) — Partners.
+ *
+ * 29 Ağustos 2026 revizyonu: sayfa /culture/partners'tan üst menüdeki
+ * canonical /partners rotasına taşındı; eski yol kalıcı olarak buraya
+ * yönlendiriliyor (next.config.mjs). İçerik değişmedi.
  * PAR-02 [DOĞRULA]: alıntı mevcut sitede MOTIVE'ye atfedilmiş; deck
  * reklamcılıkta David Ogilvy'ye ait olduğunu belirtiyor ama kesin
  * doğrulama istiyor — attribütü olduğu gibi bırakıp deck'in kendi
@@ -24,7 +28,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Partners",
-    alternates: localizedAlternates(locale, "/culture/partners"),
+    alternates: localizedAlternates(locale, "/partners"),
   };
 }
 
@@ -41,8 +45,7 @@ export default async function PartnersPage({
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
-          { name: "Culture", path: "/culture" },
-          { name: "Partners", path: "/culture/partners" },
+          { name: "Partners", path: "/partners" },
         ])}
       />
 

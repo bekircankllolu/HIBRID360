@@ -5,11 +5,20 @@ const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
 /**
  * Kritik yollar için e2e testleri — bkz. e2e/*.spec.ts.
  *
- * `npm run dev` ile başlatılan sunucuya karşı çalışır (build+start yerine:
- * daha hızlı soğuk başlangıç, doğruluk için üretim optimizasyonu gerekmiyor
- * — performans zaten ayrıca Lighthouse CI ile ölçülüyor, bkz.
- * lighthouserc.js). CI'da webServer zaten yoksa kurulur; yerelde açık bir
- * sunucu varsa yeniden kullanılır.
+ * Üretim build'ine karşı çalışır (`build` + `start`).
+ *
+ * Önceden `npm run dev` kullanılıyordu; gerekçesi "daha hızlı soğuk
+ * başlangıç"tı. Next 15'e geçişte bu gerekçe geçersizleşti: dev sunucusu
+ * suite'in ~60 rotasını paralel derlerken kendi .next önbelleğinde yarım
+ * okunan JSON üretiyor ("Unexpected non-whitespace character after JSON"),
+ * testlerin çoğu bu yüzden düşüyordu. Aynı suite üretim sunucusunda 60/60
+ * geçiyor ve daha da hızlı (15s), çünkü istek anında derleme yok.
+ *
+ * Yan fayda: testler artık gerçekten yayınlanan çıktıyı doğruluyor.
+ * Performans ölçümü yine ayrı (lighthouserc.js).
+ *
+ * CI'da webServer kurulur; yerelde 3100'de açık bir sunucu varsa
+ * yeniden kullanılır (kendi `npm run start`'ını açıp iterasyon yapabilirsin).
  *
  * PLAYWRIGHT_EXECUTABLE_PATH: yalnızca tarayıcı indirmenin mümkün olmadığı
  * ortamlar (ör. bu tür sanal alan/konteyner kurulumları) için — önceden
@@ -32,9 +41,10 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `npm run dev -- -p ${PORT}`,
+    command: `npm run build && npm run start -- -p ${PORT}`,
     url: `http://localhost:${PORT}/tr`,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    // Build + start; dev'in anlık derlemesine göre başlangıç uzun, testler kısa.
+    timeout: 300_000,
   },
 });

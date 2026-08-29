@@ -6,7 +6,12 @@ aşağıdaki **varsayılan önerilerle** kurulabilir, sonradan tek satırlık
 değişiklikle güncellenir. Müşteriye (Zühre Didem Gödek) tek dosya olarak
 gönderilip toplu onay istenmesi önerilir.
 
-Durum sütunu: `AÇIK` / `VARSAYILANLA İLERLE` / `KAPANDI`
+Durum sütunu: `AÇIK` / `VARSAYILANLA İLERLE` / `KAPANDI` / `SUPERSEDED`
+
+> **29 Ağustos 2026 müşteri revizyonu** aşağıdaki tablodaki bazı maddeleri
+> geçersiz kıldı. Eski kararlar **silinmedi**, `SUPERSEDED` işaretlendi ve
+> gerekçesi bu dosyanın sonundaki "29 Ağustos 2026 revizyonu" bölümünde
+> duruyor. Yeni kararlar #17–#24 numaralarıyla eklendi.
 
 | # | Konu | Brief bölümü | Varsayılan öneri | Durum |
 |---|---|---|---|---|
@@ -15,14 +20,14 @@ Durum sütunu: `AÇIK` / `VARSAYILANLA İLERLE` / `KAPANDI`
 | 3 | İmleç seçeneği (taş / derece işareti) | 1.5 | Seçenek B (derece işareti °) — daha hafif, performans dostu | VARSAYILANLA İLERLE |
 | 4 | Telif satırı / şirket ünvanı | 1.8 | "© 2026 Hibrid 360. All Rights Reserved." (ünvan netleşince eklenir) | AÇIK |
 | 5 | İletişim e-postası | 1.8 | contact@hibrid360.com (brief'te zaten geçiyor, teyit gerekiyor) | AÇIK |
-| 6 | Kurucu görseli üstü pop-up sunum (küre/logo ızgarası) | 8.1 | Düz logo ızgarası (daha hızlı, daha performanslı) | VARSAYILANLA İLERLE |
+| 6 | Kurucu görseli üstü pop-up sunum (küre/logo ızgarası) | 8.1 | Düz logo ızgarası (daha hızlı, daha performanslı) | KAPANDI — 29 Ağu 2026 pekiştirdi: logo değil, düz **marka adı** ızgarası (bkz. #21) |
 | 7 | Creative sayfası zemin rengi | 9 | Toz pembe zemin + siyah başlık + fuşya vurgu (brief'in kendi önerisi) | VARSAYILANLA İLERLE |
 | 8 | MONA sesi | 11.1 | İnsan seslendirme (brief'in önerisi — "karakter yapay, ses insan" tezi) | AÇIK — prodüksiyon planlanmalı |
 | 9 | MONA kafası (iMac G3 / 1984 Mac) | 11.1 | 1984 Macintosh (brief'in önerisi — "hello" ekranı açılış repliğine bağlanıyor) | VARSAYILANLA İLERLE |
 | 10 | WhatsApp butonu | 13 | Evet, ikincil CTA olarak eklensin | VARSAYILANLA İLERLE |
 | 11 | Randevu linki | 13 | Cal.com (Calendly'den daha esnek ücretsiz tier) | VARSAYILANLA İLERLE |
 | 12 | Sitenin birincil eylemi | 13 | "30 dakikalık tanışma görüşmesi" (takvim linki), ikincil WhatsApp | VARSAYILANLA İLERLE |
-| 13 | Insights menü konumu | 18.1 / 20.1 | Ana menüde 6. madde (brief'in gerekçesi güçlü: gömülü içerik taranmaz) | VARSAYILANLA İLERLE |
+| 13 | Insights menü konumu | 18.1 / 20.1 | Ana menüde 6. madde (brief'in gerekçesi güçlü: gömülü içerik taranmaz) | **SUPERSEDED** — 29 Ağu 2026: Insights ana menüde değil (bkz. #18) |
 | 14 | Directors & Crew — kaç kişi, çekim tarihi | 20.3 | Müşteriden liste + çekim günü planlanmalı | AÇIK |
 | 15 | How We Work bütçe bandı rakamları | 20.5 | Somut rakam yerine süre bandı ("3-6 hafta") + form yönlendirme | AÇIK — ticari karar, müşteride kalmalı |
 | 16 | Works içerik envanteri (iş adı, müşteri, yıl, format, yayın izni, dosya/video/görsel konumu, vaka sayfası açılacak mı?) | 7.3 | Yok — bu liste olmadan grid tasarımı ve yayınlanacak işler kesinleşmez | AÇIK — blocker |
@@ -124,3 +129,44 @@ sınırlarına göre konumlanır. Escape, dışarı tıklama ve klavye odağı k
   Parçacık izleri daha yoğun, 3.8-5.4 saniye ömürlüdür.
 - Azaltılmış hareket tercihi tüm dekoratif hareketi durdurur. Yeni
   görsel üretimi, kütüphane veya WebGL sahnesi eklenmez.
+
+---
+
+## 29 Ağustos 2026 müşteri revizyonu
+
+Müşteri, siteyi eski hibrid360.com'un bilgi mimarisine yaklaştıran bir
+revizyon verdi. Aşağıdaki maddeler **kapanmış kararlardır** — sorulmadı,
+müşteri tarafından bildirildi.
+
+| # | Konu | Karar | Durum | Etki |
+|---|---|---|---|---|
+| 17 | Photography bağımsız hizmet sayfası | **Kaldırıldı.** Yetenek olarak Solutions'ta ("Photo Shooting") ve Production/Post Production kapsamında kalır | KAPANDI | `/what-we-do/photography` → `/what-we-do` (308). Katalogdan, service-links'ten, What We Do listesinden, sitemap'ten çıktı |
+| 18 | Ana menü | Eski sitenin **yedi maddelik** sırasına dönüldü: Who We Are · What We Do · What We Believe · Solutions · Clients · Partners · Contact | KAPANDI | Deck'in beş maddelik menüsü ve #13 geçersiz. WORK, INSIGHTS ve CULTURE menüde değil; rotaları yaşıyor |
+| 19 | Menü etiketlerinin dili | TR locale'de **Türkçe** karşılıklar kullanılır | KAPANDI | "Ana menü maddeleri iki dilde de İngilizce kalır" varsayımı geçersiz. Hizmet **adları** İngilizce kalmayı sürdürür (özel ad) |
+| 20 | Eski Culture alt rotaları | Who We Are · What We Believe · Partners kendi canonical rotalarına taşındı | KAPANDI | `/culture/*` → yeni rotalar (308). `/culture` hub'ı silinmedi: Directors & Crew ve Sustainability'nin başka üst sayfası yok |
+| 21 | Friends → Clients | Sayfanın görünür adı ve rotası **Clients** oldu (eski sitedeki adına dönüş) | KAPANDI | `/friends` → `/clients` (308). Logo alanı **eklenmeyecek** — müşteri minimal marka adları istiyor. Sektör/kategori/filtre yok |
+| 22 | Solutions sayfası | Yeniden açıldı; eski sayfanın on beş yetenek listesiyle | KAPANDI | Giriş paragrafı yok — eski sayfada da yoktu, uydurulmadı |
+| 23 | Ana sayfada MONA | **Kaldırıldı.** MONA yalnızca AI Creative Production sayfasında | KAPANDI | ⚠️ Kod değişikliği **Codex'te**: `src/app/[locale]/page.tsx` hâlâ `<Mona variant="compact" />` render ediyor |
+| 24 | Full-bleed tasarım | Genel kural oldu | KAPANDI | ⚠️ Tamamen Codex kapsamında (CSS/layout) |
+
+### Bu revizyonla kapanmayan, hâlâ blocker olan maddeler
+
+- **#16 Works içerik envanteri** — hâlâ `AÇIK — blocker`. Filtre facet'leri
+  (`service` · `industry` · `content_format`) şemaya eklendi ama üçü de
+  nullable ve envanter gelmeden dolmuyor. Arayüz boş eksende filtre
+  göstermiyor.
+- **AI showreel filmi** — hâlâ yok (BLOCKERS.md madde 2).
+- **What We Believe müşteri videosu** — müşterinin çekeceği konuşma videosu
+  için hiçbir gerçek dosya yok. Sahte video/yer tutucu kişi üretilmedi.
+- **Atatürk fotoğrafı ve Küçük Prens illüstrasyonunun kullanım hakları** —
+  bkz. BLOCKERS.md madde 8 ve LEGACY_CONTENT_ROUTE_MAP.md bölüm 4.
+
+### Açık teknik kararlar (bu revizyonla doğan)
+
+| Konu | Durum | Nerede |
+|---|---|---|
+| Harita sağlayıcısı (Google Maps / Mapbox / OSM / yok) | **AÇIK** — dört seçenek maliyet ve gizlilik gerekçeleriyle karşılaştırıldı; seçilene kadar gömülü harita yok, yalnızca yol tarifi bağlantısı var | `src/data/contact.ts` |
+| Clients gövde metni çelişkisi | **AÇIK** — deck metni "onlara müşteri değil, dost diyoruz" diyor, sayfa adı artık Clients | CURRENT_CONTENT_GAPS.md madde 18 |
+| Contact adresi | **AÇIK** — eski site (2020) ile deck (Ağu 2026) farklı adres veriyor | CURRENT_CONTENT_GAPS.md madde 4 |
+| Solutions giriş paragrafı | **AÇIK** — eski sayfada yoktu, müşteriden isteniyor | CURRENT_CONTENT_GAPS.md madde 19 |
+| `works.category` alanının anlamı | **AÇIK** — arayüzde artık kullanılmıyor; ne anlama geldiği netleşmeli | `supabase/migrations/20260829100050_extend_works_filter_facets.sql` |

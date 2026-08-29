@@ -127,10 +127,60 @@ Konfigürasyon: `wrangler.jsonc`, `open-next.config.ts`.
 - Çeviri metinleri: `src/messages/tr.json`, `src/messages/en.json`.
 - hreflang etiketleri her sayfada `generateMetadata` → `alternates.languages`
   ile otomatik üretilir.
-- Ana menü kelimeleri (WORK, WHAT WE DO, CULTURE, FRIENDS, CONTACT) marka
-  dili olarak her iki dilde de İngilizce sabit kalır — CLAUDE.md'deki slogan
-  kuralıyla tutarlı bir varsayım. INSIGHTS rotası korunur ve footer'da
-  erişilebilir kalır.
+- Ana menü etiketleri **TR locale'de Türkçedir** (29 Ağustos 2026 müşteri
+  revizyonu, `docs/DECISIONS.md` #19). Bu, menü maddelerinin iki dilde de
+  İngilizce kalacağını söyleyen eski varsayımın yerini alır. Hizmet
+  **adları** (Creative, Production, Cloud TV…) özel ad olarak İngilizce
+  kalmayı sürdürür; sloganlar da CLAUDE.md kuralı gereği çevrilmez.
+
+## Site haritası ve navigasyon
+
+Menü ve hizmet kataloğu **tek veri kaynağından** gelir; sayfa, sitemap ve
+mega menü aynı diziyi okur:
+
+- `src/data/navigation.ts` — üst menü (label key, canonical href, sıra,
+  mega menü alt öğeleri) + menüde olmayan ikincil rotalar
+- `src/data/services.ts` — sekiz hizmetin sırası, adı, rotası, görseli
+
+### Üst menü (canonical sıra)
+
+| # | TR | EN | Rota |
+|---|---|---|---|
+| 1 | BİZ KİMİZ | WHO WE ARE | `/[locale]/who-we-are` |
+| 2 | NE YAPIYORUZ | WHAT WE DO | `/[locale]/what-we-do` |
+| 3 | NEYE İNANIYORUZ | WHAT WE BELIEVE | `/[locale]/what-we-believe` |
+| 4 | ÇÖZÜMLER | SOLUTIONS | `/[locale]/solutions` |
+| 5 | MÜŞTERİLER | CLIENTS | `/[locale]/clients` |
+| 6 | İŞ ORTAKLARI | PARTNERS | `/[locale]/partners` |
+| 7 | İLETİŞİM | CONTACT | `/[locale]/contact` |
+
+**Menüde olmayan ama yaşayan rotalar:** `/work` (ana sayfa CTA'ları,
+Clients ve footer üzerinden), `/insights`, `/culture`
+(+ `/culture/directors`, `/culture/sustainability`), `/brief`, yasal
+sayfalar.
+
+### Hizmet kataloğu (What We Do)
+
+Creative · Production · Post Production · Digital · Live Broadcast ·
+Cloud TV · Event Management · AI Creative Production
+
+Photography 29 Ağustos 2026 revizyonuyla bağımsız hizmet olmaktan çıktı;
+yetenek olarak Solutions sayfasında duruyor (`docs/DECISIONS.md` #17).
+
+### Kalıcı yönlendirmeler (308)
+
+`next.config.mjs` → `redirects()`, her locale için ayrı üretilir:
+
+| Eski | Yeni |
+|---|---|
+| `/[locale]/friends` | `/[locale]/clients` |
+| `/[locale]/culture/who-we-are` | `/[locale]/who-we-are` |
+| `/[locale]/culture/what-we-believe` | `/[locale]/what-we-believe` |
+| `/[locale]/culture/partners` | `/[locale]/partners` |
+| `/[locale]/what-we-do/photography` | `/[locale]/what-we-do` |
+
+Yönlendirilen hiçbir URL sitemap'te yer almaz ve hiçbir yerde canonical
+olarak ilan edilmez.
 
 ## Design tokens
 

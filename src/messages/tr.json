@@ -8,12 +8,17 @@
     "closeDetails": "Detayı kapat"
   },
   "nav": {
+    "whoWeAre": "BİZ KİMİZ",
+    "whatWeDo": "NE YAPIYORUZ",
+    "whatWeBelieve": "NEYE İNANIYORUZ",
+    "solutions": "ÇÖZÜMLER",
+    "clients": "MÜŞTERİLER",
+    "friends": "MÜŞTERİLER",
+    "partners": "İŞ ORTAKLARI",
+    "contact": "İLETİŞİM",
     "work": "WORK",
-    "whatWeDo": "WHAT WE DO",
-    "culture": "CULTURE",
     "insights": "INSIGHTS",
-    "friends": "FRIENDS",
-    "contact": "CONTACT",
+    "culture": "CULTURE",
     "menuLabel": "Ana menü",
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat"
@@ -84,7 +89,9 @@
       "label": "Filtre",
       "year": "Yıl",
       "client": "Müşteri",
-      "format": "Format",
+      "service": "Hizmet",
+      "industry": "Sektör",
+      "contentFormat": "Format",
       "all": "Tümü"
     },
     "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz — özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",
@@ -102,15 +109,38 @@
     "heroTitle": "NE YAPIYORUZ",
     "heroBody": "Tek fikir, uçtan uca üretim: strateji, film, fotoğraf, canlı yayın, dijital ve AI — tek çatı, tek ekip.",
     "list": [
-      { "title": "Creative", "body": "Marka düşüncesi, konsept ve kampanya fikirleri." },
-      { "title": "Production", "body": "Film, reklam filmi ve ürün içeriği; uçtan uca çekim." },
-      { "title": "Post Production", "body": "Kurgu, renk, ses, motion ve 3D." },
-      { "title": "Digital", "body": "Sosyal medya öncelikli içerik, web ve sürekli üretim." },
-      { "title": "Live Broadcast", "body": "Çok kameralı canlı yayın, etkinlik ve medikal yayın." },
-      { "title": "Cloud TV", "body": "Bulut portal üzerinde kendi kurumsal TV kanalınız." },
-      { "title": "Event Management", "body": "Etkinlik, kongre, lansman ve roadshow." },
-      { "title": "Photography", "body": "Ürün, yemek, portre ve kampanya fotoğrafı." },
-      { "title": "AI Creative Production", "body": "AI film, AI fotoğraf, AI tasarım ve hibrit iş akışları." }
+      {
+        "title": "Creative",
+        "body": "Marka düşüncesi, konsept ve kampanya fikirleri."
+      },
+      {
+        "title": "Production",
+        "body": "Film, reklam filmi ve ürün içeriği; uçtan uca çekim."
+      },
+      {
+        "title": "Post Production",
+        "body": "Kurgu, renk, ses, motion ve 3D."
+      },
+      {
+        "title": "Digital",
+        "body": "Sosyal medya öncelikli içerik, web ve sürekli üretim."
+      },
+      {
+        "title": "Live Broadcast",
+        "body": "Çok kameralı canlı yayın, etkinlik ve medikal yayın."
+      },
+      {
+        "title": "Cloud TV",
+        "body": "Bulut portal üzerinde kendi kurumsal TV kanalınız."
+      },
+      {
+        "title": "Event Management",
+        "body": "Etkinlik, kongre, lansman ve roadshow."
+      },
+      {
+        "title": "AI Creative Production",
+        "body": "AI film, AI fotoğraf, AI tasarım ve hibrit iş akışları."
+      }
     ]
   },
   "contact": {
@@ -316,8 +346,30 @@
       "freelance": "Birlikte çalıştığımız"
     }
   },
-  "friends": {
-    "heroTitle": "DOSTLARIMIZ",
+  "solutions": {
+    "heroTitle": "ÇÖZÜMLER",
+    "heroKicker": "More And More",
+    "listTitle": "Neler üretiyoruz",
+    "items": [
+      "Marka Danışmanlığı",
+      "Reklam",
+      "Basılı İşler",
+      "Ambalaj",
+      "Açık Hava",
+      "Web Sitesi",
+      "Logo",
+      "Dijital",
+      "TVC",
+      "Etkinlik",
+      "Fotoğraf Çekimi",
+      "Canlı Yayın",
+      "Çekim",
+      "Post Prodüksiyon",
+      "Cloud TV"
+    ]
+  },
+  "clients": {
+    "heroTitle": "MÜŞTERİLER",
     "heroBody": "Birlikte çalıştığımız insanları seviyoruz. O kadar ki ajansımızda onlara müşteri değil, dost diyoruz — ancak en yakın dostlarınızla kurabileceğiniz türden dürüst ve sadık bir kimya. Cesur iş birlikleri. Global ikonlar. Ortak yaratıcı enerji.",
     "ctaLead": "Birlikte ne ürettiğimizi görmek ister misiniz?",
     "testimonialsTitle": "Ne diyorlar",

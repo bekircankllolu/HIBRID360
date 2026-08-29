@@ -40,8 +40,17 @@ create table public.works (
   client_name text not null,
   client_name_confidential boolean default false,
   year integer not null check (year >= 1990 and year <= 2100),
+  -- Varlık türü. Filtredeki "Format" bu DEĞİL — bkz. content_format.
   format text not null check (format in ('video', 'image', 'case_study')),
+  -- Eski serbest metin gruplama. Anlamı müşteriyle netleşmedi; arayüzde
+  -- kullanılmıyor, dönüştürülmedi.
   category text,
+  -- Filtre facet'leri (29 Ağustos 2026 revizyonu). Üçü de nullable: iş
+  -- envanteri gelmeden doldurulamaz ve zorlamak veriyi uydurmaya davet
+  -- eder. Boşken arayüz o filtreyi hiç göstermez.
+  service text,
+  industry text,
+  content_format text,
   is_featured boolean default false,
   permission_status text default 'pending' check (permission_status in ('approved', 'pending', 'not_allowed')),
   cover_image_url text,
@@ -127,6 +136,9 @@ create index directors_published_sort_idx
 create index works_public_sort_idx
   on public.works (published, permission_status, is_featured, year desc);
 
+create index works_facets_idx
+  on public.works (service, industry, content_format);
+
 create index testimonials_public_idx
   on public.testimonials (is_published, written_consent_confirmed);
 
@@ -208,6 +220,9 @@ as
     year,
     format,
     category,
+    service,
+    industry,
+    content_format,
     is_featured,
     cover_image_url,
     video_url,

@@ -39,6 +39,12 @@ async function selectFrom<T>(
  * `works` tablosu yerine `works_public` view'i: gizli müşteri adı burada
  * maskeleniyor ve yalnızca permission_status='approved' işler dönüyor.
  * Taban tablonun anon/authenticated'a select yetkisi kaldırıldı.
+ *
+ * `select("*")` bilinçli: kolon listesi view'de tanımlı ve view zaten
+ * güvenlik sınırı. 29 Ağustos 2026 revizyonuyla eklenen filtre
+ * facet'leri (`service` · `industry` · `content_format`) bu yüzden ek
+ * değişiklik gerektirmeden akıyor. View ile `Work` tipi arasındaki el
+ * ile senkron src/types/content.test.ts tarafından doğrulanıyor.
  */
 export function getPublishedWorks() {
   return selectFrom<Work>("works_public", {

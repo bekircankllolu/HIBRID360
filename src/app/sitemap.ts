@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 import { insightsPosts } from "@/data/insights";
+import { MAIN_NAV_PATHS } from "@/data/navigation";
+import { SERVICE_PATHS, WHAT_WE_DO_EXTRA_PATHS } from "@/data/services";
 import {
   getPublishedDirectors,
   getPublishedInsights,
@@ -11,19 +13,24 @@ import {
 // brief-rev12.md Bölüm 1.7 — GEO/AI görünürlüğü: sitemap.xml zorunlu.
 // Statik rotalar + Supabase'ten gelen yayınlanmış Works/Directors/Insights
 // detay sayfaları listelenir.
+//
+// 29 Ağustos 2026 revizyonu: yalnızca canonical rotalar listelenir.
+// Yönlendirilen eski yollar (/friends, /culture/who-we-are,
+// /culture/what-we-believe, /culture/partners, /what-we-do/photography)
+// sitemap'e **girmez** — 308 dönen bir URL'yi sitemap'te ilan etmek
+// canonical sinyalini bulandırır. Menü sırası MAIN_NAV'dan, hizmet
+// rotaları SERVICE_CATALOG'dan gelir; sitemap ile navigasyonun ayrışması
+// böylece imkânsız.
 const STATIC_PATHS = [
   "",
+  ...MAIN_NAV_PATHS,
+  ...SERVICE_PATHS,
+  ...WHAT_WE_DO_EXTRA_PATHS,
   "/work",
-  "/what-we-do",
-  "/what-we-do/service-production",
-  "/what-we-do/how-we-work",
-  "/what-we-do/ai-creative-production",
   "/culture",
   "/culture/directors",
   "/culture/sustainability",
   "/insights",
-  "/friends",
-  "/contact",
   "/brief",
   "/privacy",
   "/cookie-policy",

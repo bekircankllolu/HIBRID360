@@ -8,12 +8,17 @@
     "closeDetails": "Close details"
   },
   "nav": {
-    "work": "WORK",
+    "whoWeAre": "WHO WE ARE",
     "whatWeDo": "WHAT WE DO",
-    "culture": "CULTURE",
-    "insights": "INSIGHTS",
-    "friends": "FRIENDS",
+    "whatWeBelieve": "WHAT WE BELIEVE",
+    "solutions": "SOLUTIONS",
+    "clients": "CLIENTS",
+    "friends": "CLIENTS",
+    "partners": "PARTNERS",
     "contact": "CONTACT",
+    "work": "WORK",
+    "insights": "INSIGHTS",
+    "culture": "CULTURE",
     "menuLabel": "Main navigation",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
@@ -84,7 +89,9 @@
       "label": "Filter",
       "year": "Year",
       "client": "Client",
-      "format": "Format",
+      "service": "Service",
+      "industry": "Industry",
+      "contentFormat": "Format",
       "all": "All"
     },
     "ctaLead": "If our work aligns with your frequency, we would love to meet you — especially if you are on the SAME FREQUENCY, same mindset as us.",
@@ -102,15 +109,38 @@
     "heroTitle": "WHAT WE DO",
     "heroBody": "One idea, produced end to end: strategy, film, photography, live broadcast, digital and AI — under one roof, with one crew.",
     "list": [
-      { "title": "Creative", "body": "Brand thinking, concept and campaign ideas." },
-      { "title": "Production", "body": "Films, commercials and product content, shot end to end." },
-      { "title": "Post Production", "body": "Editing, colour, sound, motion and 3D." },
-      { "title": "Digital", "body": "Social-first content, web and always-on production." },
-      { "title": "Live Broadcast", "body": "Multi-camera live streams, events and medical broadcasts." },
-      { "title": "Cloud TV", "body": "Your own corporate TV channel on a cloud portal." },
-      { "title": "Event Management", "body": "Events, conventions, launches and roadshows." },
-      { "title": "Photography", "body": "Product, food, portrait and campaign photography." },
-      { "title": "AI Creative Production", "body": "AI films, AI photography, AI design and hybrid workflows." }
+      {
+        "title": "Creative",
+        "body": "Brand thinking, concept and campaign ideas."
+      },
+      {
+        "title": "Production",
+        "body": "Films, commercials and product content, shot end to end."
+      },
+      {
+        "title": "Post Production",
+        "body": "Editing, colour, sound, motion and 3D."
+      },
+      {
+        "title": "Digital",
+        "body": "Social-first content, web and always-on production."
+      },
+      {
+        "title": "Live Broadcast",
+        "body": "Multi-camera live streams, events and medical broadcasts."
+      },
+      {
+        "title": "Cloud TV",
+        "body": "Your own corporate TV channel on a cloud portal."
+      },
+      {
+        "title": "Event Management",
+        "body": "Events, conventions, launches and roadshows."
+      },
+      {
+        "title": "AI Creative Production",
+        "body": "AI films, AI photography, AI design and hybrid workflows."
+      }
     ]
   },
   "contact": {
@@ -316,8 +346,30 @@
       "freelance": "We work with"
     }
   },
-  "friends": {
-    "heroTitle": "OUR FRIENDS",
+  "solutions": {
+    "heroTitle": "SOLUTIONS",
+    "heroKicker": "More And More",
+    "listTitle": "What we deliver",
+    "items": [
+      "Brand Consultancy",
+      "Advertising",
+      "Printed",
+      "Packing",
+      "Outdoor",
+      "Website",
+      "Logo",
+      "Digital",
+      "TVC",
+      "Event",
+      "Photo Shooting",
+      "Live Broadcast",
+      "Shooting",
+      "Post Production",
+      "Cloud TV"
+    ]
+  },
+  "clients": {
+    "heroTitle": "CLIENTS",
     "heroBody": "We love the folks we work with. So much so, at our creative agency we call them friends, not clients — the kind of honest, loyal chemistry you only get with your BFFs. Bold collaborations. Global icons. Shared creative energy.",
     "ctaLead": "Want to see what we made together?",
     "testimonialsTitle": "What they say",
