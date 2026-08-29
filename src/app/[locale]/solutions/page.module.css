@@ -1,0 +1,189 @@
+/**
+ * Solutions — tam genişlik tipografik ızgara.
+ *
+ * Marka kuralı (CLAUDE.md): siyah zemin, beyaz tipografi; sarı ve fuşya
+ * yalnızca vurgu. Burada sarı üst başlıkta ve sayaçta, fuşya hover
+ * çizgisinde ve okta kullanılıyor — ikisi de zemin olarak değil.
+ *
+ * Kart içinde kart yok: her madde tek bir hücre, kendi kenarlığı yok,
+ * yalnızca alt çizgisi var. Izgara boşluğu ile çizgi hiyerarşiyi
+ * kuruyor.
+ */
+.page {
+  --page-gutter: clamp(1rem, 3vw, 3.5rem);
+  width: 100%;
+  /* Tam genişlik: içerik konteyneri yok, yalnızca kenar boşluğu. */
+  padding: 0 0 clamp(4rem, 8vw, 8rem);
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  /* Dev tipografi kendi satır kutusundan taşabildiği için sayfa kendi
+     içinde kırpar; gövde asla yatay kaymaz (390/768/1440 doğrulandı). */
+  overflow-x: hidden;
+}
+
+/* Tam ekran kapak: başlık ekranın altına yaslanır, ızgara kaydırınca
+   gelir — eski sayfanın kapak/liste ayrımı korunuyor. */
+.hero {
+  min-height: min(58svh, 34rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(3.5rem, 9vh, 7rem) var(--page-gutter) clamp(2rem, 5vh, 4rem);
+}
+
+.kicker {
+  margin: 0 0 clamp(0.75rem, 1.5vw, 1.25rem);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(0.8125rem, 1.4vw, 1.125rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  /* Ekran genişliğine göre büyür ama taşmaz: 390px'te ~2.6rem,
+     1440px'te ~10rem. */
+  font-size: clamp(2.6rem, 13vw, 10rem);
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  /* Uzun TR başlığı ("ÇÖZÜMLER") dar ekranda kırpılmasın. */
+  overflow-wrap: anywhere;
+}
+
+/* Izgara bloğu */
+.list {
+  padding: 0 var(--page-gutter);
+}
+
+.listTitle {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+}
+
+.grid {
+  display: grid;
+  /* Sütun sayısı kırılma noktalarıyla açıkça belirleniyor: mobilde 1-2,
+     masaüstünde 3-5. auto-fill yerine bu tercih edildi ki her ekranda
+     sayı öngörülebilir olsun. */
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1600px) {
+  .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.75rem, 1.2vw, 1.25rem);
+  padding: clamp(1.1rem, 2vw, 1.6rem) clamp(0.5rem, 1.5vw, 1.5rem)
+    clamp(1.1rem, 2vw, 1.6rem) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.index {
+  flex: 0 0 auto;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  /* Numaralar aynı genişlikte hizalansın. */
+  font-variant-numeric: tabular-nums;
+  color: var(--color-brand-yellow);
+}
+
+.label {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(1.0625rem, 1.7vw, 1.5rem);
+  line-height: 1.15;
+  /* Hover'da renk DEĞİŞMEZ — hareket ve çizgi taşıyor. */
+  color: var(--color-brand-white);
+  overflow-wrap: anywhere;
+}
+
+/* Hover göstergesi: sağa kayan ok. Metin rengine dokunmaz. */
+.arrow {
+  margin-left: auto;
+  flex: 0 0 auto;
+  align-self: center;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--color-brand-fuchsia);
+  opacity: 0;
+  transform: translateX(-0.4rem);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+/* Alt çizginin fuşyaya dönen üst katmanı — kenarlığın kendisi yerinde
+   kalır, üstüne soldan açılan ikinci bir çizgi biner. */
+.item::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.item:hover::after,
+.item:focus-within::after {
+  transform: scaleX(1);
+}
+
+.item:hover .arrow,
+.item:focus-within .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* CLAUDE.md zorunlu kuralı — hareket azaltmada geçişler kapanır.
+   Gösterge kaybolmaz, yalnızca anında görünür. */
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .item::after {
+    transition: none;
+  }
+}
