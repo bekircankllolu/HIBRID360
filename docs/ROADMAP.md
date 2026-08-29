@@ -49,9 +49,10 @@ sahip bir iskelet. Hiçbir gerçek içerik yok, ama teknik temel hazır.
 - [ ] **Blocker: Directors & Crew kadrosu + çekim tarihi** (DECISIONS.md #14)
 - [x] Works veri sözleşmesi: `service` · `industry` · `content_format`
       nullable filtre facet'leri (migration + view + tipler + testler)
-- [ ] Works sayfası: Recent Works, yıl bazlı arşiv, iş envanteri grid
-- [ ] Vaka sayfası şablonu (Sorun/Çözüm/Sonuç/Kanıt) — Supabase `works` tablosundan besleniyor
-- [ ] Directors & Crew sayfası + profil detay sayfaları
+- [x] Works sayfası: `RECENT`, Yıl/Hizmet/Sektör filtreleri ve tam genişlik iş grid'i
+      (gerçek kartların yayınlanması içerik envanterine bağlı)
+- [x] Vaka sayfası şablonu (Sorun/Çözüm/Sonuç/Kanıt) — Supabase `works` tablosundan besleniyor
+- [x] Directors & Crew sayfası + profil detay sayfaları (gerçek kadro verisi bekleniyor)
 - [ ] Müşteri sözü toplama (video + yazılı) — hedef: 3 video, 6 yazılı, yayın öncesi
 - [ ] plug-ad.co yönlendirmesinin kaldırılması, Works'e bağlanması
 
@@ -73,8 +74,7 @@ sahip bir iskelet. Hiçbir gerçek içerik yok, ama teknik temel hazır.
 - [ ] Frontend state machine: sessiz açılış → tıklama → konuşma → scroll'da fade out → idle döngüsü
 - [ ] ~~Ana sayfadaki kısa MONA sürümü (2 replik)~~ — **29 Ağu 2026'da
       kaldırıldı** (DECISIONS #23). MONA yalnızca AI Creative Production
-      sayfasında. ⚠️ Kod hâlâ ana sayfada render ediyor; kaldırma işi
-      Codex'te (`src/app/[locale]/page.tsx`)
+      sayfasında. Ana sayfadaki render kaldırıldı.
 - [ ] Brief Builder: 6 soruluk form (Supabase `brief_submissions` tablosu), MONA konuşarak sorar
 - [ ] `prefers-reduced-motion` desteği: MONA döngüsü durur, yalnızca yazı akar
 

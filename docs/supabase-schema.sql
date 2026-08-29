@@ -37,6 +37,9 @@ create table public.directors (
 create table public.works (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
+  -- Proje başlığı envanter teslim edilene kadar nullable kalır.
+  title_tr text,
+  title_en text,
   client_name text not null,
   client_name_confidential boolean default false,
   year integer not null check (year >= 1990 and year <= 2100),
@@ -215,6 +218,8 @@ as
   select
     id,
     slug,
+    title_tr,
+    title_en,
     case when client_name_confidential then null else client_name end as client_name,
     client_name_confidential,
     year,

@@ -1,0 +1,99 @@
+/**
+ * What We Believe — tam genişlik alıntı/görsel bölümleri.
+ *
+ * Eski sitenin anlatım yapısı korunuyor: liste bloklarının ardından iki
+ * tam genişlik görsel bandı geliyor (Atatürk · Küçük Prens), metin
+ * görselin üzerinde duruyor.
+ *
+ * OKUNAKLILIK: kontrast görselin kendisine bırakılmıyor. Her bandın
+ * üstünde alttan yukarı koyulaşan bir perde var; metin o perdenin
+ * içinde, görselin en parlak yerinde bile beyaz metin AA'yı geçiyor
+ * (axe ile doğrulandı). Bu yüzden marka kuralındaki "sarı zemin →
+ * siyah metin" durumu burada oluşmuyor: metnin arkasındaki zemin sarı
+ * değil, siyaha yakın.
+ */
+.figure {
+  position: relative;
+  /* Tam genişlik: sayfa konteynerinin yatay boşluğu kadar dışarı taşar.
+     `100vw` KULLANILMIYOR — masaüstünde kaydırma çubuğunun genişliği
+     kadar taşıp gövdeye yatay kaydırma ekliyor. Negatif margin
+     konteynerin kendi padding'iyle birebir eşleşir, o sorun oluşmaz. */
+  margin-inline: calc(-1 * clamp(1rem, 3vw, 3.5rem));
+  margin-block: clamp(4rem, 9vw, 8rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Uzun ekranlarda bant çok yükselmesin; oran sabit → CLS 0. */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Küçük Prens illüstrasyonu 4:3'e yakın; figürü kırpmadan göstermek için
+   kendi oranını korur. */
+.imageTall {
+  aspect-ratio: 16 / 11;
+}
+
+/* Metin perdesi — alttan yukarı. */
+.caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: clamp(3rem, 9vw, 7rem) clamp(1rem, 3vw, 3.5rem)
+    clamp(1.5rem, 4vw, 3.5rem);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.82) 32%,
+    rgba(0, 0, 0, 0.45) 62%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.captionLead {
+  margin: 0 0 var(--space-3);
+  max-width: 52rem;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: clamp(0.75rem, 1.4vw, 0.9375rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+}
+
+/* Şirketin kendi manifesto cümlesi — tırnak YOK, imza YOK. Alıntı gibi
+   okunmasın diye (bkz. src/data/what-we-believe.ts atıf notu). */
+.captionStatement {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.5rem, 4.5vw, 3.25rem);
+  line-height: 1.05;
+  color: var(--color-brand-white);
+}
+
+.captionQuote {
+  margin: 0;
+  max-width: 30ch;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-style: italic;
+  font-size: clamp(1.25rem, 3.6vw, 2.5rem);
+  line-height: 1.2;
+  color: var(--color-brand-white);
+}
+
+.captionAuthor {
+  margin: var(--space-4) 0 0;
+  font-size: clamp(0.8125rem, 1.4vw, 0.9375rem);
+  letter-spacing: 0.04em;
+  color: var(--color-brand-yellow);
+}

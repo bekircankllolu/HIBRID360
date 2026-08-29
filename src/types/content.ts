@@ -39,6 +39,9 @@ export interface Director {
 export interface Work {
   id: string;
   slug: string;
+  /** Localized project title. Nullable until the approved work inventory arrives. */
+  title_tr: string | null;
+  title_en: string | null;
   client_name: string | null;
   client_name_confidential: boolean;
   year: number;

@@ -96,9 +96,26 @@ describe("navigasyon", () => {
 
   it("TR menüsü Türkçe, EN menüsü İngilizce etiket kullanır", () => {
     // Müşteri revizyonu: "Türkçe karşılıklarını TR locale'de kullan."
-    expect(tr.nav.whoWeAre).toBe("BİZ KİMİZ");
-    expect(tr.nav.clients).toBe("MÜŞTERİLER");
-    expect(en.nav.whoWeAre).toBe("WHO WE ARE");
-    expect(en.nav.clients).toBe("CLIENTS");
+    expect(tr.nav.whoWeAre).toBe("Biz Kimiz");
+    expect(tr.nav.clients).toBe("Müşteriler");
+    expect(en.nav.whoWeAre).toBe("Who We Are");
+    expect(en.nav.clients).toBe("Clients");
+  });
+
+  it("etiketler Title Case — başlıkta text-transform yok", () => {
+    // Header.module.css'te `text-transform` YOK: görünen metin doğrudan
+    // etiketin kendisi. Etiketler Header.tsx'ten mesaj dosyasına taşınırken
+    // görünür tasarımın değişmemesi buna bağlı; tamamı büyük harfe
+    // çevrilirse menü görünümü sessizce bozulur.
+    for (const locale of ["tr", "en"] as const) {
+      const nav = LOCALE_MESSAGES[locale].nav as Record<string, string>;
+      for (const item of MAIN_NAV) {
+        const label = nav[item.labelKey];
+        expect(
+          label,
+          `nav.${item.labelKey} (${locale}) tamamen büyük harf`,
+        ).not.toBe(label.toLocaleUpperCase(locale));
+      }
+    }
   });
 });

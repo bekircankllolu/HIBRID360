@@ -11,17 +11,29 @@ import { CONSENT_STORAGE_KEY } from "@/lib/consent";
  *   2. Geri gelen ziyaretçide bir an görünüp kaybolma riski.
  *
  * Çözüm: bandın işaretlemesi ilk HTML'de geliyor (statik üretim korunuyor),
- * bu script de <html> üzerine data-consent="set|pending" yazıyor. CSS
- * "set" durumunda bandı hiç göstermiyor. Script boyamadan önce çalıştığı
- * için ne gecikmeli giriş ne de yanıp sönme oluyor.
+ * bu script de <html> üzerindeki data-consent değerini rıza kaydı varsa
+ * "set" yapıyor. CSS "set" durumunda bandı hiç göstermiyor. Script
+ * boyamadan önce çalıştığı için ne gecikmeli giriş ne de yanıp sönme
+ * oluyor.
+ *
+ * `data-consent="pending"` BAŞLANGIÇ DEĞERİ SUNUCUDAN geliyor
+ * (src/app/[locale]/layout.tsx). Script eskiden bu değeri her yüklemede
+ * kendisi yazıyordu; sunucu çıktısında öznitelik hiç olmadığı için React
+ * hidrasyonda onu fazladan görüyor ve her sayfa açılışında uyuşmazlık
+ * hatası veriyordu. Şimdi öznitelik iki tarafta da var; script yalnızca
+ * kararını vermiş ziyaretçide değeri değiştiriyor ve o tek durum
+ * layout'taki `suppressHydrationWarning` ile beklenen ilan ediliyor.
+ *
+ * Öznitelik hiç yazılamazsa (script engellendi, gizli sekme) değer
+ * "pending" kalır ve bant görünür — rıza sorulmadan analytics
+ * yüklenmemesi, bandın gizlenmesinden önemli.
  *
  * `beforeInteractive` yerine ham <script>: next/script'in bu stratejisi
  * de <head>'e koyuyor ama bu kadar küçük bir kod için ek yükü gereksiz.
  */
 const INIT_SCRIPT = `(function(){try{
-var v=localStorage.getItem(${JSON.stringify(CONSENT_STORAGE_KEY)});
-document.documentElement.dataset.consent=v?"set":"pending";
-}catch(e){document.documentElement.dataset.consent="pending";}})();`;
+if(localStorage.getItem(${JSON.stringify(CONSENT_STORAGE_KEY)}))document.documentElement.dataset.consent="set";
+}catch(e){}})();`;
 
 export function ConsentInitScript() {
   return (

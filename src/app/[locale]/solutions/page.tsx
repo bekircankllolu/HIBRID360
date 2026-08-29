@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
+import styles from "./page.module.css";
 
 /**
  * Solutions — 29 Ağustos 2026 müşteri revizyonuyla üst menüye dönen sayfa.
@@ -22,9 +23,10 @@ import { localizedAlternates } from "@/lib/site";
  * olmaktan çıktı ama bir yetenek olarak eski sitede de burada
  * listeleniyordu (bkz. docs/DECISIONS.md #17).
  *
- * SUNUM: burada bilinçli olarak yalnızca semantik iskelet var — sarmalayıcı
- * div, CSS modülü, animasyon veya satır içi stil yok. Görsel katman
- * (full-bleed düzen, kutucuk ızgarası, hover) Codex tarafından bağlanacak.
+ * SUNUM: tam genişlik kapak + tipografik ızgara (bkz. page.module.css).
+ * Maddeler bağlantı DEĞİL — her yeteneğin kendi sayfası yok ve olmayan
+ * bir hedefe link uydurulmadı. Hover göstergesi bu yüzden yalnızca
+ * dekoratif: çizgi ve ok, metin rengi sabit.
  */
 
 export async function generateMetadata({
@@ -54,7 +56,7 @@ export default async function SolutionsPage({
 
   return (
     // <main> layout'ta zaten var (#main-content) — burada tekrarlanmaz.
-    <div>
+    <div className={styles.page}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -62,15 +64,25 @@ export default async function SolutionsPage({
         ])}
       />
 
-      <h1>{t("heroTitle")}</h1>
-      {/* Eski sayfanın kendi üst başlığı; marka dili, iki dilde de aynı. */}
-      <p>{t("heroKicker")}</p>
+      <header className={styles.hero}>
+        {/* Eski sayfanın kendi üst başlığı; marka dili, iki dilde de aynı. */}
+        <p className={styles.kicker}>{t("heroKicker")}</p>
+        <h1 className={styles.title}>{t("heroTitle")}</h1>
+      </header>
 
-      <section>
-        <h2>{t("listTitle")}</h2>
-        <ul>
-          {items.map((item) => (
-            <li key={item}>{item}</li>
+      <section className={styles.list}>
+        <h2 className={styles.listTitle}>{t("listTitle")}</h2>
+        <ul className={styles.grid}>
+          {items.map((item, index) => (
+            <li key={item} className={styles.item}>
+              <span className={styles.index}>
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className={styles.label}>{item}</span>
+              <span className={styles.arrow} aria-hidden="true">
+                →
+              </span>
+            </li>
           ))}
         </ul>
       </section>

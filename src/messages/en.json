@@ -8,17 +8,20 @@
     "closeDetails": "Close details"
   },
   "nav": {
-    "whoWeAre": "WHO WE ARE",
-    "whatWeDo": "WHAT WE DO",
-    "whatWeBelieve": "WHAT WE BELIEVE",
-    "solutions": "SOLUTIONS",
-    "clients": "CLIENTS",
-    "friends": "CLIENTS",
-    "partners": "PARTNERS",
-    "contact": "CONTACT",
-    "work": "WORK",
-    "insights": "INSIGHTS",
-    "culture": "CULTURE",
+    "whoWeAre": "Who We Are",
+    "whatWeDo": "What We Do",
+    "whatWeBelieve": "What We Believe",
+    "solutions": "Solutions",
+    "clients": "Clients",
+    "friends": "Clients",
+    "partners": "Partners",
+    "contact": "Contact",
+    "work": "Work",
+    "insights": "Insights",
+    "culture": "Culture",
+    "about": "About",
+    "explore": "Explore",
+    "legal": "Legal",
     "menuLabel": "Main navigation",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
@@ -40,7 +43,8 @@
       "label": "Social"
     },
     "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
-    "carbonNeutral": "🌱 Carbon neutral"
+    "carbonNeutral": "🌱 Carbon neutral",
+    "backToTop": "Back to top"
   },
   "home": {
     "showreel": {
@@ -79,6 +83,7 @@
     "readMore": "Read more"
   },
   "work": {
+    "pageTitle": "RECENT",
     "empty": "Work inventory is being prepared.",
     "emptyDetail": "Projects will be added after publication permission, client, year, format and asset location are verified.",
     "showreelBody": "Integrated brand experiences that move hearts — and the needle.",
@@ -97,6 +102,7 @@
     "ctaLead": "If our work aligns with your frequency, we would love to meet you — especially if you are on the SAME FREQUENCY, same mindset as us.",
     "seoHeading": "AT HIBRID 360, CREATIVE STORYTELLING AGENCY SERVICES FOR AMBITIOUS BRANDS",
     "confidentialClient": "Confidential client",
+    "projectFallback": "Selected work",
     "case": {
       "problem": "The Challenge",
       "solution": "What We Did",
@@ -171,7 +177,15 @@
     ],
     "directions": "Get directions",
     "bookingLead": "Prefer to talk?",
-    "socialInvite": "Follow the work"
+    "socialInvite": "Follow the work",
+    "mapTitle": "Hibrid 360 office location on Google Maps",
+    "mapNote": "The map is loaded from Google Maps.",
+    "mapLoad": "Load map",
+    "mapPrivacyNote": "The map loads from Google only after you select this button. This action establishes a connection with Google.",
+    "addressLabel": "Address",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "photoCaption": "Istanbul — the Bosphorus Bridge at night"
   },
   "culture": {
     "hub": {
@@ -370,7 +384,7 @@
   },
   "clients": {
     "heroTitle": "CLIENTS",
-    "heroBody": "We love the folks we work with. So much so, at our creative agency we call them friends, not clients — the kind of honest, loyal chemistry you only get with your BFFs. Bold collaborations. Global icons. Shared creative energy.",
+    "heroBody": "We build honest, long-term and ambitious partnerships with the brands we work with. Global icons. Shared creative energy.",
     "ctaLead": "Want to see what we made together?",
     "testimonialsTitle": "What they say",
     "testimonialsEmpty": "Client testimonials are on the way."

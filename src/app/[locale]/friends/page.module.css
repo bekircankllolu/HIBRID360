@@ -6,7 +6,14 @@
 .heroTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(4rem, 11vw, 12rem);
+  /* Taban 4rem'den 3.25rem'e indirildi. 390px'te clamp'in vw terimi
+     (11vw = 42.9px) tabanın altında kaldığı için ölçüyü TABAN belirliyor;
+     64px'te tek parça Türkçe kelimeler ("MÜŞTERİLER" 434px, "YAPIYORUZ"
+     396px) 358px'lik içerik genişliğine sığmıyor ve gövdeye yatay kaydırma
+     ekliyordu. 3.25rem her iki kelimeyi de payla sığdırıyor; ~475px
+     üstünde vw terimi devraldığı için daha geniş ekranlarda ölçü
+     değişmiyor. Nöbetçi: e2e/canonical-routes.spec.ts "Yatay taşma". */
+  font-size: clamp(3.25rem, 11vw, 12rem);
   line-height: 0.85;
   margin: 0 0 clamp(2rem, 5vw, 4rem);
 }

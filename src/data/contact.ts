@@ -41,29 +41,38 @@ export const CONTACT = {
 } as const;
 
 /**
- * Yol tarifi bağlantısı.
- *
- * ## Harita sağlayıcısı — AÇIK TEKNİK KARAR
- *
- * Gömülü harita için sağlayıcı **seçilmedi**; seçim müşteriye/ekibe ait
- * bir maliyet ve gizlilik kararı:
- *
- * | Seçenek | Maliyet | Not |
- * |---|---|---|
- * | Google Maps Embed API | API anahtarı + faturalandırma hesabı | En tanıdık; KVKK/çerez metnine üçüncü taraf satırı eklemek gerekir |
- * | Mapbox GL | Ücretsiz tier + anahtar | Marka renklerine boyanabilir; ek JS ağırlığı (performans bütçesi) |
- * | OpenStreetMap / Leaflet | Anahtarsız | Tile sunucusu politikası ve görünüm sınırları var |
- * | Harita yok, yalnızca yol tarifi bağlantısı | 0 | **Şu anki durum** — sıfır JS, sıfır üçüncü taraf çerezi |
- *
- * Karar verilene kadar gömülü harita yok. Aşağıdaki bağlantı Google
- * Maps'in resmî "directions" URL şemasını, **doğrulanmış adres
- * metninden** üretiyor — uydurma bir place-id veya kısa link değil,
- * anahtar da gerektirmiyor.
+ * Yol tarifi bağlantısı — Google Maps'in resmî "directions" URL şeması,
+ * **doğrulanmış adres metninden** üretiliyor. Uydurma bir place-id veya
+ * kısa link değil, anahtar da gerektirmiyor.
  */
 export function directionsUrl(): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
     CONTACT.addressLines.join(", "),
   )}`;
+}
+
+/**
+ * Gömülü harita — SAĞLAYICI KARARI (29 Ağustos 2026'da verildi).
+ *
+ * | Seçenek | Anahtar | Neden seçilmedi / seçildi |
+ * |---|---|---|
+ * | Google Maps Embed API | **gerekir** (+ faturalandırma hesabı) | Anahtar ve fatura kurulumu müşteriye bağlı; beklemeye gerek yok |
+ * | Mapbox GL | gerekir | Marka renklerine boyanabilirdi ama ek JS ağırlığı performans bütçesini zorlar |
+ * | OpenStreetMap / Leaflet | gerekmez | **Enlem/boylam ister** — elimizde doğrulanmış koordinat yok, uydurulmayacak |
+ * | **Google Maps sorgu gömmesi** | **gerekmez** | ← SEÇİLDİ |
+ *
+ * Sorgu gömmesi (`?q=<adres>&output=embed`) anahtar istemez ve
+ * koordinat değil **adres metni** alır — yani doğrulanmış tek veriyi
+ * kullanır, hiçbir şey uydurmaz. iframe `loading="lazy"`.
+ *
+ * KVKK NOTU — AÇIK: iframe üçüncü taraf (Google) içeriğidir ve çerez
+ * yazabilir. Çerez politikası metnine üçüncü taraf satırı eklenmeli;
+ * bkz. docs/content/CURRENT_CONTENT_GAPS.md.
+ */
+export function mapEmbedUrl(): string {
+  return `https://www.google.com/maps?q=${encodeURIComponent(
+    CONTACT.addressLines.join(", "),
+  )}&output=embed`;
 }
 
 /** WhatsApp derin bağlantısı — teyitli numaradan türetilir. */
@@ -77,23 +86,35 @@ export function telUrl(): string {
 }
 
 /**
- * Contact sayfasının eski sitedeki iki görseli. Dosyalar henüz depoya
- * **alınmadı**: kaynağı ve lisansı doğrulanmamış varlık `public/` altına
- * konmuyor (bkz. docs/visual-audit/BLOCKERS.md madde 3). Kaynak yollar
- * ve ölçüler docs/content/LEGACY_CONTENT_ROUTE_MAP.md'de kayıtlı.
+ * Contact sayfasının eski sitedeki İstanbul panoraması.
  *
- * Telif teyidi gelince `src/data/site-images.ts` içine taşınıp
- * `public/images/site/contact/` altından servis edilecekler.
+ * Müşterinin 29 Ağustos 2026 talimatı bu görselin korunması yönünde.
+ * Türevler `scripts/assets/prepare-legacy-images.py` ile üretildi
+ * (WebP + AVIF, 1600w + 2560w); kaynak yolu, ölçüler ve sha256
+ * `docs/content/LEGACY_CONTENT_ROUTE_MAP.md` içinde kayıtlı.
+ *
+ * Kaynak gri tonlama gece çekimi olduğu için duotone uygulanmadı —
+ * siyah zemine olduğu gibi oturuyor.
+ *
+ * TELİF — AÇIK: fotoğrafın çekeni ve lisansı **doğrulanmadı**; stok
+ * görsel olma ihtimali var (bkz. docs/visual-audit/BLOCKERS.md madde 3).
+ * Yayın öncesi teyit edilmeli.
+ *
+ * Eski sitedeki ikinci görsel ("Motion Office" bölüm görseli,
+ * `/assets/img/contact/contact-screen01.jpg`) bu revizyonda istenmedi ve
+ * alınmadı; kaydı route map'te duruyor.
  */
-export const CONTACT_LEGACY_IMAGES = {
-  /** İstanbul panoraması — eski hero arka planı. */
+export const CONTACT_IMAGES = {
   panorama: {
     legacySrc: "/assets/img/contact/contact-bg.jpg",
-    status: "pending-rights" as const,
+    avif:
+      "/images/site/contact/istanbul-panorama-1600w.avif 1600w, " +
+      "/images/site/contact/istanbul-panorama-2560w.avif 2560w",
+    webp:
+      "/images/site/contact/istanbul-panorama-1600w.webp 1600w, " +
+      "/images/site/contact/istanbul-panorama-2560w.webp 2560w",
+    fallback: "/images/site/contact/istanbul-panorama-1600w.webp",
+    width: 2560,
+    height: 750,
   },
-  /** "Motion Office" bölüm görseli. */
-  motionOffice: {
-    legacySrc: "/assets/img/contact/contact-screen01.jpg",
-    status: "pending-rights" as const,
-  },
-};
+} as const;

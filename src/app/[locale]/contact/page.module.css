@@ -1,183 +1,147 @@
+/**
+ * Contact — tam genişlik akış.
+ *
+ * Sayfa artık ortalanmış dar bir konteyner değil: hero, fotoğraf, sarı
+ * bant ve harita kenardan kenara. İçerik blokları kendi yatay boşluğunu
+ * `--gutter` üzerinden alıyor; tam genişlik olması gereken bloklar
+ * (fotoğraf, sarı bant, harita) o boşluğu almıyor.
+ */
 .page {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+  --gutter: clamp(1rem, 3vw, 3.5rem);
+  width: 100%;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
 }
 
-/* Hero iki sütun: solda başlık + giriş metinleri, sağda künye kartı.
-   Önceden başlık soldaydı ve hero'nun sağ yarısı boştu; adres bloğu da
-   sayfanın aşağısında, içinde tek bir şehir adı olan boş sarı kutunun
-   yanında duruyordu. */
+/* 1 — tam genişlik hero */
 .hero {
-  display: grid;
-  gap: var(--space-10);
-  grid-template-columns: 1fr;
-  align-items: start;
+  padding: clamp(4rem, 10vh, 8rem) var(--gutter) clamp(3rem, 7vh, 5rem);
 }
 
-@media (min-width: 900px) {
-  .hero {
-    grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.65fr);
-    gap: var(--space-16);
-  }
+.heroKicker {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(0.8125rem, 1.4vw, 1.125rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-fuchsia);
 }
 
 .heroTitle {
+  margin: 0 0 var(--space-8);
+  max-width: 18ch;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  line-height: 1.05;
-  margin: 0 0 var(--space-8);
-}
-
-.heroLead {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-subheading);
-  margin: 0 0 var(--space-2);
+  font-size: clamp(2rem, 6.5vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
 }
 
 .heroBody {
-  max-width: 44rem;
-  margin: var(--space-4) 0 0;
-  opacity: 0.9;
-}
-
-/* Künye kartı — brief CON-03: "Harita siyah zemin üzerine sarı (#FFFC00)
-   olacak." Çerçeve ve vurgu sarısı korundu; kutunun içi artık boş değil.
-   TODO: harita API anahtarı gelince gömülü harita bu kartın üstüne
-   eklenecek (bkz. page.tsx). */
-.locationCard {
-  background: var(--color-brand-black);
-  border: 1px solid var(--color-brand-yellow);
-  padding: var(--space-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.addressLead {
   margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  opacity: 0.9;
-}
-
-.address {
-  font-style: normal;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: var(--color-brand-yellow);
-  padding-top: var(--space-5);
-  border-top: 1px solid rgba(255, 252, 0, 0.35);
-}
-
-.contactRows {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  font-size: 0.9375rem;
-}
-
-.contactRow {
-  display: flex;
-  gap: var(--space-3);
-}
-
-.contactRow dt {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  line-height: 1.7;
-  color: var(--color-brand-yellow);
-  min-width: 1rem;
-}
-
-.contactRow dd {
-  margin: 0;
-}
-
-.contactRow a {
-  color: var(--color-brand-fuchsia);
-}
-
-.contactRow a:hover {
-  text-decoration: underline;
-}
-
-/* Gerçek Google Maps "directions" bağlantısı — teyitli adresten
-   türetiliyor, kırık/uydurma link değil. */
-.directions {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
-  align-self: flex-start;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--color-brand-fuchsia);
-  color: var(--color-brand-fuchsia);
-}
-
-.directions:hover {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
-  border-bottom-color: transparent;
-}
-
-.section {
-  margin-top: var(--space-24);
-}
-
-.sectionTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  margin: 0 0 var(--space-6);
-}
-
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  max-width: 46rem;
+  max-width: 48rem;
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
   opacity: 0.9;
 }
 
-.body p {
+/* 2 — İstanbul fotoğrafı + Motion Office */
+.motion {
+  padding-bottom: clamp(3rem, 7vh, 5rem);
+}
+
+.figure {
+  position: relative;
+  margin: 0 0 clamp(2.5rem, 6vw, 5rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.figureImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Panorama kaynağı 2560x750 (≈3.41:1). Dar ekranda bu kadar geniş bir
+     şerit ezik duruyor; oran kırılma noktasıyla ayarlanıyor, ölçü sabit
+     olduğu için CLS 0. */
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 768px) {
+  .figureImage {
+    aspect-ratio: 2560 / 750;
+  }
+}
+
+.figureCaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: clamp(3rem, 8vw, 6rem) var(--gutter) clamp(1.25rem, 3vw, 2.5rem);
+  /* Okunabilirlik görsele bırakılmıyor: metnin arkası her zaman koyu. */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.78) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.figureTitle {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.25rem, 3.6vw, 2.75rem);
+  line-height: 1.05;
+  color: var(--color-brand-white);
+}
+
+.motionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 46rem;
+  margin-inline: var(--gutter);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  opacity: 0.9;
+}
+
+.motionBody p {
   margin: 0;
 }
 
 .motionQuestion {
+  margin: var(--space-12) var(--gutter) var(--space-4);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: 1.125rem;
-  margin: var(--space-12) 0 var(--space-4);
 }
 
 .motionIntro {
+  margin: 0 var(--gutter) var(--space-8);
   max-width: 46rem;
-  margin: 0 0 var(--space-8);
   opacity: 0.9;
 }
 
 .teams {
   display: grid;
   gap: var(--space-8);
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-inline: var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
 }
 
 .teamTitle {
+  margin: 0 0 var(--space-2);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   font-size: 1rem;
   color: var(--color-brand-yellow);
-  margin: 0 0 var(--space-2);
 }
 
 .teamBody {
@@ -186,16 +150,189 @@
   opacity: 0.85;
 }
 
-/* Form iki sütunlu bir bölüm: solda formun kendisi, sağda formu
-   doldurmak istemeyenler için randevu/WhatsApp ve sosyal davet. Önceden
-   form 1440px'te sayfanın sol üçte birinde tek başına duruyordu ve bu iki
-   öğe formun altında ayrı birer şerit halindeydi. */
+/* 3 — sarı iletişim bandı.
+   CLAUDE.md kontrast kuralı: sarı zemin üzerinde metin SİYAH olur;
+   beyaz metin AA geçmiyor. Eski sitedeki sarı kutu içi boştu ve
+   yalnızca bir şehir adı taşıyordu — burada bandın işi net: davet + tek
+   tıkla e-posta. */
+.yellowBand {
+  padding: clamp(3rem, 8vw, 6rem) var(--gutter);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}
+
+.yellowBandLead {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2rem, 8vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.yellowBandEmail {
+  display: inline-block;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1rem, 3vw, 2rem);
+  line-height: 1.2;
+  color: var(--color-text-on-yellow);
+  border-bottom: 2px solid currentColor;
+  /* Uzun e-posta dar ekranda bandı taşırmasın. */
+  overflow-wrap: anywhere;
+}
+
+.yellowBandEmail:hover,
+.yellowBandEmail:focus-visible {
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
+  border-bottom-color: var(--color-brand-black);
+}
+
+/* 4 — adres · telefon · e-posta */
+.details {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(3rem, 7vw, 5rem) var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--color-brand-yellow);
+}
+
+.detailLabel {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+}
+
+.address {
+  margin: 0;
+  font-style: normal;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.detailValue {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.detailValue a {
+  color: var(--color-brand-white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.detailValue a:hover {
+  color: var(--color-brand-fuchsia);
+  border-bottom-color: var(--color-brand-fuchsia);
+}
+
+.inlineLink {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-brand-fuchsia);
+  color: var(--color-brand-fuchsia);
+}
+
+.inlineLink:hover,
+.inlineLink:focus-visible {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  border-bottom-color: transparent;
+}
+
+.socialInvite {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  opacity: 0.7;
+}
+
+/* 5 — tam genişlik harita */
+.mapSection {
+  position: relative;
+  width: 100%;
+}
+
+.map {
+  display: block;
+  width: 100%;
+  /* Şart: en az 70svh. Masaüstünde başlık yüksekliği düşülmüş tam
+     görüntü alanı. */
+  height: 70svh;
+  border: 0;
+  /* Harita yüklenene kadar (lazy) siyah zemin — beyaz bir dikdörtgen
+     parlamasın. */
+  background: var(--color-brand-black);
+}
+
+@media (min-width: 900px) {
+  .map {
+    height: calc(100svh - var(--header-height));
+  }
+}
+
+.mapFallback {
+  margin: 0;
+  padding: var(--space-4) var(--gutter);
+  font-size: 0.875rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.mapFallback span {
+  opacity: 0.7;
+}
+
+.mapFallback a {
+  color: var(--color-brand-fuchsia);
+  border-bottom: 1px solid var(--color-brand-fuchsia);
+}
+
+.mapFallback a:hover {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-text-on-fuchsia);
+  border-bottom-color: transparent;
+}
+
+/* Görsel olarak gizli ama ekran okuyucuya açık başlık — bölümün
+   erişilebilir adı. */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 6 — form */
 .formSection {
-  margin-top: var(--space-24);
-  padding-top: var(--space-12);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
   display: grid;
   gap: var(--space-12);
+  padding: clamp(3rem, 8vw, 6rem) var(--gutter);
   grid-template-columns: 1fr;
 }
 
@@ -206,7 +343,7 @@
     align-items: start;
   }
 
-  /* Yan sütunu formdan ayıran dikey ayraç — yatay şerit yerine. */
+  /* Yan sütunu formdan ayıran dikey ayraç. */
   .formAside {
     padding-left: var(--space-12);
     border-left: 1px solid rgba(255, 255, 255, 0.15);
@@ -215,8 +352,7 @@
 
 /* Form bileşeni ReachOut pop-up'ında da kullanıldığı için kendi modülünde
    32rem ile sınırlı (dar bir diyalogda doğru ölçü). Bu sayfada sütun daha
-   geniş; formu ayraca yaklaştırmak için sınır burada, yalnızca Contact
-   için gevşetiliyor. */
+   geniş; sınır burada, yalnızca Contact için gevşetiliyor. */
 .formColumn form {
   max-width: 40rem;
 }
@@ -252,13 +388,4 @@
   background: var(--color-brand-fuchsia);
   color: var(--color-text-on-fuchsia);
   border-bottom-color: transparent;
-}
-
-.socialInvite {
-  margin: var(--space-4) 0 0;
-  padding-top: var(--space-5);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 0.875rem;
-  line-height: 1.7;
-  opacity: 0.7;
 }

@@ -4,7 +4,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
+import { BeliefFounderVideo } from "@/components/culture/BeliefFounderVideo";
+import { BELIEF_IMAGES } from "@/data/what-we-believe";
 import styles from "@/styles/culture-page.module.css";
+import belief from "./page.module.css";
 
 /**
  * WWB-01..06 (nihai copy deck, Ağustos 2026) — What We Believe.
@@ -13,16 +16,26 @@ import styles from "@/styles/culture-page.module.css";
  * menüdeki canonical /what-we-believe rotasına taşındı; eski yol kalıcı
  * olarak buraya yönlendiriliyor (next.config.mjs). İçerik değişmedi.
  *
- * Eski sitedeki üç görsel (ataturk.jpg · little_prince.png · kadin.jpg)
- * ve "Everything in the world created by women" alıntısı bu sayfaya
- * **bağlanmadı**: telif ve atıf teyidi bekliyor. Bkz.
- * docs/visual-audit/BLOCKERS.md ve docs/content/LEGACY_CONTENT_ROUTE_MAP.md.
+ * 29 Ağustos 2026 revizyonu — görseller: müşteri Atatürk ve Küçük Prens
+ * bölümlerinin korunmasını istedi. Eski sitenin anlatım yapısı geri
+ * geldi: liste bloklarından sonra iki tam genişlik görsel bandı, metin
+ * görselin üzerinde. Görseller marka sarısı duotone ile yeniden
+ * türetildi (eski zeytin yeşili filtre yerine) ve WebP+AVIF, 1600w+2560w
+ * olarak servis ediliyor — bkz. src/data/what-we-believe.ts.
  *
- * WWB-06 [KARAR]: deck'in kendi notu "Everything in the world created by
- * women" alıntısının kaynağının yazılması veya çıkarılması gerektiğini
- * söylüyor — ama bu alıntı WWB-06 kutusunun içinde verilmedi (yalnızca
- * Little Prince alıntısı var). Bu yüzden buraya eklenmedi; kaynaksız/
- * uydurma alıntı yazılmadı.
+ * TELİF AÇIK BLOCKER: iki görselin de kullanım hakkı teyit edilmedi
+ * (Küçük Prens en yüksek riskli madde). Bkz. docs/visual-audit/
+ * BLOCKERS.md ve docs/content/LEGACY_CONTENT_ROUTE_MAP.md.
+ *
+ * `kadin.jpg` (eski hero kapağı) bilerek alınmadı: tanınabilir bir
+ * kişinin portresi, model rıza kaydı yok ve bu revizyonda istenmedi.
+ *
+ * WWB-06 [KARAR]: "Everything in the world created by women" alıntısı
+ * eski sitede Atatürk fotoğrafının üzerinde, **imzasız** duruyordu —
+ * atıf ima ediliyor ama yazılmıyor. Birincil kaynağı gösterilemediği için
+ * yeni siteye alınmadı ve yerine alıntı **uydurulmadı**. O bandın
+ * üzerindeki metin şirketin kendi onaylı manifesto cümlesidir; tırnak
+ * içinde değil, imzasız — alıntı gibi okunmasın diye.
  */
 
 export async function generateMetadata({
@@ -120,12 +133,73 @@ export default async function WhatWeBelievePage({
         </ul>
       </section>
 
-      <section className={styles.band}>
-        <p className={styles.bandLead}>{t("bandLead")}</p>
-        <p className={styles.manifesto}>{t("manifesto")}</p>
-        <p className={styles.quote}>{t("quote")}</p>
-        <p className={styles.quoteAuthor}>{t("quoteAuthor")}</p>
-      </section>
+      {/* Tam genişlik bant 1 — Atatürk. Üzerindeki metin şirketin kendi
+          manifesto cümlesi; tırnak ve imza YOK (bkz. dosya başı notu). */}
+      <figure className={belief.figure}>
+        <picture>
+          <source
+            type="image/avif"
+            srcSet={BELIEF_IMAGES.ataturk.avif}
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet={BELIEF_IMAGES.ataturk.webp}
+            sizes="100vw"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className={belief.image}
+            src={BELIEF_IMAGES.ataturk.fallback}
+            width={BELIEF_IMAGES.ataturk.width}
+            height={BELIEF_IMAGES.ataturk.height}
+            alt={BELIEF_IMAGES.ataturk.alt[locale]}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <figcaption className={belief.caption}>
+          <p className={belief.captionLead}>{t("bandLead")}</p>
+          <p className={belief.captionStatement}>{t("manifesto")}</p>
+        </figcaption>
+      </figure>
+
+      {/* Tam genişlik bant 2 — Küçük Prens. Alıntı ve atıf gerçek ve
+          doğrulanmış (yazım eski sitedeki hatalı hâliyle değil, doğru
+          hâliyle: Antoine de Saint-Exupéry). */}
+      <figure className={belief.figure}>
+        <picture>
+          <source
+            type="image/avif"
+            srcSet={BELIEF_IMAGES.littlePrince.avif}
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcSet={BELIEF_IMAGES.littlePrince.webp}
+            sizes="100vw"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className={`${belief.image} ${belief.imageTall}`}
+            src={BELIEF_IMAGES.littlePrince.fallback}
+            width={BELIEF_IMAGES.littlePrince.width}
+            height={BELIEF_IMAGES.littlePrince.height}
+            alt={BELIEF_IMAGES.littlePrince.alt[locale]}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <figcaption className={belief.caption}>
+          <blockquote className={belief.captionQuote}>{t("quote")}</blockquote>
+          <p className={belief.captionAuthor}>{t("quoteAuthor")}</p>
+        </figcaption>
+      </figure>
+
+      {/* Müşteri konuşma videosu. Varlık teslim edilene kadar bileşen
+          hiçbir şey render etmez — "video hazırlanıyor" kutusu yok,
+          sahte kişi/video üretilmedi (bkz. BELIEF_FOUNDER_VIDEO). */}
+      <BeliefFounderVideo />
     </div>
   );
 }

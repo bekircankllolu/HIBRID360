@@ -1,79 +1,34 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import { MAIN_NAV, MEGA_MENU, type MegaMenuLink } from "@/data/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./Header.module.css";
 
 const MENU_ID = "main-navigation";
 const MEGA_MENU_ID = "desktop-mega-menu";
 
-const SERVICE_LINKS = [
-  { href: "/what-we-do/creative", en: "Creative", tr: "Creative" },
-  { href: "/what-we-do/production", en: "Production", tr: "Production" },
-  {
-    href: "/what-we-do/post-production",
-    en: "Post Production",
-    tr: "Post Production",
-  },
-  { href: "/what-we-do/digital", en: "Digital", tr: "Digital" },
-  {
-    href: "/what-we-do/live-broadcast",
-    en: "Live Broadcast",
-    tr: "Live Broadcast",
-  },
-  { href: "/what-we-do/cloud-tv", en: "Cloud TV", tr: "Cloud TV" },
-  {
-    href: "/what-we-do/event-management",
-    en: "Event Management",
-    tr: "Event Management",
-  },
-  {
-    href: "/what-we-do/ai-creative-production",
-    en: "AI Creative Production",
-    tr: "AI Creative Production",
-  },
-] as const;
+/** Mega menüde alt menüsü açılan madde. */
+const MEGA_TRIGGER_HREF = "/what-we-do";
 
-// 29 Ağustos 2026 revizyonu — merge notu: bu bileşen menüyü kendi içinde
-// tanımlıyor. Canonical rotaların ve sıranın asıl kaynağı
-// `src/data/navigation.ts` (MAIN_NAV) ve `src/data/services.ts`
-// (SERVICE_CATALOG). Aşağıdaki hedefler merge sırasında o kaynakla
-// hizalandı: artık 308 yönlendirmeye değil doğrudan canonical rotalara
-// gidiyorlar ve "Solutions" gerçek Solutions sayfasına bakıyor
-// (önceden yanlışlıkla /what-we-do/how-we-work'e gidiyordu).
-//
-// TODO: bu iki dizi MAIN_NAV/SERVICE_CATALOG'dan türetilip kaldırılmalı.
-// Bugün elle senkron: etiketler burada sabit yazılı (nav.* mesaj
-// anahtarları kullanılmıyor) ve e2e/mobile-menu.spec.ts bu sabit
-// etiketlere göre yazıldığı için merge'de yalnızca href'ler düzeltildi,
-// etiketlere dokunulmadı.
-const NAV_ITEMS = [
-  {
-    href: "/who-we-are",
-    en: "Who We Are",
-    tr: "Biz Kimiz",
-  },
-  { href: "/what-we-do", en: "What We Do", tr: "Ne Yapıyoruz" },
-  {
-    href: "/what-we-believe",
-    en: "What We Believe",
-    tr: "Neye İnanıyoruz",
-  },
-  {
-    href: "/solutions",
-    en: "Solutions",
-    tr: "Çözümler",
-  },
-  { href: "/clients", en: "Clients", tr: "Müşteriler" },
-  { href: "/partners", en: "Partners", tr: "Partnerler" },
-  { href: "/contact", en: "Contact", tr: "İletişim" },
-] as const;
-
+/**
+ * Üst menü.
+ *
+ * Menü maddeleri, sıra ve mega menü sütunları `src/data/navigation.ts`
+ * içinden geliyor; hizmet listesi de oradan `src/data/services.ts`'e
+ * bağlanıyor. Bu bileşende paralel bir menü dizisi **yok** — daha önce
+ * `NAV_ITEMS` ve `SERVICE_LINKS` burada sabit yazılıydı ve veri
+ * dosyasıyla elle senkron tutuluyordu; Solutions'ın yanlış sayfaya
+ * bakması ve dört maddenin yönlendirme URL'lerine gitmesi bu ikiliğin
+ * sonucuydu.
+ *
+ * Etiketler `messages/*.json` → `nav.*`. Değerler Title Case; başlıkta
+ * `text-transform` yok, yani görünen metin etiketin kendisi.
+ */
 export function Header() {
   const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMegaOpen, setIsMegaOpen] = useState(false);
@@ -82,10 +37,14 @@ export function Header() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const wasMenuOpen = useRef(false);
-  const isTurkish = locale === "tr";
 
-  const label = (item: { en: string; tr: string }) =>
-    isTurkish ? item.tr : item.en;
+  /** Hizmet adları çevrilmez (marka dili); menü maddeleri çevrilir. */
+  const linkLabel = (link: MegaMenuLink) =>
+    link.labelKey ? t(link.labelKey) : link.label;
+
+  /** Mobil panelde What We Do'nun altında açılan hizmet listesi. */
+  const services =
+    MAIN_NAV.find((item) => item.href === MEGA_TRIGGER_HREF)?.children ?? [];
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -160,32 +119,36 @@ export function Header() {
           onMouseEnter={() => setIsMegaOpen(true)}
         >
           <ul className={styles.navList}>
-            {NAV_ITEMS.map((item, index) => (
-              <li key={item.href} className={styles.navItem}>
-                <Link
-                  href={item.href}
-                  ref={index === 0 ? firstLinkRef : undefined}
-                  className={pathname === item.href ? styles.activeLink : undefined}
-                  aria-expanded={item.href === "/what-we-do" ? isMegaOpen : undefined}
-                  aria-controls={
-                    item.href === "/what-we-do" ? MEGA_MENU_ID : undefined
-                  }
-                  onFocus={() => setIsMegaOpen(true)}
-                >
-                  {label(item)}
-                </Link>
+            {MAIN_NAV.map((item, index) => {
+              const isMegaTrigger = item.href === MEGA_TRIGGER_HREF;
 
-                {item.href === "/what-we-do" && (
-                  <ul className={styles.mobileServices}>
-                    {SERVICE_LINKS.map((service) => (
-                      <li key={service.href}>
-                        <Link href={service.href}>{label(service)}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
+              return (
+                <li key={item.href} className={styles.navItem}>
+                  <Link
+                    href={item.href}
+                    ref={index === 0 ? firstLinkRef : undefined}
+                    className={
+                      pathname === item.href ? styles.activeLink : undefined
+                    }
+                    aria-expanded={isMegaTrigger ? isMegaOpen : undefined}
+                    aria-controls={isMegaTrigger ? MEGA_MENU_ID : undefined}
+                    onFocus={() => setIsMegaOpen(true)}
+                  >
+                    {t(item.labelKey)}
+                  </Link>
+
+                  {isMegaTrigger && (
+                    <ul className={styles.mobileServices}>
+                      {services.map((service) => (
+                        <li key={service.href}>
+                          <Link href={service.href}>{service.label}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -227,44 +190,34 @@ export function Header() {
         <div className={styles.megaInner}>
           <p className={styles.megaBrand}>HIBRID 360</p>
 
-          <div className={styles.megaColumnWide}>
-            <Link href="/what-we-do" className={styles.megaHeading}>
-              {isTurkish ? "Ne Yapıyoruz" : "What We Do"}
-            </Link>
-            <ul className={styles.serviceGrid}>
-              {SERVICE_LINKS.map((service) => (
-                <li key={service.href}>
-                  <Link href={service.href}>{label(service)}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className={styles.megaColumn}>
-            <p className={styles.megaHeading}>
-              {isTurkish ? "Hakkımızda" : "About"}
-            </p>
-            <Link href="/who-we-are">
-              {isTurkish ? "Biz Kimiz" : "Who We Are"}
-            </Link>
-            <Link href="/what-we-believe">
-              {isTurkish ? "Neye İnanıyoruz" : "What We Believe"}
-            </Link>
-            <Link href="/partners">
-              {isTurkish ? "Partnerler" : "Partners"}
-            </Link>
-          </div>
-
-          <div className={styles.megaColumn}>
-            <p className={styles.megaHeading}>
-              {isTurkish ? "Keşfet" : "Explore"}
-            </p>
-            <Link href="/work">Work</Link>
-            <Link href="/clients">
-              {isTurkish ? "Müşteriler" : "Clients"}
-            </Link>
-            <Link href="/contact">{isTurkish ? "İletişim" : "Contact"}</Link>
-          </div>
+          {MEGA_MENU.map((column) =>
+            column.variant === "services" ? (
+              <div key={column.headingKey} className={styles.megaColumnWide}>
+                <Link
+                  href={column.headingHref ?? "/"}
+                  className={styles.megaHeading}
+                >
+                  {t(column.headingKey)}
+                </Link>
+                <ul className={styles.serviceGrid}>
+                  {column.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href}>{linkLabel(link)}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <div key={column.headingKey} className={styles.megaColumn}>
+                <p className={styles.megaHeading}>{t(column.headingKey)}</p>
+                {column.links.map((link) => (
+                  <Link key={link.href} href={link.href}>
+                    {linkLabel(link)}
+                  </Link>
+                ))}
+              </div>
+            ),
+          )}
         </div>
       </div>
     </header>

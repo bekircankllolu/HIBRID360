@@ -35,7 +35,12 @@ export async function generateMetadata({
   if (!work) return {};
 
   // client_name gizli işlerde veritabanından null gelir (works_public view).
-  const title = work.client_name ?? "Case study";
+  const title =
+    (locale === "tr" ? work.title_tr : work.title_en) ??
+    work.title_en ??
+    work.title_tr ??
+    work.client_name ??
+    "Case study";
   const description =
     (locale === "tr" ? work.case_problem_tr : work.case_problem_en) ?? undefined;
 
@@ -61,6 +66,11 @@ export default async function WorkCasePage({
   const t = await getTranslations("work");
   const isTr = locale === "tr";
   const clientLabel = work.client_name ?? t("confidentialClient");
+  const projectTitle =
+    (isTr ? work.title_tr : work.title_en) ??
+    work.title_en ??
+    work.title_tr ??
+    clientLabel;
 
   const problem = isTr ? work.case_problem_tr : work.case_problem_en;
   const solution = isTr ? work.case_solution_tr : work.case_solution_en;
@@ -79,7 +89,8 @@ export default async function WorkCasePage({
         ])}
       />
 
-      <h1 className={styles.client}>{clientLabel}</h1>
+      <p className={styles.client}>{clientLabel}</p>
+      <h1 className={styles.projectTitle}>{projectTitle}</h1>
       <p className={styles.meta}>
         {work.year}
         {work.category ? ` · ${work.category}` : ""}

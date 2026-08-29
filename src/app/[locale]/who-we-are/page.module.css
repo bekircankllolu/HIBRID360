@@ -1,0 +1,80 @@
+/**
+ * Kurucu bloğu (CUL-03/04).
+ *
+ * Fotoğraf teslim edilmediği için blok tipografik çalışır: solda sarı
+ * dikey kural + isim/ünvan, sağda replik. Eskiden burada 160x200'lük boş
+ * bir kutu ve "Photo pending" yazısı vardı — boş çerçeve ve geliştirme
+ * notu production arayüzünde görünmez artık.
+ *
+ * Fotoğraf gelince (src/data/who-we-are.ts → FOUNDER.portrait) aynı
+ * ızgara portreli varyanta geçer; iki durumda da düzen aynı hizada durur.
+ */
+.founder {
+  margin-top: var(--space-16);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .founder {
+    grid-template-columns: minmax(12rem, 0.4fr) minmax(0, 1fr);
+  }
+
+  /* Portre varken sol sütun görselin doğal oranına açılır. */
+  .founderWithPortrait {
+    grid-template-columns: minmax(14rem, 0.42fr) minmax(0, 1fr);
+  }
+}
+
+.portrait {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Portre oranı sabit — varlık farklı oranda gelse de düzen kaymaz. */
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* Fotoğrafsız durumda kimlik sütunu: sarı dikey kural taşır. */
+.identity {
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-brand-yellow);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.125rem, 2.2vw, 1.75rem);
+  line-height: 1.1;
+}
+
+.title {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: var(--color-brand-yellow);
+}
+
+.quote {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-semibold);
+  font-style: italic;
+  font-size: clamp(1.125rem, 2.6vw, 1.75rem);
+  line-height: 1.35;
+  max-width: 34rem;
+}
+
+.disclaimer {
+  margin: var(--space-4) 0 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}

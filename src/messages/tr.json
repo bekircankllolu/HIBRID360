@@ -8,17 +8,20 @@
     "closeDetails": "Detayı kapat"
   },
   "nav": {
-    "whoWeAre": "BİZ KİMİZ",
-    "whatWeDo": "NE YAPIYORUZ",
-    "whatWeBelieve": "NEYE İNANIYORUZ",
-    "solutions": "ÇÖZÜMLER",
-    "clients": "MÜŞTERİLER",
-    "friends": "MÜŞTERİLER",
-    "partners": "İŞ ORTAKLARI",
-    "contact": "İLETİŞİM",
-    "work": "WORK",
-    "insights": "INSIGHTS",
-    "culture": "CULTURE",
+    "whoWeAre": "Biz Kimiz",
+    "whatWeDo": "Ne Yapıyoruz",
+    "whatWeBelieve": "Neye İnanıyoruz",
+    "solutions": "Çözümler",
+    "clients": "Müşteriler",
+    "friends": "Müşteriler",
+    "partners": "Partnerler",
+    "contact": "İletişim",
+    "work": "Work",
+    "insights": "Insights",
+    "culture": "Culture",
+    "about": "Hakkımızda",
+    "explore": "Keşfet",
+    "legal": "Yasal",
     "menuLabel": "Ana menü",
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat"
@@ -40,7 +43,8 @@
       "label": "Sosyal Medya"
     },
     "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
-    "carbonNeutral": "🌱 Karbon nötr"
+    "carbonNeutral": "🌱 Karbon nötr",
+    "backToTop": "Yukarı"
   },
   "home": {
     "showreel": {
@@ -79,6 +83,7 @@
     "readMore": "Devamını oku"
   },
   "work": {
+    "pageTitle": "RECENT",
     "empty": "İş envanteri hazırlanıyor.",
     "emptyDetail": "İşler; yayın izni, müşteri, yıl, format ve dosya konumu doğrulandıktan sonra eklenecek.",
     "showreelBody": "Hem kalpleri hem rakamları hareket ettiren bütünleşik marka deneyimleri.",
@@ -97,6 +102,7 @@
     "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz — özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",
     "seoHeading": "HİBRİD 360 — İDDİALI MARKALAR İÇİN KREATİF HİKÂYE ANLATICILIĞI",
     "confidentialClient": "Gizli müşteri",
+    "projectFallback": "Seçili iş",
     "case": {
       "problem": "Sorun",
       "solution": "Ne Yaptık",
@@ -171,7 +177,15 @@
     ],
     "directions": "Yol tarifi al",
     "bookingLead": "Konuşmayı mı tercih edersiniz?",
-    "socialInvite": "İşleri takip edin"
+    "socialInvite": "İşleri takip edin",
+    "mapTitle": "Hibrid 360 ofisinin Google Haritalar üzerindeki konumu",
+    "mapNote": "Harita Google Haritalar üzerinden yüklenir.",
+    "mapLoad": "Haritayı yükle",
+    "mapPrivacyNote": "Harita, yalnızca bu düğmeyi seçtiğinizde Google üzerinden yüklenir. Bu işlem Google ile bağlantı kurulmasına neden olur.",
+    "addressLabel": "Adres",
+    "phoneLabel": "Telefon",
+    "emailLabel": "E-posta",
+    "photoCaption": "İstanbul — Boğaziçi Köprüsü, gece"
   },
   "culture": {
     "hub": {
@@ -370,7 +384,7 @@
   },
   "clients": {
     "heroTitle": "MÜŞTERİLER",
-    "heroBody": "Birlikte çalıştığımız insanları seviyoruz. O kadar ki ajansımızda onlara müşteri değil, dost diyoruz — ancak en yakın dostlarınızla kurabileceğiniz türden dürüst ve sadık bir kimya. Cesur iş birlikleri. Global ikonlar. Ortak yaratıcı enerji.",
+    "heroBody": "Birlikte çalıştığımız markalarla dürüst, uzun soluklu ve cesur iş birlikleri kuruyoruz. Global ikonlar. Ortak yaratıcı enerji.",
     "ctaLead": "Birlikte ne ürettiğimizi görmek ister misiniz?",
     "testimonialsTitle": "Ne diyorlar",
     "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."

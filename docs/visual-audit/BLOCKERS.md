@@ -14,9 +14,10 @@ fotoğraflık arşiv **bu envanterin yerini tutmuyor** — arşivdeki hiçbir
 görsel kendi başına "bu iş, bu müşteri için, şu tarihte yapıldı" bilgisini
 taşımıyor (Renova billboard'u hariç, bkz. madde 5).
 
-**Bu doküman setinin katkısı:** Envanter gelene kadar mevcut
-`story-clapper.webp` placeholder'ının kalması önerildi (dürüst, marka
-renklerinde, sahte iddia yok) — bkz. NEW_SITE_IMAGE_PLACEMENT_PLAN.md.
+**30 Ağustos 2026 uygulama durumu:** INNOCEAN referanslı `RECENT` başlığı,
+Yıl/Hizmet/Sektör filtre çubuğu, dört sütunlu tam genişlik grid, iki dilli
+proje başlığı alanları ve vaka rotası hazır. Envanter gelene kadar sahte
+proje veya stok iş görseli gösterilmiyor; tasarlanmış boş durum kullanılıyor.
 
 ## 2. MONA — gerçek video/ses varlıkları prodüksiyon bekliyor
 
@@ -30,9 +31,25 @@ karakteriyle (eski Mac kafalı, deniz kızı kostümlü, baby pink zeminli
 figür) ilgili **hiçbir görsel bulunamadı** — beklenen bir sonuç, bu
 görev foto arşiviyle çözülemeyecek türden bir illüstrasyon/3D
 karakter/video prodüksiyonu. Ayrıca "AI Showreel filmi" de ayrı bir
-TODO olarak sayfa kodunda bekliyor (Film A "Henüz Değil").
+Ana sayfadaki Film A için küçük sağ üst kadrajdan scroll ile tam ekrana
+büyüyen video sahnesi hazır. Onaylı medya gelene kadar yanlış bir filmi
+showreel diye göstermemek için `src/data/home-showreel.ts` null tutuluyor.
 
 ## 3. Görsellerin yayın/telif izni teyit edilmeli
+
+**30 Ağustos 2026 çalışma varsayımı:** mevcut geliştirme turunda müşterinin
+kullanım onayı gelmiş kabul edildi ve görseller korunuyor. Kaynak/lisans
+belgesinin yayın klasörüne eklenmesi yine release checklist maddesidir.
+Müşterinin talimatıyla eski sitenin üç görseli (İstanbul panoraması ·
+Atatürk fotoğrafı · Küçük Prens illüstrasyonu) artık **depoda ve
+sayfalarda**. Kullanım hakları hâlâ **doğrulanmadı**; yayın öncesi
+kapatılması gereken en riskli üç kalem bunlar. Kaynak, ölçü, sha256 ve
+madde madde risk değerlendirmesi:
+`docs/content/LEGACY_CONTENT_ROUTE_MAP.md` bölüm 4.
+
+`kadin.jpg` bilerek alınmadı: tanınabilir bir kişinin portresi, model
+rıza kaydı yok.
+
 
 İki somut risk tespit edildi:
 
@@ -116,9 +133,10 @@ eklenmemiş veya düşmemiş. Ayrıntı:
 
 ## 8. What We Believe görselleri ve alıntıları — telif/atıf **AÇIK**
 
-29 Ağustos 2026 denetiminde eski `/what-we-believe` sayfasının üç görseli
-indirildi, ölçüldü ve web türevleri üretildi; **hiçbiri yeni siteye
-bağlanmadı ve ikili dosyalar bu depoya konmadı** (depo herkese açık).
+29 Ağustos 2026 denetiminde eski `/what-we-believe` sayfasının görselleri
+indirildi, ölçüldü ve web türevleri üretildi. Müşterinin korunmasını
+istediği Atatürk ve Küçük Prens bölümleri **depoya alındı ve yeni sayfaya
+bağlandı**. `kadin.jpg` rıza/kaynak belirsizliği nedeniyle alınmadı.
 Ölçüm, sha256 ve tekrarlanabilir dönüşüm betiği:
 `docs/content/LEGACY_CONTENT_ROUTE_MAP.md` bölüm 4 ·
 `scripts/assets/prepare-legacy-images.py`.
@@ -148,8 +166,8 @@ blocker'ı.
 
 ## 10. Contact görselleri — kaynak doğrulanmadı
 
-Eski `/contact` sayfasının iki görseli (`contact/contact-bg.jpg`,
-2560×750, İstanbul panoraması · `contact/contact-screen01.jpg`, 1273×807,
-Motion Office) **bağlanmadı**. İkisi de gri tonlama; kaynağı ve lisansı
-bilinmiyor. Kod tarafında `CONTACT_LEGACY_IMAGES` altında
-`status: "pending-rights"` olarak kayıtlı (`src/data/contact.ts`).
+Eski `/contact` sayfasındaki İstanbul panoraması (`contact/contact-bg.jpg`,
+2560×750) müşterinin talebi doğrultusunda **depoya alındı ve Contact
+sayfasına bağlandı**. Kaynağı ve lisansı yayın öncesi teyit listesinde
+kalmaya devam ediyor. `contact/contact-screen01.jpg` bu revizyonda
+istenmediği için alınmadı.
