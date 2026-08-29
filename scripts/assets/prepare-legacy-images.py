@@ -164,6 +164,14 @@ def main() -> int:
                 continue
             height = round(image.height * width / image.width)
             resized = rgb.resize((width, height), Image.LANCZOS)
+            # Kaynak metadata'sını TAŞIMA. contact-bg.jpg gri tonlama
+            # (mode "L") ve 912 baytlık tek kanallı bir ICC profili
+            # taşıyor; Pillow bunu RGB'ye çevrilmiş görüntünün AVIF
+            # çıktısına da yazıyor ve Chromium o dosyayı **çözemiyor**
+            # (sessizce kırık görsel; <picture> type fallback'i devreye
+            # girmiyor çünkü sorun destek değil, çözümleme).
+            # Ayrıca EXIF/XMP'yi de web türevine taşımanın anlamı yok.
+            resized.info = {}
 
             for fmt, params in (
                 ("WEBP", {"quality": WEBP_QUALITY, "method": 6}),

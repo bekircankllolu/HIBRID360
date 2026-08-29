@@ -175,7 +175,13 @@
     ],
     "directions": "Get directions",
     "bookingLead": "Prefer to talk?",
-    "socialInvite": "Follow the work"
+    "socialInvite": "Follow the work",
+    "mapTitle": "Hibrid 360 office location on Google Maps",
+    "mapNote": "The map is loaded from Google Maps.",
+    "addressLabel": "Address",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "photoCaption": "Istanbul — the Bosphorus Bridge at night"
   },
   "culture": {
     "hub": {

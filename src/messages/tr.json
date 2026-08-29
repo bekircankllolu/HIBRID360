@@ -175,7 +175,13 @@
     ],
     "directions": "Yol tarifi al",
     "bookingLead": "Konuşmayı mı tercih edersiniz?",
-    "socialInvite": "İşleri takip edin"
+    "socialInvite": "İşleri takip edin",
+    "mapTitle": "Hibrid 360 ofisinin Google Haritalar üzerindeki konumu",
+    "mapNote": "Harita Google Haritalar üzerinden yüklenir.",
+    "addressLabel": "Adres",
+    "phoneLabel": "Telefon",
+    "emailLabel": "E-posta",
+    "photoCaption": "İstanbul — Boğaziçi Köprüsü, gece"
   },
   "culture": {
     "hub": {

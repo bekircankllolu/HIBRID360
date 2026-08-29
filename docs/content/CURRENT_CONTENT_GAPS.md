@@ -221,6 +221,16 @@ kapattı (6, 14).**
 | **Bağlı karar** | `docs/DECISIONS.md` #21 |
 | **Bu olmadan** | Sayfa çalışır ve tutarlıdır; ama yayında duran metin müşterinin nihai onayından geçmemiştir |
 
+## 22. 🟡 Harita gömmesi — çerez politikasına üçüncü taraf satırı
+
+| | |
+|---|---|
+| **Soru** | Çerez/Gizlilik politikasına Google Haritalar için üçüncü taraf satırı eklenmeli mi, kim yazacak? |
+| **Neden gerekli** | Contact sayfasındaki harita bir Google iframe'i; sayfa açıldığında (tembel de olsa) Google'a istek gider ve çerez yazılabilir. KVKK/GDPR açısından politika metninde adı geçmeli |
+| **Bugün ne var** | Harita **anahtarsız Google Maps sorgu gömmesi** ile çalışıyor: koordinat değil, doğrulanmış adres metni kullanıyor; `loading="lazy"`, erişilebilir `title` ve harita yüklenmese de çalışan yol tarifi bağlantısı var. Politika metninde üçüncü taraf satırı **yok** |
+| **Kodda nerede** | `src/data/contact.ts` → `mapEmbedUrl()` · `src/app/[locale]/contact/page.tsx` · `src/data/policies/cookie.ts` |
+| **Bu olmadan** | Sayfa çalışır; politika metni eksik kalır |
+
 ## 19. 🟠 Solutions sayfası giriş paragrafı yok
 
 | | |

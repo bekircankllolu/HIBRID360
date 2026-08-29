@@ -3,7 +3,14 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { CONTACT, directionsUrl, telUrl, whatsappUrl } from "@/data/contact";
+import {
+  CONTACT,
+  CONTACT_IMAGES,
+  directionsUrl,
+  mapEmbedUrl,
+  telUrl,
+  whatsappUrl,
+} from "@/data/contact";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates, SOCIAL_PLATFORMS } from "@/lib/site";
 import styles from "./page.module.css";
@@ -11,25 +18,32 @@ import styles from "./page.module.css";
 /**
  * CON-01..08 (nihai copy deck, Ağustos 2026) — Contact.
  *
+ * 29 Ağustos 2026 revizyonu — sayfa sırası müşterinin verdiği düzene
+ * getirildi:
+ *
+ *   1. tam genişlik hero
+ *   2. eski sitedeki İstanbul fotoğrafı (müşteri korunmasını istedi)
+ *      + "Motion Office" anlatısı — fotoğrafın üzerindeki başlık bu
+ *      bölümü açıyor, ikisi tek birim
+ *   3. sarı iletişim bandı (yeni tasarım diline uyarlandı)
+ *   4. adres · telefon · e-posta · yol tarifi
+ *   5. tam genişlik harita
+ *   6. iletişim formu
+ *   7. footer (layout'tan gelir)
+ *
+ * Harita: anahtar gerektirmeyen Google Maps **sorgu gömmesi**. Koordinat
+ * değil doğrulanmış adres metni kullanır — uydurulan hiçbir veri yok.
+ * Sağlayıcı karşılaştırması ve KVKK notu src/data/contact.ts içinde.
+ *
  * CON-03 [KARAR]: "Yayına girecek e-posta adresi teyit edilmeli." Deck
  * kendi içinde contact@hibrid360.com veriyor (GEN-05'te de aynı adres) —
  * bu yüzden bu adres kullanıldı, ama TODO olarak bırakıldı: son onay
  * gelmeden bu sayfa/footer yayına alınmamalı.
  *
- * 29 Ağustos 2026 revizyonu: adres/telefon/e-posta ve bağlantı üreticileri
- * tek içerik kaynağına (`src/data/contact.ts`) taşındı. Harita sağlayıcısı
- * seçimi orada açık teknik karar olarak belgelendi; koordinat veya
- * sağlayıcı uydurulmadı, yol tarifi bağlantısı doğrulanmış adres
- * metninden üretiliyor.
- *
- * TODO: CON-03 — gömülü harita yok. Künye kartı hero'nun sağ yarısında
- * adresi + telefonu + e-postayı ve gerçek bir yol tarifi bağlantısını
- * taşıyor. Sağlayıcı kararı verilince gömülü harita bu kartın üstüne
- * eklenecek — kart kalır, çünkü adres/iletişim bilgisi haritadan bağımsız
- * olarak gerekli.
- *
- * TODO: eski sitedeki İstanbul panoraması ve "Motion Office" görseli
- * (bkz. CONTACT_LEGACY_IMAGES) telif teyidi beklediği için bağlanmadı.
+ * Adres: eski site (© 2020) farklı bir Kadıköy adresi gösteriyor; kodda
+ * güncel deck adresi var ve çelişki src/data/contact.ts içinde yorumla,
+ * CURRENT_CONTENT_GAPS.md'de madde olarak duruyor — **uydurularak
+ * çözülmedi**.
  */
 
 export async function generateMetadata({
@@ -42,7 +56,7 @@ export async function generateMetadata({
     title: "Contact",
     description:
       locale === "en"
-        ? "Tell us what you're making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
+        ? "Tell us what you are making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
         : undefined,
     alternates: localizedAlternates(locale, "/contact"),
   };
@@ -55,11 +69,9 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("contact");
-  const tWork = await getTranslations("work");
   const tCta = await getTranslations("cta");
   const motionBody = t.raw("motionBody") as string[];
   const teams = t.raw("teams") as Array<{ title: string; body: string }>;
-  const whatsappHref = whatsappUrl();
   const directionsHref = directionsUrl();
 
   return (
@@ -71,56 +83,44 @@ export default async function ContactPage({
         ])}
       />
 
-      <div className={styles.hero}>
-        <div className={styles.heroMain}>
-          <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-          <p className={styles.heroLead}>{t("heroLead1")}</p>
-          <p className={styles.heroLead}>{t("heroLead2")}</p>
-          <p className={styles.heroBody}>{t("heroBody")}</p>
-        </div>
+      {/* 1 — tam genişlik hero */}
+      <header className={styles.hero}>
+        <p className={styles.heroKicker}>{t("heroLead1")}</p>
+        <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
+        <p className={styles.heroBody}>{t("heroBody")}</p>
+      </header>
 
-        {/* Hero'nun sağ yarısı eskiden tamamen boştu; künye kartı oraya
-            taşındı. Kartın kendisi de eskiden altta duran, içinde tek bir
-            şehir adı olan boş sarı kutuydu. */}
-        <aside className={styles.locationCard}>
-          {/* CON-03 — WORK-07 ile birebir aynı gövde metni, tek kaynak. */}
-          <p className={styles.addressLead}>{tWork("ctaLead")}</p>
-          <address className={styles.address}>
-            {CONTACT.addressLines.map((line) => (
-              <span key={line}>
-                {line}
-                <br />
-              </span>
-            ))}
-          </address>
-          <dl className={styles.contactRows}>
-            <div className={styles.contactRow}>
-              <dt>T</dt>
-              <dd>
-                <a href={telUrl()}>{CONTACT.phone}</a>
-              </dd>
-            </div>
-            <div className={styles.contactRow}>
-              <dt>E</dt>
-              <dd>
-                <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-              </dd>
-            </div>
-          </dl>
-          <a
-            className={styles.directions}
-            href={directionsHref}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("directions")} →
-          </a>
-        </aside>
-      </div>
+      {/* 2 — İstanbul fotoğrafı + Motion Office anlatısı */}
+      <section className={styles.motion}>
+        <figure className={styles.figure}>
+          <picture>
+            <source
+              type="image/avif"
+              srcSet={CONTACT_IMAGES.panorama.avif}
+              sizes="100vw"
+            />
+            <source
+              type="image/webp"
+              srcSet={CONTACT_IMAGES.panorama.webp}
+              sizes="100vw"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className={styles.figureImage}
+              src={CONTACT_IMAGES.panorama.fallback}
+              width={CONTACT_IMAGES.panorama.width}
+              height={CONTACT_IMAGES.panorama.height}
+              alt={t("photoCaption")}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+          <figcaption className={styles.figureCaption}>
+            <h2 className={styles.figureTitle}>{t("motionTitle")}</h2>
+          </figcaption>
+        </figure>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("motionTitle")}</h2>
-        <div className={styles.body}>
+        <div className={styles.motionBody}>
           {motionBody.map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
@@ -138,11 +138,86 @@ export default async function ContactPage({
         </div>
       </section>
 
-      {/* Form solda, "ya da başka türlü ulaşın" bloğu sağda. İkinci sütun
-          yeni metinle değil, daha önce formun altında tek başına duran
-          randevu/WhatsApp satırı ve sosyal davetin yukarı taşınmasıyla
-          doldu — formun sağ yarısı boş kalmıyor, bu iki öğe de artık
-          formun alternatifi olarak okunuyor. */}
+      {/* 3 — sarı iletişim bandı. Marka kuralı: sarı zemin → SİYAH metin
+          (CLAUDE.md kontrast kuralı; beyaz metin AA geçmiyor). */}
+      <section className={styles.yellowBand}>
+        <p className={styles.yellowBandLead}>{t("heroLead2")}</p>
+        <a className={styles.yellowBandEmail} href={`mailto:${CONTACT.email}`}>
+          {CONTACT.email}
+        </a>
+      </section>
+
+      {/* 4 — adres · telefon · e-posta · yol tarifi */}
+      <section className={styles.details}>
+        <div className={styles.detail}>
+          <h2 className={styles.detailLabel}>{t("addressLabel")}</h2>
+          <address className={styles.address}>
+            {CONTACT.addressLines.map((line) => (
+              <span key={line}>
+                {line}
+                <br />
+              </span>
+            ))}
+          </address>
+          <a
+            className={styles.inlineLink}
+            href={directionsHref}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t("directions")} →
+          </a>
+        </div>
+
+        <div className={styles.detail}>
+          <h2 className={styles.detailLabel}>{t("phoneLabel")}</h2>
+          <p className={styles.detailValue}>
+            <a href={telUrl()}>{CONTACT.phone}</a>
+          </p>
+          <a
+            className={styles.inlineLink}
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {tCta("whatsapp")} →
+          </a>
+        </div>
+
+        <div className={styles.detail}>
+          <h2 className={styles.detailLabel}>{t("emailLabel")}</h2>
+          <p className={styles.detailValue}>
+            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+          </p>
+          <p className={styles.socialInvite}>
+            {t("socialInvite")}: {SOCIAL_PLATFORMS.join(" · ")}
+          </p>
+        </div>
+      </section>
+
+      {/* 5 — tam genişlik harita. Anahtarsız sorgu gömmesi; erişilebilir
+          yedek olarak altında gerçek yol tarifi bağlantısı var, harita
+          yüklenmese veya engellense de adrese ulaşılabiliyor. */}
+      <section className={styles.mapSection} aria-labelledby="contact-map">
+        <h2 id="contact-map" className={styles.visuallyHidden}>
+          {t("mapTitle")}
+        </h2>
+        <iframe
+          className={styles.map}
+          src={mapEmbedUrl()}
+          title={t("mapTitle")}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+        <p className={styles.mapFallback}>
+          <span>{t("mapNote")}</span>{" "}
+          <a href={directionsHref} target="_blank" rel="noreferrer">
+            {t("directions")} →
+          </a>
+        </p>
+      </section>
+
+      {/* 6 — iletişim formu */}
       <section className={styles.formSection}>
         <div className={styles.formColumn}>
           <ContactForm locale={locale} />
@@ -156,14 +231,10 @@ export default async function ContactPage({
                 yüzden burada (CtaBand'ın aksine) /contact'a self-link
                 vermek yerine metin görünür bırakıldı. */}
             <span>{tCta("bookCall")}</span>
-            <a href={whatsappHref} target="_blank" rel="noreferrer">
+            <a href={whatsappUrl()} target="_blank" rel="noreferrer">
               {tCta("whatsapp")}
             </a>
           </div>
-
-          <p className={styles.socialInvite}>
-            {t("socialInvite")}: {SOCIAL_PLATFORMS.join(" · ")}
-          </p>
         </aside>
       </section>
     </div>
