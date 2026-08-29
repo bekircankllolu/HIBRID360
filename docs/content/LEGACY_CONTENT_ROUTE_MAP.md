@@ -72,9 +72,9 @@ müşteriye ait (bkz. CURRENT_CONTENT_GAPS).
 |---|---|
 | Eski başlıklar | `What we believe` · `OUR VISION` · `OUR MISSION` · `WHAT INSPIRES US` · `OUR EDICT` · `IN THE MOOD FOR LOVE - A WORK OF LOVE` |
 | Onaylı metin | Deck (WWB-01..06) eski dört bloğu birebir taşıyor — kodda deck sürümü var |
-| Görseller | `/assets/img/kadin.jpg` (hero kapak) · `/assets/img/ataturk.jpg` (alıntı arka planı) · `/assets/img/little_prince.png` (alıntı arka planı) |
+| Görseller | `/assets/img/ataturk.jpg` ve `/assets/img/little_prince.png` **bağlandı** (marka sarısı duotone, WebP+AVIF) · `/assets/img/kadin.jpg` alınmadı |
 | TR çeviri | Tamam |
-| Telif | **AÇIK — üçü de bağlanmadı** (aşağıya bakınız) |
+| Telif | **AÇIK — ikisi bağlandı, hakları doğrulanmadı** (bölüm 4) |
 | Blocker | Görsel telifi + alıntı atfı + müşterinin çekeceği konuşma videosu |
 
 Eski sitedeki `IN THE MOOD FOR LOVE` bloğunun üç maddesi deck'e girmemiş;
@@ -164,8 +164,8 @@ Deck kararı: `MOTIWE` (deck'te "Motive") partner listesinden çıktı, yerine
 | Onaylı metin | Motion Office anlatısı ve üç takım tanımı eski site ile deck'te **aynı** — teyitli |
 | Görseller | `/assets/img/contact/contact-bg.jpg` (2560×750, gri tonlama — İstanbul panoraması) · `/assets/img/contact/contact-screen01.jpg` (1273×807, gri tonlama — Motion Office) |
 | TR çeviri | Tamam |
-| Telif | İki görsel de **doğrulanmadı** — bağlanmadı (`CONTACT_LEGACY_IMAGES`) |
-| Blocker | **Adres çelişkisi** (aşağıda) + harita sağlayıcısı kararı |
+| Telif | Panorama **bağlandı** (`CONTACT_IMAGES`), telifi hâlâ doğrulanmadı — bkz. bölüm 4. `contact-screen01.jpg` istenmedi, alınmadı |
+| Blocker | **Adres çelişkisi** (aşağıda). Harita sağlayıcısı kararı KAPANDI: anahtarsız Google Maps sorgu gömmesi (`src/data/contact.ts` → `mapEmbedUrl`) |
 
 **Adres çelişkisi — teyit gerekiyor:**
 
@@ -226,69 +226,98 @@ edene kadar eklenmedi — bkz. `src/lib/site.ts`.
 
 ---
 
-## 4. What We Believe görselleri — telif durumu ve web türevleri
+## 4. Eski site görselleri — depoya alındı, telif AÇIK
 
-Üç kaynak dosya indirildi ve ölçüldü (2026-08-29):
+**29 Ağustos 2026 müşteri talimatı:** Contact'taki İstanbul fotoğrafı ile
+What We Believe'deki Atatürk ve Küçük Prens bölümleri korunacak. Türevler
+bu revizyonla **depoya alındı ve sayfalara bağlandı.**
 
-| Dosya | Gerçek format | Boyut | Bayt | sha256 (kaynak) |
-|---|---|---|---|---|
-| `/assets/img/ataturk.jpg` | **PNG** (uzantı yanlış) | 2592×1454 RGBA | 581 715 | `820cede696bdc080998c699ff1d93f95cf2890c578bfeca2eaef8d31c1569d88` |
-| `/assets/img/little_prince.png` | PNG | 2654×2056 RGBA | 1 102 667 | `fb3149535122cae3479b84c0f3c8773f76c3a1d04d66e3276b5629cf41929580` |
-| `/assets/img/kadin.jpg` | JPEG (gri tonlama) | 1920×1280 L | 268 547 | `051f3aacd7912c29ec06ee163b67d867ea4eadc0a9f8da4baf9e15e8312c149c` |
+### Kaynaklar (ölçüldü 2026-08-29)
 
-Web türevleri **üretildi ve ölçüldü** (WebP, kalite 80, Lanczos):
+| Kaynak | Gerçek format | Boyut | Bayt | sha256 | Uygulanan işlem |
+|---|---|---|---|---|---|
+| `/assets/img/contact/contact-bg.jpg` | JPEG | 2560x750 L | 375 034 | `0807d0a17f649783…` | — |
+| `/assets/img/ataturk.jpg` | PNG | 2592x1454 RGBA | 581 715 | `820cede696bdc080…` | duotone (0  0  0) -> (255  252  0)  gamma 1.6 |
+| `/assets/img/little_prince.png` | PNG | 2654x2056 RGBA | 1 102 667 | `fb3149535122cae3…` | duotone (0  0  0) -> (255  252  0)  gamma 1.6 |
 
-| Türev | Boyut | Bayt | Kaynağa göre |
+`ataturk.jpg` **PNG**'dir (uzantı yanlış).
+
+**Duotone:** eski sitede sarı/yeşil filtre dosyaya pişmişti ama tonu
+marka sarısı değil zeytin yeşiliydi. Kaynak parlaklığa indirgenip
+siyah → `#FFFC00` rampasından geçirilerek yeniden türetildi. Gamma 1.6:
+orta tonlar koyu kalsın ki üzerine gelen beyaz metin, altındaki gradyan
+perdeyle birlikte WCAG AA'yı geçsin (axe ile doğrulandı, 0 ihlal).
+İstanbul panoraması gri tonlama gece çekimi olduğu için işlenmedi.
+
+### Depodaki türevler (`public/images/site/`)
+
+| Dosya | Boyut | Bayt | sha256 |
 |---|---|---|---|
-| `what-we-believe-quote-women-bg-1600w.webp` | 1600×898 | 78 734 | −86 % |
-| `what-we-believe-quote-women-bg-2560w.webp` | 2560×1436 | 147 306 | −75 % |
-| `what-we-believe-quote-little-prince-bg-1600w.webp` | 1600×1239 | 46 286 | −96 % |
-| `what-we-believe-quote-little-prince-bg-2560w.webp` | 2560×1983 | 87 478 | −92 % |
-| `what-we-believe-hero-cover-1600w.webp` | 1600×1067 | 12 680 | −95 % |
+| `contact/istanbul-panorama-1600w.webp` | 1600x469 | 73 198 | `9a25ed2970437433…` |
+| `contact/istanbul-panorama-1600w.avif` | 1600x469 | 56 679 | `ec6459791393308e…` |
+| `contact/istanbul-panorama-2560w.webp` | 2560x750 | 150 874 | `bed0a7f38682792a…` |
+| `contact/istanbul-panorama-2560w.avif` | 2560x750 | 117 063 | `36a406f5d7446581…` |
+| `what-we-believe/ataturk-1600w.webp` | 1600x898 | 65 248 | `ca7d14035800011f…` |
+| `what-we-believe/ataturk-1600w.avif` | 1600x898 | 33 744 | `0431512564b18cc0…` |
+| `what-we-believe/ataturk-2560w.webp` | 2560x1436 | 125 096 | `be7dcb8ce3a79bb9…` |
+| `what-we-believe/ataturk-2560w.avif` | 2560x1436 | 69 387 | `914097c1331d0246…` |
+| `what-we-believe/little-prince-1600w.webp` | 1600x1239 | 28 920 | `30392e70649e8c33…` |
+| `what-we-believe/little-prince-1600w.avif` | 1600x1239 | 14 779 | `a0d43d00cab6eba8…` |
+| `what-we-believe/little-prince-2560w.webp` | 2560x1983 | 57 812 | `b06f20a23e269ec0…` |
+| `what-we-believe/little-prince-2560w.avif` | 2560x1983 | 26 750 | `df14e5e931723480…` |
 
-**İkili dosyalar bu depoya konmadı.** Depo herkese açık
-(`github.com/bekircankllolu/HIBRID360`, `visibility: PUBLIC`) ve üç
-görselin de kullanım hakkı doğrulanmadı; doğrulanmamış üçüncü taraf
-görselini herkese açık bir depoya koymak, onu yayına almak kadar riskli.
-Bunun yerine üretimi birebir tekrarlanabilir kılan betik commit edildi:
+Üretim tekrarlanabilir:
 
 ```
-python scripts/assets/prepare-legacy-images.py <depo-disi-cikis-dizini>
+python scripts/assets/prepare-legacy-images.py
 ```
 
 Betik kaynağı indirir, yukarıdaki sha256'larla karşılaştırır (kaynak
 değiştiyse uyarır) ve aynı türevleri üretir.
 
-### Telif ve atıf blocker'ları — **"yayına hazır" DEĞİL**
+**AVIF üretiminde bir tuzak:** `contact-bg.jpg` gri tonlama (mode `L`) ve
+912 baytlık **tek kanallı** bir ICC profili taşıyor. Pillow bunu RGB'ye
+çevrilmiş görüntünün AVIF çıktısına da yazıyor ve Chromium o dosyayı
+**çözemiyor** — üstelik `<picture>` içindeki `type` yedeği devreye
+girmiyor, çünkü sorun format desteği değil çözümleme. Sonuç: istek 200
+dönerken görsel sessizce kırık kalıyor. Betik artık kaynak metadata'sını
+taşımıyor; nöbetçi test `e2e/canonical-routes.spec.ts` → "Görseller".
 
-1. **Atatürk fotoğrafı** (`ataturk.jpg`) — fotoğrafın kimin çektiği,
+`kadin.jpg` (eski What We Believe kapağı) **alınmadı**: tanınabilir bir
+kişinin portresi, model rıza kaydı yok ve bu revizyonda istenmedi.
+`contact-screen01.jpg` ("Motion Office" bölüm görseli) de istenmedi.
+
+### Telif ve atıf blocker'ları — **KAPANMADI**
+
+Görseller artık depoda ve sayfada; bu, kullanım hakkının doğrulandığı
+anlamına **gelmez**. Yayın öncesi kapatılmalı:
+
+1. **Küçük Prens illüstrasyonu** (`little_prince.png`) — Saint-Exupéry
+   1944'te öldü, eser 1943'te yayımlandı. Türkiye'de koruma süresi
+   dolmuş görünse de Fransa'da savaş dönemi uzatmaları ve ABD'de 1943
+   yayın tarihi nedeniyle **hâlâ korumalı**. Ticari bir kurumsal sitede
+   kullanmak lisans gerektirir. **EN YÜKSEK RİSKLİ MADDE.**
+
+2. **Atatürk fotoğrafı** (`ataturk.jpg`) — fotoğrafın kimin çektiği,
    hangi arşivden geldiği ve kullanım izni **bilinmiyor**. Tarihî
    fotoğrafın kendisi kamu malı olsa bile belirli bir baskı/restorasyon
    ayrı hak doğurabilir.
 
-2. **Küçük Prens illüstrasyonu** (`little_prince.png`) — Saint-Exupéry
-   1944'te öldü; eser 1943'te yayımlandı. Türkiye'de koruma süresi
-   dolmuş görünse de Fransa'da savaş dönemi uzatmaları ve ABD'de 1943
-   yayın tarihi nedeniyle **hâlâ korumalı**. Ticari bir kurumsal sitede
-   kullanmak lisans gerektirir. En yüksek riskli madde.
+3. **İstanbul panoraması** (`contact-bg.jpg`) — çekeni ve lisansı
+   doğrulanmadı; stok görsel olma ihtimali var (BLOCKERS.md madde 3).
 
-3. **"Everything in the world created by women" alıntısı** — eski sitede
-   Atatürk fotoğrafının üzerine, **imza alanı boş bırakılarak**
-   konulmuş; yani atıf ima ediliyor ama yazılmıyor. Bu cümlenin
-   Atatürk'e ait olduğu yaygın olarak söylenir ama **birincil kaynağı
-   gösterilemiyor**. Kaynağı belgelenmeden veya atıf kaldırılmadan
-   yayına giremez.
+4. **"Everything in the world created by women" alıntısı** — eski sitede
+   Atatürk fotoğrafının üzerine, **imza alanı boş bırakılarak** konmuştu;
+   atıf ima ediliyor ama yazılmıyor. Birincil kaynağı gösterilemediği
+   için yeni siteye **alınmadı** ve yerine alıntı **uydurulmadı**. O
+   bandın üzerindeki metin şirketin kendi onaylı manifesto cümlesidir —
+   tırnak içinde değil, imzasız.
 
-4. **Küçük Prens alıntısının atfı** — eski sitede `Antonie de Saint –
-   Exupery` yazıyor; doğrusu **Antoine de Saint-Exupéry**. Kodda
-   (`culture.whatWeBelieve.quoteAuthor`) doğru yazım zaten var.
+5. **Küçük Prens alıntısının atfı** — eski sitede `Antonie de Saint –
+   Exupery` yazıyordu; doğrusu **Antoine de Saint-Exupéry**. Kodda
+   (`culture.whatWeBelieve.quoteAuthor`) doğru yazım kullanılıyor.
 
-5. **`kadin.jpg`** — gri tonlama, stüdyo işi gibi görünen bir portre;
-   kaynağı ve model rızası bilinmiyor. Stok görsel olma ihtimali yüksek
-   (bkz. BLOCKERS.md madde 3).
-
-6. **Müşterinin çekeceği konuşma videosu** — What We Believe sayfası için
-   planlanan video için **hiçbir gerçek dosya yok**. Sahte video veya
-   yer tutucu kişi üretilmedi. Prodüksiyon blocker'ı.
-
-Bu altı madde kapanmadan sayfa "yayına hazır" işaretlenemez.
+6. **Müşterinin çekeceği konuşma videosu** — hâlâ **hiçbir gerçek dosya
+   yok**. Sahte video veya yer tutucu kişi üretilmedi; bileşen
+   (`BeliefFounderVideo`) hazır ve `BELIEF_FOUNDER_VIDEO` `null` olduğu
+   sürece bölümü hiç render etmiyor. Prodüksiyon blocker'ı.

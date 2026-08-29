@@ -34,6 +34,18 @@ TODO olarak sayfa kodunda bekliyor (Film A "Henüz Değil").
 
 ## 3. Görsellerin yayın/telif izni teyit edilmeli
 
+**29 Ağustos 2026 güncellemesi — DURUM DEĞİŞTİ, MADDE KAPANMADI.**
+Müşterinin talimatıyla eski sitenin üç görseli (İstanbul panoraması ·
+Atatürk fotoğrafı · Küçük Prens illüstrasyonu) artık **depoda ve
+sayfalarda**. Kullanım hakları hâlâ **doğrulanmadı**; yayın öncesi
+kapatılması gereken en riskli üç kalem bunlar. Kaynak, ölçü, sha256 ve
+madde madde risk değerlendirmesi:
+`docs/content/LEGACY_CONTENT_ROUTE_MAP.md` bölüm 4.
+
+`kadin.jpg` bilerek alınmadı: tanınabilir bir kişinin portresi, model
+rıza kaydı yok.
+
+
 İki somut risk tespit edildi:
 
 - **Eski sitenin `bisiklet.jpg` görseli E.T. the Extra-Terrestrial
