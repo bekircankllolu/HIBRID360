@@ -87,8 +87,9 @@ kapattı (6, 14).**
 ## 6. ~~🟠 Müşteri logoları — hiç yok~~ · **KAPANDI (29 Ağu 2026)**
 
 > Müşteri revizyonu bu maddeyi kapattı: **logo istenmiyor**, minimal marka
-> adları isteniyor. Clients sayfasına logo alanı eklenmeyecek, sektör/
-> kategori bilgisi ve filtre kurulmayacak — eski sitede de yoktu.
+> adları isteniyor. Clients sayfasına logo alanı eklenmeyecek. Doğrulanmış
+> sektör verisi olmadığı için semantik kategori filtresi kurulmayacak;
+> uzun liste yalnızca alfabetik aralıklarla gezilecek.
 > Bkz. `docs/DECISIONS.md` #21. Aşağıdaki eski kayıt tarihsel olarak
 > bırakıldı.
 
@@ -97,7 +98,7 @@ kapattı (6, 14).**
 | **Soru** | Müşteri logolarını (vektörel, tercihen SVG/EPS) paylaşabilir misiniz? Her marka için **logo kullanım izni** var mı? |
 | **Neden gerekli** | Friends sayfası bugün 60+ müşteriyi **düz metin listesi** olarak gösteriyor. Eski site de aynıydı. Logo ızgarası bu sayfayı bambaşka bir seviyeye taşır |
 | **Bugün ne var** | Hiç logo yok — ne repoda, ne müşteriden gelen 119 dosyalık fotoğraf arşivinde |
-| **Kodda nerede** | `src/components/friends/ClientLogoGrid.tsx` (TODO: *"müşteri logoları teslim edilmedi; ızgara …"*) |
+| **Kodda nerede** | `src/components/friends/ClientNameIndex.tsx` |
 | **Dikkat** | Logo kullanım izni, işin yayın izninden **ayrı** bir izindir. Bir markayla çalışmış olmak, logosunu sitede kullanma hakkı vermez |
 
 ## 7. 🟠 Yeni müşteri grubu — sözleşme izni kontrolü

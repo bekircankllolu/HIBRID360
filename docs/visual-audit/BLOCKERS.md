@@ -122,7 +122,8 @@ bu ayrı bir talep olarak müşteriden istenmeli.~~
 
 **29 Ağustos 2026 müşteri revizyonu bu fırsatı kapattı:** müşteri logo
 değil, **minimal marka adları** istiyor. Clients sayfasına logo alanı
-eklenmeyecek; sektör/kategori bilgisi ve filtre de olmayacak (eski sitede
+eklenmeyecek; doğrulanmış sektör/kategori bilgisi olmadığı için semantik
+filtre olmayacak, yalnızca alfabetik gezinme kullanılacak (eski sitede
 de yoktu). Bu artık bir blocker değil, kapanmış bir karar — bkz.
 `docs/DECISIONS.md` #21.
 

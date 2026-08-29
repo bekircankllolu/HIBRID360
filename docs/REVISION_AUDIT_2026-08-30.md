@@ -20,7 +20,7 @@
 | 10 — Hizmet detay sayfaları | Tamamlandı | Creative, Production, Post Production, Digital, Live Broadcast, Cloud TV, Event Management, AI Creative Production ve ek servis rotaları mevcut |
 | 11 — Büyük görseller tam ekran | Tamamlandı | Ortak servis görseli full-bleed ve en az `100svh`; yatay taşma e2e ile denetleniyor |
 | 12 — Contact eski yapı + harita | Tamamlandı | İstanbul panorama, sarı iletişim bölümü, tam genişlik harita; Google iframe açık kullanıcı eyleminden sonra yükleniyor |
-| 13 — Clients minimal isim grid'i | Tamamlandı | Siyah zemin, beyaz marka isimleri, logo ve kategori filtresi yok |
+| 13 — Clients tipografik marka dizini | Tamamlandı | Siyah zemin üzerinde çerçevesiz beyaz marka adları; solda doğrulanmış veriden türetilen alfabetik gezinme rayı var. Logo ve uydurma sektör kategorisi yok |
 | 14 — What We Believe | Uygulama tamam, medya belgesi bekliyor | Atatürk/Küçük Prens alanları, eski menü sırası ve scroll ile büyüyen kurucu video bileşeni hazır. Gerçek konuşma videosu ve nihai hak dosyası release girdisi |
 | 15 — Work / RECENT | Uygulama tamam, envanter bekliyor | Büyük RECENT başlığı, Yıl/Hizmet/Sektör filtreleri, 4/2/1 kolon grid, iki dilli proje başlıkları ve vaka şablonu hazır. Gerçek iş kartları müşteri envanteriyle açılacak |
 

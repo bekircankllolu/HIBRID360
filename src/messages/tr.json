@@ -383,8 +383,13 @@
     ]
   },
   "clients": {
-    "heroTitle": "MÜŞTERİLER",
+    "heroTitle": "MÜŞTERİLERİMİZ",
     "heroBody": "Birlikte çalıştığımız markalarla dürüst, uzun soluklu ve cesur iş birlikleri kuruyoruz. Global ikonlar. Ortak yaratıcı enerji.",
+    "index": {
+      "label": "Marka dizini",
+      "all": "Tümü",
+      "resultCount": "Gösterilen marka sayısı: {count}"
+    },
     "ctaLead": "Birlikte ne ürettiğimizi görmek ister misiniz?",
     "testimonialsTitle": "Ne diyorlar",
     "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."
