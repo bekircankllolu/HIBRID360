@@ -1,0 +1,95 @@
+/**
+ * Kaydırmayla büyüyen kurucu videosu.
+ *
+ * `--progress` (0→1) bileşen tarafından yazılır; ölçüler yalnızca bu
+ * değişkenden türetilir, böylece JS'in tek işi bir sayı yazmak olur
+ * (layout okuma/yazma döngüsü yok).
+ */
+.wrapper {
+  /* Sarmalayıcı bir ekrandan uzun: fark, büyüme için kaydırma payı. */
+  height: 250svh;
+  position: relative;
+}
+
+.stage {
+  --progress: 0;
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100svh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  /* Büyürken kenardan taşan medya sayfayı yatay kaydırmasın. */
+  overflow: hidden;
+}
+
+.media {
+  /* Küçük alandan tam genişliğe: 46% → 100%. */
+  width: calc((46 + 54 * var(--progress)) * 1%);
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--color-brand-black);
+}
+
+.disclaimer {
+  margin: 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+/* Mobilde küçük başlangıç ölçüsü anlamsız (zaten dar) ve uzun sticky
+   bölüm kaydırmayı yoruyor: başlangıç %78, sarmalayıcı kısa. */
+@media (max-width: 767px) {
+  .wrapper {
+    height: 170svh;
+  }
+
+  .media {
+    width: calc((78 + 22 * var(--progress)) * 1%);
+  }
+}
+
+/* CLAUDE.md zorunlu kuralı — hareket azaltmada sticky ve büyüme yok:
+   medya tam genişlik statik durur, bölüm normal akışta akar. */
+.wrapperStatic {
+  height: auto;
+}
+
+.wrapperStatic .stage {
+  position: static;
+  height: auto;
+  padding: var(--space-12) 0;
+  overflow: visible;
+}
+
+.wrapperStatic .media {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    height: auto;
+  }
+
+  .stage {
+    position: static;
+    height: auto;
+    padding: var(--space-12) 0;
+    overflow: visible;
+  }
+
+  .media {
+    width: 100%;
+  }
+}

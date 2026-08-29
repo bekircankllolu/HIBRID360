@@ -103,25 +103,7 @@
   opacity: 0.9;
 }
 
-.band {
-  margin-top: var(--space-16);
-  padding: var(--space-8) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.bandLead {
-  max-width: 44rem;
-  margin: 0 0 var(--space-4);
-  opacity: 0.85;
-}
-
-.manifesto {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-heading);
-  margin: 0 0 var(--space-8);
-}
-
+/* Partners (PAR-02). What We Believe alıntı bandı kendi modülünde. */
 .quote {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
