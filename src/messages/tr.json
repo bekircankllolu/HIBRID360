@@ -89,7 +89,9 @@
       "label": "Filtre",
       "year": "Yıl",
       "client": "Müşteri",
-      "format": "Format",
+      "service": "Hizmet",
+      "industry": "Sektör",
+      "contentFormat": "Format",
       "all": "Tümü"
     },
     "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz — özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",

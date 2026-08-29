@@ -89,7 +89,9 @@
       "label": "Filter",
       "year": "Year",
       "client": "Client",
-      "format": "Format",
+      "service": "Service",
+      "industry": "Industry",
+      "contentFormat": "Format",
       "all": "All"
     },
     "ctaLead": "If our work aligns with your frequency, we would love to meet you — especially if you are on the SAME FREQUENCY, same mindset as us.",

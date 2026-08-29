@@ -42,8 +42,23 @@ export interface Work {
   client_name: string | null;
   client_name_confidential: boolean;
   year: number;
+  /** Varlık türü. Arşivdeki "Format" süzgeci bu DEĞİL — bkz. content_format. */
   format: "video" | "image" | "case_study";
+  /**
+   * Eski serbest metin gruplama. Anlamı müşteriyle netleşmedi; arayüzde
+   * kullanılmıyor. Başka bir anlama dönüştürülmedi.
+   */
   category: string | null;
+  /**
+   * Arşiv filtre facet'leri (29 Ağustos 2026 revizyonu). Üçü de nullable:
+   * iş envanteri gelmeden (docs/DECISIONS.md #16) doldurulamazlar.
+   * Süzgeç seçenekleri yalnızca gerçek veriden türer — envanter gelmeden
+   * arayüzde hiçbir filtre görünmez.
+   */
+  service: string | null;
+  industry: string | null;
+  /** brief 7.1 WORK-05: "Film · Photography · Live · AI". */
+  content_format: string | null;
   is_featured: boolean;
   cover_image_url: string | null;
   video_url: string | null;
