@@ -79,62 +79,6 @@
   margin: 0 0 var(--space-4);
 }
 
-/* Kurucu bloğu (CUL-03/04) */
-.founder {
-  margin-top: var(--space-16);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
-  align-items: flex-start;
-}
-
-.founderPhoto {
-  width: 160px;
-  height: 200px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.6875rem;
-  opacity: 0.5;
-  text-align: center;
-  padding: var(--space-2);
-}
-
-.founderInfo {
-  flex: 1;
-  min-width: 220px;
-}
-
-.founderName {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: 1.125rem;
-  margin: 0;
-}
-
-.founderTitle {
-  font-size: 0.8125rem;
-  opacity: 0.7;
-  margin: var(--space-1) 0 var(--space-4);
-}
-
-.founderQuote {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-style: italic;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  max-width: 32rem;
-  margin: 0 0 var(--space-2);
-}
-
-.founderDisclaimer {
-  font-size: 0.6875rem;
-  opacity: 0.6;
-}
-
 /* Numaralı/etiketli liste blokları (WWB-02..05) */
 .list {
   list-style: none;
