@@ -18,8 +18,8 @@ Her madde **kim cevaplayacak**, **ne olmadan ne yayınlanamaz** ve
 
 | Aciliyet | Madde sayısı | Ne bloke ediyor |
 |---|---|---|
-| 🔴 **Yayın bloklayıcı** | 5 | Bunlar olmadan site yayına alınamaz |
-| 🟠 **Sayfa bloklayıcı** | 4 | İlgili sayfa eksik/boş kalır, site yayınlanabilir |
+| 🔴 **Yayın bloklayıcı** | 4 | Bunlar olmadan site yayına alınamaz |
+| 🟠 **Sayfa bloklayıcı** | 5 | İlgili sayfa eksik/boş kalır, site yayınlanabilir |
 | 🟡 **İyileştirme** | 5 | Sayfa çalışıyor, daha iyi olabilir |
 
 **29 Ağustos 2026 revizyonu üç madde ekledi (18, 19, 20) ve iki maddeyi
@@ -207,16 +207,19 @@ kapattı (6, 14).**
 
 ---
 
-## 18. 🔴 Clients gövde metni çelişkisi
+## 18. 🟠 Clients gövde metni — geçici metin yürürlükte, ONAY BEKLİYOR
 
 | | |
 |---|---|
-| **Soru** | Sayfanın adı Clients oldu ama onaylı gövde metni "onlara **müşteri değil, dost** diyoruz" diyor. Metin güncellenecek mi, yoksa böyle mi kalsın? |
-| **Neden gerekli** | Sayfa başlığı "MÜŞTERİLER / CLIENTS", hemen altındaki paragraf bu adı reddediyor — ziyaretçi için görünür bir çelişki |
-| **Bugün ne var** | Onaylı deck metni **silinmedi**, yerine metin **uydurulmadı**. Başlık Clients, gövde deck'teki hâliyle duruyor |
+| **Soru** | Aşağıdaki geçici gövde metni onaylanıyor mu? Onaylanmazsa yerine ne yazılacak? |
+| **Neden gerekliydi** | Sayfa başlığı "MÜŞTERİLER / CLIENTS" iken paragraf "onlara **müşteri değil, dost** diyoruz" diyordu — ziyaretçi için görünür bir çelişki |
+| **Bugün ne var** | 29 Ağustos 2026 revizyonunda verilen **geçici** metin yürürlükte. Çelişki kalktı ama metin **müşteri onayı bekliyor** — onaysız yayına girmemeli |
+| **Yürürlükteki TR** | "Birlikte çalıştığımız markalarla dürüst, uzun soluklu ve cesur iş birlikleri kuruyoruz. Global ikonlar. Ortak yaratıcı enerji." |
+| **Yürürlükteki EN** | "We build honest, long-term and ambitious partnerships with the brands we work with. Global icons. Shared creative energy." |
+| **Değişen ne** | Onaylı deck metnindeki "dost" çerçevesi ve "en yakın dostlarınızla kurabileceğiniz türden dürüst ve sadık bir kimya" cümlesi düştü. "Cesur iş birlikleri / Global ikonlar / Ortak yaratıcı enerji" üçlüsü deck'ten korundu |
 | **Kodda nerede** | `messages/*.json` → `clients.heroBody` · `src/app/[locale]/clients/page.tsx` |
 | **Bağlı karar** | `docs/DECISIONS.md` #21 |
-| **Seçenekler** | (a) gövdeyi Clients adına uyacak şekilde yeniden yazdırmak, (b) sayfa adını Clients bırakıp gövdeyi kısaltmak, (c) eski sitenin kendi kicker'ını kullanmak: *"Who Believed In Us"* |
+| **Bu olmadan** | Sayfa çalışır ve tutarlıdır; ama yayında duran metin müşterinin nihai onayından geçmemiştir |
 
 ## 19. 🟠 Solutions sayfası giriş paragrafı yok
 
