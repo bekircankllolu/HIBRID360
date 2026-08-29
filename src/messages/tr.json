@@ -8,17 +8,20 @@
     "closeDetails": "Detayı kapat"
   },
   "nav": {
-    "whoWeAre": "BİZ KİMİZ",
-    "whatWeDo": "NE YAPIYORUZ",
-    "whatWeBelieve": "NEYE İNANIYORUZ",
-    "solutions": "ÇÖZÜMLER",
-    "clients": "MÜŞTERİLER",
-    "friends": "MÜŞTERİLER",
-    "partners": "İŞ ORTAKLARI",
-    "contact": "İLETİŞİM",
-    "work": "WORK",
-    "insights": "INSIGHTS",
-    "culture": "CULTURE",
+    "whoWeAre": "Biz Kimiz",
+    "whatWeDo": "Ne Yapıyoruz",
+    "whatWeBelieve": "Neye İnanıyoruz",
+    "solutions": "Çözümler",
+    "clients": "Müşteriler",
+    "friends": "Müşteriler",
+    "partners": "Partnerler",
+    "contact": "İletişim",
+    "work": "Work",
+    "insights": "Insights",
+    "culture": "Culture",
+    "about": "Hakkımızda",
+    "explore": "Keşfet",
+    "legal": "Yasal",
     "menuLabel": "Ana menü",
     "openMenu": "Menüyü aç",
     "closeMenu": "Menüyü kapat"
@@ -40,7 +43,8 @@
       "label": "Sosyal Medya"
     },
     "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
-    "carbonNeutral": "🌱 Karbon nötr"
+    "carbonNeutral": "🌱 Karbon nötr",
+    "backToTop": "Yukarı"
   },
   "home": {
     "showreel": {

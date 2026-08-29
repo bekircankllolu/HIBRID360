@@ -8,17 +8,20 @@
     "closeDetails": "Close details"
   },
   "nav": {
-    "whoWeAre": "WHO WE ARE",
-    "whatWeDo": "WHAT WE DO",
-    "whatWeBelieve": "WHAT WE BELIEVE",
-    "solutions": "SOLUTIONS",
-    "clients": "CLIENTS",
-    "friends": "CLIENTS",
-    "partners": "PARTNERS",
-    "contact": "CONTACT",
-    "work": "WORK",
-    "insights": "INSIGHTS",
-    "culture": "CULTURE",
+    "whoWeAre": "Who We Are",
+    "whatWeDo": "What We Do",
+    "whatWeBelieve": "What We Believe",
+    "solutions": "Solutions",
+    "clients": "Clients",
+    "friends": "Clients",
+    "partners": "Partners",
+    "contact": "Contact",
+    "work": "Work",
+    "insights": "Insights",
+    "culture": "Culture",
+    "about": "About",
+    "explore": "Explore",
+    "legal": "Legal",
     "menuLabel": "Main navigation",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
@@ -40,7 +43,8 @@
       "label": "Social"
     },
     "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
-    "carbonNeutral": "🌱 Carbon neutral"
+    "carbonNeutral": "🌱 Carbon neutral",
+    "backToTop": "Back to top"
   },
   "home": {
     "showreel": {

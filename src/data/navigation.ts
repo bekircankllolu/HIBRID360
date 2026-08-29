@@ -25,11 +25,12 @@
  * `href` locale öneki taşımaz; `@/i18n/navigation` içindeki `Link` öneki
  * kendisi ekler (`/tr/who-we-are`, `/en/who-we-are`).
  *
- * ## Sahiplik notu
+ * ## Tek kaynak
  *
- * Bu dosya yalnızca veridir. `src/components/layout/Header.tsx` ve
- * `Footer.tsx` Codex'in sahipliğindedir; menüyü bu diziye bağlama işi
- * orada yapılacak.
+ * `Header.tsx` ve `Footer.tsx` menüyü artık burada tanımlı dizilerden
+ * üretiyor; o dosyalarda paralel `NAV_ITEMS` / `SERVICE_LINKS` /
+ * `FOOTER_NAV` listeleri yok. Yeni bir menü maddesi yalnızca buraya
+ * eklenir, hizmet maddesi ise `src/data/services.ts` içine.
  */
 import { SERVICE_CATALOG } from "@/data/services";
 
@@ -84,3 +85,74 @@ export const SECONDARY_NAV: Array<{ labelKey: string; href: string }> = [
 
 /** Üst menüdeki canonical rotalar — sitemap ve smoke testleri için. */
 export const MAIN_NAV_PATHS = MAIN_NAV.map((item) => item.href);
+
+/**
+ * Masaüstü mega menüsü — Header'daki sabit sütun işaretlemesinin veri
+ * karşılığı. Sütun sırası ve içerik eskisiyle birebir aynı; tek fark
+ * hedeflerin ve etiketlerin artık tek kaynaktan gelmesi.
+ */
+export interface MegaMenuLink {
+  /** Locale öneki olmadan canonical rota. */
+  href: string;
+  /** `messages` → `nav.<labelKey>`. Hizmet adlarında kullanılmaz. */
+  labelKey?: string;
+  /** Çevrilmeyen sabit etiket — hizmet adları (marka dili, özel ad). */
+  label?: string;
+}
+
+export interface MegaMenuColumn {
+  /** `messages` → `nav.<headingKey>`. */
+  headingKey: string;
+  /** Başlık aynı zamanda bağlantıysa canonical rota. */
+  headingHref?: string;
+  /** `services` iki sütunlu ızgara, `links` tek sütun (bkz. Header CSS). */
+  variant: "services" | "links";
+  links: MegaMenuLink[];
+}
+
+export const MEGA_MENU: MegaMenuColumn[] = [
+  {
+    headingKey: "whatWeDo",
+    headingHref: "/what-we-do",
+    variant: "services",
+    links: SERVICE_CATALOG.map((service) => ({
+      href: service.href,
+      label: service.name,
+    })),
+  },
+  {
+    headingKey: "about",
+    variant: "links",
+    links: [
+      { href: "/who-we-are", labelKey: "whoWeAre" },
+      { href: "/what-we-believe", labelKey: "whatWeBelieve" },
+      { href: "/partners", labelKey: "partners" },
+    ],
+  },
+  {
+    headingKey: "explore",
+    variant: "links",
+    links: [
+      { href: "/work", labelKey: "work" },
+      { href: "/clients", labelKey: "clients" },
+      { href: "/contact", labelKey: "contact" },
+    ],
+  },
+];
+
+/**
+ * Footer "Keşfet" sütunu.
+ *
+ * Work ilk sırada: üst menüde yok ama sitenin ana iş girişlerinden biri,
+ * footer onun birincil giriş noktası. Ardından üst menünün tamamı, sonra
+ * Insights geliyor.
+ *
+ * Not: eski elle tutulan footer listesinde Solutions **eksikti** — üst
+ * menüye eklendiği hâlde footer'a yansımamıştı. Tek kaynağa bağlanınca
+ * kendiliğinden düzeldi.
+ */
+export const FOOTER_NAV: Array<{ labelKey: string; href: string }> = [
+  { labelKey: "work", href: "/work" },
+  ...MAIN_NAV.map((item) => ({ labelKey: item.labelKey, href: item.href })),
+  { labelKey: "insights", href: "/insights" },
+];

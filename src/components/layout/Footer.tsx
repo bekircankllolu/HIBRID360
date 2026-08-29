@@ -1,33 +1,23 @@
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BRAND_SIGNATURE, SOCIAL_PLATFORMS, CONTACT } from "@/lib/site";
+import { FOOTER_NAV } from "@/data/navigation";
 import { isSustainabilityPublishable } from "@/data/sustainability";
 import styles from "./Footer.module.css";
 
-// 29 Ağustos 2026 revizyonu — merge notu: hedefler canonical rotalarla
-// hizalandı (bkz. src/data/navigation.ts). Work üst menüde yok; footer
-// onun ana giriş noktalarından biri, bu yüzden listede ilk sırada.
-// TODO: MAIN_NAV/SECONDARY_NAV'dan türetilip bu dizi kaldırılmalı —
-// Header.tsx'teki aynı TODO ile birlikte.
-const FOOTER_NAV = [
-  { href: "/work", en: "Work", tr: "Work" },
-  { href: "/who-we-are", en: "Who We Are", tr: "Biz Kimiz" },
-  { href: "/what-we-do", en: "What We Do", tr: "Ne Yapıyoruz" },
-  {
-    href: "/what-we-believe",
-    en: "What We Believe",
-    tr: "Neye İnanıyoruz",
-  },
-  { href: "/clients", en: "Clients", tr: "Müşteriler" },
-  { href: "/partners", en: "Partners", tr: "Partnerler" },
-  { href: "/contact", en: "Contact", tr: "İletişim" },
-] as const;
-
+/**
+ * Footer.
+ *
+ * Keşfet sütunu `src/data/navigation.ts` → `FOOTER_NAV` üzerinden geliyor
+ * (Work + üst menünün tamamı + Insights). Daha önce burada elle tutulan
+ * bir dizi vardı; üst menüye eklenen Solutions ona yansımadığı için
+ * footer'da eksikti.
+ *
+ * Etiketler `messages/*.json` → `nav.*` ve `footer.*`.
+ */
 export function Footer() {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
-  const locale = useLocale();
-  const isTurkish = locale === "tr";
 
   const legalItems: Array<{ href: string; label: string }> = [
     { href: "/privacy", label: t("legal.privacy") },
@@ -55,9 +45,7 @@ export function Footer() {
 
         <div className={styles.columns}>
           <section className={styles.column} aria-labelledby="footer-contact">
-            <h2 id="footer-contact">
-              {isTurkish ? "İletişim" : "Contact"}
-            </h2>
+            <h2 id="footer-contact">{tNav("contact")}</h2>
             <address className={styles.contact}>
               <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
                 {CONTACT.phone}
@@ -67,21 +55,18 @@ export function Footer() {
           </section>
 
           <nav className={styles.column} aria-label="Footer">
-            <h2>{isTurkish ? "Keşfet" : "Explore"}</h2>
+            <h2>{tNav("explore")}</h2>
             <ul>
               {FOOTER_NAV.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href}>{isTurkish ? item.tr : item.en}</Link>
+                  <Link href={item.href}>{tNav(item.labelKey)}</Link>
                 </li>
               ))}
-              <li>
-                <Link href="/insights">{tNav("insights")}</Link>
-              </li>
             </ul>
           </nav>
 
           <nav className={styles.column} aria-label="Legal">
-            <h2>{isTurkish ? "Yasal" : "Legal"}</h2>
+            <h2>{tNav("legal")}</h2>
             <ul>
               {legalItems.map((item) => (
                 <li key={item.href}>
@@ -109,7 +94,7 @@ export function Footer() {
             </Link>
           )}
           <a href="#top" className={styles.backToTop}>
-            {isTurkish ? "Yukarı" : "Back to top"} ↑
+            {t("backToTop")} ↑
           </a>
         </div>
       </div>
