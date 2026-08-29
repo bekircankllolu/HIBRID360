@@ -146,16 +146,16 @@ müşteri tarafından bildirildi.
 | 20 | Eski Culture alt rotaları | Who We Are · What We Believe · Partners kendi canonical rotalarına taşındı | KAPANDI | `/culture/*` → yeni rotalar (308). `/culture` hub'ı silinmedi: Directors & Crew ve Sustainability'nin başka üst sayfası yok |
 | 21 | Friends → Clients | Sayfanın görünür adı ve rotası **Clients** oldu (eski sitedeki adına dönüş) | KAPANDI | `/friends` → `/clients` (308). Logo alanı **eklenmeyecek** — müşteri minimal marka adları istiyor. Sektör/kategori/filtre yok |
 | 22 | Solutions sayfası | Yeniden açıldı; eski sayfanın on beş yetenek listesiyle | KAPANDI | Giriş paragrafı yok — eski sayfada da yoktu, uydurulmadı |
-| 23 | Ana sayfada MONA | **Kaldırıldı.** MONA yalnızca AI Creative Production sayfasında | KAPANDI | ⚠️ Kod değişikliği **Codex'te**: `src/app/[locale]/page.tsx` hâlâ `<Mona variant="compact" />` render ediyor |
-| 24 | Full-bleed tasarım | Genel kural oldu | KAPANDI | ⚠️ Tamamen Codex kapsamında (CSS/layout) |
+| 23 | Ana sayfada MONA | **Kaldırıldı.** MONA yalnızca AI Creative Production sayfasında | KAPANDI | Uygulandı; ana sayfa MONA render etmiyor |
+| 24 | Full-bleed tasarım | Genel kural oldu | KAPANDI | Uygulandı; ana sahneler, servis görselleri, Work grid'i ve Contact haritası viewport genişliğini kullanıyor |
 
 ### Bu revizyonla kapanmayan, hâlâ blocker olan maddeler
 
-- **#16 Works içerik envanteri** — hâlâ `AÇIK — blocker`. Filtre facet'leri
-  (`service` · `industry` · `content_format`) şemaya eklendi ama üçü de
-  nullable ve envanter gelmeden dolmuyor. Arayüz boş eksende filtre
-  göstermiyor.
-- **AI showreel filmi** — hâlâ yok (BLOCKERS.md madde 2).
+- **#16 Works içerik envanteri** — hâlâ `AÇIK — veri blocker'ı`. `RECENT`
+  sayfa düzeni, Yıl/Hizmet/Sektör filtreleri, proje grid'i, iki dilli başlık
+  alanları ve vaka şablonu hazır; gerçek kartlar envanter gelince açılacak.
+- **AI showreel filmi** — gerçek dosya hâlâ yok; scroll ile küçük kadrajdan
+  tam ekrana büyüme altyapısı hazır (`src/data/home-showreel.ts`).
 - **What We Believe müşteri videosu** — müşterinin çekeceği konuşma videosu
   için hiçbir gerçek dosya yok. Sahte video/yer tutucu kişi üretilmedi.
 - **Atatürk fotoğrafı ve Küçük Prens illüstrasyonunun kullanım hakları** —
@@ -165,7 +165,7 @@ müşteri tarafından bildirildi.
 
 | Konu | Durum | Nerede |
 |---|---|---|
-| Harita sağlayıcısı (Google Maps / Mapbox / OSM / yok) | **AÇIK** — dört seçenek maliyet ve gizlilik gerekçeleriyle karşılaştırıldı; seçilene kadar gömülü harita yok, yalnızca yol tarifi bağlantısı var | `src/data/contact.ts` |
+| Harita sağlayıcısı | **KAPANDI** — anahtarsız Google Maps sorgu gömmesi; iframe yalnızca kullanıcının açık yükleme eyleminden sonra oluşturulur, yol tarifi bağlantısı haritadan bağımsızdır | `src/data/contact.ts` · `PrivacyAwareMap.tsx` |
 | Clients gövde metni çelişkisi | **AÇIK** — deck metni "onlara müşteri değil, dost diyoruz" diyor, sayfa adı artık Clients | CURRENT_CONTENT_GAPS.md madde 18 |
 | Contact adresi | **AÇIK** — eski site (2020) ile deck (Ağu 2026) farklı adres veriyor | CURRENT_CONTENT_GAPS.md madde 4 |
 | Solutions giriş paragrafı | **AÇIK** — eski sayfada yoktu, müşteriden isteniyor | CURRENT_CONTENT_GAPS.md madde 19 |

@@ -45,7 +45,7 @@ export interface ResponsiveImage {
   /** Doğal ölçüler (en geniş türev) — CLS'i sıfırda tutar. */
   width: number;
   height: number;
-  alt: string;
+  alt: Record<"tr" | "en", string>;
 }
 
 const WWB = "/images/site/what-we-believe";
@@ -57,7 +57,10 @@ export const BELIEF_IMAGES = {
     fallback: `${WWB}/ataturk-1600w.webp`,
     width: 2560,
     height: 1436,
-    alt: "Mustafa Kemal Atatürk, bir pencerenin yanında düşünceli otururken — marka sarısı duotone",
+    alt: {
+      tr: "Mustafa Kemal Atatürk, bir pencerenin yanında düşünceli otururken — marka sarısı duotone",
+      en: "Mustafa Kemal Atatürk sitting thoughtfully beside a window — brand-yellow duotone",
+    },
   },
   littlePrince: {
     avif: `${WWB}/little-prince-1600w.avif 1600w, ${WWB}/little-prince-2560w.avif 2560w`,
@@ -65,7 +68,10 @@ export const BELIEF_IMAGES = {
     fallback: `${WWB}/little-prince-1600w.webp`,
     width: 2560,
     height: 1983,
-    alt: "Küçük Prens illüstrasyonu: yıldızlı gökyüzünde küçük gezegeninde gülüyle oturan figür",
+    alt: {
+      tr: "Küçük Prens illüstrasyonu: yıldızlı gökyüzünde küçük gezegeninde gülüyle oturan figür",
+      en: "The Little Prince sitting with his rose on a small planet beneath a star-filled sky",
+    },
   },
 } satisfies Record<string, ResponsiveImage>;
 
@@ -89,6 +95,8 @@ export const BELIEF_IMAGES = {
  *       { src: "/videos/belief-founder.tr.vtt", srcLang: "tr", label: "Türkçe" },
  *       { src: "/videos/belief-founder.en.vtt", srcLang: "en", label: "English" },
  *     ],
+ *     // Yalnızca gerçekten AI ile üretilmiş içerikte eklenir.
+ *     disclosure: "ai-generated",
  *   };
  *
  * Kurallar (CLAUDE.md):
@@ -116,6 +124,7 @@ export interface BeliefFounderVideo {
   sources: BeliefVideoSource[];
   poster: { src: string; width: number; height: number };
   captions?: BeliefVideoCaption[];
+  disclosure?: "ai-generated";
 }
 
 export const BELIEF_FOUNDER_VIDEO: BeliefFounderVideo | null = null;

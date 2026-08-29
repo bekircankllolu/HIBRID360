@@ -65,7 +65,12 @@ export const cookiePolicyTr: LegalDoc = {
         ],
       ],
     },
-    { kind: "heading", text: "3. Çerez Yönetimi ve Tercihler" },
+    { kind: "heading", text: "3. Google Haritalar İçeriği" },
+    {
+      kind: "paragraph",
+      text: "İletişim sayfasındaki Google Haritalar içeriği sayfa açıldığında otomatik olarak yüklenmez. Harita yalnızca kullanıcı “Haritayı yükle” düğmesini seçtiğinde Google sunucularından çağrılır. Bu işlem sırasında IP adresi, tarayıcı ve cihaz bilgileri Google tarafından işlenebilir; Google'ın kendi gizlilik ve çerez koşulları geçerlidir. Haritayı yüklemeden adresi okuyabilir ve yol tarifi bağlantısını kullanabilirsiniz.",
+    },
+    { kind: "heading", text: "4. Çerez Yönetimi ve Tercihler" },
     {
       kind: "paragraph",
       text: "Tarayıcı ayarlarınız üzerinden çerezleri dilediğiniz zaman engelleyebilirsiniz:",
@@ -82,7 +87,7 @@ export const cookiePolicyTr: LegalDoc = {
       kind: "paragraph",
       text: "Zorunlu çerezlerin kapatılması durumunda web sitemizdeki 3D WebGL içeriklerinin görüntülenmesinde aksamalar yaşanabilir.",
     },
-    { kind: "heading", text: "4. İletişim" },
+    { kind: "heading", text: "5. İletişim" },
     { kind: "paragraph", text: "E-posta: contact@hibrid360.com" },
   ],
 };
@@ -144,7 +149,12 @@ export const cookiePolicyEn: LegalDoc = {
       kind: "paragraph",
       text: "To deliver high-performance 3D Web Experience applications without lag, our site runs hardware capability checks (GPU tier detection). These checks utilize temporary local session storage and do not link hardware profiles to individual user identities.",
     },
-    { kind: "heading", text: "4. Managing Cookies via Browser Settings" },
+    { kind: "heading", text: "4. Google Maps Content" },
+    {
+      kind: "paragraph",
+      text: "Google Maps content on the Contact page does not load automatically when the page opens. It is requested from Google's servers only after the visitor selects the “Load map” button. Google may process the visitor's IP address, browser and device information at that point, under Google's own privacy and cookie terms. The office address and directions link remain available without loading the map.",
+    },
+    { kind: "heading", text: "5. Managing Cookies via Browser Settings" },
     {
       kind: "paragraph",
       text: "Users can control or disable cookies through browser settings:",
@@ -165,7 +175,7 @@ export const cookiePolicyEn: LegalDoc = {
       kind: "callout",
       text: 'Preference Control: You can modify or revoke your cookie preferences at any time by clicking the "Cookie Settings" link in our website footer.',
     },
-    { kind: "heading", text: "5. Contact & Updates" },
+    { kind: "heading", text: "6. Contact & Updates" },
     {
       kind: "paragraph",
       text: "For questions regarding our cookie practices, please email privacy@hibrid360.com.",

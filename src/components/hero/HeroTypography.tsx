@@ -1,6 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { HOME_SHOWREEL } from "@/data/home-showreel";
+import type { Locale } from "@/i18n/routing";
 import { HibridWebGL } from "./HibridWebGL";
 import styles from "./HeroTypography.module.css";
 
@@ -21,36 +24,101 @@ import styles from "./HeroTypography.module.css";
  * görünürlükle devrediliyor, bu yüzden iki sahne de kendi sırasında
  * çalışabiliyor — "aynı anda en fazla BİR sahne" kuralı korunuyor.
  *
- * HOME-03 — "AI SHOWREEL" film alanı etiketi sağ üstte, menünün altında.
- * Deck: "Fare hareket ettikçe alan büyüyerek tam ekrana oturur." Film A
- * varlığı henüz teslim edilmedi — bu yüzden yalnızca etiket render
- * ediliyor, tam ekrana büyüyen etkileşim video geldiğinde eklenecek.
+ * HOME-03 — showreel küçük sağ üst kadrajdan başlar ve sayfa kaydırıldıkça
+ * viewport'u kaplar. Medya teslim edilene kadar yanlış bir filmi temsil
+ * etmemek için yalnızca etiket görünür; src/data/home-showreel.ts dolduğu
+ * anda aynı bileşen scroll sahnesini etkinleştirir.
  */
 export function HeroTypography() {
   const t = useTranslations("home");
+  const locale = useLocale() as Locale;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const hasShowreel = HOME_SHOWREEL !== null;
+
+  useEffect(() => {
+    if (!hasShowreel) return;
+
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    let frame = 0;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const measure = () => {
+      const rect = stage.getBoundingClientRect();
+      const travel = Math.max(1, rect.height - window.innerHeight);
+      const progress = reducedMotion.matches
+        ? 1
+        : Math.min(1, Math.max(0, -rect.top / travel));
+
+      stage.style.setProperty("--showreel-progress", progress.toFixed(4));
+      stage.style.setProperty("--showreel-rest", (1 - progress).toFixed(4));
+      frame = 0;
+    };
+
+    const requestMeasure = () => {
+      if (!frame) frame = window.requestAnimationFrame(measure);
+    };
+
+    measure();
+    window.addEventListener("scroll", requestMeasure, { passive: true });
+    window.addEventListener("resize", requestMeasure);
+    reducedMotion.addEventListener("change", requestMeasure);
+
+    return () => {
+      window.removeEventListener("scroll", requestMeasure);
+      window.removeEventListener("resize", requestMeasure);
+      reducedMotion.removeEventListener("change", requestMeasure);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [hasShowreel]);
 
   return (
-    <div className={styles.hero}>
-      <div className={styles.showreel}>
-        <span className={styles.showreelLabel}>{t("showreel.label")}</span>
-        <span className={`${styles.showreelCta} ${styles.pointerCta}`}>
-          {t("showreel.cta")}
-        </span>
-        <span className={`${styles.showreelCta} ${styles.touchCta}`}>
-          {t("showreel.touchCta")}
-        </span>
-      </div>
-
-      <div className={styles.inner}>
-        {/* brief 4.2 — SİTEYE GİRECEK METİN, TR sürümde de aynı. */}
-        <p className={styles.kicker}>
-          MAKE IT MATTER.
-          <span className={styles.kickerSecond}>
-            HYPE THE VIBE. AMPLIFY THE IMPACT.
+    <div
+      ref={stageRef}
+      className={`${styles.stage} ${hasShowreel ? styles.stageWithMedia : ""}`}
+    >
+      <div className={styles.hero}>
+        <div className={styles.showreel}>
+          <span className={styles.showreelLabel}>{t("showreel.label")}</span>
+          <span className={`${styles.showreelCta} ${styles.pointerCta}`}>
+            {t("showreel.cta")}
           </span>
-        </p>
+          <span className={`${styles.showreelCta} ${styles.touchCta}`}>
+            {t("showreel.touchCta")}
+          </span>
+        </div>
 
-        <HibridWebGL />
+        <div className={styles.inner}>
+          <p className={styles.kicker}>
+            MAKE IT MATTER.
+            <span className={styles.kickerSecond}>
+              HYPE THE VIBE. AMPLIFY THE IMPACT.
+            </span>
+          </p>
+
+          <HibridWebGL />
+        </div>
+
+        {HOME_SHOWREEL && (
+          <div className={styles.showreelFrame}>
+            <video
+              className={styles.showreelVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster={HOME_SHOWREEL.poster}
+              aria-label={HOME_SHOWREEL.title[locale]}
+            >
+              {HOME_SHOWREEL.webm && (
+                <source src={HOME_SHOWREEL.webm} type="video/webm" />
+              )}
+              <source src={HOME_SHOWREEL.mp4} type="video/mp4" />
+            </video>
+          </div>
+        )}
       </div>
     </div>
   );

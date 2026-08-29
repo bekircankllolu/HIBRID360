@@ -1,3 +1,19 @@
+.stage {
+  --showreel-progress: 0;
+  --showreel-rest: 1;
+  position: relative;
+}
+
+.stageWithMedia {
+  height: 220svh;
+}
+
+.stageWithMedia .hero {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100svh - var(--header-height));
+}
+
 .hero {
   position: relative;
   min-height: calc(100svh - var(--header-height));
@@ -13,6 +29,8 @@
   width: 100%;
   margin-top: auto;
   padding-inline: clamp(1rem, 2.5vw, 3rem);
+  opacity: var(--showreel-rest);
+  transform: translateY(calc(-1.5rem * var(--showreel-progress)));
 }
 
 /* brief 4.2 — hero üstü slogan, TR sürümde de aynı (marka dili). */
@@ -52,7 +70,7 @@
   align-items: flex-end;
   gap: var(--space-1);
   text-align: right;
-  z-index: 1;
+  z-index: 3;
 }
 
 .showreelLabel {
@@ -72,6 +90,28 @@
   display: none;
 }
 
+.showreelFrame {
+  position: absolute;
+  top: calc(clamp(1.25rem, 3vw, 2.5rem) * var(--showreel-rest));
+  right: calc(clamp(1rem, 2.5vw, 3rem) * var(--showreel-rest));
+  z-index: 2;
+  width: calc(
+    100% - (100% - clamp(18rem, 27vw, 32rem)) * var(--showreel-rest)
+  );
+  height: calc(
+    100% - (100% - clamp(10.125rem, 15.1875vw, 18rem)) * var(--showreel-rest)
+  );
+  overflow: hidden;
+  background: #080808;
+}
+
+.showreelVideo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 @media (max-width: 640px) {
   .hero {
     min-height: calc(100svh - var(--header-height));
@@ -84,6 +124,17 @@
 
   .kicker {
     font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stageWithMedia {
+    height: calc(100svh - var(--header-height));
+  }
+
+  .stageWithMedia .hero {
+    position: relative;
+    top: auto;
   }
 }
 

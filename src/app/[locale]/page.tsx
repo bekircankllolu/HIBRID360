@@ -20,7 +20,7 @@ import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@
  * sinyali verir).
  *
  * Ekran sırası deck'teki HOME-01..13 numaralamasıyla birebir:
- *   01-03 HeroTypography (dev tipografi + hero sloganı + showreel etiketi)
+ *   01-03 HeroTypography (dev tipografi + hero sloganı + showreel sahnesi)
  *   04    RotatingSlogans
  *   05    LessTalk
  *   06    ServiceLinksRow

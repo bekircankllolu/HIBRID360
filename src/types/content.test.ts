@@ -84,7 +84,9 @@ describe("works filtre facet'leri", () => {
     // View drop+create edildiği için grant'ın yeniden verilmesi şart.
     expect(sql).toContain("drop view if exists public.works_public");
     expect(sql).toContain("grant select on public.works_public to anon, authenticated");
-    expect(worksPublicColumns(sql)).toEqual(worksPublicColumns(SCHEMA));
+    expect(worksPublicColumns(SCHEMA)).toEqual(
+      expect.arrayContaining(worksPublicColumns(sql)),
+    );
   });
 
   it("seed dosyasına sahte iş eklenmedi", () => {
@@ -93,10 +95,35 @@ describe("works filtre facet'leri", () => {
   });
 });
 
+describe("works proje başlıkları", () => {
+  const titles = ["title_tr", "title_en"] as const;
+
+  it.each(titles)("%s nullable ve public view içinde", (column) => {
+    const match = SCHEMA.match(new RegExp(`^\\s*${column} text.*$`, "m"));
+    expect(match, `${column} docs/supabase-schema.sql'de yok`).not.toBeNull();
+    expect(match?.[0]).not.toMatch(/not null/i);
+    expect(worksPublicColumns(SCHEMA)).toContain(column);
+  });
+
+  it("title migration view'i güncel şemayla aynı kolonlarla kuruyor", () => {
+    const file = fs
+      .readdirSync(MIGRATION_DIR)
+      .find((name) => name.includes("add_work_titles"));
+    expect(file, "work title migration'ı yok").toBeDefined();
+
+    const sql = fs.readFileSync(path.join(MIGRATION_DIR, file!), "utf8");
+    for (const column of titles) {
+      expect(sql).toContain(`add column if not exists ${column} text`);
+    }
+    expect(sql).toContain("grant select on public.works_public to anon, authenticated");
+    expect(worksPublicColumns(sql)).toEqual(worksPublicColumns(SCHEMA));
+  });
+});
+
 describe("arşiv filtre etiketleri", () => {
-  it.each(["tr", "en"] as const)("%s: dört eksenin de etiketi var", (locale) => {
+  it.each(["tr", "en"] as const)("%s: görünür üç eksenin de etiketi var", (locale) => {
     const filter = (locale === "tr" ? tr : en).work.filter as Record<string, string>;
-    for (const key of ["year", "client", "service", "industry", "contentFormat", "all"]) {
+    for (const key of ["year", "service", "industry", "all"]) {
       expect(filter[key], `work.filter.${key} eksik`).toBeTruthy();
     }
   });

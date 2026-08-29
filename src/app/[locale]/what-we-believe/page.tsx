@@ -153,7 +153,7 @@ export default async function WhatWeBelievePage({
             src={BELIEF_IMAGES.ataturk.fallback}
             width={BELIEF_IMAGES.ataturk.width}
             height={BELIEF_IMAGES.ataturk.height}
-            alt={BELIEF_IMAGES.ataturk.alt}
+            alt={BELIEF_IMAGES.ataturk.alt[locale]}
             loading="lazy"
             decoding="async"
           />
@@ -185,7 +185,7 @@ export default async function WhatWeBelievePage({
             src={BELIEF_IMAGES.littlePrince.fallback}
             width={BELIEF_IMAGES.littlePrince.width}
             height={BELIEF_IMAGES.littlePrince.height}
-            alt={BELIEF_IMAGES.littlePrince.alt}
+            alt={BELIEF_IMAGES.littlePrince.alt[locale]}
             loading="lazy"
             decoding="async"
           />

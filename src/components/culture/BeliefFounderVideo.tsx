@@ -152,7 +152,9 @@ function BeliefFounderVideoStage({ video }: { video: BeliefVideo }) {
             />
           )}
         </div>
-        <p className={styles.disclaimer}>{t("aiGenerated")}</p>
+        {video.disclosure === "ai-generated" && (
+          <p className={styles.disclaimer}>{t("aiGenerated")}</p>
+        )}
       </div>
     </div>
   );

@@ -83,6 +83,7 @@
     "readMore": "Read more"
   },
   "work": {
+    "pageTitle": "RECENT",
     "empty": "Work inventory is being prepared.",
     "emptyDetail": "Projects will be added after publication permission, client, year, format and asset location are verified.",
     "showreelBody": "Integrated brand experiences that move hearts — and the needle.",
@@ -101,6 +102,7 @@
     "ctaLead": "If our work aligns with your frequency, we would love to meet you — especially if you are on the SAME FREQUENCY, same mindset as us.",
     "seoHeading": "AT HIBRID 360, CREATIVE STORYTELLING AGENCY SERVICES FOR AMBITIOUS BRANDS",
     "confidentialClient": "Confidential client",
+    "projectFallback": "Selected work",
     "case": {
       "problem": "The Challenge",
       "solution": "What We Did",
@@ -178,6 +180,8 @@
     "socialInvite": "Follow the work",
     "mapTitle": "Hibrid 360 office location on Google Maps",
     "mapNote": "The map is loaded from Google Maps.",
+    "mapLoad": "Load map",
+    "mapPrivacyNote": "The map loads from Google only after you select this button. This action establishes a connection with Google.",
     "addressLabel": "Address",
     "phoneLabel": "Phone",
     "emailLabel": "Email",

@@ -68,7 +68,7 @@ kapattı (6, 14).**
 | **Bugün ne var** | Adres deck'ten alındı ve kullanılıyor. Yol tarifi bağlantısı **uydurma bir place-id değil**, adresten türetilen resmi Google Maps `dir/?api=1` şeması |
 | **Kodda nerede** | `src/lib/site.ts` → `CONTACT.addressLines` · `src/app/[locale]/contact/page.tsx` |
 | **⚠️ 29 Ağu 2026 bulgusu** | Eski site (© 2020) **farklı** bir adres gösteriyor: *Cemil Topuzlu Caddesi Çiftehavuzlar, 18 Mart Sokak Yapı Kredi Evleri B Blok 9/20, Kadıköy / İstanbul*. İkisi de Kadıköy — muhtemelen taşınma olmuş. Kodda deck adresi duruyor (daha yeni ve onaylı); eski adres koda **girmedi** |
-| **Ayrıca sorulacak** | Gömülü harita istiyor musunuz? İsteniyorsa Google Maps veya Mapbox **API anahtarı** gerekiyor — bugün yok (kodda TODO). Şu an yerine adres/telefon/e-posta taşıyan bir künye kartı duruyor, boş bir kutu değil |
+| **Harita durumu** | Anahtarsız Google Maps sorgu gömmesi kullanılıyor. Üçüncü taraf iframe sayfa açılışında oluşmuyor; yalnızca kullanıcı “Haritayı yükle” dediğinde yükleniyor. Adres ve yol tarifi bağlantısı haritadan bağımsız çalışıyor |
 
 ## 5. 🔴 Müşteri listesi — 5 isim doğrulama bekliyor
 
@@ -221,15 +221,15 @@ kapattı (6, 14).**
 | **Bağlı karar** | `docs/DECISIONS.md` #21 |
 | **Bu olmadan** | Sayfa çalışır ve tutarlıdır; ama yayında duran metin müşterinin nihai onayından geçmemiştir |
 
-## 22. 🟡 Harita gömmesi — çerez politikasına üçüncü taraf satırı
+## 22. ~~Harita gömmesi — çerez politikasına üçüncü taraf satırı~~ · **KAPANDI**
 
 | | |
 |---|---|
-| **Soru** | Çerez/Gizlilik politikasına Google Haritalar için üçüncü taraf satırı eklenmeli mi, kim yazacak? |
-| **Neden gerekli** | Contact sayfasındaki harita bir Google iframe'i; sayfa açıldığında (tembel de olsa) Google'a istek gider ve çerez yazılabilir. KVKK/GDPR açısından politika metninde adı geçmeli |
-| **Bugün ne var** | Harita **anahtarsız Google Maps sorgu gömmesi** ile çalışıyor: koordinat değil, doğrulanmış adres metni kullanıyor; `loading="lazy"`, erişilebilir `title` ve harita yüklenmese de çalışan yol tarifi bağlantısı var. Politika metninde üçüncü taraf satırı **yok** |
+| **Karar** | Google Haritalar açıklaması TR/EN Çerez Politikası'na eklendi |
+| **Neden gerekli** | Google iframe'i IP adresi ve tarayıcı bilgisini üçüncü tarafa aktarabilir; bu nedenle otomatik yüklenmemeli ve politika metninde açıklanmalı |
+| **Bugün ne var** | Harita **anahtarsız Google Maps sorgu gömmesi** ile çalışıyor ancak iframe yalnızca açık “Haritayı yükle” eyleminden sonra oluşturuluyor. Politika metni sağlayıcıyı ve veri aktarımını açıklıyor; yol tarifi bağlantısı haritadan bağımsız çalışıyor |
 | **Kodda nerede** | `src/data/contact.ts` → `mapEmbedUrl()` · `src/app/[locale]/contact/page.tsx` · `src/data/policies/cookie.ts` |
-| **Bu olmadan** | Sayfa çalışır; politika metni eksik kalır |
+| **Doğrulama** | `e2e/canonical-routes.spec.ts` haritanın başlangıçta bulunmadığını ve kullanıcı eyleminden sonra erişilebilir adla yüklendiğini kontrol ediyor |
 
 ## 19. 🟠 Solutions sayfası giriş paragrafı yok
 

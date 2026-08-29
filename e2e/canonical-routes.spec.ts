@@ -100,6 +100,22 @@ test.describe("Eski yol yönlendirmeleri", () => {
 
 test.describe("İçerik ve düzen sözleşmeleri", () => {
   for (const locale of LOCALES) {
+    test(`/${locale}/work — RECENT başlığı ve üçlü filtre çubuğu`, async ({
+      page,
+    }) => {
+      await seedConsent(page);
+      await page.goto(`/${locale}/work`, { waitUntil: "networkidle" });
+
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText("RECENT");
+      const filters = page.getByRole("group", {
+        name: locale === "tr" ? "Filtre" : "Filter",
+      });
+      await expect(filters.locator("select")).toHaveCount(3);
+      await expect(filters.getByText(locale === "tr" ? "Yıl" : "Year")).toBeVisible();
+      await expect(filters.getByText(locale === "tr" ? "Hizmet" : "Service")).toBeVisible();
+      await expect(filters.getByText(locale === "tr" ? "Sektör" : "Industry")).toBeVisible();
+    });
+
     test(`/${locale}/solutions — on beş yetenek listeleniyor`, async ({
       page,
     }) => {
@@ -129,13 +145,24 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
   });
 
   for (const locale of LOCALES) {
-    test(`/${locale}/contact — haritanın erişilebilir adı var`, async ({
+    test(`/${locale}/contact — harita açık eylemden sonra yükleniyor`, async ({
       page,
     }) => {
       await seedConsent(page);
       await page.goto(`/${locale}/contact`, { waitUntil: "networkidle" });
 
-      const map = page.locator('section[aria-labelledby="contact-map"] iframe');
+      const mapSection = page.locator(
+        'section[aria-labelledby="contact-map"]',
+      );
+      const map = mapSection.locator("iframe");
+
+      // Contact açılışında Google'a üçüncü taraf isteği başlatılmaz.
+      await expect(map).toHaveCount(0);
+      await mapSection
+        .getByRole("button", {
+          name: locale === "tr" ? "Haritayı yükle" : "Load map",
+        })
+        .click();
       await expect(map).toHaveCount(1);
 
       const title = await map.getAttribute("title");
@@ -241,4 +268,23 @@ test.describe("Görseller", () => {
       expect(broken, broken.join("\n")).toEqual([]);
     });
   }
+
+  test("What We Believe görsel alt metinleri sayfa diliyle eşleşiyor", async ({
+    page,
+  }) => {
+    await seedConsent(page);
+
+    await page.goto("/tr/what-we-believe");
+    await expect(
+      page.getByRole("img", { name: /bir pencerenin yanında/ }),
+    ).toHaveCount(1);
+
+    await page.goto("/en/what-we-believe");
+    await expect(
+      page.getByRole("img", { name: /sitting thoughtfully beside a window/ }),
+    ).toHaveCount(1);
+    await expect(page.getByRole("img", { name: /Küçük Prens/ })).toHaveCount(
+      0,
+    );
+  });
 });

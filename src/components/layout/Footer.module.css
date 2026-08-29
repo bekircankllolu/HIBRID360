@@ -39,10 +39,10 @@
   max-width: 100%;
   margin: 0 0 clamp(4rem, 8vw, 8rem);
   font-family: var(--font-brand);
-  font-size: clamp(1.8rem, 6vw, 7rem);
+  font-size: clamp(1.2rem, 6.5vw, 7rem);
   font-weight: var(--font-weight-heading-bold);
   line-height: 0.9;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
   text-decoration: underline;
   text-decoration-thickness: 0.04em;
   text-underline-offset: 0.12em;
