@@ -9,6 +9,15 @@ import styles from "@/styles/culture-page.module.css";
 /**
  * WWB-01..06 (nihai copy deck, Ağustos 2026) — What We Believe.
  *
+ * 29 Ağustos 2026 revizyonu: sayfa /culture/what-we-believe'den üst
+ * menüdeki canonical /what-we-believe rotasına taşındı; eski yol kalıcı
+ * olarak buraya yönlendiriliyor (next.config.mjs). İçerik değişmedi.
+ *
+ * Eski sitedeki üç görsel (ataturk.jpg · little_prince.png · kadin.jpg)
+ * ve "Everything in the world created by women" alıntısı bu sayfaya
+ * **bağlanmadı**: telif ve atıf teyidi bekliyor. Bkz.
+ * docs/visual-audit/BLOCKERS.md ve docs/content/LEGACY_CONTENT_ROUTE_MAP.md.
+ *
  * WWB-06 [KARAR]: deck'in kendi notu "Everything in the world created by
  * women" alıntısının kaynağının yazılması veya çıkarılması gerektiğini
  * söylüyor — ama bu alıntı WWB-06 kutusunun içinde verilmedi (yalnızca
@@ -24,7 +33,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "What We Believe",
-    alternates: localizedAlternates(locale, "/culture/what-we-believe"),
+    alternates: localizedAlternates(locale, "/what-we-believe"),
   };
 }
 
@@ -58,8 +67,7 @@ export default async function WhatWeBelievePage({
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
-          { name: "Culture", path: "/culture" },
-          { name: "What We Believe", path: "/culture/what-we-believe" },
+          { name: "What We Believe", path: "/what-we-believe" },
         ])}
       />
 

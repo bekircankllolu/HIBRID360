@@ -10,6 +10,10 @@ import styles from "@/styles/culture-page.module.css";
 /**
  * CUL-01..06 (nihai copy deck, Ağustos 2026) — Who We Are.
  *
+ * 29 Ağustos 2026 revizyonu: sayfa /culture/who-we-are'dan üst menüdeki
+ * canonical /who-we-are rotasına taşındı; eski yol kalıcı olarak buraya
+ * yönlendiriliyor (next.config.mjs). İçerik değişmedi.
+ *
  * CUL-03/04: kurucu (Zühre Didem Gödek, President & CCO) fotoğrafı ve
  * video repliği. Fotoğraf/video varlığı henüz teslim edilmedi — yer
  * tutucu bir kutu ve TODO ile bırakıldı. Video repliğinin altında
@@ -33,7 +37,7 @@ export async function generateMetadata({
       locale === "en"
         ? "An Istanbul-based creative production studio building the visual experiences of the future — meet the crew."
         : undefined,
-    alternates: localizedAlternates(locale, "/culture/who-we-are"),
+    alternates: localizedAlternates(locale, "/who-we-are"),
   };
 }
 
@@ -53,8 +57,7 @@ export default async function WhoWeArePage({
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
-          { name: "Culture", path: "/culture" },
-          { name: "Who We Are", path: "/culture/who-we-are" },
+          { name: "Who We Are", path: "/who-we-are" },
         ])}
       />
 

@@ -5,43 +5,30 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Link } from "@/i18n/navigation";
 import { siteImages } from "@/data/site-images";
+import { SERVICE_CATALOG } from "@/data/services";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
  * WWD-01/02 (nihai copy deck, Ağustos 2026) — What We Do hub sayfası.
- * Eski "Solutions" sayfasının yerini alıyor; dokuz hizmet WWD-02'deki
- * sıraya ve başlık+tek satır tanım biçimine birebir uyuyor.
  *
- * Sunum: düz metin listesi yerine görsel kart ızgarası. Kullanılan
- * fotoğraflar hizmetlerin kendi alt sayfalarındaki görsellerin aynısı
- * (src/data/site-images.ts) — yeni varlık üretilmedi, hub'da atıl duran
- * mevcut varlıklar değerlendirildi. AI Creative Production'ın kendi
- * fotoğrafı yok; o kart görselsiz "featured" varyantla çıkıyor
- * (TODO: brief 11.9 — AI görseli teslim edilince buraya da bağlanacak).
+ * 29 Ağustos 2026 revizyonu: hizmet sırası ve kapsamı artık burada değil,
+ * `src/data/services.ts` içinde tutuluyor (tek veri kaynağı; ana sayfa
+ * hizmet satırı ve navigasyon mega menüsü de oradan besleniyor).
+ * Photography katalogdan çıktı — dokuz kart sekize indi, /what-we-do/
+ * photography kalıcı olarak bu hub'a yönlendiriliyor.
+ *
+ * Başlıklar (hizmet adları) katalogdan gelir, iki dilde de İngilizcedir;
+ * tek satırlık tanımlar çevrilir ve `whatWeDo.list` altındadır. İki kaynak
+ * hizmet adı üzerinden eşleşir; eşleşmenin bozulmadığını
+ * src/data/services.test.ts doğruluyor.
+ *
+ * Sunum: görsel kart ızgarası. Kullanılan fotoğraflar hizmetlerin kendi
+ * alt sayfalarındaki görsellerin aynısı (src/data/site-images.ts) — yeni
+ * varlık üretilmedi. AI Creative Production'ın kendi fotoğrafı yok; o kart
+ * görselsiz "featured" varyantla çıkıyor (TODO: brief 11.9).
  */
-
-const SERVICES: Record<string, { href: string; image?: { src: string; alt: string } }> = {
-  Creative: { href: "/what-we-do/creative", image: siteImages.services.creative },
-  Production: { href: "/what-we-do/production", image: siteImages.services.production },
-  "Post Production": {
-    href: "/what-we-do/post-production",
-    image: siteImages.services.postProduction,
-  },
-  Digital: { href: "/what-we-do/digital", image: siteImages.services.digital },
-  "Live Broadcast": {
-    href: "/what-we-do/live-broadcast",
-    image: siteImages.services.liveBroadcast,
-  },
-  "Cloud TV": { href: "/what-we-do/cloud-tv", image: siteImages.services.cloudTv },
-  "Event Management": {
-    href: "/what-we-do/event-management",
-    image: siteImages.services.eventManagement,
-  },
-  Photography: { href: "/what-we-do/photography", image: siteImages.services.photography },
-  "AI Creative Production": { href: "/what-we-do/ai-creative-production" },
-};
 
 // META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
 export async function generateMetadata({
@@ -54,7 +41,7 @@ export async function generateMetadata({
     title: "What We Do",
     description:
       locale === "en"
-        ? "Creative, production, post production, digital, live broadcast, Cloud TV, events, photography and AI production."
+        ? "Creative, production, post production, digital, live broadcast, Cloud TV, events and AI creative production."
         : undefined,
     alternates: localizedAlternates(locale, "/what-we-do"),
   };
@@ -67,7 +54,7 @@ export default async function WhatWeDoPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("whatWeDo");
-  const list = t.raw("list") as Array<{ title: string; body: string }>;
+  const descriptions = t.raw("list") as Array<{ title: string; body: string }>;
 
   return (
     <div className={styles.page}>
@@ -81,19 +68,22 @@ export default async function WhatWeDoPage({
       <p className={styles.heroBody}>{t("heroBody")}</p>
 
       <ul className={styles.grid}>
-        {list.map((item, index) => {
-          const service = SERVICES[item.title] ?? { href: "/what-we-do" };
+        {SERVICE_CATALOG.map((service, index) => {
+          const image = service.imageKey
+            ? siteImages.services[service.imageKey]
+            : undefined;
+          const body = descriptions.find((item) => item.title === service.name)?.body;
           return (
             <li
-              key={item.title}
-              className={`${styles.card} ${service.image ? "" : styles.cardFeatured}`}
+              key={service.id}
+              className={`${styles.card} ${image ? "" : styles.cardFeatured}`}
             >
               <Link href={service.href} className={styles.cardLink}>
                 <span className={styles.media} aria-hidden="true">
-                  {service.image ? (
+                  {image ? (
                     <Image
                       className={styles.mediaImage}
-                      src={service.image.src}
+                      src={image.src}
                       alt=""
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
@@ -102,8 +92,8 @@ export default async function WhatWeDoPage({
                   ) : null}
                 </span>
                 <span className={styles.cardBody}>
-                  <span className={styles.cardTitle}>{item.title}</span>
-                  <span className={styles.cardText}>{item.body}</span>
+                  <span className={styles.cardTitle}>{service.name}</span>
+                  <span className={styles.cardText}>{body}</span>
                   <span className={styles.cardArrow} aria-hidden="true">
                     →
                   </span>

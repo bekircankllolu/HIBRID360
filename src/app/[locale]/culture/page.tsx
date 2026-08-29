@@ -6,28 +6,25 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import styles from "./page.module.css";
 
-// brief-rev12.md Bölüm 3.1 / nihai copy deck Bölüm 6 — CULTURE altı:
-// Who We Are · What We Believe · Directors & Crew · Partners ·
-// Sustainability. Beşi de artık gerçek sayfalar (task #20).
+// brief-rev12.md Bölüm 3.1 / nihai copy deck Bölüm 6 — CULTURE altı.
 //
-// Sunum: beş düz bağlantı yerine numaralı kart ızgarası. Kart etiketleri
-// `culture.hub` sözlüğünden geliyor; her kart gittiği sayfanın kendi adını
-// gösteriyor (footer "Sürdürülebilirlik" derken kartın "Sustainability"
-// demesi tutarsızlığı buradan kapandı). TR karşılığı onaylı olmayan üç
-// bölüm adı İngilizce kaldı — bkz. DECISIONS.md "TR çevirisi bekleyen
-// metinler".
+// 29 Ağustos 2026 revizyonu: Who We Are · What We Believe · Partners üst
+// menüye kendi canonical rotalarıyla çıktı (eski /culture/* yolları oraya
+// kalıcı olarak yönlendiriliyor). CULTURE'ın kendisi de üst menüden çıktı
+// ama rota **silinmedi**: Directors & Crew ve Sustainability'nin başka bir
+// üst sayfası yok, ikisi de buradan ve footer'dan erişiliyor.
+//
+// Sunum: numaralı kart ızgarası. Kart etiketleri `culture.hub`
+// sözlüğünden geliyor; her kart gittiği sayfanın kendi adını gösteriyor.
+// TR karşılığı onaylı olmayan bölüm adı İngilizce kaldı — bkz.
+// DECISIONS.md "TR çevirisi bekleyen metinler".
 //
 // Kartlara açıklama YAZILMADI — deck bu hub için tanım cümlesi vermedi ve
-// uydurma metin commit edilmiyor. TODO: deck'ten beş bölümün birer
-// satırlık tanımı gelirse .cardText olarak eklenecek; kart yüksekliği
-// içeriğe bağlı olduğu için metin geldiğinde ızgara kendiliğinden büyür.
+// uydurma metin commit edilmiyor.
 export const metadata = { title: "Culture" };
 
 const SECTIONS = [
-  { href: "/culture/who-we-are", key: "whoWeAre" },
-  { href: "/culture/what-we-believe", key: "whatWeBelieve" },
   { href: "/culture/directors", key: "directors" },
-  { href: "/culture/partners", key: "partners" },
   { href: "/culture/sustainability", key: "sustainability" },
 ] as const;
 
