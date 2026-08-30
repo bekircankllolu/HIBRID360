@@ -41,7 +41,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Brand thinking, concept and campaign ideas — from strategy to key visual and packaging."
-        : undefined,
+        : "Marka düşüncesi, konsept ve kampanya fikirleri; stratejiden ana görsele ve ambalaja uzanan kreatif çözümler.",
     alternates: localizedAlternates(locale, "/what-we-do/creative"),
   };
 }

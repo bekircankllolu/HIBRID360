@@ -10,14 +10,20 @@
  * gerçek durumundan çıkarılmıştır — tahmin veya doldurma değildir.
  */
 
-export const ACCESSIBILITY_COMMITMENT =
-  "Our commitment — we aim to meet WCAG 2.1 level AA across hibrid360.com.";
+export const ACCESSIBILITY_COMMITMENT = {
+  en: "Our commitment: we aim to meet WCAG 2.1 level AA across hibrid360.com.",
+  tr: "Taahhüdümüz: hibrid360.com genelinde WCAG 2.1 AA seviyesini karşılamayı hedefliyoruz.",
+} as const;
 
-export const ACCESSIBILITY_DONE =
-  "What we have done — reduced-motion support, keyboard navigation, visible focus, captions on every video, contrast checks on all four brand colours.";
+export const ACCESSIBILITY_DONE = {
+  en: "What we have done: reduced-motion support, keyboard navigation, visible focus and contrast checks across the brand palette. No video with spoken content is published without captions.",
+  tr: "Yaptıklarımız: hareket azaltma desteği, klavye ile gezinme, görünür odak durumları ve marka paletinin tamamında kontrast kontrolleri. Konuşmalı hiçbir video altyazısız yayınlanmaz.",
+} as const;
 
-export const ACCESSIBILITY_FEEDBACK =
-  "Feedback — if something on this site blocks you, write to contact@hibrid360.com; we respond within five working days.";
+export const ACCESSIBILITY_FEEDBACK = {
+  en: "Feedback: if something on this site blocks you, write to contact@hibrid360.com; we respond within five working days.",
+  tr: "Geri bildirim: sitedeki herhangi bir unsur erişiminizi engelliyorsa contact@hibrid360.com adresine yazın; beş iş günü içinde yanıt veririz.",
+} as const;
 
 /**
  * Bilinen sınırlamalar — sitenin bugünkü gerçek durumu.
@@ -37,10 +43,6 @@ export const knownLimitations: Array<{ tr: string; en: string }> = [
   {
     en: "Video assets are not published yet. Each video will ship with TR and EN VTT captions before it goes live; until then this claim cannot be verified on the site.",
     tr: "Video varlıkları henüz yayında değil. Her video yayına girmeden önce TR ve EN VTT altyazılarıyla birlikte gelecek; o zamana kadar bu iddia sitede doğrulanamaz.",
-  },
-  {
-    en: "The body text of the legal pages (Privacy, Cookie, KVKK) is still being drafted with legal counsel, so those pages currently carry headings only.",
-    tr: "Yasal sayfaların (Gizlilik, Çerez, KVKK) gövde metinleri hukuk danışmanıyla birlikte hazırlanıyor; bu sayfalar şu an yalnızca başlıkları taşıyor.",
   },
   {
     en: "Largest Contentful Paint on the homepage measures slightly above our 2.5 second mobile target in testing; work on the font loading path is ongoing.",

@@ -43,7 +43,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Commercials, product films and how-to content, shot end to end with an in-house crew. 20+ years of production experience."
-        : undefined,
+        : "Reklam filmleri, ürün filmleri ve kullanım içerikleri; kurum içi ekiple uçtan uca çekim ve 20+ yıllık prodüksiyon deneyimi.",
     alternates: localizedAlternates(locale, "/what-we-do/production"),
   };
 }
@@ -73,7 +73,7 @@ export default async function ProductionPage({
       <p className={styles.heroSubtitle}>PURE. SIMPLE. POWERFUL.</p>
       <ServiceVisual
         src={siteImages.services.production.src}
-        alt={siteImages.services.production.alt}
+        alt={siteImages.services.production.alt[locale]}
         priority
       />
 

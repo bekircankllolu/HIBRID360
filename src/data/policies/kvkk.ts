@@ -9,11 +9,11 @@ import type { LegalDoc } from "@/types/legal";
  * maddesinin istediği üç unsuru (veri sorumlusunun kimliği, işleme
  * amaçları, başvuru yolu) kendi içinde taşıyor.
  *
- * Bu sayfa, o dokümanın (privacy.ts) TAM METNİNİ TEKRARLAMAK yerine,
+ * Bu sayfa, o dokümanın (privacy.ts) tam metnini tekrarlamak yerine,
  * KVKK madde 10'un istediği üç unsura karşılık gelen bölümlerini
  * (kurumsal kimlik, işleme amaçları tablosu, madde 11 hakları) aynı
- * kaynak metinden BİREBİR alıntılayarak ayrı, öz bir aydınlatma metni
- * olarak sunuyor — cümleler değiştirilmedi, yalnızca seçildi. Genel
+ * kaynak metinden derleyerek ayrı, öz bir aydınlatma metni olarak sunuyor.
+ * Genel
  * gizlilik anlatımının tamamı için /privacy sayfasına yönlendiriyor.
  */
 
@@ -21,20 +21,15 @@ export const kvkkNoticeTr: LegalDoc = {
   title: "KVKK AYDINLATMA METNİ",
   subtitle: "6698 Sayılı Kişisel Verilerin Korunması Kanunu Madde 10 Uyarınca",
   lastUpdated: "Son Güncelleme: Temmuz 2026",
-  // LEG-03 — nihai copy deck, Ağustos 2026. TODO: "[şirket ünvanı]"
-  // deck'teki gibi köşeli parantezle bırakıldı — DECISIONS.md #1/#4
-  // (resmî şirket ünvanı A.Ş./Ltd. Şti.) kapanmadan uydurulmadı.
+  // Resmî şirket ünvanı A.Ş./Ltd. Şti. teslim edilmediği için marka adı
+  // kullanılıyor; sayfa bu karar kapanana kadar noindex olarak yayınlanır.
   intro:
-    "Veri sorumlusu sıfatıyla Hibrid 360 [şirket ünvanı] tarafından, iletişim formu ve site kullanımı yoluyla toplanan kişisel verilerin işlenme amaçları, hukuki sebebi, saklama süresi ve başvuru yollarına ilişkin bilgilendirmedir.",
+    "Bu metin, Hibrid 360 tarafından işletilen web sitesi kapsamında iletişim formu ve site kullanımı yoluyla toplanan kişisel verilerin işlenme amaçları, hukuki sebebi, saklama süresi ve başvuru yollarına ilişkin bilgilendirmedir.",
   blocks: [
     { kind: "heading", text: "1. Veri Sorumlusunun Kimliği" },
     {
       kind: "paragraph",
       text: 'HIBRID360 ("Şirket" veya "Biz") olarak; Üst Düzey Kreatif Prodüksiyon, Yapay Zekâ (AI) Çözümleri, Marka Deneyimi Tasarımı, Web Deneyimi Mühendisliği ve Film Prodüksiyonu alanlarında entegre stüdyo hizmetleri sunmaktayız. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu\'nun ("KVKK") 10. maddesi uyarınca veri sorumlusu sıfatıyla hazırlanmıştır.',
-    },
-    {
-      kind: "paragraph",
-      text: "TODO: DECISIONS.md #1 — veri sorumlusunun tam ticari unvanı (A.Ş./Ltd. Şti.) netleşince bu bölüme eklenecek.",
     },
     { kind: "heading", text: "2. Kişisel Verilerin İşlenme Amaçları" },
     {
@@ -96,19 +91,14 @@ export const kvkkNoticeEn: LegalDoc = {
   lastUpdated: "Effective Date: July 2026",
   // LEG-03 says only "GDPR Notice — English version of the same text" —
   // an instruction to translate, not literal copy. Faithful EN mirror of
-  // the TR intro below; "[company legal name]" left open for the same
-  // reason as the TR bracket (DECISIONS.md #1/#4 not yet closed).
+  // the TR intro below; the legal entity name is still pending.
   intro:
-    "As the data controller, Hibrid 360 [company legal name] provides this notice regarding the purposes, legal basis, retention period and application procedures for personal data collected through the contact form and use of this site.",
+    "This notice explains the purposes, legal basis, retention period and application procedures for personal data collected through the contact form and use of the website operated by Hibrid 360.",
   blocks: [
     { kind: "heading", text: "1. Identity of the Data Controller" },
     {
       kind: "paragraph",
       text: 'At HIBRID360 ("we", "our", or "us"), we operate at the cutting edge of Creative Production, Artificial Intelligence (AI) Solutions, Brand Experience Design, Web Experience Engineering, and Film Production. This notice is prepared in our capacity as data controller under Article 10 of Turkish Law No. 6698 on the Protection of Personal Data ("KVKK").',
-    },
-    {
-      kind: "paragraph",
-      text: "TODO: docs/DECISIONS.md #1 — the controller's full registered company name (A.Ş./Ltd. Şti.) will be added once confirmed.",
     },
     { kind: "heading", text: "2. Purposes of Processing" },
     {

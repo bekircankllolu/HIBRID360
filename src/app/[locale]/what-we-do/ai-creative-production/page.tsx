@@ -39,7 +39,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "AI films, AI photography and hybrid production workflows — human creativity, AI precision, real impact."
-        : undefined,
+        : "AI filmleri, AI fotoğrafçılık ve hibrit prodüksiyon akışları: insan yaratıcılığı, yapay zekâ hassasiyeti ve gerçek etki.",
     alternates: localizedAlternates(locale, "/what-we-do/ai-creative-production"),
   };
 }

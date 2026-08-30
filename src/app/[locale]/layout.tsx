@@ -12,7 +12,13 @@ import { ConsentInitScript } from "@/components/consent/ConsentInitScript";
 import { Analytics } from "@/components/consent/Analytics";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/schema";
-import { localizedAlternates, SITE_URL, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
+import {
+  localizedAlternates,
+  SITE_URL,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_TAGLINE_TR,
+} from "@/lib/site";
 import "@/styles/globals.css";
 
 export function generateStaticParams() {
@@ -25,6 +31,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const description = locale === "tr" ? SITE_TAGLINE_TR : SITE_TAGLINE;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -37,11 +44,12 @@ export async function generateMetadata({
     // brief-rev12.md Bölüm 1.7: anahtar kelime istifi temizlendi — tek,
     // doğal cümle. Sayfa özelinde farklı bir açıklama hazır olduğunda
     // ilgili page.tsx kendi generateMetadata'sında bunu geçersiz kılar.
-    description: SITE_TAGLINE,
+    description,
     openGraph: {
       siteName: SITE_NAME,
       locale,
       type: "website",
+      description,
     },
     alternates: localizedAlternates(locale as Locale),
   };

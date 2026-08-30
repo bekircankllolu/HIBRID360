@@ -26,8 +26,8 @@ describe("breadcrumbListJsonLd", () => {
 
     expect(json.itemListElement.map((i) => i.position)).toEqual([1, 2, 3]);
     expect(json.itemListElement.map((i) => i.name)).toEqual([
-      "Home",
-      "Work",
+      "Ana Sayfa",
+      "İşler",
       "Örnek",
     ]);
   });
@@ -63,6 +63,11 @@ describe("organizationJsonLd", () => {
       "Organization",
       "LocalBusiness",
     ]);
+  });
+
+  it("organization açıklamasını locale'e göre üretir", () => {
+    expect(organizationJsonLd("tr").description).toContain("Türkiye'nin");
+    expect(organizationJsonLd("en").description).toContain("Türkiye's");
   });
 });
 

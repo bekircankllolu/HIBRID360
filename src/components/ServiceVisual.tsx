@@ -17,7 +17,7 @@ export function ServiceVisual({
         src={src}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, 1120px"
+        sizes="100vw"
         priority={priority}
       />
     </figure>

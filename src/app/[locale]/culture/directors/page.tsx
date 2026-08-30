@@ -28,9 +28,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "directors" });
+  const directors = await getPublishedDirectors();
   return {
     title: "Directors & Crew",
     description: t("heroSubtitle"),
+    robots: directors.length > 0 ? undefined : { index: false, follow: true },
     alternates: localizedAlternates(locale, "/culture/directors"),
   };
 }

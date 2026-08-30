@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { BRAND_SIGNATURE, SOCIAL_PLATFORMS, CONTACT } from "@/lib/site";
+import { BRAND_SIGNATURE, SOCIAL_LINKS, CONTACT } from "@/lib/site";
 import { FOOTER_NAV } from "@/data/navigation";
 import { isSustainabilityPublishable } from "@/data/sustainability";
 import styles from "./Footer.module.css";
@@ -79,8 +79,15 @@ export function Footer() {
           <section className={styles.column} aria-labelledby="footer-social">
             <h2 id="footer-social">{t("social.label")}</h2>
             <div className={styles.social}>
-              {SOCIAL_PLATFORMS.map((platform) => (
-                <span key={platform}>{platform}</span>
+              {SOCIAL_LINKS.map((platform) => (
+                <a
+                  key={platform.name}
+                  href={platform.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {platform.name}
+                </a>
               ))}
             </div>
           </section>

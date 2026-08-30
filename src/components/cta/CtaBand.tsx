@@ -12,10 +12,8 @@ import styles from "./CtaBand.module.css";
  * İkincil butonlar:
  *   - WhatsApp: CONTACT.phone'dan (gerçek, teyitli numara) türetilmiş
  *     wa.me linki — uydurma bir numara değil.
- *   - "Randevu ayarla": DECISIONS.md #11 Cal.com'a karar verdi ama gerçek
- *     kullanıcı adı/URL henüz yok. TODO: Cal.com hesabı açılınca href
- *     gerçek randevu linkine değiştirilecek — o zamana kadar Contact
- *     sayfasına yönlendiriyor (kırık/uydurma link üretilmez).
+ *   - Takvim hesabı teslim edilmediği sürece Contact sayfasına giden
+ *     eylem, randevu vaadinde bulunmayan dürüst bir iletişim etiketi taşır.
  */
 export function CtaBand() {
   const t = useTranslations("cta");
@@ -26,7 +24,7 @@ export function CtaBand() {
       <PrimaryCta />
       <div className={styles.secondary}>
         <Link href="/contact" className={styles.secondaryLink}>
-          {t("bookCall")}
+          {t("contact")}
         </Link>
         <a
           href={whatsappHref}

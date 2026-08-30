@@ -31,7 +31,12 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "sustainability" });
-  return { title: t("title") };
+  return {
+    title: t("title"),
+    robots: isSustainabilityPublishable()
+      ? undefined
+      : { index: false, follow: true },
+  };
 }
 
 export default async function SustainabilityPage({
@@ -57,7 +62,7 @@ export default async function SustainabilityPage({
       {!publishable && <p className={styles.notice}>{t("pendingEvidence")}</p>}
 
       <section className={styles.section}>
-        <h2 className={styles.heading}>Measurement</h2>
+        <h2 className={styles.heading}>{t("measurementTitle")}</h2>
         {publishable ? (
           <p className={styles.body}>
             {t("measurement", {
@@ -72,7 +77,7 @@ export default async function SustainabilityPage({
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.heading}>Reduction</h2>
+        <h2 className={styles.heading}>{t("reductionTitle")}</h2>
         {/* Bu maddeler iddia değil, sitede uygulanmış mühendislik
             kararları — ölçüm verisi olmadan da doğrular. */}
         <ul>
@@ -86,7 +91,7 @@ export default async function SustainabilityPage({
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.heading}>Offset</h2>
+        <h2 className={styles.heading}>{t("offsetTitle")}</h2>
         {publishable ? (
           <p className={styles.body}>
             {t("offset", {
@@ -100,7 +105,7 @@ export default async function SustainabilityPage({
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.heading}>On set</h2>
+        <h2 className={styles.heading}>{t("onSetTitle")}</h2>
         <EmptyState message={t("onSetPending")} />
       </section>
     </div>

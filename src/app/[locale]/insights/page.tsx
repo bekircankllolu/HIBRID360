@@ -21,9 +21,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "insights" });
+  const fromDb = await getPublishedInsights();
+  const hasPublishedPosts =
+    fromDb.length > 0 || insightsPosts.some((post) => post.is_published);
   return {
     title: "Insights",
     description: t("heroSubtitle"),
+    robots: hasPublishedPosts ? undefined : { index: false, follow: true },
     alternates: localizedAlternates(locale, "/insights"),
   };
 }

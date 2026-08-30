@@ -42,7 +42,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Editing, colour, sound, motion graphics, 3D and retouch — full-service post production in-house."
-        : undefined,
+        : "Kurgu, renk, ses, hareketli grafik, 3D ve rötuş; kurum içinde uçtan uca post prodüksiyon.",
     alternates: localizedAlternates(locale, "/what-we-do/post-production"),
   };
 }
@@ -70,7 +70,7 @@ export default async function PostProductionPage({
       <p className={styles.heroSubtitle}>Off We Go!</p>
       <ServiceVisual
         src={siteImages.services.postProduction.src}
-        alt={siteImages.services.postProduction.alt}
+        alt={siteImages.services.postProduction.alt[locale]}
         priority
       />
 

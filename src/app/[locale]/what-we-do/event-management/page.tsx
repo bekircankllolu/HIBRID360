@@ -39,7 +39,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Conventions, launches, roadshows and brand events — concept, production and on-site execution."
-        : undefined,
+        : "Kongre, lansman, roadshow ve marka etkinliklerinde konsept, prodüksiyon ve saha uygulaması.",
     alternates: localizedAlternates(locale, "/what-we-do/event-management"),
   };
 }
@@ -67,7 +67,7 @@ export default async function EventManagementPage({
       <p className={styles.heroSubtitle}>We Design Experience</p>
       <ServiceVisual
         src={siteImages.services.eventManagement.src}
-        alt={siteImages.services.eventManagement.alt}
+        alt={siteImages.services.eventManagement.alt[locale]}
         priority
       />
 

@@ -13,7 +13,7 @@ import {
   whatsappUrl,
 } from "@/data/contact";
 import type { Locale } from "@/i18n/routing";
-import { localizedAlternates, SOCIAL_PLATFORMS } from "@/lib/site";
+import { localizedAlternates, SOCIAL_LINKS } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -62,7 +62,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Tell us what you are making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
-        : undefined,
+        : "Ne üretmek istediğinizi ve zamanlamanızı anlatın. İstanbul, Kadıköy'de ya da 30 dakikalık çevrim içi görüşmede buluşalım.",
     alternates: localizedAlternates(locale, "/contact"),
   };
 }
@@ -195,7 +195,7 @@ export default async function ContactPage({
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
           </p>
           <p className={styles.socialInvite}>
-            {t("socialInvite")}: {SOCIAL_PLATFORMS.join(" · ")}
+            {t("socialInvite")}: {SOCIAL_LINKS.map((link) => link.name).join(" · ")}
           </p>
         </div>
       </section>
@@ -233,11 +233,7 @@ export default async function ContactPage({
         <aside className={styles.formAside}>
           <p className={styles.bookingLead}>{t("bookingLead")}</p>
           <div className={styles.bookingLinks}>
-            {/* TODO: DECISIONS.md #11 — Cal.com hesabı açılınca gerçek
-                randevu linkine değiştirilecek. Zaten bu sayfadayız, bu
-                yüzden burada (CtaBand'ın aksine) /contact'a self-link
-                vermek yerine metin görünür bırakıldı. */}
-            <span>{tCta("bookCall")}</span>
+            <a href={`mailto:${CONTACT.email}`}>{tCta("email")}</a>
             <a href={whatsappUrl()} target="_blank" rel="noreferrer">
               {tCta("whatsapp")}
             </a>

@@ -68,16 +68,17 @@ export { CONTACT } from "@/data/contact";
 //   https://vimeo.com/hibrid360
 // YouTube ve Spotify hesaplarının URL'si hiçbir kaynakta yok.
 //
-// TODO: brief 17.2 — müşteri bu üç hesabın güncel olduğunu teyit edince
-// (ve varsa YouTube/Spotify URL'lerini verince) schema.org "sameAs"
-// dizisi eklenecek. Teyitsiz hesap bağlanmıyor: ölü veya devredilmiş bir
-// hesabı yapılandırılmış veride ilan etmek marka adına yanlış beyandır.
-export const SOCIAL_PLATFORMS = [
-  "Instagram",
-  "Vimeo",
-  "YouTube",
-  "LinkedIn",
-  "Spotify",
+// Eski siteden doğrulanan bu üç hesap footer ve schema.org "sameAs" için
+// tek veri kaynağıdır. YouTube/Spotify, resmî URL'leri teslim edilmeden
+// eklenmez: ölü veya devredilmiş bir hesabı ilan etmek marka adına yanlış
+// beyandır.
+export const SOCIAL_LINKS = [
+  { name: "Instagram", href: "https://www.instagram.com/hibrid360" },
+  { name: "Vimeo", href: "https://vimeo.com/hibrid360" },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/hibrid-production",
+  },
 ] as const;
 
 // Geçici marka favicon'u src/app/icon.svg — gerçek marka varlığı (brief 16)

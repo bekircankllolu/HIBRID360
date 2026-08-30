@@ -514,6 +514,10 @@
   },
   "sustainability": {
     "title": "Sustainability",
+    "measurementTitle": "Measurement",
+    "reductionTitle": "Reduction",
+    "offsetTitle": "Offset",
+    "onSetTitle": "On set",
     "pendingEvidence": "A carbon neutral claim is not published without measurement and certificate data. This page and the footer badge go live once the sections below are complete.",
     "measurement": "Measurement — this site emits approximately {grams} g CO₂ per page view, measured with {tool} on {date}.",
     "measurementPending": "Awaiting measurement: grams of CO₂ per page view, tool name and date.",
@@ -536,6 +540,8 @@
   "cta": {
     "primary": "Let’s Build Something Extraordinary.",
     "bookCall": "Book a 30-minute intro call",
+    "contact": "Contact us",
+    "email": "Send an email",
     "whatsapp": "WhatsApp"
   },
   "video": {

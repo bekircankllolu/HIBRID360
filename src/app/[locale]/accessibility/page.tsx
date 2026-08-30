@@ -47,11 +47,11 @@ export default async function AccessibilityPage({
       <h1 className={styles.title}>{tLegal("accessibility")}</h1>
 
       <section className={styles.section}>
-        <p className={styles.body}>{ACCESSIBILITY_COMMITMENT}</p>
+        <p className={styles.body}>{ACCESSIBILITY_COMMITMENT[locale]}</p>
       </section>
 
       <section className={styles.section}>
-        <p className={styles.body}>{ACCESSIBILITY_DONE}</p>
+        <p className={styles.body}>{ACCESSIBILITY_DONE[locale]}</p>
       </section>
 
       <section className={styles.section}>
@@ -64,7 +64,7 @@ export default async function AccessibilityPage({
       </section>
 
       <section className={styles.section}>
-        <p className={styles.body}>{ACCESSIBILITY_FEEDBACK}</p>
+        <p className={styles.body}>{ACCESSIBILITY_FEEDBACK[locale]}</p>
       </section>
 
       <section className={styles.section}>

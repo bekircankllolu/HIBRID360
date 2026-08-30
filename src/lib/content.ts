@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getSupabase } from "@/lib/supabase";
 import type { Director, InsightsPost, Testimonial, Work } from "@/types/content";
 
@@ -46,32 +47,32 @@ async function selectFrom<T>(
  * değişiklik gerektirmeden akıyor. View ile `Work` tipi arasındaki el
  * ile senkron src/types/content.test.ts tarafından doğrulanıyor.
  */
-export function getPublishedWorks() {
-  return selectFrom<Work>("works_public", {
+export const getPublishedWorks = cache(() =>
+  selectFrom<Work>("works_public", {
     column: "year",
     ascending: false,
-  });
-}
+  }),
+);
 
-export function getPublishedDirectors() {
-  return selectFrom<Director>(
+export const getPublishedDirectors = cache(() =>
+  selectFrom<Director>(
     "directors",
     { column: "sort_order", ascending: true },
     "is_published",
-  );
-}
+  ),
+);
 
-export function getPublishedTestimonials() {
-  return selectFrom<Testimonial>("testimonials", undefined, "is_published");
-}
+export const getPublishedTestimonials = cache(() =>
+  selectFrom<Testimonial>("testimonials", undefined, "is_published"),
+);
 
-export function getPublishedInsights() {
-  return selectFrom<InsightsPost>(
+export const getPublishedInsights = cache(() =>
+  selectFrom<InsightsPost>(
     "insights_posts",
     { column: "published_at", ascending: false },
     "is_published",
-  );
-}
+  ),
+);
 
 export async function getWorkBySlug(slug: string): Promise<Work | null> {
   const works = await getPublishedWorks();

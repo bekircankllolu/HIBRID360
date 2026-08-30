@@ -29,7 +29,10 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "How We Work",
-    description: "How a project runs here, what it costs, and how long it takes.",
+    description:
+      locale === "en"
+        ? "How a project runs here, what it costs, and how long it takes."
+        : "Bir projenin Hibrid 360'ta nasıl ilerlediği, bütçe yapısı ve üretim takvimi.",
     alternates: localizedAlternates(locale, "/what-we-do/how-we-work"),
   };
 }

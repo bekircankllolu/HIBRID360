@@ -51,7 +51,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Films, campaigns, live broadcast and AI production for global brands. Istanbul-based, 20+ years, one crew end to end."
-        : undefined,
+        : "Global markalar için film, kampanya, canlı yayın ve yapay zekâ prodüksiyonu. İstanbul merkezli, 20+ yıllık deneyim, uçtan uca tek ekip.",
     alternates: localizedAlternates(locale),
   };
 }

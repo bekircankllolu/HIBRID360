@@ -15,6 +15,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
+  const works = await getPublishedWorks();
   return {
   // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
   // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
@@ -24,6 +25,7 @@ export async function generateMetadata({
       locale === "en"
         ? "Selected films, campaigns and live productions by Hibrid 360."
         : "Hibrid 360'ın seçili film, kampanya ve canlı prodüksiyon işleri.",
+    robots: works.length > 0 ? undefined : { index: false, follow: true },
     alternates: localizedAlternates(locale, "/work"),
   };
 }

@@ -52,7 +52,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "The brands we work with — from holdings and global appliance brands to hotels, restaurants and start-ups."
-        : undefined,
+        : "Birlikte çalıştığımız markalar: holdinglerden global beyaz eşya markalarına, otellerden restoranlara ve girişimlere.",
     alternates: localizedAlternates(locale, "/clients"),
   };
 }

@@ -28,7 +28,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Your own corporate TV channel on a cloud portal: content, infrastructure, training and turnkey operation."
-        : undefined,
+        : "Bulut portal üzerinde kendi kurumsal TV kanalınız: içerik, altyapı, eğitim ve anahtar teslim operasyon.",
     alternates: localizedAlternates(locale, "/what-we-do/cloud-tv"),
   };
 }
@@ -58,7 +58,7 @@ export default async function CloudTvPage({
       <p className={styles.heroSubtitle}>There Is No Time Like Right Now</p>
       <ServiceVisual
         src={siteImages.services.cloudTv.src}
-        alt={siteImages.services.cloudTv.alt}
+        alt={siteImages.services.cloudTv.alt[locale]}
         priority
       />
 

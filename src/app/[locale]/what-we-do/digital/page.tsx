@@ -49,7 +49,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Social-first content, short-form video, CGI and AI-powered production built to perform across platforms."
-        : undefined,
+        : "Platformlar genelinde performans için tasarlanan sosyal medya öncelikli içerik, kısa video, CGI ve yapay zekâ destekli prodüksiyon.",
     alternates: localizedAlternates(locale, "/what-we-do/digital"),
   };
 }
@@ -79,7 +79,7 @@ export default async function DigitalPage({
       <h1 className={styles.heroTitle}>BUILT FOR THE FEED. MADE TO MOVE.</h1>
       <ServiceVisual
         src={siteImages.services.digital.src}
-        alt={siteImages.services.digital.alt}
+        alt={siteImages.services.digital.alt[locale]}
         priority
       />
       <div className={styles.body}>

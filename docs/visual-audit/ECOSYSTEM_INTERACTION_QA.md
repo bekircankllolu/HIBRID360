@@ -53,6 +53,11 @@ türetildi; önceki MP4/WebM ve poster dosyaları kaynak olarak korunur.
 | Yükleme | Bölüme 300px yaklaşınca; ilk ekran için video isteği yok |
 | Azaltılmış hareket | Video yüklenmez; mevcut poster çizilir |
 
+> 30 Ağustos 2026 yayın denetimi: bu bölüm ilk etkileşim uygulamasının
+> tarihsel medya kaydını anlatır. Aktif kaynak artık müşterinin teslim ettiği
+> `hibrid-stone-loop-20260827.mp4` dosyasıdır; hiçbir kod yolunda kullanılmayan
+> `hibrid-stone-interactive.mp4` dağıtım paketinden kaldırılmıştır.
+
 Dosya normal oynatım kaynağından büyüktür: bağımsız I-frame'ler ileri/geri
 kare erişimi için bilinçli bir tercihtir. Sayfa iki video formatını birden
 indirmez. Bölüm ekrandan çıkınca ve sekme gizlenince oynatım/rAF durur.

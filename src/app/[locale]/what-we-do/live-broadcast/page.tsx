@@ -40,7 +40,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Multi-camera live streaming for events, conventions and medical broadcasts — with satellite uplink and remote production."
-        : undefined,
+        : "Etkinlik, kongre ve medikal yayınlar için çok kameralı canlı yayın; uydu bağlantısı ve uzaktan prodüksiyon desteğiyle.",
     alternates: localizedAlternates(locale, "/what-we-do/live-broadcast"),
   };
 }
@@ -71,7 +71,7 @@ export default async function LiveBroadcastPage({
       </p>
       <ServiceVisual
         src={siteImages.services.liveBroadcast.src}
-        alt={siteImages.services.liveBroadcast.alt}
+        alt={siteImages.services.liveBroadcast.alt[locale]}
         priority
       />
 

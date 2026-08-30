@@ -46,7 +46,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "An Istanbul-based creative production studio building the visual experiences of the future — meet the crew."
-        : undefined,
+        : "Geleceğin görsel deneyimlerini üreten İstanbul merkezli kreatif prodüksiyon stüdyosu; ekibimizle tanışın.",
     alternates: localizedAlternates(locale, "/who-we-are"),
   };
 }

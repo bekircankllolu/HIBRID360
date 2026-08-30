@@ -13,7 +13,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const doc = locale === "tr" ? kvkkNoticeTr : kvkkNoticeEn;
-  return { title: doc.title };
+  return {
+    title: doc.title,
+    robots: {
+      index: false,
+      follow: true,
+    },
+  };
 }
 
 export default async function KvkkPage({

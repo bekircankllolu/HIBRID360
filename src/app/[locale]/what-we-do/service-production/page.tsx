@@ -34,7 +34,9 @@ export async function generateMetadata({
   return {
     title: "Service Production (International)",
     description:
-      "Locations, permits, crew, gear and post — one contact, one contract, one country.",
+      locale === "en"
+        ? "Locations, permits, crew, gear and post — one contact, one contract, one country."
+        : "Mekân, izin, ekip, ekipman ve post prodüksiyon; tek muhatap ve tek sözleşmeyle Türkiye'de servis prodüksiyonu.",
     alternates: localizedAlternates(locale, "/what-we-do/service-production"),
   };
 }

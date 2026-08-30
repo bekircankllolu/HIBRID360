@@ -1,4 +1,11 @@
-import { SITE_URL, SITE_NAME, SITE_TAGLINE, CONTACT } from "@/lib/site";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_TAGLINE_TR,
+  SOCIAL_LINKS,
+  CONTACT,
+} from "@/lib/site";
 import type { Locale } from "@/i18n/routing";
 
 /**
@@ -16,7 +23,7 @@ export function organizationJsonLd(locale: Locale) {
     url: `${SITE_URL}/${locale}`,
     // brief Bölüm 5: aynı tanım cümlesi meta description + LinkedIn bio'da
     // da kullanılıyor — tek kaynak burası.
-    description: SITE_TAGLINE,
+    description: locale === "tr" ? SITE_TAGLINE_TR : SITE_TAGLINE,
     // TODO: DECISIONS.md #1 — şirket ünvanı netleşince "legalName" eklenecek.
     // TODO: brief 16 — logo görseli teslim edilince "logo"/"image" eklenecek.
     telephone: CONTACT.phone,
@@ -27,8 +34,7 @@ export function organizationJsonLd(locale: Locale) {
       addressLocality: CONTACT.addressLocality,
       addressCountry: CONTACT.addressCountry,
     },
-    // TODO: brief 17.2 — sosyal hesap URL'leri teyit edilince "sameAs"
-    // dizisi eklenecek (Instagram, Vimeo, YouTube, LinkedIn, Spotify).
+    sameAs: SOCIAL_LINKS.map((link) => link.href),
   };
 }
 
@@ -36,13 +42,30 @@ export function breadcrumbListJsonLd(
   locale: Locale,
   items: Array<{ name: string; path: string }>,
 ) {
+  const trNames: Record<string, string> = {
+    Home: "Ana Sayfa",
+    Work: "İşler",
+    Contact: "İletişim",
+    Clients: "Müşteriler",
+    Culture: "Kültür",
+    Sustainability: "Sürdürülebilirlik",
+    Insights: "İçgörüler",
+    Partners: "İş Ortakları",
+    "Who We Are": "Biz Kimiz",
+    "What We Do": "Ne Yapıyoruz",
+    "What We Believe": "Neye İnanıyoruz",
+    "Directors & Crew": "Yönetmenler ve Ekip",
+    "Accessibility Statement": "Erişilebilirlik Beyanı",
+    "Brief Builder": "Brief Oluşturucu",
+  };
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: item.name,
+      name: locale === "tr" ? (trNames[item.name] ?? item.name) : item.name,
       item: `${SITE_URL}/${locale}${item.path}`,
     })),
   };

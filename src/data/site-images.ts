@@ -18,35 +18,59 @@ export const siteImages = {
   services: {
     creative: {
       src: "/images/site/services/creative.webp",
-      alt: "Creative desk with light bulbs and campaign planning materials",
+      alt: {
+        tr: "Ampuller ve kampanya planlama materyalleri bulunan kreatif çalışma masası",
+        en: "Creative desk with light bulbs and campaign planning materials",
+      },
     },
     production: {
       src: "/images/site/services/production.webp",
-      alt: "Camera setup on a production shoot",
+      alt: {
+        tr: "Prodüksiyon çekiminde kamera kurulumu",
+        en: "Camera setup on a production shoot",
+      },
     },
     postProduction: {
       src: "/images/site/services/post-production.webp",
-      alt: "Post production screens in an editing suite",
+      alt: {
+        tr: "Kurgu stüdyosunda post prodüksiyon ekranları",
+        en: "Post production screens in an editing suite",
+      },
     },
     digital: {
       src: "/images/site/services/digital.webp",
-      alt: "Hands using a smartphone in a colorful digital content scene",
+      alt: {
+        tr: "Renkli bir dijital içerik sahnesinde akıllı telefon kullanan eller",
+        en: "Hands using a smartphone in a colorful digital content scene",
+      },
     },
     liveBroadcast: {
       src: "/images/site/services/live-broadcast.webp",
-      alt: "Broadcast camera lens with an on air sign",
+      alt: {
+        tr: "Yayında tabelasıyla birlikte profesyonel yayın kamerası objektifi",
+        en: "Broadcast camera lens with an on air sign",
+      },
     },
     cloudTv: {
       src: "/images/site/services/cloud-tv.webp",
-      alt: "Multi-screen broadcast control room",
+      alt: {
+        tr: "Çok ekranlı yayın kontrol odası",
+        en: "Multi-screen broadcast control room",
+      },
     },
     eventManagement: {
       src: "/images/site/services/event-management.webp",
-      alt: "Stage lighting for a live event",
+      alt: {
+        tr: "Canlı etkinlik için sahne ışıklandırması",
+        en: "Stage lighting for a live event",
+      },
     },
     photography: {
       src: "/images/site/services/photography.webp",
-      alt: "Black and white portrait production setup",
+      alt: {
+        tr: "Siyah beyaz portre çekimi kurulumu",
+        en: "Black and white portrait production setup",
+      },
     },
   },
 } as const;

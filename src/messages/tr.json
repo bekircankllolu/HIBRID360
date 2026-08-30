@@ -14,11 +14,11 @@
     "solutions": "Çözümler",
     "clients": "Müşteriler",
     "friends": "Müşteriler",
-    "partners": "Partnerler",
+    "partners": "İş Ortakları",
     "contact": "İletişim",
-    "work": "Work",
-    "insights": "Insights",
-    "culture": "Culture",
+    "work": "İşler",
+    "insights": "İçgörüler",
+    "culture": "Kültür",
     "about": "Hakkımızda",
     "explore": "Keşfet",
     "legal": "Yasal",
@@ -42,7 +42,7 @@
     "social": {
       "label": "Sosyal Medya"
     },
-    "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
+    "copyright": "© 2026 Hibrid 360. Tüm hakları saklıdır.",
     "carbonNeutral": "🌱 Karbon nötr",
     "backToTop": "Yukarı"
   },
@@ -190,9 +190,9 @@
   "culture": {
     "hub": {
       "whoWeAre": "Biz Kimiz",
-      "whatWeBelieve": "What We Believe",
-      "directors": "Directors & Crew",
-      "partners": "Partners",
+      "whatWeBelieve": "Neye İnanıyoruz",
+      "directors": "Yönetmenler ve Ekip",
+      "partners": "İş Ortakları",
       "sustainability": "Sürdürülebilirlik"
     },
     "whoWeAre": {
@@ -514,6 +514,10 @@
   },
   "sustainability": {
     "title": "Sürdürülebilirlik",
+    "measurementTitle": "Ölçüm",
+    "reductionTitle": "Azaltım",
+    "offsetTitle": "Denkleştirme",
+    "onSetTitle": "Sette",
     "pendingEvidence": "Karbon nötr iddiası, ölçüm ve sertifika verisi girilmeden yayınlanmaz. Aşağıdaki bölümler tamamlandığında bu sayfa ve footer rozeti yayına açılacak.",
     "measurement": "Ölçüm — bu site sayfa görüntüleme başına yaklaşık {grams} g CO₂ salıyor; {tool} ile {date} tarihinde ölçüldü.",
     "measurementPending": "Ölçüm bekleniyor: sayfa başına gram CO₂, ölçüm aracı ve tarih.",
@@ -536,6 +540,8 @@
   "cta": {
     "primary": "Birlikte sıra dışı bir şey üretelim.",
     "bookCall": "30 dakikalık tanışma görüşmesi ayarla",
+    "contact": "İletişime geç",
+    "email": "E-posta gönder",
     "whatsapp": "WhatsApp"
   },
   "video": {

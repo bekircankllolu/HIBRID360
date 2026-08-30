@@ -93,7 +93,7 @@
 }
 
 .column li,
-.social span {
+.social a {
   margin-bottom: 0.45rem;
   font-size: 0.9rem;
   line-height: 1.25;
@@ -120,7 +120,7 @@
   flex-direction: column;
 }
 
-.social span {
+.social a {
   width: fit-content;
   color: rgba(255, 255, 255, 0.72);
 }
