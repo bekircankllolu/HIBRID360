@@ -12,6 +12,17 @@
   margin: 0 0 var(--space-4);
 }
 
+/* "ARKASINDAKİLER." tek parça uzun bir kelime; paylaşılan display token'ının
+   2.25rem'lik tabanı 320px ekranda onu içerik genişliğinin dışına taşırıyordu.
+   Token yasal sayfalarda da kullanıldığı için değiştirilmedi — yalnızca dar
+   ekranda devreye giren bir kural eklendi. 400px üstünde ölçü token'ın
+   verdiğiyle aynı kalır. */
+@media (max-width: 400px) {
+  .heroTitle {
+    font-size: clamp(1.75rem, 9vw, 2.25rem);
+  }
+}
+
 .heroSubtitle {
   max-width: 40rem;
   opacity: 0.85;

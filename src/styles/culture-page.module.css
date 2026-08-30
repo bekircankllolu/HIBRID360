@@ -12,7 +12,15 @@
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
   max-width: 14ch;
-  font-size: clamp(4rem, 11vw, 12rem);
+  /* Taban ölçü sorunu: clamp'in vw terimi küçük ekranlarda tabanın altında
+     kaldığı için ölçüyü TABAN belirliyordu. 64px'te tek parça uzun kelimeler
+     ("MANAGEMENT", "PRODUCTION", "PARTNERS") 320-390px içerik genişliğine
+     sığmıyor ve gövdeye yatay kaydırma ekliyordu. Taban 2rem'e indirildi:
+     artık 320px'ten itibaren ÖLÇÜYÜ vw TERİMİ belirliyor (11vw = 320px'te
+     35px, 390px'te 43px) ve kelimeler anlamsız yerden bölünmeden sığıyor.
+     11vw ve 12rem'e DOKUNULMADI — masaüstündeki dev tipografi birebir aynı.
+     Nöbetçi: e2e/canonical-routes.spec.ts "Yatay taşma". */
+  font-size: clamp(2rem, 11vw, 12rem);
   line-height: 0.85;
   margin: 0 0 var(--space-8);
 }

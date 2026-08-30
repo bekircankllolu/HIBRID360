@@ -61,7 +61,7 @@
       ]
     },
     "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
-    "tagline": "Türkiye's AI-native Creative Production Studio",
+    "tagline": "Türkiye’s AI-native Creative Production Studio",
     "reachOut": {
       "title": "What can we do for you?",
       "cta": "Reach out",
@@ -306,7 +306,25 @@
         "At Hibrid 360, digital is where strategy, design, storytelling and technology become an experience. It gives your brand a place to be explored, understood, trusted and remembered.",
         "We build digital experiences for brands that need more than a polished interface. They need structure, movement, clarity, and a system that can guide people from first impression to meaningful action."
       ],
-      "closingBody": "From one-off content to always-on content systems, we build digital production around the speed, scale and behavior of modern audiences."
+      "closingBody": "From one-off content to always-on content systems, we build digital production around the speed, scale and behavior of modern audiences.",
+      "quad": [
+        {
+          "title": "INNOVATION",
+          "body": "In continuous search of simplicity for a better solution for your needs."
+        },
+        {
+          "title": "CAPABILITY",
+          "body": "Combining extensive digital expertise with an understanding of your business."
+        },
+        {
+          "title": "VISIONARY",
+          "body": "Dedication to your wants and needs, and also to your customers’ wants and needs."
+        },
+        {
+          "title": "ENGAGING",
+          "body": "Passion for digital and technical innovation driven by a search for excellence."
+        }
+      ]
     },
     "liveBroadcast": {
       "body": [
@@ -414,8 +432,8 @@
   },
   "mona": {
     "sectionLabel": "MONA",
-    "headLabel": "MONA's screen",
-    "mediaPending": "MONA's character video and voice-over are in production; for now the lines run as text only.",
+    "headLabel": "MONA’s screen",
+    "mediaPending": "MONA’s character video and voice-over are in production; for now the lines run as text only.",
     "mute": "Mute",
     "unmute": "Unmute",
     "stop": "Stop",
@@ -429,7 +447,7 @@
       "Hibrid AI brings stories and experiences to life through art, design and technology."
     ],
     "diffTitle": "Is Hibrid 360 just a video production company?",
-    "diffBody": "No. While high-end production is in our DNA, Hibrid 360 operates as an AI-Native Creative & Production Studio. By unifying strategy, branding, design, digital content, photography, audio and analytics into an end-to-end AI Creative Operating System, we bridge the gap between imagination and execution. We don't just use AI as a tool — we build scalable, tech-driven creative workflows that leave a lasting mark on culture.",
+    "diffBody": "No. While high-end production is in our DNA, Hibrid 360 operates as an AI-Native Creative & Production Studio. By unifying strategy, branding, design, digital content, photography, audio and analytics into an end-to-end AI Creative Operating System, we bridge the gap between imagination and execution. We don’t just use AI as a tool — we build scalable, tech-driven creative workflows that leave a lasting mark on culture.",
     "proofTitle": "WHY HIBRID 360?",
     "proofLead": "From idea to impact: Faster · Smarter · More Flexible · More Sustainable · More Human",
     "proofList": [
@@ -445,8 +463,18 @@
       "Human Refinement",
       "Final Delivery"
     ],
-    "closingBody": "Technology alone doesn't create emotion. Stories do. Ideas do. People do. Technology is our tool. Creativity is our language. Emotion is our outcome.",
-    "closingQuestion": "Ready to Create What's Next?"
+    "closingBody": "Technology alone doesn’t create emotion. Stories do. Ideas do. People do. Technology is our tool. Creativity is our language. Emotion is our outcome.",
+    "closingQuestion": "Ready to Create What’s Next?",
+    "manifestoText": "We don’t replace creativity. We expand it.",
+    "bandText": "AI is Changing Production. We are Redefining It.",
+    "buildTitle": "What We Build",
+    "buildList": [
+      "AI Films",
+      "AI Photography",
+      "AI Design",
+      "AI Experiences",
+      "AI Innovation"
+    ]
   },
   "brief": {
     "pageTitle": "Brief Builder",
@@ -506,7 +534,7 @@
     "analytics": "Analytics cookies"
   },
   "cta": {
-    "primary": "Let's Build Something Extraordinary.",
+    "primary": "Let’s Build Something Extraordinary.",
     "bookCall": "Book a 30-minute intro call",
     "whatsapp": "WhatsApp"
   },
@@ -527,8 +555,20 @@
     "consent": "I have read and accept the Privacy Policy and the KVKK notice.",
     "send": "Send",
     "sending": "Sending…",
-    "success": "Thank you — we've got it. We reply within one working day.",
-    "error": "Something didn't go through. Please try again or write to contact@hibrid360.com.",
+    "success": "Thank you — we’ve got it. We reply within one working day.",
+    "error": "Something didn’t go through. Please try again or write to contact@hibrid360.com.",
     "errorConsent": "You must tick the consent box to continue."
+  },
+  "meta": {
+    "title": {
+      "contact": "Contact",
+      "clients": "Clients",
+      "work": "Work",
+      "solutions": "Solutions",
+      "partners": "Partners",
+      "whoWeAre": "Who We Are",
+      "whatWeBelieve": "What We Believe",
+      "whatWeDo": "What We Do"
+    }
   }
 }

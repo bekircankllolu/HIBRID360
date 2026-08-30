@@ -72,7 +72,7 @@ export const orbitStones: OrbitStone[] = [
   },
   {
     orbit: 4,
-    label: "AI",
+    label: "AI CREATIVE PRODUCTION",
     href: "/what-we-do/ai-creative-production",
     ready: true,
     color: "fuchsia",
@@ -112,7 +112,7 @@ export const orbitStones: OrbitStone[] = [
   },
   {
     orbit: 8,
-    label: "EVENTS",
+    label: "EVENT MANAGEMENT",
     href: "/what-we-do/event-management",
     ready: true,
     color: "fuchsia",

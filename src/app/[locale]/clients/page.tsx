@@ -43,8 +43,12 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
   return {
-    title: "Clients",
+  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
+  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
+  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
+    title: t("title.clients"),
     description:
       locale === "en"
         ? "The brands we work with — from holdings and global appliance brands to hotels, restaurants and start-ups."
@@ -91,7 +95,11 @@ export default async function ClientsPage({
         ]}
       />
 
-      <section className={styles.testimonials}>
+      <section
+        className={`${styles.testimonials} ${
+          testimonials.length === 0 ? styles.testimonialsCompact : ""
+        }`}
+      >
         <h2 className={styles.sectionTitle}>{t("testimonialsTitle")}</h2>
         {/* brief 18.7: üç videolu söz, ızgaranın hemen altında. Hedef:
             yayına girmeden en az 3 videolu, 6 yazılı söz. Yayın izni
@@ -101,7 +109,9 @@ export default async function ClientsPage({
           locale={locale}
           placement="friends"
         />
-        {testimonials.length === 0 && <EmptyState message={t("testimonialsEmpty")} />}
+        {testimonials.length === 0 && (
+          <EmptyState message={t("testimonialsEmpty")} compact />
+        )}
       </section>
 
       {/* FRD-04 — buton layout'taki global CtaBand'dan geliyor. WORK üst

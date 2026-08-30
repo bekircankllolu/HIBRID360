@@ -20,7 +20,10 @@
   gap: var(--space-4);
   /* Beş kart: 24rem eşiği masaüstünde üç sütun veriyor (3 + 2), 20rem
      dört sütun verip beşinciyi tek başına bırakıyordu. */
-  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  /* `min(100%, 24rem)`: 24rem sabit eşik 320px ekranda sütunu içerikten
+     geniş yapıp gövdeyi yatay kaydırıyordu. min() eşiği dar ekranda
+     konteyner genişliğine indiriyor; 384px üstünde davranış aynı. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
 }
 
 .card {

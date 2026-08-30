@@ -20,11 +20,11 @@ const services = [
   "PRODUCTION",
   "DIGITAL",
   "CREATIVE",
-  "AI",
+  "AI CREATIVE PRODUCTION",
   "LIVE BROADCAST",
   "CLOUD TV",
   "POST PRODUCTION",
-  "EVENTS",
+  "EVENT MANAGEMENT",
 ];
 
 async function openScene(page: Page, locale = "tr", reduced = false) {
@@ -312,9 +312,9 @@ test("reduced motion uses a nonblank poster, including after resize", async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await stage.scrollIntoViewIfNeeded();
   await expect(stage).toHaveAttribute("data-motion", "paused");
-  await region.getByRole("button", { name: "AI", exact: true }).click();
+  await region.getByRole("button", { name: "AI CREATIVE PRODUCTION", exact: true }).click();
   await expect(
-    region.getByRole("heading", { name: "AI", exact: true }),
+    region.getByRole("heading", { name: "AI CREATIVE PRODUCTION", exact: true }),
   ).toBeVisible();
   expect(requests.some((url) => /hibrid-stone.*\.(mp4|webm)/.test(url))).toBe(
     false,
@@ -358,14 +358,14 @@ test("point popover stays in the scene, gently focuses the crystal and dismisses
   const { stage, region } = await openScene(page);
   const initialStage = (await stage.boundingBox())!;
   const initialCrystal = (await page.getByTestId("crystal-hit").boundingBox())!;
-  const point = region.getByRole("button", { name: "AI", exact: true });
+  const point = region.getByRole("button", { name: "AI CREATIVE PRODUCTION", exact: true });
   await aimAtMovingPoint(page, point);
   const pointBounds = (await point.boundingBox())!;
   await page.mouse.click(
     pointBounds.x + pointBounds.width / 2,
     pointBounds.y + pointBounds.height / 2,
   );
-  const dialog = region.getByRole("dialog", { name: "AI", exact: true });
+  const dialog = region.getByRole("dialog", { name: "AI CREATIVE PRODUCTION", exact: true });
   await expect(dialog).toBeFocused();
   await expect(dialog).toHaveAttribute("aria-modal", "false");
   const bounds = (await dialog.boundingBox())!;
@@ -575,14 +575,14 @@ test.describe("touch", () => {
   test("tap reveals details without navigation", async ({ page }) => {
     const { region } = await openScene(page);
     const point = (await region
-      .getByRole("button", { name: "AI", exact: true })
+      .getByRole("button", { name: "AI CREATIVE PRODUCTION", exact: true })
       .boundingBox())!;
     await page.touchscreen.tap(
       point.x + point.width / 2,
       point.y + point.height / 2,
     );
     await expect(
-      region.getByRole("heading", { name: "AI", exact: true }),
+      region.getByRole("heading", { name: "AI CREATIVE PRODUCTION", exact: true }),
     ).toBeVisible();
     await expect(page).toHaveURL(/\/tr$/);
     await expect(

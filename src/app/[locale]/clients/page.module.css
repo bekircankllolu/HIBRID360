@@ -38,6 +38,23 @@
   margin-top: var(--space-24);
 }
 
+/* Müşteri sözü verisi gelene kadar bu bölüm yalnızca bir başlık ve küçük
+   bir boş durum kutusu taşıyor; tam ritimle bırakılınca isim dizini ile
+   footer arasında ~35rem boş alan oluşuyordu. Sahte söz eklenmiyor,
+   yalnızca boşluk gerçek içerik ölçüsüne indiriliyor. */
+.testimonialsCompact {
+  margin-top: var(--space-16);
+}
+
+.testimonialsCompact .sectionTitle {
+  margin-bottom: var(--space-4);
+  font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+}
+
+.testimonialsCompact + .cta {
+  margin-top: var(--space-16);
+}
+
 .sectionTitle {
   margin-bottom: var(--space-8);
   font-family: var(--font-brand);

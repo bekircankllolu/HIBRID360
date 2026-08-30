@@ -6,14 +6,15 @@
 .title {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  /* Taban 4rem'den 3.25rem'e indirildi. 390px'te clamp'in vw terimi
-     (11vw = 42.9px) tabanın altında kaldığı için ölçüyü TABAN belirliyor;
-     64px'te tek parça Türkçe kelimeler ("MÜŞTERİLER" 434px, "YAPIYORUZ"
-     396px) 358px'lik içerik genişliğine sığmıyor ve gövdeye yatay kaydırma
-     ekliyordu. 3.25rem her iki kelimeyi de payla sığdırıyor; ~475px
-     üstünde vw terimi devraldığı için daha geniş ekranlarda ölçü
-     değişmiyor. Nöbetçi: e2e/canonical-routes.spec.ts "Yatay taşma". */
-  font-size: clamp(3.25rem, 11vw, 12rem);
+  /* Taban ölçü sorunu: clamp'in vw terimi küçük ekranlarda tabanın altında
+     kaldığı için ölçüyü TABAN belirliyordu. 64px'te tek parça uzun kelimeler
+     ("MANAGEMENT", "PRODUCTION", "PARTNERS") 320-390px içerik genişliğine
+     sığmıyor ve gövdeye yatay kaydırma ekliyordu. Taban 2rem'e indirildi:
+     artık 320px'ten itibaren ÖLÇÜYÜ vw TERİMİ belirliyor (11vw = 320px'te
+     35px, 390px'te 43px) ve kelimeler anlamsız yerden bölünmeden sığıyor.
+     11vw ve 12rem'e DOKUNULMADI — masaüstündeki dev tipografi birebir aynı.
+     Nöbetçi: e2e/canonical-routes.spec.ts "Yatay taşma". */
+  font-size: clamp(2rem, 11vw, 12rem);
   line-height: 0.85;
   margin: 0;
 }
@@ -118,6 +119,12 @@
    ızgarada iki sütun kaplayarak sayfanın kapanışını üstleniyor. */
 .cardFeatured {
   grid-column: span 2;
+  /* .card'ın 22rem'lik alt sınırı görselsiz kartta karşılığı olmayan bir
+     boşluğa dönüşüyordu: 3rem'lik boş medya kutusu + kısa gövde, 22rem'lik
+     hücrede yüzüyordu. Alt sınır içeriğin gerçekten ihtiyaç duyduğu ölçüye
+     indirildi; iki sütunluk genişlik ve marka renkli zemin korunduğu için
+     kartın "featured" karakteri ve ızgara ritmi değişmedi. */
+  min-height: 12rem;
   border-color: rgba(255, 0, 255, 0.4);
   background:
     radial-gradient(80% 120% at 12% 0%, rgba(255, 0, 255, 0.16), transparent 62%),
@@ -125,9 +132,11 @@
     #070707;
 }
 
+/* Görsel yok: boş bir medya kutusu bırakmak yerine hiç yer kaplamıyor.
+   Kartın üst boşluğunu .cardBody'nin kendi dolgusu veriyor. */
 .cardFeatured .media {
   aspect-ratio: auto;
-  min-height: var(--space-12);
+  min-height: 0;
   background: transparent;
 }
 

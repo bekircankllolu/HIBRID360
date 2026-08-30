@@ -213,7 +213,7 @@ export function Mona({
       </div>
 
       {/* MONA-16 — zorunlu ibare, konum/dil değişmez. */}
-      <p className={styles.disclaimer}>{AI_DISCLAIMER}</p>
+      <p className={styles.disclaimer}>{AI_DISCLAIMER[locale]}</p>
     </section>
   );
 }

@@ -11,10 +11,16 @@ import styles from "@/styles/service-page.module.css";
 
 /**
  * DIG-01..06 (nihai copy deck, Ağustos 2026) — Digital alt sayfası.
- * DIG-04 (dörtlü blok) ve DIG-05 (kısa hizmet listesi) deck'te yalnızca
- * İngilizce verildi, TR çevirisi istenmedi — marka dili kabul edilip
- * iki locale'de de aynı bırakıldı (bkz. src/data/digital-services.ts
- * DIG-03 için aynı mantığın TODO'lu hâli).
+ * 30 Ağustos 2026 QA denetimi: DIG-04 (dörtlü blok) sayfa içinde sabit
+ * İngilizce duruyordu, yani TR sayfada dört uzun İngilizce cümle
+ * görünüyordu. Blok mesaj dosyasına taşındı; gövde cümleleri Türkçeleşti,
+ * tek kelimelik başlıklar (INNOVATION · CAPABILITY · VISIONARY · ENGAGING)
+ * marka terminolojisi olarak İngilizce kaldı.
+ *
+ * DIG-05 (SHORT_SERVICES) kısa hizmet adlarından oluşuyor ve iki locale'de
+ * de aynı — marka terminolojisi, bilerek çevrilmedi. Aynı gerekçeyle hero
+ * sloganı ve CTA mikro başlığı da İngilizce; CTA'nın gövde cümlesi
+ * (`closingBody`) zaten Türkçe.
  */
 
 const SHORT_SERVICES = [
@@ -31,24 +37,6 @@ const SHORT_SERVICES = [
   "GIF",
 ];
 
-const QUAD = [
-  {
-    title: "INNOVATION",
-    body: "In continuous search of simplicity for a better solution for your needs.",
-  },
-  {
-    title: "CAPABILITY",
-    body: "Combining extensive digital expertise with an understanding of your business.",
-  },
-  {
-    title: "VISIONARY",
-    body: "Dedication to your wants and needs, and also to your customers’ wants and needs.",
-  },
-  {
-    title: "ENGAGING",
-    body: "Passion for digital and technical innovation driven by a search for excellence.",
-  },
-];
 
 export async function generateMetadata({
   params,
@@ -76,6 +64,7 @@ export default async function DigitalPage({
   const isTr = locale === "tr";
   const body = t.raw("body") as string[];
   const bandBody = t.raw("bandBody") as string[];
+  const quad = t.raw("quad") as Array<{ title: string; body: string }>;
 
   return (
     <div className={styles.page}>
@@ -122,7 +111,7 @@ export default async function DigitalPage({
 
       <section className={styles.section}>
         <div className={styles.quad}>
-          {QUAD.map((item) => (
+          {quad.map((item) => (
             <div key={item.title}>
               <p className={styles.quadTitle}>{item.title}</p>
               <p className={styles.quadBody}>{item.body}</p>

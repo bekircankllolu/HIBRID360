@@ -61,7 +61,7 @@
       ]
     },
     "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
-    "tagline": "Türkiye'nin AI-native kreatif prodüksiyon stüdyosu",
+    "tagline": "Türkiye’nin AI-native kreatif prodüksiyon stüdyosu",
     "reachOut": {
       "title": "Sizin için ne yapabiliriz?",
       "cta": "Bize ulaşın",
@@ -154,7 +154,7 @@
     "heroLead1": "Sizden haber almak isteriz.",
     "heroLead2": "Merhaba deyin",
     "heroBody": "Bağlantı kurmayı seviyoruz — kısa bir merhaba, derin bir yaratıcı iş birliği ya da sosyal medyada bir takip; hepsi olur. Merhaba deyin, ürettiklerimizi takipte kalın!",
-    "motionTitle": "“MOTION OFFICE”A HOŞ GELDİNİZ",
+    "motionTitle": "MOTION OFFICE’E HOŞ GELDİNİZ",
     "motionBody": [
       "İstanbul merkezli bir ajansız ve nerede olursak olalım ofisteyiz. Ekibimiz uluslararası ve resmiyetten uzak.",
       "Dünyanın en büyük ofisine sahibiz diyebilirsiniz — duvarsız ve sınırsız. Bu bize Hibrid 360’ın bütün avantajlarını veriyor: hizmetimiz yüzeyin ötesine geçiyor. Markanızın özünü anlatmak için sanatı, tasarımı, teknolojiyi ve etkileşimli, proaktif hikâye anlatımını kullanıyoruz."
@@ -306,7 +306,25 @@
         "Hibrid 360’ta dijital; stratejinin, tasarımın, hikâye anlatımının ve teknolojinin deneyime dönüştüğü yerdir. Markanıza keşfedilecek, anlaşılacak, güvenilecek ve hatırlanacak bir yer verir.",
         "Cilalı bir arayüzden fazlasına ihtiyacı olan markalar için dijital deneyimler kuruyoruz: yapı, hareket, netlik ve insanı ilk izlenimden anlamlı bir eyleme götüren bir sistem."
       ],
-      "closingBody": "Tek seferlik içerikten sürekli çalışan içerik sistemlerine kadar; dijital üretimi bugünün izleyicisinin hızına, ölçeğine ve alışkanlığına göre kuruyoruz."
+      "closingBody": "Tek seferlik içerikten sürekli çalışan içerik sistemlerine kadar; dijital üretimi bugünün izleyicisinin hızına, ölçeğine ve alışkanlığına göre kuruyoruz.",
+      "quad": [
+        {
+          "title": "INNOVATION",
+          "body": "İhtiyaçlarınıza daha iyi bir çözüm için sadeliği aralıksız arıyoruz."
+        },
+        {
+          "title": "CAPABILITY",
+          "body": "Geniş dijital uzmanlığı işinizi anlamakla birleştiriyoruz."
+        },
+        {
+          "title": "VISIONARY",
+          "body": "Sizin istek ve ihtiyaçlarınıza olduğu kadar müşterilerinizin istek ve ihtiyaçlarına da bağlıyız."
+        },
+        {
+          "title": "ENGAGING",
+          "body": "Mükemmellik arayışının sürüklediği bir dijital ve teknik yenilik tutkusu."
+        }
+      ]
     },
     "liveBroadcast": {
       "body": [
@@ -395,7 +413,7 @@
     "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."
   },
   "serviceProduction": {
-    "localeNote": "Bu sayfa, Türkiye'de çekim yapmak isteyen yurt dışı ajans, yapımcı ve markalar için hazırlandı; içeriği İngilizcedir.",
+    "localeNote": "Bu sayfa, Türkiye’de çekim yapmak isteyen yurt dışı ajans, yapımcı ve markalar için hazırlandı; içeriği İngilizcedir.",
     "evidenceTitle": "Kanıt",
     "evidenceEmpty": "Hizmet verilen uluslararası yapımların listesi hazırlanıyor."
   },
@@ -404,7 +422,7 @@
     "budgetTitle": "Bütçe bandı",
     "pendingShort": "belirlenecek",
     "pendingHint": "Başlangıç bantları ve süreler netleştiğinde bu tablo güncellenecek.",
-    "cta": "Brief'ini oluştur",
+    "cta": "Brief’ini oluştur",
     "table": {
       "format": "Format",
       "startingFrom": "Başlangıç",
@@ -414,8 +432,8 @@
   },
   "mona": {
     "sectionLabel": "MONA",
-    "headLabel": "MONA'nın ekranı",
-    "mediaPending": "MONA'nın karakter videosu ve seslendirmesi prodüksiyonda; replikler şimdilik yalnızca yazı olarak akıyor.",
+    "headLabel": "MONA’nın ekranı",
+    "mediaPending": "MONA’nın karakter videosu ve seslendirmesi prodüksiyonda; replikler şimdilik yalnızca yazı olarak akıyor.",
     "mute": "Sesi kapat",
     "unmute": "Sesi aç",
     "stop": "Sustur",
@@ -429,7 +447,7 @@
       "Hibrid AI brings stories and experiences to life through art, design and technology."
     ],
     "diffTitle": "Hibrid 360 sadece bir video prodüksiyon şirketi mi?",
-    "diffBody": "Hayır. Yüksek kaliteli prodüksiyon genlerimizde olsa da Hibrid 360 bir AI-Native Kreatif ve Prodüksiyon Stüdyosu olarak çalışır. Stratejiyi, markayı, tasarımı, dijital içeriği, fotoğrafı, sesi ve analitiği uçtan uca tek bir AI Kreatif İşletim Sistemi'nde birleştirerek hayal ile uygulama arasındaki mesafeyi kapatıyoruz. Yapay zekâyı yalnızca araç olarak kullanmıyor; kültürde iz bırakan, ölçeklenebilir ve teknolojiyle kurulmuş yaratıcı iş akışları inşa ediyoruz.",
+    "diffBody": "Hayır. Yüksek kaliteli prodüksiyon genlerimizde olsa da Hibrid 360 bir AI-Native Kreatif ve Prodüksiyon Stüdyosu olarak çalışır. Stratejiyi, markayı, tasarımı, dijital içeriği, fotoğrafı, sesi ve analitiği uçtan uca tek bir AI Kreatif İşletim Sistemi’nde birleştirerek hayal ile uygulama arasındaki mesafeyi kapatıyoruz. Yapay zekâyı yalnızca araç olarak kullanmıyor; kültürde iz bırakan, ölçeklenebilir ve teknolojiyle kurulmuş yaratıcı iş akışları inşa ediyoruz.",
     "proofTitle": "NEDEN HİBRİD 360?",
     "proofLead": "Fikirden etkiye: Daha hızlı · Daha akıllı · Daha esnek · Daha sürdürülebilir · Daha insan",
     "proofList": [
@@ -446,7 +464,17 @@
       "Nihai Teslim"
     ],
     "closingBody": "Teknoloji tek başına duygu üretmez. Hikâyeler üretir. Fikirler üretir. İnsanlar üretir. Teknoloji aracımız. Yaratıcılık dilimiz. Duygu sonucumuz.",
-    "closingQuestion": "Sıradakini yaratmaya hazır mısınız?"
+    "closingQuestion": "Sıradakini yaratmaya hazır mısınız?",
+    "manifestoText": "Yaratıcılığın yerini almıyoruz; alanını genişletiyoruz.",
+    "bandText": "AI prodüksiyonu değiştiriyor. Biz yeniden tanımlıyoruz.",
+    "buildTitle": "Neler Üretiyoruz",
+    "buildList": [
+      "AI Filmler",
+      "AI Fotoğraf",
+      "AI Tasarım",
+      "AI Deneyimler",
+      "AI İnovasyon"
+    ]
   },
   "brief": {
     "pageTitle": "Brief Builder",
@@ -455,7 +483,7 @@
     "next": "İleri",
     "send": "Gönder",
     "sending": "Gönderiliyor…",
-    "sent": "Brief'in bize ulaştı.",
+    "sent": "Brief’in bize ulaştı.",
     "summaryTitle": "Özet",
     "notAnswered": "—",
     "consent": "KVKK aydınlatma metnini okudum, verilerimin teklif süreci için işlenmesine açık rıza veriyorum.",
@@ -514,7 +542,7 @@
     "soundOn": "Sesi aç",
     "soundOff": "Sesi kapat",
     "subtitles": "Altyazı",
-    "playShowreel": "Showreel'i oynat",
+    "playShowreel": "Showreel’i oynat",
     "watchFilm": "Filmi izle",
     "aiGenerated": "AI ile canlandırılmıştır"
   },
@@ -524,11 +552,23 @@
     "message": "Ne yapmak istiyorsunuz?",
     "email": "E-posta",
     "phone": "Telefon (opsiyonel)",
-    "consent": "Gizlilik Politikası'nı ve KVKK Aydınlatma Metni'ni okudum, kabul ediyorum.",
+    "consent": "Gizlilik Politikası’nı ve KVKK Aydınlatma Metni’ni okudum, kabul ediyorum.",
     "send": "Gönder",
     "sending": "Gönderiliyor…",
     "success": "Teşekkürler — ulaştı. Bir iş günü içinde dönüyoruz.",
     "error": "Bir sorun oldu. Tekrar deneyin veya contact@hibrid360.com adresine yazın.",
     "errorConsent": "Devam etmek için onay kutucuğunu işaretlemelisiniz."
+  },
+  "meta": {
+    "title": {
+      "contact": "İletişim",
+      "clients": "Müşterilerimiz",
+      "work": "İşler",
+      "solutions": "Çözümler",
+      "partners": "İş Ortakları",
+      "whoWeAre": "Biz Kimiz",
+      "whatWeBelieve": "Neye İnanıyoruz",
+      "whatWeDo": "Ne Yapıyoruz"
+    }
   }
 }

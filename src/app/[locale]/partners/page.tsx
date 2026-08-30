@@ -26,8 +26,12 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
   return {
-    title: "Partners",
+  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
+  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
+  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
+    title: t("title.partners"),
     alternates: localizedAlternates(locale, "/partners"),
   };
 }

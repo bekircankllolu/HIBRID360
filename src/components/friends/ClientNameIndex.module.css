@@ -29,7 +29,14 @@
   border: 0;
   padding: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.38);
+  /* Pasif filtre rengi. 0.38 alfa siyah üzerinde #616161'e denk geliyordu
+     ve kontrast 3.39:1'de kalıyordu — axe bunu "serious" olarak düşürüyordu
+     (18px/600 ağırlık büyük metin sayılmıyor, eşik 4.5:1). 0.58 alfa
+     #949494'e denk gelir ve 6.9:1 verir. Aktif filtre saf beyaz (21:1)
+     olduğu için pasif/aktif hiyerarşisi görünür kalıyor; ayrıca aktif
+     olanın sarı oku ve aria-pressed'i var, ayrım yalnızca renge bağlı
+     değil. Marka paleti dışına çıkılmadı (beyaz, azaltılmış opaklıkta). */
+  color: rgba(255, 255, 255, 0.58);
   font-family: var(--font-brand);
   font-size: clamp(0.9rem, 1.3vw, 1.125rem);
   font-weight: var(--font-weight-heading-semibold);
@@ -41,6 +48,12 @@
 .filter:focus-visible,
 .filterActive {
   color: var(--color-brand-white);
+}
+
+/* Aktif madde ayrıca kalınlaşır: pasif/aktif ayrımı renk körlüğünde de
+   okunur kalsın (sarı ok ve aria-pressed'e ek üçüncü ipucu). */
+.filterActive {
+  font-weight: var(--font-weight-brand);
 }
 
 .filter:focus-visible {

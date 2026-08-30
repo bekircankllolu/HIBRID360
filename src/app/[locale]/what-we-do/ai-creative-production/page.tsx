@@ -6,7 +6,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Mona } from "@/components/mona/Mona";
 import { monaQuestions, openingLine } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
-import { localizedAlternates } from "@/lib/site";
+import { BRAND_SIGNATURE, localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
 /**
@@ -16,6 +16,12 @@ import styles from "./page.module.css";
  * göre next-intl "aiCreativeProduction" namespace'inden geliyor (önceki
  * sürüm brief-rev12'nin İngilizce-kalır varsayımıyla hardcoded İngilizceydi
  * — yeni deck AI-01/03/04/09 için ayrı TR çevirisi veriyor).
+ *
+ * 30 Ağustos 2026 QA denetimi: AI-06/07/08 blokları ve kapanış imzası hâlâ
+ * JSX içinde sabit İngilizceydi, yani TR sayfada çevrilmemiş gövde metni
+ * görünüyordu. Manifesto, ara bant ve "What We Build" mesaj dosyasına
+ * taşındı ve Türkçeleştirildi. Kapanış imzası çevrilmedi: o satır markanın
+ * imzası (footer'la aynı) ve BRAND_SIGNATURE'dan okunuyor.
  *
  * TODO: brief 11.9 — AI Showreel filmi (Film A "Henüz Değil") teslim
  * edilince bu sayfaya tam sürüm olarak eklenecek; VideoObject JSON-LD
@@ -48,6 +54,7 @@ export default async function AiCreativeProductionPage({
   const slogans = t.raw("slogans") as string[];
   const proofList = t.raw("proofList") as string[];
   const flowSteps = t.raw("flowSteps") as string[];
+  const buildList = t.raw("buildList") as string[];
 
   return (
     <div>
@@ -112,36 +119,32 @@ export default async function AiCreativeProductionPage({
 
       {/* AI-06 — manifesto bandı */}
       <section className={`${styles.block} ${styles.manifesto}`}>
-        <p className={styles.manifestoText}>
-          We don&rsquo;t replace creativity. We expand it.
-        </p>
+        <p className={styles.manifestoText}>{t("manifestoText")}</p>
       </section>
 
       {/* AI-07 — ara bant */}
       <section className={styles.block}>
-        <p className={styles.bandText}>
-          AI is Changing Production. We are Redefining It.
-        </p>
+        <p className={styles.bandText}>{t("bandText")}</p>
       </section>
 
       {/* AI-08 — What We Build */}
       <section className={styles.block}>
-        <h2 className={styles.blockTitle}>What We Build</h2>
+        <h2 className={styles.blockTitle}>{t("buildTitle")}</h2>
         <ul className={styles.buildList}>
-          <li>AI Films</li>
-          <li>AI Photography</li>
-          <li>AI Design</li>
-          <li>AI Experiences</li>
-          <li>AI Innovation</li>
+          {buildList.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
       </section>
 
       {/* AI-09 — kapanış + CTA (buton layout'taki global CtaBand'dan gelir) */}
       <section className={styles.block}>
         <p className={styles.closing}>{t("closingBody")}</p>
-        <p className={styles.closing}>
-          The future of creativity isn&rsquo;t artificial. It&rsquo;s hybrid.
-        </p>
+        {/* Marka imzası — footer'daki satırın aynısı. CLAUDE.md "sloganlar
+            TR sürümde de İngilizce kalır" kuralı gereği çevrilmiyor; mesaj
+            dosyasında kopyalanmak yerine tek kaynaktan (BRAND_SIGNATURE)
+            okunuyor ki footer'la sessizce ayrışmasın. */}
+        <p className={styles.closing}>{BRAND_SIGNATURE}</p>
         <p className={styles.closingQuestion}>{t("closingQuestion")}</p>
       </section>
 

@@ -74,7 +74,12 @@
 
 .disclaimer {
   margin: var(--space-4) 0 0;
-  font-size: 0.6875rem;
+  /* 0.6875rem (11px) idi — yardımcı/disclosure metni olsa bile mobilde
+     okunabilirlik sınırının altındaydı. 0.8125rem (13px) gövde
+     metninden hâlâ belirgin biçimde küçük, yani kompakt hiyerarşi
+     korunuyor. */
+  font-size: 0.8125rem;
+  line-height: 1.4;
   letter-spacing: 0.04em;
   opacity: 0.6;
 }

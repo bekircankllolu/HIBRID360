@@ -14,7 +14,10 @@
 .heroTitle {
   margin: 0;
   font-family: var(--font-brand);
-  font-size: clamp(4.5rem, 11vw, 11rem);
+  /* Taban 4.5rem 320px'te "RECENT"i içerik genişliğinin dışına
+     taşırıyordu; 2.5rem'den itibaren ölçüyü vw terimi belirliyor.
+     11vw ve 11rem korundu — masaüstü ölçüsü değişmedi. */
+  font-size: clamp(2.5rem, 11vw, 11rem);
   font-weight: var(--font-weight-brand);
   line-height: 0.82;
   letter-spacing: 0;

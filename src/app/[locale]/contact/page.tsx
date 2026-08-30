@@ -53,8 +53,12 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
   return {
-    title: "Contact",
+  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
+  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
+  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
+    title: t("title.contact"),
     description:
       locale === "en"
         ? "Tell us what you are making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
@@ -209,6 +213,8 @@ export default async function ContactPage({
           title={t("mapTitle")}
           loadLabel={t("mapLoad")}
           privacyNote={t("mapPrivacyNote")}
+          addressLabel={t("addressLabel")}
+          addressLines={CONTACT.addressLines}
         />
         <p className={styles.mapFallback}>
           <span>{t("mapNote")}</span>{" "}

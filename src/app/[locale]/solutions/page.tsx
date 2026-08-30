@@ -35,8 +35,12 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
   return {
-    title: "Solutions",
+  // Sayfa başlığı locale'e bağlı: TR sekmesinde/arama sonucunda İngilizce
+  // başlık çıkıyordu. Görünür sayfa terminolojisiyle aynı sözlükten
+  // (meta.title) okunuyor; alternates/canonical yapısı değişmedi.
+    title: t("title.solutions"),
     description:
       locale === "en"
         ? "Brand consultancy, advertising, print, packaging, outdoor, web, digital, TVC, events, live broadcast, shooting, post production and Cloud TV."

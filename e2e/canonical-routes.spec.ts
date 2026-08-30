@@ -26,6 +26,43 @@ const CANONICAL_ROUTES = [
 
 const LOCALES = ["tr", "en"] as const;
 
+/**
+ * Yatay taşma testinin kapsamı — canonical üst sayfalar + What We Do
+ * alt sayfalarının TAMAMI + görsel yoğun Culture rotaları.
+ *
+ * 30 Ağustos 2026 QA denetimi: taşma testi yalnızca üst sayfaları
+ * kapsadığı için hizmet detay rotalarındaki taşmalar (390px'te
+ * /what-we-do/event-management +127px'e kadar) hiç yakalanmıyordu. Kök
+ * neden ortak bir CSS kalıbıydı — hero başlığının clamp tabanı — ve o
+ * kalıp yalnızca test edilmeyen sayfalarda yaşıyordu.
+ */
+const OVERFLOW_ROUTES = [
+  "",
+  "/who-we-are",
+  "/what-we-do",
+  "/what-we-believe",
+  "/solutions",
+  "/clients",
+  "/partners",
+  "/contact",
+  "/work",
+  "/insights",
+  "/brief",
+  "/culture",
+  "/culture/directors",
+  "/culture/sustainability",
+  "/what-we-do/creative",
+  "/what-we-do/production",
+  "/what-we-do/post-production",
+  "/what-we-do/digital",
+  "/what-we-do/live-broadcast",
+  "/what-we-do/cloud-tv",
+  "/what-we-do/event-management",
+  "/what-we-do/ai-creative-production",
+  "/what-we-do/how-we-work",
+  "/what-we-do/service-production",
+] as const;
+
 /** next.config.mjs → LEGACY_ROUTE_MAP ile birebir aynı olmalı. */
 const LEGACY_REDIRECTS = [
   ["/friends", "/clients"],
@@ -178,19 +215,19 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
 });
 
 test.describe("Yatay taşma", () => {
-  // Şart: 390 ve 1440'ta gövde yatay kaymamalı.
-  for (const width of [390, 1440]) {
-    test(`${width}px — canonical sayfaların hiçbiri yatay taşmıyor`, async ({
-      page,
-    }) => {
+  // 320px en dar gerçekçi cihaz; 375/390 en yaygın telefonlar; 768 tablet;
+  // 1440 masaüstü. Taşmanın kaynağı hero başlıklarının clamp tabanı olduğu
+  // için en dar uç şart: orada geçen ölçü yukarıda da geçiyor.
+  for (const width of [320, 375, 390, 768, 1440]) {
+    test(`${width}px — hiçbir rota yatay taşmıyor`, async ({ page }) => {
       await seedConsent(page);
       await page.setViewportSize({ width, height: 900 });
 
       const overflowing: string[] = [];
       for (const locale of LOCALES) {
-        for (const route of ["", ...CANONICAL_ROUTES]) {
+        for (const route of OVERFLOW_ROUTES) {
           const url = `/${locale}${route}`;
-          await page.goto(url, { waitUntil: "networkidle" });
+          await page.goto(url, { waitUntil: "domcontentloaded" });
           const overflow = await page.evaluate(() => {
             const root = document.documentElement;
             return root.scrollWidth - root.clientWidth;

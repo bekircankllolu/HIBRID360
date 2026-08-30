@@ -241,8 +241,16 @@ export function lineText(line: MonaLine, locale: Locale): string {
 }
 
 /**
- * MONA-16 — MONA'nın altında zorunlu ibare. Deck'te "EN + TR" olarak
- * tek bir iki dilli satır verilmiş (locale'e göre ayrılmıyor), bu yüzden
- * her iki dilde de aynı, sabit metin.
+ * MONA-16 — MONA'nın altında zorunlu ibare.
+ *
+ * Deck bunu "EN + TR" biçiminde tek bir iki dilli satır olarak vermişti ve
+ * kod da öyle sabitlemişti: `"AI-generated character · AI ile üretilmiş
+ * karakter"`. Sonuç olarak EN arayüzde Türkçe, TR arayüzde İngilizce ibare
+ * birlikte görünüyordu (30 Ağustos 2026 QA denetimi). Sitenin geri kalanı
+ * locale başına tek dil gösterdiği için ibare de locale'e bağlandı; iki
+ * dildeki metin deck'teki ifadelerin aynısı, yeni bir beyan üretilmedi.
  */
-export const AI_DISCLAIMER = "AI-generated character · AI ile üretilmiş karakter";
+export const AI_DISCLAIMER: Record<Locale, string> = {
+  en: "AI-generated character",
+  tr: "AI ile üretilmiş karakter",
+};

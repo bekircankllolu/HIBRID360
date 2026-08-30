@@ -40,7 +40,9 @@ test.describe("Contact formu", () => {
 
     await page.getByLabel("Adınız").fill("Test Kullanıcı");
     await page.getByLabel("E-posta").fill("test@example.com");
-    await page.getByLabel(/Gizlilik Politikası'nı/).check();
+    // Apostrof kopyada tipografik (U+2019); test her iki biçimi de kabul
+    // eder ki ileride metin rötuşunda sessizce kırılmasın.
+    await page.getByLabel(/Gizlilik Politikası['’]nı/).check();
     await page.getByRole("button", { name: "Gönder" }).click();
 
     // Bu ortamda Supabase bağlı değil (env boş) — sunucu action zarifçe

@@ -15,14 +15,20 @@ import styles from "./EmptyState.module.css";
 export function EmptyState({
   message,
   detail,
+  compact = false,
 }: {
   message: string;
   detail?: string;
+  /** Sayfanın ana içeriği olmayan bölümlerde daha az yer kaplayan varyant. */
+  compact?: boolean;
 }) {
   const t = useTranslations("common");
 
   return (
-    <div className={styles.emptyState} role="status">
+    <div
+      className={`${styles.emptyState} ${compact ? styles.emptyStateCompact : ""}`}
+      role="status"
+    >
       <span className={styles.emptyStateLabel}>{t("pendingLabel")}</span>
       <p className={styles.emptyStateMessage}>{message}</p>
       {detail ? <p className={styles.emptyStateDetail}>{detail}</p> : null}
