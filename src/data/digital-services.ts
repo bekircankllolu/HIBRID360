@@ -20,12 +20,12 @@ export const digitalServices: DigitalServiceItem[] = [
   {
     title: "Social Content",
     en: "Platform-native content for Instagram, TikTok, YouTube, LinkedIn and beyond.",
-    tr: "Instagram, TikTok, YouTube, LinkedIn ve ötesi için platforma özgü içerik.",
+    tr: "Instagram, TikTok, YouTube, LinkedIn ve diğer mecralara özgü içerikler.",
   },
   {
     title: "Reach & Reactive Content",
     en: "Fast, culturally relevant content designed to capture attention, join conversations and extend brand reach.",
-    tr: "Dikkat çekmek, gündeme dahil olmak ve markanın erişimini genişletmek için hızlı ve kültürel olarak yerinde içerik.",
+    tr: "Dikkat çekmek, gündeme dahil olmak ve marka erişimini genişletmek için hızlı, kültürel bağlama uygun içerikler.",
   },
   {
     title: "Content Production",
@@ -35,7 +35,7 @@ export const digitalServices: DigitalServiceItem[] = [
   {
     title: "Motion & Animation",
     en: "Motion graphics, 2D/3D animation, kinetic typography, transitions and visual effects.",
-    tr: "Motion grafik, 2D/3D animasyon, kinetik tipografi, geçişler ve görsel efektler.",
+    tr: "Hareketli grafikler, 2D/3D animasyon, kinetik tipografi, geçişler ve görsel efektler.",
   },
   {
     title: "CGI & 3D",
@@ -50,12 +50,12 @@ export const digitalServices: DigitalServiceItem[] = [
   {
     title: "Product & Packshot Content",
     en: "High-end product films, photography, digital packshots and visual assets built for campaigns and always-on content.",
-    tr: "Üst segment ürün filmleri, fotoğraf, dijital packshot ve kampanyalarla sürekli yayında içerik için üretilen görsel varlıklar.",
+    tr: "Üst düzey ürün filmleri, fotoğraflar, dijital packshot’lar ve kampanyalar ile sürekli içerik akışları için üretilen görsel varlıklar.",
   },
   {
     title: "Short-Form Video",
     en: "Instagram Reels, TikTok, YouTube Shorts, cutdowns, vertical films and platform-specific edits designed for attention.",
-    tr: "Instagram Reels, TikTok, YouTube Shorts, cutdown’lar, dikey filmler ve dikkat için tasarlanmış platforma özel kurgular.",
+    tr: "Instagram Reels, TikTok, YouTube Shorts, cutdown’lar, dikey filmler ve dikkat çekmek için tasarlanmış platforma özel kurgular.",
   },
   {
     title: "Content Adaptation",
