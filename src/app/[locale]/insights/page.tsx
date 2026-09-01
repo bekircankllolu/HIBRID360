@@ -9,10 +9,9 @@ import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
-// brief-rev12.md Bölüm 20.6 — Insights hero metni. Marka dili kuralı
-// gereği (bkz. CLAUDE.md i18n) her iki locale'de de İngilizce sabit kalır
-// — src/messages/{tr,en}.json içindeki insights.heroTitle/heroSubtitle
-// bilerek aynı İngilizce değeri taşıyor.
+// brief-rev12.md Bölüm 20.6 — Insights hero metni. Başlık ve açıklama
+// gövde içeriğidir; marka sloganı değildir. Bu yüzden TR ve EN
+// locale'lerinde ayrı, onaylı dil düzeni kullanılır.
 
 export async function generateMetadata({
   params,

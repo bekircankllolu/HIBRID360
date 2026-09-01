@@ -33,7 +33,9 @@ görev foto arşiviyle çözülemeyecek türden bir illüstrasyon/3D
 karakter/video prodüksiyonu. Ayrıca "AI Showreel filmi" de ayrı bir
 Ana sayfadaki Film A için küçük sağ üst kadrajdan scroll ile tam ekrana
 büyüyen video sahnesi hazır. Onaylı medya gelene kadar yanlış bir filmi
-showreel diye göstermemek için `src/data/home-showreel.ts` null tutuluyor.
+showreel diye göstermemek için gerçek müşteri işi yerine anonim bir prodüksiyon
+seti posteri kullanılıyor ve arayüzde açıkça AI üretimi temsili görsel olarak
+bildiriliyor. Onaylı Film A hâlâ release girdisi olarak bekleniyor.
 
 ## 3. Görsellerin yayın/telif izni teyit edilmeli
 
@@ -161,9 +163,10 @@ bağlandı**. `kadin.jpg` rıza/kaynak belirsizliği nedeniyle alınmadı.
 ## 9. What We Believe müşteri videosu — prodüksiyon bekliyor
 
 Müşterinin çekeceği konuşma videosu için **hiçbir gerçek dosya yok**.
-Sahte video veya yer tutucu kişi **üretilmedi**; sayfa bu bölüm olmadan
-duruyor. AI showreel filmi (madde 2) ile birlikte iki ayrı prodüksiyon
-blocker'ı.
+Gerçek video gelene kadar müşteri talebiyle anonim, temsili bir röportaj
+posteri üretildi ve ekranda açıkça **AI ile üretilmiş temsili görsel**
+olarak bildiriliyor. Scroll ile büyüyen arayüz tamam; gerçek video,
+poster ve TR/EN altyazılar hâlâ prodüksiyon blocker'ı.
 
 ## 10. Contact görselleri — kaynak doğrulanmadı
 

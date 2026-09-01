@@ -78,9 +78,10 @@ export const BELIEF_IMAGES = {
 /**
  * Kurucu/müşteri konuşma videosu (WWB — scroll ile büyüyen bölüm).
  *
- * GERÇEK VİDEO TESLİM EDİLMEDİ. Sahte kişi, sahte video veya yer tutucu
- * bir "video hazırlanıyor" kutusu **üretilmedi**: değer `null` olduğu
- * sürece bölüm hiç render edilmez (bkz. BeliefFounderVideo).
+ * GERÇEK VİDEO TESLİM EDİLMEDİ. Müşteri talebiyle, gerçek konuşma
+ * videosu gelene kadar açıkça AI üretimi olarak bildirilen anonim ve
+ * temsili bir röportaj posteri kullanılıyor. Bu görsel gerçek bir Hibrid
+ * 360 müşterisini ya da kurucusunu temsil etmez.
  *
  * Varlık gelince tek değişiklik bu sabiti doldurmak:
  *
@@ -123,8 +124,21 @@ export interface BeliefVideoCaption {
 export interface BeliefFounderVideo {
   sources: BeliefVideoSource[];
   poster: { src: string; width: number; height: number };
+  alt: Record<"tr" | "en", string>;
   captions?: BeliefVideoCaption[];
   disclosure?: "ai-generated";
 }
 
-export const BELIEF_FOUNDER_VIDEO: BeliefFounderVideo | null = null;
+export const BELIEF_FOUNDER_VIDEO: BeliefFounderVideo | null = {
+  sources: [],
+  poster: {
+    src: `${WWB}/founder-interview-representative-1600w.webp`,
+    width: 1600,
+    height: 900,
+  },
+  alt: {
+    tr: "Prodüksiyon stüdyosunda röportaj veren anonim yaratıcı profesyoneli gösteren temsili görsel",
+    en: "Representative image of an anonymous creative professional being interviewed in a production studio",
+  },
+  disclosure: "ai-generated",
+};

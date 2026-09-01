@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { PrivacyAwareMap } from "@/components/contact/PrivacyAwareMap";
+import { ContactMap } from "@/components/contact/ContactMap";
 import {
   CONTACT,
   CONTACT_IMAGES,
@@ -200,21 +200,16 @@ export default async function ContactPage({
         </div>
       </section>
 
-      {/* 5 — tam genişlik harita. Google iframe'i yalnızca kullanıcının
-          açık "haritayı yükle" eyleminden sonra oluşturulur. Altındaki
-          yol tarifi bağlantısı üçüncü taraf içeriği yüklemeden de çalışır. */}
+      {/* 5 — tam genişlik harita. Müşteri revizyonu gereği Google Maps
+          iframe'i Contact sayfasıyla birlikte doğrudan yüklenir. */}
       <section className={styles.mapSection} aria-labelledby="contact-map">
         <h2 id="contact-map" className={styles.visuallyHidden}>
           {t("mapTitle")}
         </h2>
-        <PrivacyAwareMap
+        <ContactMap
           className={styles.map}
           src={mapEmbedUrl()}
           title={t("mapTitle")}
-          loadLabel={t("mapLoad")}
-          privacyNote={t("mapPrivacyNote")}
-          addressLabel={t("addressLabel")}
-          addressLines={CONTACT.addressLines}
         />
         <p className={styles.mapFallback}>
           <span>{t("mapNote")}</span>{" "}

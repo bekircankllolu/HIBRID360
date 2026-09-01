@@ -58,9 +58,7 @@
 /* brief 4.1 — "HIBRID" dev tipografi artık WebGL sahnesi olarak render
    ediliyor; ölçü ve yerleşim kuralları HibridWebGL.module.css'te. */
 
-/* HOME-03 — "AI SHOWREEL" film alanı etiketi, sağ üst / menünün altı.
-   Film A varlığı gelene kadar tam ekrana büyüyen etkileşim yok, yalnızca
-   etiket görünür (bkz. bileşen üstündeki TODO notu). */
+/* HOME-03 — "AI SHOWREEL" film alanı etiketi, sağ üst / menünün altı. */
 .showreel {
   position: absolute;
   top: clamp(1.25rem, 3vw, 2.5rem);
@@ -110,6 +108,19 @@
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+.showreelDisclosure {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 1;
+  max-width: calc(100% - var(--space-6));
+  padding: 0.35rem 0.5rem;
+  background: rgb(0 0 0 / 78%);
+  color: var(--color-brand-yellow);
+  font-size: 0.75rem;
+  line-height: 1.35;
 }
 
 @media (max-width: 640px) {

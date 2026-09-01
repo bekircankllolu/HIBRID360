@@ -50,7 +50,8 @@
     "showreel": {
       "label": "AI SHOWREEL",
       "cta": "Move your cursor",
-      "touchCta": "Tap the screen"
+      "touchCta": "Tap the screen",
+      "representative": "AI-generated representative showreel visual"
     },
     "lessTalk": {
       "title": "Less Talk, More Work",
@@ -180,8 +181,6 @@
     "socialInvite": "Follow the work",
     "mapTitle": "Hibrid 360 office location on Google Maps",
     "mapNote": "The map is loaded from Google Maps.",
-    "mapLoad": "Load map",
-    "mapPrivacyNote": "The map loads from Google only after you select this button. This action establishes a connection with Google.",
     "addressLabel": "Address",
     "phoneLabel": "Phone",
     "emailLabel": "Email",
@@ -550,7 +549,7 @@
     "subtitles": "Subtitles",
     "playShowreel": "Play showreel",
     "watchFilm": "Watch the film",
-    "aiGenerated": "AI-generated animation"
+    "aiGenerated": "AI-generated representative visual"
   },
   "contactForm": {
     "name": "Your name",

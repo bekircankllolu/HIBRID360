@@ -96,6 +96,7 @@
 }
 
 .language {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -110,24 +111,54 @@
   line-height: 1;
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
+  animation: languageIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.language:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.language::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .language[aria-current="true"]::before {
   content: "";
-  width: 0.7rem;
-  height: 0.7rem;
+  width: 0.8rem;
+  height: 0.8rem;
   margin-right: 1rem;
-  background: var(--color-brand-fuchsia);
+  border: 3px solid var(--color-brand-fuchsia);
   border-radius: 50%;
+  animation: currentPulse 2.4s ease-in-out infinite;
 }
 
 .language[aria-current="true"] > :first-child {
   margin-right: auto;
 }
 
-.language:hover,
-.language:focus-visible {
-  background: var(--color-brand-yellow);
+.languageName {
+  margin-right: auto;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.language:hover::after,
+.language:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.language:hover .languageName,
+.language:focus-visible .languageName {
+  transform: translateX(clamp(0.5rem, 1.5vw, 1rem));
 }
 
 .languageCode {
@@ -184,6 +215,27 @@
   }
 }
 
+@keyframes languageIn {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes currentPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.72);
+  }
+}
+
 @media (max-width: 520px) {
   .trigger,
   .close {
@@ -204,5 +256,15 @@
 @media (prefers-reduced-motion: reduce) {
   .panel {
     animation: none;
+  }
+
+  .language,
+  .language[aria-current="true"]::before {
+    animation: none;
+  }
+
+  .language::after,
+  .languageName {
+    transition: none;
   }
 }

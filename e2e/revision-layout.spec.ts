@@ -66,6 +66,42 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
   ).toBeLessThanOrEqual(0);
 });
 
+test("representative showreel expands from the top-right frame to the viewport", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/tr");
+  await acceptCookies(page);
+
+  const frame = page.locator('[class*="HeroTypography_showreelFrame"]');
+  await expect(
+    frame.getByRole("img", { name: /temsili AI showreel görseli/ }),
+  ).toBeVisible();
+  await expect(
+    frame.getByText("AI ile üretilmiş temsili showreel görseli"),
+  ).toBeVisible();
+
+  const initial = (await frame.boundingBox())!;
+  expect(initial.width).toBeLessThan(600);
+  expect(initial.height).toBeLessThan(400);
+  expect(initial.x).toBeGreaterThan(800);
+
+  await page.evaluate(() => {
+    const stage = document.querySelector('[class*="HeroTypography_stage"]');
+    if (!stage) return;
+    const rect = stage.getBoundingClientRect();
+    const stageTop = window.scrollY + rect.top;
+    window.scrollTo(0, stageTop + rect.height - window.innerHeight);
+  });
+
+  await expect
+    .poll(async () => (await frame.boundingBox())?.width ?? 0)
+    .toBeGreaterThan(1438);
+  const expanded = (await frame.boundingBox())!;
+  expect(expanded.x).toBeLessThanOrEqual(1);
+  expect(expanded.height).toBeGreaterThan(800);
+});
+
 test("language dialog and mobile menu remain unclipped", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/tr");

@@ -4,7 +4,6 @@ import en from "@/messages/en.json";
 import tr from "@/messages/tr.json";
 import { MAIN_NAV, MAIN_NAV_PATHS, SECONDARY_NAV } from "@/data/navigation";
 import { SERVICE_CATALOG, SERVICE_PATHS } from "@/data/services";
-import { SERVICE_LINKS } from "@/data/service-links";
 
 /**
  * 29 Ağustos 2026 revizyonunun sözleşmesini kilitleyen testler.
@@ -34,14 +33,9 @@ describe("hizmet kataloğu", () => {
   it("Photography'yi hizmet olarak listelemez", () => {
     const surfaces = [
       ...SERVICE_CATALOG.map((service) => `${service.name} ${service.href}`),
-      ...SERVICE_LINKS.map((link) => `${link.label} ${link.href}`),
       ...MAIN_NAV_PATHS,
     ].join(" ");
     expect(surfaces.toLowerCase()).not.toContain("photograph");
-  });
-
-  it("ana sayfa hizmet satırı katalogla birebir aynı sırada", () => {
-    expect(SERVICE_LINKS.map((link) => link.href)).toEqual(SERVICE_PATHS);
   });
 
   it.each(["tr", "en"] as const)(

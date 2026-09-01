@@ -3,7 +3,6 @@ import { HeroTypography } from "@/components/hero/HeroTypography";
 import { RotatingSlogans } from "@/components/hero/RotatingSlogans";
 import { SolarSystem } from "@/components/hero/SolarSystem";
 import { LessTalk } from "@/components/home/LessTalk";
-import { ServiceLinksRow } from "@/components/home/ServiceLinksRow";
 import { MakeBrandBand } from "@/components/home/MakeBrandBand";
 import { Tagline } from "@/components/home/Tagline";
 import { ReachOut } from "@/components/home/ReachOut";
@@ -23,13 +22,12 @@ import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@
  *   01-03 HeroTypography (dev tipografi + hero sloganı + showreel sahnesi)
  *   04    RotatingSlogans
  *   05    LessTalk
- *   06    ServiceLinksRow
- *   07    MakeBrandBand
- *   08    SolarSystem
- *   09    Tagline
- *   10    ReachOut
- *   11    ClosingBand
- *   12    ClosingBody
+ *   06    MakeBrandBand
+ *   07    SolarSystem
+ *   08    Tagline
+ *   09    ReachOut
+ *   10    ClosingBand
+ *   11    ClosingBody
  *
  * TODO: brief Bölüm 4 KARAR — "İlk ziyaretten sonra animasyonun kısa
  * sürümü gösterilir (çerezle hatırlanır)": çerez onay bandı kuruldu, rıza
@@ -77,7 +75,6 @@ export default async function HomePage({
       <HeroTypography />
       <RotatingSlogans />
       <LessTalk />
-      <ServiceLinksRow />
       <MakeBrandBand />
       <SolarSystem />
       <Tagline />

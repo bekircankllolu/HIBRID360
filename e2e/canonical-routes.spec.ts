@@ -182,7 +182,7 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
   });
 
   for (const locale of LOCALES) {
-    test(`/${locale}/contact — harita açık eylemden sonra yükleniyor`, async ({
+    test(`/${locale}/contact — harita sayfayla birlikte yükleniyor`, async ({
       page,
     }) => {
       await seedConsent(page);
@@ -193,19 +193,12 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
       );
       const map = mapSection.locator("iframe");
 
-      // Contact açılışında Google'a üçüncü taraf isteği başlatılmaz.
-      await expect(map).toHaveCount(0);
-      await mapSection
-        .getByRole("button", {
-          name: locale === "tr" ? "Haritayı yükle" : "Load map",
-        })
-        .click();
+      // Müşteri revizyonu: ara yükleme ekranı yok, iframe doğrudan görünür.
       await expect(map).toHaveCount(1);
 
       const title = await map.getAttribute("title");
       expect(title?.trim().length ?? 0).toBeGreaterThan(10);
-      // Tembel yükleme zorunlu (CLAUDE.md performans bütçesi).
-      await expect(map).toHaveAttribute("loading", "lazy");
+      await expect(map).toHaveAttribute("loading", "eager");
 
       // Harita yüklenmese/engellense de adrese ulaşılabilmeli.
       const fallback = page.locator('a[href*="google.com/maps/dir"]');
@@ -315,6 +308,12 @@ test.describe("Görseller", () => {
     await expect(
       page.getByRole("img", { name: /bir pencerenin yanında/ }),
     ).toHaveCount(1);
+    await expect(
+      page.getByRole("img", { name: /anonim yaratıcı profesyoneli/ }),
+    ).toHaveCount(1);
+    await expect(
+      page.getByText("AI ile üretilmiş temsili görseldir"),
+    ).toBeVisible();
 
     await page.goto("/en/what-we-believe");
     await expect(
@@ -323,5 +322,11 @@ test.describe("Görseller", () => {
     await expect(page.getByRole("img", { name: /Küçük Prens/ })).toHaveCount(
       0,
     );
+    await expect(
+      page.getByRole("img", { name: /anonymous creative professional/ }),
+    ).toHaveCount(1);
+    await expect(
+      page.getByText("AI-generated representative visual"),
+    ).toBeVisible();
   });
 });

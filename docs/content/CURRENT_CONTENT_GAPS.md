@@ -68,7 +68,7 @@ kapattı (6, 14).**
 | **Bugün ne var** | Adres deck'ten alındı ve kullanılıyor. Yol tarifi bağlantısı **uydurma bir place-id değil**, adresten türetilen resmi Google Maps `dir/?api=1` şeması |
 | **Kodda nerede** | `src/lib/site.ts` → `CONTACT.addressLines` · `src/app/[locale]/contact/page.tsx` |
 | **⚠️ 29 Ağu 2026 bulgusu** | Eski site (© 2020) **farklı** bir adres gösteriyor: *Cemil Topuzlu Caddesi Çiftehavuzlar, 18 Mart Sokak Yapı Kredi Evleri B Blok 9/20, Kadıköy / İstanbul*. İkisi de Kadıköy — muhtemelen taşınma olmuş. Kodda deck adresi duruyor (daha yeni ve onaylı); eski adres koda **girmedi** |
-| **Harita durumu** | Anahtarsız Google Maps sorgu gömmesi kullanılıyor. Üçüncü taraf iframe sayfa açılışında oluşmuyor; yalnızca kullanıcı “Haritayı yükle” dediğinde yükleniyor. Adres ve yol tarifi bağlantısı haritadan bağımsız çalışıyor |
+| **Harita durumu** | Anahtarsız Google Maps sorgu gömmesi kullanılıyor. 30 Ağustos müşteri revizyonuyla üçüncü taraf iframe Contact sayfasıyla birlikte doğrudan yükleniyor. Adres ve yol tarifi bağlantısı haritadan bağımsız çalışıyor |
 
 ## 5. 🔴 Müşteri listesi — 5 isim doğrulama bekliyor
 
@@ -228,9 +228,9 @@ kapattı (6, 14).**
 |---|---|
 | **Karar** | Google Haritalar açıklaması TR/EN Çerez Politikası'na eklendi |
 | **Neden gerekli** | Google iframe'i IP adresi ve tarayıcı bilgisini üçüncü tarafa aktarabilir; bu nedenle otomatik yüklenmemeli ve politika metninde açıklanmalı |
-| **Bugün ne var** | Harita **anahtarsız Google Maps sorgu gömmesi** ile çalışıyor ancak iframe yalnızca açık “Haritayı yükle” eyleminden sonra oluşturuluyor. Politika metni sağlayıcıyı ve veri aktarımını açıklıyor; yol tarifi bağlantısı haritadan bağımsız çalışıyor |
+| **Bugün ne var** | Harita **anahtarsız Google Maps sorgu gömmesi** ile çalışıyor ve iframe Contact sayfasıyla birlikte doğrudan yükleniyor. Politika metni sağlayıcıyı ve veri aktarımını açıklıyor; yol tarifi bağlantısı haritadan bağımsız çalışıyor |
 | **Kodda nerede** | `src/data/contact.ts` → `mapEmbedUrl()` · `src/app/[locale]/contact/page.tsx` · `src/data/policies/cookie.ts` |
-| **Doğrulama** | `e2e/canonical-routes.spec.ts` haritanın başlangıçta bulunmadığını ve kullanıcı eyleminden sonra erişilebilir adla yüklendiğini kontrol ediyor |
+| **Doğrulama** | `e2e/canonical-routes.spec.ts` haritanın sayfa açılışında erişilebilir adla yüklendiğini kontrol ediyor |
 
 ## 19. 🟠 Solutions sayfası giriş paragrafı yok
 

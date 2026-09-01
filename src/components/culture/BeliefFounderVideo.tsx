@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   BELIEF_FOUNDER_VIDEO,
   type BeliefFounderVideo as BeliefVideo,
@@ -42,6 +42,7 @@ export function BeliefFounderVideo() {
 
 function BeliefFounderVideoStage({ video }: { video: BeliefVideo }) {
   const t = useTranslations("video");
+  const locale = useLocale() as "tr" | "en";
   const prefersReduced = usePrefersReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -111,50 +112,55 @@ function BeliefFounderVideoStage({ video }: { video: BeliefVideo }) {
       className={`${styles.wrapper} ${prefersReduced ? styles.wrapperStatic : ""}`}
     >
       <div ref={stageRef} className={styles.stage}>
-        <div className={styles.media}>
-          {playable ? (
-            <video
-              className={styles.video}
-              poster={video.poster.src}
-              width={video.poster.width}
-              height={video.poster.height}
-              controls
-              // Otomatik ses YASAK (CLAUDE.md) — sessiz başlar, sesi
-              // kullanıcı açar. autoPlay bilerek yok.
-              muted
-              playsInline
-              preload="none"
-            >
-              {video.sources.map((source) => (
-                <source key={source.src} src={source.src} type={source.type} />
-              ))}
-              {video.captions?.map((caption) => (
-                <track
-                  key={caption.src}
-                  kind="captions"
-                  src={caption.src}
-                  srcLang={caption.srcLang}
-                  label={caption.label}
-                />
-              ))}
-            </video>
-          ) : (
-            // Kontrollü poster modu: video henüz yok ama görsel hazır.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              className={styles.video}
-              src={video.poster.src}
-              width={video.poster.width}
-              height={video.poster.height}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
+        <figure className={styles.mediaFigure}>
+          <div className={styles.media}>
+            {playable ? (
+              <video
+                className={styles.video}
+                poster={video.poster.src}
+                width={video.poster.width}
+                height={video.poster.height}
+                controls
+                aria-label={video.alt[locale]}
+                // Otomatik ses YASAK (CLAUDE.md) — sessiz başlar, sesi
+                // kullanıcı açar. autoPlay bilerek yok.
+                muted
+                playsInline
+                preload="none"
+              >
+                {video.sources.map((source) => (
+                  <source key={source.src} src={source.src} type={source.type} />
+                ))}
+                {video.captions?.map((caption) => (
+                  <track
+                    key={caption.src}
+                    kind="captions"
+                    src={caption.src}
+                    srcLang={caption.srcLang}
+                    label={caption.label}
+                  />
+                ))}
+              </video>
+            ) : (
+              // Kontrollü poster modu: video henüz yok ama görsel hazır.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className={styles.video}
+                src={video.poster.src}
+                width={video.poster.width}
+                height={video.poster.height}
+                alt={video.alt[locale]}
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </div>
+          {video.disclosure === "ai-generated" && (
+            <figcaption className={styles.disclaimer}>
+              {t("aiGenerated")}
+            </figcaption>
           )}
-        </div>
-        {video.disclosure === "ai-generated" && (
-          <p className={styles.disclaimer}>{t("aiGenerated")}</p>
-        )}
+        </figure>
       </div>
     </div>
   );

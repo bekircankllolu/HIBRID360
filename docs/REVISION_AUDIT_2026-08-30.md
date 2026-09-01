@@ -11,7 +11,7 @@
 | 1 — Header + mega menü | Tamamlandı | `Header.tsx`, `navigation.ts`; sol marka, sağ navigasyon ve açılır sütunlar |
 | 2 — Dünya ikonlu dil seçimi | Tamamlandı | `LanguageSwitcher.tsx`; TR/EN düğmeleri kaldırıldı, tam ekran dil paneli var |
 | 3 — Full-screen hero yerleşimi | Tamamlandı | `HeroTypography`, `HibridWebGL`; HIBRID alt-sol kompozisyon ve viewport kullanımı |
-| 4 — Sağ üst video scroll ile büyüsün | Uygulama tamam, medya bekliyor | `HeroTypography.tsx` + `home-showreel.ts`; küçük kadraj → tam viewport scroll sahnesi hazır. Onaylı Film A dosyası henüz yok |
+| 4 — Sağ üst video scroll ile büyüsün | Temsili sürüm tamam, gerçek medya bekliyor | `HeroTypography.tsx` + `home-showreel.ts`; sağ üstteki anonim temsili AI showreel posteri scroll ile tam viewport'a büyüyor. Onaylı Film A geldiğinde aynı veri kaynağına MP4/WebM eklenir |
 | 5 — Ortalı Monks tipi metin düzeni | Tamamlandı | `LessTalk` ve ilgili ana sayfa metin bantları |
 | 6 — Ekosistem sahnesi | Tamamlandı | `SolarSystem`; tam genişlik yıldız alanı, HIBRID 360, sarı başlık, büyük isimli noktalar, tık/drag/orbit/partikül/popup/reduced-motion |
 | 7 — MONA ana sayfadan kalksın | Tamamlandı | MONA yalnızca `what-we-do/ai-creative-production` rotasında |
@@ -19,9 +19,9 @@
 | 9 — BASIC tipi footer | Tamamlandı | Tipografik footer, iletişim ve kolonlar; 390 px e-posta taşması da düzeltildi |
 | 10 — Hizmet detay sayfaları | Tamamlandı | Creative, Production, Post Production, Digital, Live Broadcast, Cloud TV, Event Management, AI Creative Production ve ek servis rotaları mevcut |
 | 11 — Büyük görseller tam ekran | Tamamlandı | Ortak servis görseli full-bleed ve en az `100svh`; yatay taşma e2e ile denetleniyor |
-| 12 — Contact eski yapı + harita | Tamamlandı | İstanbul panorama, sarı iletişim bölümü, tam genişlik harita; Google iframe açık kullanıcı eyleminden sonra yükleniyor |
+| 12 — Contact eski yapı + harita | Tamamlandı | İstanbul panorama, sarı iletişim bölümü, tam genişlik harita; müşteri talebi doğrultusunda Google iframe sayfayla birlikte doğrudan yükleniyor |
 | 13 — Clients tipografik marka dizini | Tamamlandı | Siyah zemin üzerinde çerçevesiz beyaz marka adları; solda doğrulanmış veriden türetilen alfabetik gezinme rayı var. Logo ve uydurma sektör kategorisi yok |
-| 14 — What We Believe | Uygulama tamam, medya belgesi bekliyor | Atatürk/Küçük Prens alanları, eski menü sırası ve scroll ile büyüyen kurucu video bileşeni hazır. Gerçek konuşma videosu ve nihai hak dosyası release girdisi |
+| 14 — What We Believe | Temsili sürüm tamam, gerçek medya bekliyor | Atatürk/Küçük Prens alanları, eski menü sırası ve scroll ile büyüyen röportaj sahnesi hazır. Gerçek video gelene kadar açık AI bildirimi taşıyan anonim temsili poster kullanılıyor; gerçek konuşma videosu ve nihai hak dosyası release girdisi |
 | 15 — Work / RECENT | Uygulama tamam, envanter bekliyor | Büyük RECENT başlığı, Yıl/Hizmet/Sektör filtreleri, 4/2/1 kolon grid, iki dilli proje başlıkları ve vaka şablonu hazır. Gerçek iş kartları müşteri envanteriyle açılacak |
 
 ## Uygulama dışı teslim listesi

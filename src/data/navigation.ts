@@ -28,8 +28,8 @@
  * ## Tek kaynak
  *
  * `Header.tsx` ve `Footer.tsx` menüyü artık burada tanımlı dizilerden
- * üretiyor; o dosyalarda paralel `NAV_ITEMS` / `SERVICE_LINKS` /
- * `FOOTER_NAV` listeleri yok. Yeni bir menü maddesi yalnızca buraya
+ * üretiyor; o dosyalarda paralel `NAV_ITEMS` / `FOOTER_NAV` listeleri
+ * yok. Yeni bir menü maddesi yalnızca buraya
  * eklenir, hizmet maddesi ise `src/data/services.ts` içine.
  */
 import { SERVICE_CATALOG } from "@/data/services";

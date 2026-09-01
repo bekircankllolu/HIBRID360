@@ -200,9 +200,9 @@ export default async function WhatWeBelievePage({
         </figcaption>
       </figure>
 
-      {/* Müşteri konuşma videosu. Varlık teslim edilene kadar bileşen
-          hiçbir şey render etmez — "video hazırlanıyor" kutusu yok,
-          sahte kişi/video üretilmedi (bkz. BELIEF_FOUNDER_VIDEO). */}
+      {/* Gerçek müşteri konuşma videosu teslim edilene kadar aynı scroll
+          sahnesi, açıkça AI üretimi olduğu belirtilen temsili posterle
+          çalışır. Gerçek medya geldiğinde yalnızca veri kaynağı değişir. */}
       <BeliefFounderVideo />
     </div>
   );

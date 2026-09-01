@@ -16,9 +16,8 @@
  * Tek satırlık tanımlar çevrilir; onlar `messages/*.json` →
  * `whatWeDo.items.<id>` altındadır.
  *
- * Bu dosyayı tüketen yüzeyler: What We Do hub'ı, ana sayfa hizmet linkleri
- * satırı (src/data/service-links.ts), navigasyon mega menüsü
- * (src/data/navigation.ts), sitemap.
+ * Bu dosyayı tüketen yüzeyler: What We Do hub'ı, navigasyon mega menüsü
+ * (src/data/navigation.ts) ve sitemap.
  *
  * NOT: src/data/solar-system.ts bu katalogdan **bilerek** beslenmiyor.
  * O dosya Codex'in sahipliğinde; ekosistem sahnesindeki Photography

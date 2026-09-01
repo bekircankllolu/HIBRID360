@@ -122,7 +122,9 @@ export function LanguageSwitcher({
                     aria-current={isCurrent ? "true" : undefined}
                     onClick={() => switchLocale(loc)}
                   >
-                    <span>{loc === "tr" ? "Türkçe" : "English"}</span>
+                    <span className={styles.languageName}>
+                      {loc === "tr" ? "Türkçe" : "English"}
+                    </span>
                     <span className={styles.languageCode}>
                       {loc.toUpperCase()}
                     </span>

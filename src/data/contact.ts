@@ -63,11 +63,12 @@ export function directionsUrl(): string {
  *
  * Sorgu gömmesi (`?q=<adres>&output=embed`) anahtar istemez ve
  * koordinat değil **adres metni** alır — yani doğrulanmış tek veriyi
- * kullanır, hiçbir şey uydurmaz. iframe `loading="lazy"`.
+ * kullanır, hiçbir şey uydurmaz. 30 Ağustos müşteri revizyonu uyarınca
+ * iframe sayfayla birlikte ve `loading="eager"` olarak yüklenir.
  *
- * KVKK NOTU — AÇIK: iframe üçüncü taraf (Google) içeriğidir ve çerez
- * yazabilir. Çerez politikası metnine üçüncü taraf satırı eklenmeli;
- * bkz. docs/content/CURRENT_CONTENT_GAPS.md.
+ * KVKK notu: iframe üçüncü taraf (Google) içeriğidir ve çerez yazabilir.
+ * Bu aktarım TR/EN Çerez Politikası'nda açıklanır; hukuki nihai onay
+ * yayın kapısında ayrıca alınmalıdır.
  */
 export function mapEmbedUrl(): string {
   return `https://www.google.com/maps?q=${encodeURIComponent(

@@ -165,7 +165,7 @@ müşteri tarafından bildirildi.
 
 | Konu | Durum | Nerede |
 |---|---|---|
-| Harita sağlayıcısı | **KAPANDI** — anahtarsız Google Maps sorgu gömmesi; iframe yalnızca kullanıcının açık yükleme eyleminden sonra oluşturulur, yol tarifi bağlantısı haritadan bağımsızdır | `src/data/contact.ts` · `PrivacyAwareMap.tsx` |
+| Harita sağlayıcısı | **KAPANDI** — anahtarsız Google Maps sorgu gömmesi; 30 Ağustos müşteri revizyonuyla iframe Contact sayfasıyla birlikte doğrudan yüklenir, yol tarifi bağlantısı haritadan bağımsızdır | `src/data/contact.ts` · `ContactMap.tsx` |
 | Clients gövde metni çelişkisi | **AÇIK** — deck metni "onlara müşteri değil, dost diyoruz" diyor, sayfa adı artık Clients | CURRENT_CONTENT_GAPS.md madde 18 |
 | Contact adresi | **AÇIK** — eski site (2020) ile deck (Ağu 2026) farklı adres veriyor | CURRENT_CONTENT_GAPS.md madde 4 |
 | Solutions giriş paragrafı | **AÇIK** — eski sayfada yoktu, müşteriden isteniyor | CURRENT_CONTENT_GAPS.md madde 19 |

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { HOME_SHOWREEL } from "@/data/home-showreel";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import type { Locale } from "@/i18n/routing";
 import { HibridWebGL } from "./HibridWebGL";
 import styles from "./HeroTypography.module.css";
@@ -25,15 +26,49 @@ import styles from "./HeroTypography.module.css";
  * çalışabiliyor — "aynı anda en fazla BİR sahne" kuralı korunuyor.
  *
  * HOME-03 — showreel küçük sağ üst kadrajdan başlar ve sayfa kaydırıldıkça
- * viewport'u kaplar. Medya teslim edilene kadar yanlış bir filmi temsil
- * etmemek için yalnızca etiket görünür; src/data/home-showreel.ts dolduğu
- * anda aynı bileşen scroll sahnesini etkinleştirir.
+ * viewport'u kaplar. Gerçek medya teslim edilene kadar açıkça temsili
+ * olduğu belirtilen poster aynı scroll sahnesinde gösterilir; onaylı
+ * video geldiğinde yalnızca src/data/home-showreel.ts güncellenir.
  */
 export function HeroTypography() {
   const t = useTranslations("home");
   const locale = useLocale() as Locale;
   const stageRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [showreelInView, setShowreelInView] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
   const hasShowreel = HOME_SHOWREEL !== null;
+  const hasPlayableShowreel = Boolean(
+    HOME_SHOWREEL?.mp4 || HOME_SHOWREEL?.webm,
+  );
+
+  useEffect(() => {
+    if (!hasShowreel) return;
+
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowreelInView(entry.isIntersecting),
+      { rootMargin: "20% 0px", threshold: 0.01 },
+    );
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, [hasShowreel]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (showreelInView && !prefersReducedMotion) {
+      void video.play().catch(() => {
+        // Tarayıcı otomatik oynatmayı engellerse poster görünmeye devam eder.
+      });
+      return;
+    }
+
+    video.pause();
+  }, [prefersReducedMotion, showreelInView]);
 
   useEffect(() => {
     if (!hasShowreel) return;
@@ -102,21 +137,42 @@ export function HeroTypography() {
 
         {HOME_SHOWREEL && (
           <div className={styles.showreelFrame}>
-            <video
-              className={styles.showreelVideo}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster={HOME_SHOWREEL.poster}
-              aria-label={HOME_SHOWREEL.title[locale]}
-            >
-              {HOME_SHOWREEL.webm && (
-                <source src={HOME_SHOWREEL.webm} type="video/webm" />
-              )}
-              <source src={HOME_SHOWREEL.mp4} type="video/mp4" />
-            </video>
+            {hasPlayableShowreel ? (
+              <video
+                ref={videoRef}
+                className={styles.showreelVideo}
+                muted
+                loop
+                playsInline
+                preload="none"
+                poster={HOME_SHOWREEL.poster}
+                aria-label={HOME_SHOWREEL.title[locale]}
+              >
+                {HOME_SHOWREEL.webm && (
+                  <source src={HOME_SHOWREEL.webm} type="video/webm" />
+                )}
+                {HOME_SHOWREEL.mp4 && (
+                  <source src={HOME_SHOWREEL.mp4} type="video/mp4" />
+                )}
+              </video>
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className={styles.showreelVideo}
+                src={HOME_SHOWREEL.poster}
+                width={1600}
+                height={900}
+                alt={HOME_SHOWREEL.title[locale]}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
+            )}
+            {HOME_SHOWREEL.disclosure === "ai-generated" && (
+              <span className={styles.showreelDisclosure}>
+                {t("showreel.representative")}
+              </span>
+            )}
           </div>
         )}
       </div>

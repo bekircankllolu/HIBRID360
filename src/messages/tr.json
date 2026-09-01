@@ -50,7 +50,8 @@
     "showreel": {
       "label": "AI SHOWREEL",
       "cta": "İmleci hareket ettirin",
-      "touchCta": "Ekrana dokunun"
+      "touchCta": "Ekrana dokunun",
+      "representative": "AI ile üretilmiş temsili showreel görseli"
     },
     "lessTalk": {
       "title": "Az Laf, Çok İş",
@@ -75,8 +76,8 @@
     "closingBody": "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz. Tam da bu yüzden her iş için ayrı bir prodüksiyon modeli, size özel bir çözüm kuruyoruz."
   },
   "insights": {
-    "heroTitle": "WHAT WE LEARNED MAKING IT.",
-    "heroSubtitle": "Numbers, methods and mistakes from our own productions — written by the people who ran them.",
+    "heroTitle": "ÜRETİRKEN ÖĞRENDİKLERİMİZ.",
+    "heroSubtitle": "Kendi prodüksiyonlarımızdan sayılar, yöntemler ve hatalar; doğrudan işi yürütenlerden.",
     "categoryLabel": "Kategori",
     "categoryAll": "Tümü",
     "comingSoon": "İlk yazılar hazırlanıyor.",
@@ -150,7 +151,7 @@
     ]
   },
   "contact": {
-    "heroTitle": "GET IN TOUCH AND LET’S START SOMETHING GREAT TOGETHER",
+    "heroTitle": "İLETİŞİME GEÇELİM VE BİRLİKTE HARİKA BİR ŞEY BAŞLATALIM",
     "heroLead1": "Sizden haber almak isteriz.",
     "heroLead2": "Merhaba deyin",
     "heroBody": "Bağlantı kurmayı seviyoruz — kısa bir merhaba, derin bir yaratıcı iş birliği ya da sosyal medyada bir takip; hepsi olur. Merhaba deyin, ürettiklerimizi takipte kalın!",
@@ -180,8 +181,6 @@
     "socialInvite": "İşleri takip edin",
     "mapTitle": "Hibrid 360 ofisinin Google Haritalar üzerindeki konumu",
     "mapNote": "Harita Google Haritalar üzerinden yüklenir.",
-    "mapLoad": "Haritayı yükle",
-    "mapPrivacyNote": "Harita, yalnızca bu düğmeyi seçtiğinizde Google üzerinden yüklenir. Bu işlem Google ile bağlantı kurulmasına neden olur.",
     "addressLabel": "Adres",
     "phoneLabel": "Telefon",
     "emailLabel": "E-posta",
@@ -349,7 +348,7 @@
         "Giderek daha çok şirket; “Cloudtivi” üzerinden çalışanlarına, bayi ağına ve kullanıcılarına doğrudan ulaşıyor — kendi mekânında ve hibrit video içerikle, profesyonel bir yönetmen ekibiyle yapılan canlı yayınlarla.",
         "Hibrid 360, sürükleyici bir TV kanalının yaptığı her şeyi markanız adına yapar — dahasını da."
       ],
-      "solutionsTitle": "WHAT ARE HIBRID SOLUTIONS?"
+      "solutionsTitle": "HIBRID ÇÖZÜMLERİ NELERDİR?"
     },
     "eventManagement": {
       "body": [
@@ -550,7 +549,7 @@
     "subtitles": "Altyazı",
     "playShowreel": "Showreel’i oynat",
     "watchFilm": "Filmi izle",
-    "aiGenerated": "AI ile canlandırılmıştır"
+    "aiGenerated": "AI ile üretilmiş temsili görseldir"
   },
   "contactForm": {
     "name": "Adınız",
