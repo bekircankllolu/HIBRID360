@@ -7,7 +7,8 @@
  * (fotoğraf, sarı bant, harita) o boşluğu almıyor.
  */
 .page {
-  --gutter: clamp(1rem, 3vw, 3.5rem);
+  /* Ortak token — bkz. src/styles/tokens.css */
+  --gutter: var(--page-gutter);
   width: 100%;
   background: var(--color-brand-black);
   color: var(--color-brand-white);
@@ -68,11 +69,30 @@
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: center;
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+@media (hover: hover) {
+  .figure:hover .figureImage,
+  .figure:focus-within .figureImage {
+    transform: scale(var(--media-zoom-scale));
+  }
 }
 
 @media (min-width: 768px) {
   .figureImage {
     aspect-ratio: 2560 / 750;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figureImage {
+    transition: none;
+  }
+
+  .figure:hover .figureImage,
+  .figure:focus-within .figureImage {
+    transform: none;
   }
 }
 

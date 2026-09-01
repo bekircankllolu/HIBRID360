@@ -10,7 +10,6 @@
  * kuruyor.
  */
 .page {
-  --page-gutter: clamp(1rem, 3vw, 3.5rem);
   width: 100%;
   /* Tam genişlik: içerik konteyneri yok, yalnızca kenar boşluğu. */
   padding: 0 0 clamp(4rem, 8vw, 8rem);

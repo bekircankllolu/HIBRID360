@@ -10,7 +10,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: clamp(3rem, 8vw, 8rem);
-  padding: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 3vw, 3.5rem);
+  padding: clamp(2.5rem, 5vw, 5rem) var(--page-gutter);
 }
 
 .heroTitle {
@@ -31,7 +31,7 @@
 
 .testimonials,
 .cta {
-  margin-inline: clamp(1rem, 3vw, 3.5rem);
+  margin-inline: var(--page-gutter);
 }
 
 .testimonials {

@@ -7,7 +7,7 @@
   align-items: center;
   gap: clamp(1.5rem, 3.5vw, 4rem);
   min-height: 5.5rem;
-  padding: 1rem clamp(1rem, 3vw, 3.5rem);
+  padding: 1rem var(--page-gutter);
   border-block: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -74,14 +74,20 @@
   background: #151515;
 }
 
+/* Medya yakınlaşması ortak token'lardan (bkz. src/styles/tokens.css) —
+   site genelinde aynı ölçü, aynı süre, aynı easing. */
 .image {
   object-fit: cover;
-  transition: transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
 }
 
-.project:hover .image,
-.project:focus-visible .image {
-  transform: scale(1.025);
+/* Yalnızca gerçek imleçte: dokunmatikte :hover bir sonraki dokunuşa kadar
+   yapışık kalıyor. `focus-within` klavye erişimini kapsıyor. */
+@media (hover: hover) {
+  .project:hover .image,
+  .project:focus-within .image {
+    transform: scale(var(--media-zoom-scale));
+  }
 }
 
 .placeholder {
@@ -127,7 +133,7 @@
   min-height: clamp(20rem, 48svh, 34rem);
   display: grid;
   align-content: center;
-  padding: clamp(3rem, 8vw, 8rem) clamp(1rem, 3vw, 3.5rem);
+  padding: clamp(3rem, 8vw, 8rem) var(--page-gutter);
   background:
     linear-gradient(90deg, rgba(255, 0, 222, 0.08), transparent 35%),
     #090909;

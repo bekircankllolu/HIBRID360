@@ -6,7 +6,7 @@
   grid-template-columns: minmax(10rem, 18vw) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 7rem);
   align-items: start;
-  padding: clamp(3rem, 6vw, 6rem) clamp(1rem, 3vw, 3.5rem)
+  padding: clamp(3rem, 6vw, 6rem) var(--page-gutter)
     clamp(5rem, 9vw, 9rem);
 }
 

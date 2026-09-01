@@ -131,7 +131,12 @@
   }
 
   .inner {
-    padding-inline: 0.75rem;
+    /* 0.75rem (12px) idi — mobil için güvenli kenar mesafesinin (16px)
+       altındaydı ve "HYPE THE VIBE..." satırı ekran kenarına yapışıyordu.
+       HIBRID wordmark'ı ile slogan AYNI kapsayıcının dolgusundan
+       beslendiği için ikisi birlikte kayıyor; sol sütun hizası korunuyor
+       (ölçüldü: sapma 0.01px). */
+    padding-inline: 1rem;
   }
 
   .kicker {

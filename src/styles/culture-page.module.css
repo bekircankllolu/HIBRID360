@@ -5,7 +5,7 @@
  */
 .page {
   width: 100%;
-  padding: clamp(5rem, 10vw, 10rem) clamp(1rem, 3vw, 3.5rem);
+  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
 }
 
 .heroTitle {

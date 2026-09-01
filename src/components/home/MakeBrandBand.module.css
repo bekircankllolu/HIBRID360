@@ -20,9 +20,32 @@
   pointer-events: none;
 }
 
+/* Bandın tamamı /work'e giden bir bağlantı; fotoğraf da onun bir parçası.
+   Yakınlaşma ortak token'lardan geliyor (bkz. src/styles/tokens.css).
+   `.band` zaten `overflow: hidden` taşıdığı için büyüyen görsel kenardan
+   taşmıyor ve yalnızca transform kullanıldığı için layout kaymıyor. */
 .image {
   object-fit: cover;
   filter: contrast(1.12) saturate(0.88);
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+@media (hover: hover) {
+  .band:hover .image,
+  .band:focus-visible .image {
+    transform: scale(var(--media-zoom-scale));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+
+  .band:hover .image,
+  .band:focus-visible .image {
+    transform: none;
+  }
 }
 
 .text {

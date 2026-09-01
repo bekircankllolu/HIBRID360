@@ -12,7 +12,7 @@
   /* Bileşen culture sayfasının yatay gutter'ı içinde render edilir.
      Negatif margin aynı gutter'ı geri alır; %100 medya gerçek viewport
      kenarlarına ulaşır ve scroll sonunda tam ekran görünür. */
-  margin-inline: calc(-1 * clamp(1rem, 3vw, 3.5rem));
+  margin-inline: calc(-1 * var(--page-gutter));
 }
 
 .stage {

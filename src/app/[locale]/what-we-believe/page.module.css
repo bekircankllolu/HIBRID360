@@ -18,7 +18,7 @@
      `100vw` KULLANILMIYOR — masaüstünde kaydırma çubuğunun genişliği
      kadar taşıp gövdeye yatay kaydırma ekliyor. Negatif margin
      konteynerin kendi padding'iyle birebir eşleşir, o sorun oluşmaz. */
-  margin-inline: calc(-1 * clamp(1rem, 3vw, 3.5rem));
+  margin-inline: calc(-1 * var(--page-gutter));
   margin-block: clamp(4rem, 9vw, 8rem);
   isolation: isolate;
   overflow: hidden;
@@ -32,6 +32,14 @@
   aspect-ratio: 16 / 9;
   object-fit: cover;
   object-position: center;
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+@media (hover: hover) {
+  .figure:hover .image,
+  .figure:focus-within .image {
+    transform: scale(var(--media-zoom-scale));
+  }
 }
 
 /* Küçük Prens illüstrasyonu 4:3'e yakın; figürü kırpmadan göstermek için
@@ -46,7 +54,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  padding: clamp(3rem, 9vw, 7rem) clamp(1rem, 3vw, 3.5rem)
+  padding: clamp(3rem, 9vw, 7rem) var(--page-gutter)
     clamp(1.5rem, 4vw, 3.5rem);
   background: linear-gradient(
     to top,
@@ -96,4 +104,15 @@
   font-size: clamp(0.8125rem, 1.4vw, 0.9375rem);
   letter-spacing: 0.04em;
   color: var(--color-brand-yellow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+
+  .figure:hover .image,
+  .figure:focus-within .image {
+    transform: none;
+  }
 }

@@ -7,7 +7,6 @@
  * modül paylaşılıyor; her page.tsx kendi JSX kompozisyonunu yapıyor.
  */
 .page {
-  --page-gutter: clamp(1rem, 3vw, 3.5rem);
   width: 100%;
   padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
 }
@@ -85,6 +84,14 @@
 .visualImage {
   object-fit: cover;
   filter: contrast(1.08) saturate(0.92);
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+@media (hover: hover) {
+  .visual:hover .visualImage,
+  .visual:focus-within .visualImage {
+    transform: scale(var(--media-zoom-scale));
+  }
 }
 
 .body {
@@ -297,5 +304,16 @@
   .visual {
     min-height: 76svh;
     margin-block: var(--space-8) var(--space-10);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visualImage {
+    transition: none;
+  }
+
+  .visual:hover .visualImage,
+  .visual:focus-within .visualImage {
+    transform: none;
   }
 }

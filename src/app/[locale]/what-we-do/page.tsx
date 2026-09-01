@@ -83,25 +83,49 @@ export default async function WhatWeDoPage({
               className={`${styles.card} ${image ? "" : styles.cardFeatured}`}
             >
               <Link href={service.href} className={styles.cardLink}>
-                <span className={styles.media} aria-hidden="true">
-                  {image ? (
-                    <Image
-                      className={styles.mediaImage}
-                      src={image.src}
-                      alt=""
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
-                      priority={index < 3}
-                    />
-                  ) : null}
-                </span>
-                <span className={styles.cardBody}>
-                  <span className={styles.cardTitle}>{service.name}</span>
-                  <span className={styles.cardText}>{body}</span>
-                  <span className={styles.cardArrow} aria-hidden="true">
-                    →
-                  </span>
-                </span>
+                {image ? (
+                  <>
+                    <span className={styles.media} aria-hidden="true">
+                      <Image
+                        className={styles.mediaImage}
+                        src={image.src}
+                        alt=""
+                        fill
+                        sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, (max-width: 1439px) 33vw, 25vw"
+                        /* Kadraj odağı görselin kendi kaydından gelir;
+                           panoramik kareler merkezden kırpılınca konu
+                           ortadan kesilebiliyor (bkz. site-images.ts). */
+                        style={{ objectPosition: image.focus }}
+                        priority={index < 3}
+                      />
+                    </span>
+                    <span className={styles.cardBody}>
+                      <span className={styles.cardTitle}>{service.name}</span>
+                      <span className={styles.cardText}>{body}</span>
+                      <span className={styles.cardArrow} aria-hidden="true">
+                        →
+                      </span>
+                    </span>
+                  </>
+                ) : (
+                  /* Fotoğrafı olmayan hizmet: medya oranının içine tipografik
+                     kapak. Ad burada büyük punto durduğu için gövdede
+                     tekrarlanmıyor; bağlantının erişilebilir adı yine
+                     "ad + açıklama" olarak okunuyor. */
+                  <>
+                    <span className={styles.featuredPoster}>
+                      <span className={styles.featuredPosterText}>
+                        {service.name}
+                      </span>
+                    </span>
+                    <span className={styles.cardBody}>
+                      <span className={styles.cardText}>{body}</span>
+                      <span className={styles.cardArrow} aria-hidden="true">
+                        →
+                      </span>
+                    </span>
+                  </>
+                )}
               </Link>
             </li>
           );

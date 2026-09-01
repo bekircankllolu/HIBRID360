@@ -79,4 +79,33 @@
   /* Layout */
   --content-max-width: 1440px;
   --header-height: 4.5rem;
+
+  /**
+   * Sayfa yatay kenar boşluğu — TEK KAYNAK.
+   *
+   * Daha önce her modül kendi `clamp(1rem, 3vw, 3.5rem)` kopyasını
+   * taşıyordu; aynı değerin farklı yerlerde tekrarlanması zamanla
+   * ayrışıyordu. Modüller artık bu token'ı okuyor.
+   *
+   * Ölçülen değerler (hedef: mobil ≥16px, tablet 24–32px, masaüstü 40–56px):
+   *   320px → 18px · 390px → 20px · 768px → 27px
+   *   1024px → 33px · 1440px → 41px · 1920px → 50px · 2560px+ → 56px
+   *
+   * Eski `3vw` terimi 768px'te 23px veriyordu, yani tablet bandının
+   * altında kalıyordu; sabit tabanlı `2vw + 0.75rem` her bandı tutturuyor
+   * ve dar ekranda da 16px'in altına düşmüyor.
+   */
+  --page-gutter: clamp(1rem, 2vw + 0.75rem, 3.5rem);
+
+  /**
+   * Medya hover yakınlaştırması — TEK KAYNAK.
+   *
+   * Yalnızca bağlantı/etkileşim içindeki gerçek fotoğraflara uygulanır.
+   * Ölçü bilinçli olarak küçük: fotoğraf "hareket ediyor" gibi değil,
+   * "canlanıyor" gibi durmalı. Yalnızca `transform` kullanılır — layout
+   * değişmez, dolayısıyla CLS üretmez.
+   */
+  --media-zoom-scale: 1.035;
+  --media-zoom-duration: 560ms;
+  --media-zoom-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }

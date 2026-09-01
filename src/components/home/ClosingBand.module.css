@@ -23,6 +23,14 @@
 .image {
   object-fit: cover;
   filter: grayscale(1) contrast(1.08);
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+@media (hover: hover) {
+  .band:hover .image,
+  .band:focus-within .image {
+    transform: scale(var(--media-zoom-scale));
+  }
 }
 
 .content {
@@ -52,4 +60,15 @@
 
 .button:hover {
   transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+
+  .band:hover .image,
+  .band:focus-within .image {
+    transform: none;
+  }
 }

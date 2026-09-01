@@ -235,7 +235,11 @@
   font-size: 0.8125rem;
   opacity: 0.58;
   text-align: center;
-  max-width: 24rem;
+  /* 390px'te metin ekran kenarına 11px kalıyordu — mobil için güvenli
+     kenar mesafesinin (16px) altında. `max-width` artık kenar boşluğunu
+     da hesaba katıyor, böylece not her ekranda ortak gutter'ın içinde
+     kalıyor. */
+  max-width: min(24rem, 100% - 2 * var(--page-gutter));
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
