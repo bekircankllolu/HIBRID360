@@ -167,7 +167,7 @@
   background: rgba(0, 0, 0, 0.72);
   font: var(--font-weight-heading-semibold) clamp(0.68rem, 0.75vw, 0.82rem) / 1.25 var(--font-brand);
   letter-spacing: 0;
-  color: var(--color-brand-white);
+  color: var(--color-brand-yellow);
   white-space: nowrap;
   opacity: 0.92;
   pointer-events: none;

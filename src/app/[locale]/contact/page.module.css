@@ -98,7 +98,7 @@
   font-weight: var(--font-weight-brand);
   font-size: clamp(1.25rem, 3.6vw, 2.75rem);
   line-height: 1.05;
-  color: var(--color-brand-white);
+  color: var(--color-brand-yellow);
 }
 
 .motionBody {
