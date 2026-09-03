@@ -44,15 +44,26 @@
 .title {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
+  /* Referans ölçümü: mürekkep genişliği 1011.3px, doğal genişlik
+     16.56em → punto ≈ 61px = 4.24vw. Token'ın 5rem'i (80px) fazla
+     büyüktü. Taban 2rem: 320px'te bile tek satır kalmasa da okunur. */
+  /* Taban 1rem: metin 16.56em geniş, tek satır için punto
+     (100vw-32px)/16.56 ≈ 6.04vw altında kalmalı. 4.24vw her genişlikte
+     bunun altında, taban da 320px'te 265px veriyor (288px alan) — yani
+     nowrap'e gerek yok ve yatay taşma riski doğmuyor. */
+  font-size: clamp(1rem, 4.24vw, 4rem);
   margin: 0 0 var(--space-8);
-  color: var(--color-brand-yellow);
+  /* Referans: bu başlık beyaz. Sarı vurgu bu ekranda butona ayrıldı. */
+  color: var(--color-text-on-black);
 }
 
+/* Referans: çerçeveli-şeffaf değil, dolu sarı blok + siyah yazı
+   (CLAUDE.md kontrast kuralı: sarı zemin → siyah metin). */
 .button {
   display: inline-block;
-  border: 1px solid var(--color-brand-white);
-  color: var(--color-brand-yellow);
+  border: 0;
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   min-height: 3.5rem;

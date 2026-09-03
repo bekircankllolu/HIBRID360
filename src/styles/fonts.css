@@ -12,7 +12,7 @@
  *
  * Buradaki dosyalar Google Fonts'un variable kaynaklarından fontTools ile
  * üretildi: Latin temel aralık + Türkçe glifler, ve yalnızca gerçekten
- * kullanılan ağırlık aralıkları (Inter 400-500, Montserrat 600-800).
+ * kullanılan ağırlık aralıkları (Inter 400-500, Montserrat 300-800).
  * Sonuç: 164KB -> 50KB.
  *
  * Lisans: her iki aile de SIL Open Font License 1.1 — yeniden dağıtım
@@ -30,7 +30,12 @@
 @font-face {
   font-family: "Montserrat";
   src: url("/fonts/montserrat-latin-tr.woff2") format("woff2-variations");
-  font-weight: 600 800;
+  /* Eylül 2026: aralık 600-800 iken ana sayfadaki "One Hybrid Production"
+     satırı tasarımdaki ince ağırlığı alamıyor, tarayıcı isteği 600'e
+     kırpıyordu. 300'e genişletildi: dosya 23.4KB -> 33.1KB (+9.7KB),
+     toplam font yükü ~50KB -> ~60KB. LCP bütçesi (<2.5sn mobil) ve
+     ilk yükleme bütçesi (<2MB) etkilenmiyor. */
+  font-weight: 300 800;
   font-style: normal;
   font-display: swap;
 }

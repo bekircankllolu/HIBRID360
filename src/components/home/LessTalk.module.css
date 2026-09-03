@@ -5,6 +5,17 @@
   --parallax-travel: 2.6rem;
   --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Referanstaki arka plan ızgarası: ölçülen adım 129.2px, kesikli ince
+     çizgiler ve kesişimlerde küçük artı işaretleri. Tek bir SVG desen
+     olarak veriliyor — ek istek yok, ek dosya yok. */
+  --grid-step: 129.2px;
+
+  position: relative;
+  /* Beliriverme sırasında maddeler yanlardan kayıyor; bu dönüşüm sayfanın
+     scrollWidth'ini büyütüp yatay kaydırma çubuğu doğuruyordu (390px'te
+     ölçülen taşma 36px). `clip`, `hidden`den farklı olarak kaydırma
+     konteyneri yaratmaz ve sticky ataları bozmaz. */
+  overflow-x: clip;
   width: 100%;
   padding: clamp(3rem, 6vw, 6rem) var(--page-gutter) clamp(6rem, 10vw, 10rem);
   display: flex;
@@ -12,31 +23,62 @@
   align-items: flex-start;
 }
 
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg stroke='%23ffffff' stroke-opacity='0.10' stroke-width='1'%3E%3Cpath d='M0 .5H40' stroke-dasharray='3 5'/%3E%3Cpath d='M.5 0V40' stroke-dasharray='3 5'/%3E%3Cpath d='M.5 -3.5V4.5M-3.5 .5H4.5' stroke-opacity='0.22'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: var(--grid-step) var(--grid-step);
+}
+
+/* İçerik ızgaranın üstünde kalsın. */
+.title,
+.body {
+  position: relative;
+  z-index: 1;
+}
+
 /* ---------- Başlık ---------- */
 
+/**
+ * Ölçüler referans PDF'ten türetildi (tasarım genişliği 1440, ölçek
+ * 2.856, Montserrat ExtraBold cap/em = 0.7025):
+ *   AZ LAF cap yüksekliği 104.7px → punto 149px  = 10.35vw
+ *   AZ LAF mürekkep genişliği 569.1px, doğal genişlik 3.801em × 149 =
+ *     566.3px → harf aralığı ≈ 0 (önceki -0.015em metni sıkıştırıyordu)
+ *   Satır ilerlemesi 127.5px → line-height 0.856
+ *   Blok 253.5..1186.1 → içerik kutusunda tam ortalı
+ */
 .title {
-  margin: 0 0 clamp(3rem, 7vw, 7rem);
+  align-self: center;
+  margin: 0 0 clamp(1.5rem, 3vw, 3rem);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(3.25rem, 8.6vw, 9.5rem);
-  line-height: 1;
-  letter-spacing: -0.015em;
+  font-size: clamp(3.25rem, 10.35vw, 12rem);
+  line-height: 0.856;
+  letter-spacing: 0;
   /* Büyük harf yalnızca çizimde, metinde değil. Türkçe locale'de
      tarayıcı doğru eşlemeyi yapar (html lang="tr"). */
   text-transform: uppercase;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(0.35rem, 0.8vw, 0.75rem);
+  gap: 0;
 }
 
 .titleLine {
   display: block;
 }
 
-/* İkinci satır sağa kayar — taslaktaki basamaklı düzen. */
+/* Referans: ÇOK İŞ, AZ LAF'ın soluna göre 404.2px sağda başlıyor
+   (1440'ta 28.07vw); iki satır yatayda kısmen üst üste biniyor. */
 .titleLine:nth-child(2) {
-  padding-left: clamp(1.25rem, 6vw, 7rem);
+  /* 28.07vw ham ölçüdür; ÇOK İŞ'in sol yan boşluğu (side bearing)
+     eklenince blok 24px sağa kaçıyordu. 26.4vw ile blok merkezi tam
+     720px'e, yani sayfa ortasına oturuyor. */
+  padding-left: clamp(1.25rem, 26.4vw, 30rem);
 }
 
 .titleMark {
@@ -67,34 +109,40 @@
    Taslak revizyonu (Eylül 2026): sarı dolgulu kutular kaldırıldı. Yerine
    iri sarı numara + beyaz metin + metnin altında ince çizgi. */
 
+/* Referans yerleşim: maddeler sayfanın iki kenarına yayılmıyor, ortada
+   toplanmış bir küme hâlinde basamak basamak iniyor. Ölçülen oranlar
+   (referans genişliğine göre): 01 %9'dan, 02 %47'den, 03 %21'den
+   başlıyor ve her biri genişliğin yaklaşık yarısını kaplıyor. */
 .body {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: start;
-  gap: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 2vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 4rem);
   width: 100%;
-  max-width: 100rem;
+  max-width: 88rem;
   margin: 0;
   margin-inline: auto;
   padding: 0;
   list-style: none;
 }
 
+/* Referanstan ölçülen konumlar (1440 sayfa, 41px kenar boşluğu çıkarılıp
+   1358px içerik kutusuna oranlandı):
+   01 sol 141.8 → %7.42, genişlik 648.2 → %47.7
+   02 sol 689.5 → %47.8, genişlik 571.9 → %42.1
+   03 sol 311.3 → %19.9, genişlik 696.9 → %51.3 */
 .itemSlot {
-  grid-column: 1 / span 6;
+  width: 47.7%;
+  margin-left: 7.4%;
 }
 
-/* Taslaktaki çapraz kademe: her madde bir öncekinden aşağıda başlar.
-   Aynı satırdaki 01 ve 02 eşit hizada dursa kompozisyon iki sütunlu bir
-   tabloya benziyordu. */
 .itemSlot:nth-child(2) {
-  grid-column: 7 / span 6;
-  margin-top: clamp(2rem, 4.5vw, 4.5rem);
+  width: 42.1%;
+  margin-left: 47.8%;
 }
 
 .itemSlot:nth-child(3) {
-  grid-column: 3 / span 6;
-  margin-top: clamp(1rem, 2.5vw, 2.5rem);
+  width: 51.3%;
+  margin-left: 19.9%;
 }
 
 .item {
@@ -103,14 +151,17 @@
      kalanı alır. */
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  gap: clamp(0.75rem, 1.6vw, 1.6rem);
+  /* Referans: numara ile metin arası 17.5px = 1.22vw. */
+  gap: clamp(0.6rem, 1.22vw, 1.3rem);
 }
 
+/* Referans: numara cap yüksekliği 63.7px → punto 90.7px = 6.30vw.
+   Numara ile metin arası ölçülen boşluk ~17.5px. */
 .index {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2.25rem, 4.4vw, 4.25rem);
-  line-height: 0.85;
+  font-size: clamp(2rem, 6.3vw, 7rem);
+  line-height: 0.8;
   color: var(--color-brand-yellow);
   font-variant-numeric: tabular-nums;
 }
@@ -119,12 +170,15 @@
   margin: 0;
   /* Çizgi metnin altında, metin sütunu boyunca. */
   padding-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  /* Referansta çizgiler marka sarısı, gri değil. */
+  border-bottom: 1px solid var(--color-brand-yellow);
   color: var(--color-text-on-black);
   font-family: var(--font-brand);
-  font-size: clamp(0.95rem, 1.05vw, 1.15rem);
+  /* Referans: 'H' cap 18.2px → punto 25.9px = 1.80vw; satır ilerlemesi
+     34.4px → line-height 1.328. */
+  font-size: clamp(1rem, 1.8vw, 1.7rem);
   font-weight: var(--font-weight-body-medium);
-  line-height: 1.5;
+  line-height: 1.328;
 }
 
 /* ---------- Hareket ----------
@@ -150,10 +204,32 @@
   transform: translate3d(1.5rem, 0, 0);
 }
 
+/* Maddeler kendi tarafından kayarak gelir: 01 ve 03 soldan, 02 sağdan.
+   Önceki sürüm yalnızca 2.75rem yukarı kayıyordu ve fark edilmiyordu. */
 .section[data-motion="on"] .item {
-  transform: translate3d(0, 2.75rem, 0);
-  /* Kademeli giriş — maddeler aynı anda değil, sırayla oturur. */
-  transition-delay: calc(var(--panel-order, 0) * 120ms);
+  transform: translate3d(-3.5rem, 3.5rem, 0);
+  transition-delay: calc(var(--panel-order, 0) * 160ms);
+}
+
+.section[data-motion="on"] .itemSlot:nth-child(2) .item {
+  transform: translate3d(3.5rem, 3.5rem, 0);
+}
+
+/* Numara metinden biraz sonra ve büyüyerek girer — okuma sırası
+   numaradan metne akıyor. */
+.section[data-motion="on"] .index {
+  opacity: 0;
+  transform: translate3d(0, 0.5rem, 0) scale(0.82);
+  transform-origin: left center;
+  transition:
+    opacity 620ms var(--reveal-ease),
+    transform 620ms var(--reveal-ease);
+  transition-delay: calc(var(--panel-order, 0) * 160ms + 180ms);
+}
+
+.section[data-revealed="true"] .index {
+  opacity: 1;
+  transform: none;
 }
 
 .section[data-revealed="true"] .titleMark,
@@ -180,16 +256,15 @@
 
 @media (max-width: 800px) {
   .body {
-    grid-template-columns: 1fr;
     gap: clamp(2rem, 7vw, 3rem);
   }
 
   .itemSlot,
   .itemSlot:nth-child(2),
   .itemSlot:nth-child(3) {
-    grid-column: 1;
-    /* Tek kolonda çapraz kademe anlamsız; gap zaten ayırıyor. */
-    margin-top: 0;
+    /* Tek kolonda kademe anlamsız; gap zaten ayırıyor. */
+    width: 100%;
+    margin-left: 0;
   }
 
   .titleLine:nth-child(2) {
@@ -205,7 +280,8 @@
 @media (prefers-reduced-motion: reduce) {
   .section .titleMark,
   .section .item,
-  .section .itemSlot {
+  .section .itemSlot,
+  .section .index {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
