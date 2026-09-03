@@ -710,8 +710,21 @@ export function SolarSystem() {
       style={{ "--crystal-scale": CRYSTAL_MEDIA.scale } as CSSProperties}
     >
       <div className={styles.heading}>
-        <h2 id="solar-system-title" className={styles.title}>
-          {SOLAR_SYSTEM_TITLE}
+        {/* Taslak (Eylül 2026): başlık iki katmanlı okunuyor — üstte ince
+            "One Hybrid Production", altta harf aralığı açılmış ECOSYSTEM.
+            Erişilebilir ad özgün cümle olarak kalıyor, çünkü hem anlamı
+            taşıyan metin o hem de e2e testleri başlığı bu adla buluyor. */}
+        <h2
+          id="solar-system-title"
+          className={styles.title}
+          aria-label={SOLAR_SYSTEM_TITLE}
+        >
+          <span className={styles.titleLead} aria-hidden="true">
+            One Hybrid Production
+          </span>
+          <span className={styles.titleWord} aria-hidden="true">
+            Ecosystem
+          </span>
         </h2>
         <p className={styles.instruction}>
           {locale === "tr"

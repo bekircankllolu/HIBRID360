@@ -24,7 +24,33 @@ export function ReachOut() {
   const locale = useLocale() as Locale;
   const [open, setOpen] = useState(false);
   const ctaRef = useRef<HTMLButtonElement>(null);
+  const ctaLabelRef = useRef<HTMLSpanElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+
+  // Hover'da ok bloğu başa geçer. İki blok da YALNIZCA transform ile
+  // kayar — yerleşim değişmediği için CLS üretmez ve hareket compositor
+  // üzerinde kalır.
+  //
+  // Etiketin ne kadar yol alacağı sabit (ok karesi + boşluk), ama okun
+  // alacağı yol etiket genişliğine bağlı ve bu dile göre değişiyor
+  // ("Bize ulaşın" ≠ "Reach out"). Sabit bir değer yazılsaydı diğer
+  // dilde bloklar üst üste binerdi; bu yüzden ölçülüp CSS değişkenine
+  // yazılıyor ve ResizeObserver ile güncel tutuluyor (font yüklenmesi,
+  // dil değişimi, ekran genişliği).
+  useEffect(() => {
+    const label = ctaLabelRef.current;
+    const button = ctaRef.current;
+    if (!label || !button) return;
+
+    const measure = () => {
+      button.style.setProperty("--cta-label-width", `${label.offsetWidth}px`);
+    };
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(label);
+    return () => observer.disconnect();
+  }, []);
 
   // aria-modal="true" bir diyalog açıkken klavye odağı arkadaki sayfaya
   // kaçmamalı (WAI-ARIA Dialog Pattern) — önceden yalnızca Escape ile
@@ -85,7 +111,9 @@ export function ReachOut() {
         className={styles.cta}
         onClick={() => setOpen(true)}
       >
-        <span className={styles.ctaLabel}>{t("cta")}</span>
+        <span ref={ctaLabelRef} className={styles.ctaLabel}>
+          {t("cta")}
+        </span>
         <span className={styles.ctaArrow} aria-hidden="true">
           →
         </span>

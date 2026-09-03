@@ -29,21 +29,21 @@ import styles from "./LessTalk.module.css";
  */
 
 /**
- * Başlığı highlight bloklarına böler. Deck metnine dokunulmaz
- * (CLAUDE.md: "SİTEYE GİRECEK METİN" kutuları birebir kopyalanır) —
- * yalnızca virgülden satırlanır:
- *   "Less Talk, More Work" → ["Less Talk,", "More Work"]
- *   "Az Laf, Çok İş"       → ["Az Laf,", "Çok İş"]
- * Virgül yoksa başlık tek blok olarak kalır.
+ * Başlığı satırlara böler. Deck metnine dokunulmaz (CLAUDE.md: "SİTEYE
+ * GİRECEK METİN" kutuları birebir kopyalanır) — yalnızca çizim için
+ * virgülden ayrılır ve virgül görselde düşürülür:
+ *   "Less Talk, More Work" → ["Less Talk", "More Work"]
+ *   "Az Laf, Çok İş"       → ["Az Laf", "Çok İş"]
+ *
+ * Büyük harf CSS'te (`text-transform`), metinde değil. Erişilebilir ad
+ * h2'nin aria-label'ında özgün hâliyle ("Az Laf, Çok İş") duruyor —
+ * ekran okuyucu ve arama motoru virgüllü, doğru büyük/küçük harfli
+ * cümleyi okumaya devam eder.
  */
 function splitTitleIntoLines(title: string): string[] {
-  const segments = title.split(",");
-  if (segments.length < 2) return [title.trim()];
-
-  return segments
-    .map((segment, index) =>
-      index < segments.length - 1 ? `${segment.trim()},` : segment.trim(),
-    )
+  return title
+    .split(",")
+    .map((segment) => segment.trim())
     .filter((segment) => segment.length > 0);
 }
 
@@ -53,7 +53,8 @@ const PANEL_PARALLAX_SPEED = [1, -0.6, 0.45];
 export function LessTalk() {
   const t = useTranslations("home.lessTalk");
   const paragraphs = t.raw("paragraphs") as string[];
-  const titleLines = splitTitleIntoLines(t("title"));
+  const title = t("title");
+  const titleLines = splitTitleIntoLines(title);
 
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -156,17 +157,19 @@ export function LessTalk() {
       data-revealed={motionActive ? String(revealed) : undefined}
       data-parallax={parallaxActive ? "on" : undefined}
     >
-      <h2 id="less-talk-title" className={styles.title}>
+      {/* Görünen satırlar virgülsüz ve büyük harf; erişilebilir ad
+          deck'teki özgün cümle. */}
+      <h2 id="less-talk-title" className={styles.title} aria-label={title}>
         {titleLines.map((line) => (
-          <span className={styles.titleLine} key={line}>
+          <span className={styles.titleLine} key={line} aria-hidden="true">
             <span className={styles.titleMark}>{line}</span>
           </span>
         ))}
       </h2>
-      <div className={styles.body}>
+      <ol className={styles.body}>
         {paragraphs.map((paragraph, index) => (
-          <div
-            className={styles.panelSlot}
+          <li
+            className={styles.itemSlot}
             key={index}
             style={
               {
@@ -175,15 +178,15 @@ export function LessTalk() {
               } as React.CSSProperties
             }
           >
-            <article className={styles.panel} tabIndex={0}>
+            <article className={styles.item}>
               <span className={styles.index} aria-hidden="true">
                 0{index + 1}
               </span>
-              <p>{paragraph}</p>
+              <p className={styles.itemText}>{paragraph}</p>
             </article>
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }
