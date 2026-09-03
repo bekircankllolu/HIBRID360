@@ -16,6 +16,12 @@ test.describe("ReachOut pop-up — klavye erişilebilirliği", () => {
 
     const dialog = page.getByRole("dialog", { name: "Merhaba." });
     await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveCSS("background-color", "rgb(255, 252, 0)");
+    await expect(dialog.locator("img")).toBeVisible();
+    await expect(dialog.getByRole("textbox", { name: "E-posta" })).toBeVisible();
+    await expect(
+      dialog.getByRole("textbox", { name: "Ne yapmak istiyorsunuz?" }),
+    ).toBeVisible();
 
     // Açılışta odak diyaloğun içinde (kapat butonu ilk odaklanabilir eleman).
     await expect(page.getByRole("button", { name: "Kapat" })).toBeFocused();

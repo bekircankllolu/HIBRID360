@@ -1,8 +1,8 @@
 .button {
   display: inline-block;
   min-height: 3.5rem;
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   padding: 1rem 2rem;
@@ -10,4 +10,27 @@
 
 .button:hover {
   transform: translateY(-2px);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+/**
+ * Dar ekranda buton metni tek satırda kalsın.
+ *
+ * Ölçüm (390px): "Let's Build Something Extraordinary." varsayılan
+ * ölçüde 350px'lik kutuya sığmayıp iki satıra düşüyordu. Yatay dolgu ve
+ * punto dar ekrana göre kısıldı; 480px üstünde ölçü değişmiyor.
+ *
+ * 320px'te İngilizce etiket tek satıra ancak ~13px puntoyla sığar —
+ * birincil CTA için fazla küçük. O genişlikte iki satır bilinçli olarak
+ * kabul ediliyor ve `text-wrap: balance` ile satırlar dengeleniyor.
+ */
+@media (max-width: 480px) {
+  .button {
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem;
+    text-wrap: balance;
+  }
 }

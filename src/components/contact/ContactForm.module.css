@@ -22,6 +22,71 @@
   padding: var(--space-3);
 }
 
+.yellow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: none;
+}
+
+.yellow .field {
+  color: var(--color-brand-black);
+  font-weight: var(--font-weight-body-medium);
+}
+
+.yellow .field input,
+.yellow .field textarea {
+  border: 0;
+  border-bottom: 1px solid var(--color-brand-black);
+  background: transparent;
+  color: var(--color-brand-black);
+  padding: 0.75rem 0;
+  border-radius: 0;
+}
+
+.yellow .field input:focus,
+.yellow .field textarea:focus {
+  outline: 2px solid var(--color-brand-black);
+  outline-offset: 3px;
+}
+
+.yellow .emailField,
+.yellow .messageField,
+.yellow .consent,
+.yellow .error,
+.yellow .submit {
+  grid-column: 1 / -1;
+}
+
+.yellow .consent {
+  color: var(--color-brand-black);
+}
+
+.yellow .submit {
+  justify-self: start;
+  background: transparent;
+  color: var(--color-brand-black);
+  border: 2px solid var(--color-brand-black);
+  min-width: 10rem;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.yellow .submit:hover,
+.yellow .submit:focus-visible {
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
+}
+
+.yellow .error {
+  border-left-color: var(--color-brand-black);
+}
+
+@media (max-width: 560px) {
+  .yellow {
+    grid-template-columns: 1fr;
+  }
+}
+
 .field textarea {
   min-height: 6rem;
   resize: vertical;
@@ -42,8 +107,8 @@
 
 .submit {
   align-self: flex-start;
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   border: none;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);

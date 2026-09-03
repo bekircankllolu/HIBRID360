@@ -27,16 +27,16 @@
 
 export const CONTACT = {
   addressLines: [
-    "Feneryolu Mahallesi, Ebru Sk.",
-    "Manolya Apt. No: 3A / 3B",
-    "Kadıköy — İstanbul, Türkiye",
+    "Feneryolu Mahallesi, Ebru Sokak,",
+    "Manolya Apt. No: 3A-3B,",
+    "İstanbul | Türkiye",
   ],
-  streetAddress: "Feneryolu Mahallesi, Ebru Sk. Manolya Apt. No: 3A / 3B",
-  addressLocality: "Kadıköy, İstanbul",
+  streetAddress: "Feneryolu Mahallesi, Ebru Sokak, Manolya Apt. No: 3A-3B",
+  addressLocality: "İstanbul",
   addressCountry: "TR",
   // GEN-05 ve CON-03'te iki kez teyit edilen numara; eski sitenin
   // footer'ındaki numarayla da birebir aynı.
-  phone: "+90 532 613 50 45",
+  phone: "+90 216 606 88 98",
   email: "contact@hibrid360.com",
 } as const;
 
@@ -47,7 +47,7 @@ export const CONTACT = {
  */
 export function directionsUrl(): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-    CONTACT.addressLines.join(", "),
+    CONTACT.addressLines.join(" "),
   )}`;
 }
 
@@ -72,7 +72,7 @@ export function directionsUrl(): string {
  */
 export function mapEmbedUrl(): string {
   return `https://www.google.com/maps?q=${encodeURIComponent(
-    CONTACT.addressLines.join(", "),
+    CONTACT.addressLines.join(" "),
   )}&output=embed`;
 }
 

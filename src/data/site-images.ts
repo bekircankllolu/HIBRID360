@@ -16,6 +16,10 @@ export const siteImages = {
       src: "/images/site/home/closing-bicycle.webp",
       alt: "Black and white bicycle handlebar detail",
     },
+    closingBody: {
+      src: "/images/site/home/moon-closing.webp",
+      alt: "Two cyclists crossing a luminous yellow moon",
+    },
   },
   work: {
     story: {

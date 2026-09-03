@@ -134,7 +134,7 @@
   /* Negatif letter-spacing yok: "AI Creative Production" gibi uzun adlar
      dar sütunda harf çakışması yaşamasın. */
   letter-spacing: 0;
-  color: var(--color-brand-white);
+  color: var(--color-brand-yellow);
   /* Uzun tek parça adlar sütunu taşırmasın. */
   overflow-wrap: anywhere;
 }
@@ -157,7 +157,7 @@
   font-weight: var(--font-weight-heading-bold);
   font-size: 1.125rem;
   /* Fuşya yerleşik hover vurgusu (CLAUDE.md marka sistemi) — değiştirilmedi. */
-  color: var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
   transform: translateX(-4px);
   opacity: 0;
   transition:

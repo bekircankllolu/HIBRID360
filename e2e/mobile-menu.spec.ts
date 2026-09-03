@@ -22,7 +22,7 @@ test.describe("Mobil menü (390px)", () => {
 
     await toggle.click();
     await expect(nav).toBeVisible();
-    await expect(nav.getByRole("link", { name: "Biz Kimiz" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Kültür" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Dil" })).toBeVisible();
 
     await page.keyboard.press("Escape");

@@ -1,9 +1,9 @@
 .block {
   width: 100%;
-  min-height: min(70svh, 50rem);
-  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
+  min-height: min(52svh, 36rem);
+  padding: clamp(3rem, 5vw, 5rem) var(--page-gutter) clamp(4rem, 7vw, 7rem);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   text-align: center;
 }
@@ -50,6 +50,8 @@
   font-size: var(--font-size-display);
   line-height: 1.1;
   margin: 0;
+  color: var(--color-brand-yellow);
+  text-wrap: balance;
 }
 
 .body {

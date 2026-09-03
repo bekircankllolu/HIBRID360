@@ -52,7 +52,7 @@
 
 .trigger:hover .globe,
 .trigger:focus-visible .globe {
-  color: var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
 }
 
 .panel {
@@ -65,7 +65,7 @@
   display: grid;
   place-items: center;
   padding: clamp(1rem, 4vw, 4rem);
-  background: var(--color-brand-white);
+  background: var(--color-brand-yellow);
   color: var(--color-brand-black);
   overflow-y: auto;
   animation: panelIn 220ms ease both;
@@ -89,6 +89,7 @@
   font-size: clamp(3rem, 9vw, 8rem);
   font-weight: var(--font-weight-heading-bold);
   line-height: 0.86;
+  color: var(--color-brand-black);
 }
 
 .languages {
@@ -126,7 +127,7 @@
   bottom: -1px;
   left: 0;
   height: 2px;
-  background: var(--color-brand-fuchsia);
+  background: var(--color-brand-black);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -137,7 +138,7 @@
   width: 0.8rem;
   height: 0.8rem;
   margin-right: 1rem;
-  border: 3px solid var(--color-brand-fuchsia);
+  border: 3px solid var(--color-brand-black);
   border-radius: 50%;
   animation: currentPulse 2.4s ease-in-out infinite;
 }
@@ -201,7 +202,9 @@
 
 .close:hover,
 .close:focus-visible {
-  border-color: var(--color-brand-fuchsia);
+  border-color: var(--color-brand-black);
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
 }
 
 @keyframes panelIn {

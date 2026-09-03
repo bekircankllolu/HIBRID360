@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { BRAND_SIGNATURE, SOCIAL_LINKS, CONTACT } from "@/lib/site";
+import { BRAND_SIGNATURE_LINES, SOCIAL_LINKS, CONTACT } from "@/lib/site";
 import { FOOTER_NAV } from "@/data/navigation";
 import { isSustainabilityPublishable } from "@/data/sustainability";
 import styles from "./Footer.module.css";
@@ -9,9 +9,8 @@ import styles from "./Footer.module.css";
  * Footer.
  *
  * Keşfet sütunu `src/data/navigation.ts` → `FOOTER_NAV` üzerinden geliyor
- * (Work + üst menünün tamamı + Insights). Daha önce burada elle tutulan
- * bir dizi vardı; üst menüye eklenen Solutions ona yansımadığı için
- * footer'da eksikti.
+ * (üst menünün tamamı + Insights). Böylece müşteri revizyonundaki menü
+ * sırası footer'a da tek kaynaktan yansır.
  *
  * Etiketler `messages/*.json` → `nav.*` ve `footer.*`.
  */
@@ -36,12 +35,12 @@ export function Footer() {
       <div className={styles.inner}>
         <div className={styles.topRow}>
           <p className={styles.wordmark}>HIBRID 360</p>
-          <p className={styles.statement}>{BRAND_SIGNATURE}</p>
+          <p className={styles.statement}>
+            {BRAND_SIGNATURE_LINES.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </p>
         </div>
-
-        <a className={styles.email} href={`mailto:${CONTACT.email}`}>
-          {CONTACT.email}
-        </a>
 
         <div className={styles.columns}>
           <section className={styles.column} aria-labelledby="footer-contact">
@@ -50,7 +49,7 @@ export function Footer() {
               <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
                 {CONTACT.phone}
               </a>
-              <span>{CONTACT.addressLines.join(", ")}</span>
+              <span>{CONTACT.addressLines.join(" ")}</span>
             </address>
           </section>
 

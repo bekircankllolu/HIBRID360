@@ -46,11 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const insights =
     dbInsights.length > 0 ? dbInsights : insightsPosts.filter((p) => p.is_published);
 
-  const hasCultureContent =
-    directors.length > 0 || isSustainabilityPublishable();
   const conditionalPaths = [
-    ...(works.length > 0 ? ["/work"] : []),
-    ...(hasCultureContent ? ["/culture"] : []),
     ...(directors.length > 0 ? ["/culture/directors"] : []),
     ...(isSustainabilityPublishable() ? ["/culture/sustainability"] : []),
     ...(insights.length > 0 ? ["/insights"] : []),

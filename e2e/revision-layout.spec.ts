@@ -8,6 +8,19 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
   await page.goto("/tr");
   await acceptCookies(page);
 
+  const navigation = page.locator("#main-navigation");
+  await expect(navigation.locator(":scope > ul > li > a")).toHaveText([
+    "Kültür",
+    "Ne Yapıyoruz",
+    "İşler",
+    "Müşteriler",
+    "İş Ortakları",
+    "İletişim",
+  ]);
+  await expect(
+    navigation.getByRole("link", { name: "Çözümler", exact: true }),
+  ).toHaveCount(0);
+
   const hero = page.locator('[class*="HeroTypography_hero"]');
   const heroBounds = (await hero.boundingBox())!;
   expect(heroBounds.x).toBeLessThanOrEqual(1);
@@ -20,6 +33,8 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
     .hover();
   const mega = page.locator("#desktop-mega-menu");
   await expect(mega).toBeVisible();
+  await expect(mega).toHaveCSS("background-color", "rgb(255, 252, 0)");
+  await expect(mega).toHaveCSS("color", "rgb(0, 0, 0)");
   const megaBounds = (await mega.boundingBox())!;
   expect(megaBounds.x).toBeLessThanOrEqual(1);
   expect(megaBounds.width).toBeGreaterThanOrEqual(1439);
@@ -110,6 +125,8 @@ test("language dialog and mobile menu remain unclipped", async ({ page }, testIn
   await page.getByRole("button", { name: "Dil" }).click();
   const languageDialog = page.getByRole("dialog", { name: "Dil seçin" });
   await expect(languageDialog).toBeVisible();
+  await expect(languageDialog).toHaveCSS("background-color", "rgb(255, 252, 0)");
+  await expect(languageDialog).toHaveCSS("color", "rgb(0, 0, 0)");
   const dialogBounds = (await languageDialog.boundingBox())!;
   expect(dialogBounds.x).toBeLessThanOrEqual(1);
   expect(dialogBounds.width).toBeGreaterThanOrEqual(389);

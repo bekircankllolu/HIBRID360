@@ -25,14 +25,13 @@
 
 .cta {
   align-self: flex-start;
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   padding: var(--space-3) var(--space-6);
 }
 
 .cta:hover {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
+  transform: translateY(-2px);
 }

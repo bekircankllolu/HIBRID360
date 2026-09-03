@@ -50,9 +50,9 @@
 }
 
 .option[aria-pressed="true"] {
-  background: var(--color-brand-fuchsia);
-  border-color: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  border-color: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
 }
 
 .field {
@@ -110,8 +110,8 @@
 }
 
 .primary {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   border: none;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -35,6 +36,8 @@ export function ReachOut() {
 
     const popup = popupRef.current;
     const trigger = ctaRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const focusFirst = () => {
       const first = popup?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
       first?.focus();
@@ -66,6 +69,7 @@ export function ReachOut() {
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
       trigger?.focus();
     };
   }, [open]);
@@ -81,18 +85,21 @@ export function ReachOut() {
         className={styles.cta}
         onClick={() => setOpen(true)}
       >
-        {t("cta")}
+        <span className={styles.ctaLabel}>{t("cta")}</span>
+        <span className={styles.ctaArrow} aria-hidden="true">
+          →
+        </span>
       </button>
 
       {open && (
-        <div className={styles.overlay} onClick={() => setOpen(false)}>
+        <div className={styles.overlay} onMouseDown={() => setOpen(false)}>
           <div
             ref={popupRef}
             className={styles.popup}
             role="dialog"
             aria-modal="true"
             aria-labelledby="reach-out-popup-title"
-            onClick={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
           >
             <button
               type="button"
@@ -100,12 +107,25 @@ export function ReachOut() {
               aria-label={t("close")}
               onClick={() => setOpen(false)}
             >
-              ×
+              <span aria-hidden="true" />
             </button>
-            <p id="reach-out-popup-title" className={styles.popupIntro}>
-              {t("popupIntro")}
-            </p>
-            <ContactForm locale={locale} />
+            <div className={styles.popupVisual} aria-hidden="true">
+              <p className={styles.popupEyebrow}>HIBRID 360 / CONTACT</p>
+              <Image
+                className={styles.illustration}
+                src="/images/site/home/reach-out-illustration.webp"
+                alt=""
+                width={1448}
+                height={1086}
+                sizes="(max-width: 899px) 100vw, 46vw"
+              />
+            </div>
+            <div className={styles.popupContent}>
+              <p id="reach-out-popup-title" className={styles.popupIntro}>
+                {t("popupIntro")}
+              </p>
+              <ContactForm locale={locale} theme="yellow" />
+            </div>
           </div>
         </div>
       )}

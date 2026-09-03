@@ -26,7 +26,7 @@
   font-size: clamp(0.8125rem, 1.4vw, 1.125rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
 }
 
 .heroTitle {
@@ -260,8 +260,8 @@
 }
 
 .detailValue a:hover {
-  color: var(--color-brand-fuchsia);
-  border-bottom-color: var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
+  border-bottom-color: var(--color-brand-yellow);
 }
 
 .inlineLink {
@@ -270,14 +270,14 @@
   font-size: 0.8125rem;
   letter-spacing: 0.06em;
   padding-bottom: 2px;
-  border-bottom: 1px solid var(--color-brand-fuchsia);
-  color: var(--color-brand-fuchsia);
+  border-bottom: 1px solid var(--color-brand-yellow);
+  color: var(--color-brand-yellow);
 }
 
 .inlineLink:hover,
 .inlineLink:focus-visible {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   border-bottom-color: transparent;
 }
 
@@ -324,13 +324,13 @@
 }
 
 .mapFallback a {
-  color: var(--color-brand-fuchsia);
-  border-bottom: 1px solid var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
+  border-bottom: 1px solid var(--color-brand-yellow);
 }
 
 .mapFallback a:hover {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   border-bottom-color: transparent;
 }
 
@@ -399,13 +399,13 @@
 }
 
 .bookingLinks a {
-  color: var(--color-brand-fuchsia);
-  border-bottom: 1px solid var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
+  border-bottom: 1px solid var(--color-brand-yellow);
   padding-bottom: 1px;
 }
 
 .bookingLinks a:hover {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   border-bottom-color: transparent;
 }

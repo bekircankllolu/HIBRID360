@@ -13,9 +13,9 @@
   left: 0;
   right: 0;
   z-index: 90;
-  background: var(--color-brand-white);
-  color: var(--color-text-on-white);
-  border-top: 2px solid var(--color-brand-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+  border-top: 2px solid var(--color-brand-black);
 }
 
 .inner {
@@ -72,15 +72,15 @@
 }
 
 .primary:hover {
-  background: var(--color-brand-fuchsia);
-  border-color: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: transparent;
+  border-color: var(--color-brand-black);
+  color: var(--color-brand-black);
 }
 
 .secondary {
   background: transparent;
   border: 1px solid var(--color-brand-black);
-  color: var(--color-text-on-white);
+  color: var(--color-brand-black);
   font-family: var(--font-body);
   font-size: 0.875rem;
   padding: var(--space-2) var(--space-4);
@@ -88,8 +88,9 @@
 }
 
 .secondary:hover {
-  border-color: var(--color-brand-fuchsia);
-  color: var(--color-brand-fuchsia);
+  background: var(--color-brand-black);
+  border-color: var(--color-brand-black);
+  color: var(--color-brand-yellow);
 }
 
 @media (max-width: 767px) {
@@ -97,7 +98,7 @@
     left: var(--space-2);
     right: var(--space-2);
     bottom: var(--space-2);
-    border: 1px solid var(--color-brand-fuchsia);
+    border: 1px solid var(--color-brand-black);
     max-height: min(34svh, 17rem);
     overflow-y: auto;
     overscroll-behavior: contain;

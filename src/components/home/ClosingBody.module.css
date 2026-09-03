@@ -1,16 +1,61 @@
 .section {
+  position: relative;
   width: 100%;
-  min-height: 60svh;
+  min-height: 100svh;
   padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
   display: grid;
   place-items: center;
   text-align: center;
+  overflow: hidden;
+}
+
+.section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.7)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.45), transparent 52%);
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.92) contrast(1.04);
+  transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section:hover .image,
+.section:focus-within .image {
+  transform: scale(1.035);
 }
 
 .body {
+  position: relative;
+  z-index: 1;
   max-width: 48rem;
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-  opacity: 0.9;
+  font-family: var(--font-brand);
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-weight: var(--font-weight-heading-semibold);
+  line-height: 1.35;
+  color: var(--color-brand-white);
+  text-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.85);
   margin: 0;
+}
+
+@media (max-width: 600px) {
+  .image {
+    object-position: 58% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+
+  .section:hover .image,
+  .section:focus-within .image {
+    transform: none;
+  }
 }

@@ -54,22 +54,23 @@ describe("hizmet kataloğu", () => {
 });
 
 describe("navigasyon", () => {
-  it("üst menü müşterinin verdiği yedi maddeyi bu sırayla içerir", () => {
+  it("üst menü müşterinin verdiği altı maddeyi bu sırayla içerir", () => {
     expect(MAIN_NAV.map((item) => item.href)).toEqual([
-      "/who-we-are",
+      "/culture",
       "/what-we-do",
-      "/what-we-believe",
-      "/solutions",
+      "/work",
       "/clients",
       "/partners",
       "/contact",
     ]);
-    expect(MAIN_NAV.map((item) => item.order)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(MAIN_NAV.map((item) => item.order)).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
-  it("Work üst menüde değil ama ikincil rota olarak yaşıyor", () => {
-    expect(MAIN_NAV_PATHS).not.toContain("/work");
-    expect(SECONDARY_NAV.map((item) => item.href)).toContain("/work");
+  it("eski sayfalar görünür menüden çıkar ama rotaları yaşamaya devam eder", () => {
+    expect(MAIN_NAV_PATHS).toContain("/work");
+    expect(SECONDARY_NAV.map((item) => item.href)).toEqual(
+      expect.arrayContaining(["/who-we-are", "/what-we-believe", "/solutions"]),
+    );
   });
 
   it("mega menü yalnızca What We Do'da ve hizmet kataloğundan gelir", () => {
@@ -90,9 +91,9 @@ describe("navigasyon", () => {
 
   it("TR menüsü Türkçe, EN menüsü İngilizce etiket kullanır", () => {
     // Müşteri revizyonu: "Türkçe karşılıklarını TR locale'de kullan."
-    expect(tr.nav.whoWeAre).toBe("Biz Kimiz");
+    expect(tr.nav.culture).toBe("Kültür");
     expect(tr.nav.clients).toBe("Müşteriler");
-    expect(en.nav.whoWeAre).toBe("Who We Are");
+    expect(en.nav.culture).toBe("Culture");
     expect(en.nav.clients).toBe("Clients");
   });
 

@@ -16,7 +16,12 @@ export function LessTalk() {
       </h2>
       <div className={styles.body}>
         {paragraphs.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+          <article className={styles.panel} key={index} tabIndex={0}>
+            <span className={styles.index} aria-hidden="true">
+              0{index + 1}
+            </span>
+            <p>{paragraph}</p>
+          </article>
         ))}
       </div>
     </section>

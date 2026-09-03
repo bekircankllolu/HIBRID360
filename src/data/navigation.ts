@@ -1,18 +1,16 @@
 /**
  * Navigasyon — tek veri kaynağı (29 Ağustos 2026 müşteri revizyonu).
  *
- * Üst menü artık eski hibrid360.com'un yedi maddelik sırasına dönüyor:
- *   Who We Are · What We Do · What We Believe · Solutions · Clients ·
- *   Partners · Contact
+ * Eylül 2026 müşteri revizyonu sonrası görünür üst menü:
+ *   Culture · What We Do · Work · Clients · Partners · Contact
  *
  * Bu, Ağustos copy deck'indeki beş maddelik menüyü (WORK · WHAT WE DO ·
  * CULTURE · FRIENDS · CONTACT) geçersiz kılar — bkz. docs/DECISIONS.md
  * #18 ve #13 (Insights menü konumu).
  *
- * WORK menüde **yok** ama rota yaşıyor: ana sayfa CTA'ları, Clients
- * sayfası, footer ve iş bağlantıları oraya gider (bkz. FOOTER_LINKS ve
- * `work.ctaLead`). Insights ve Culture alt sayfaları (Directors & Crew,
- * Sustainability) da menüden çıktı, footer/hub üzerinden erişilir.
+ * Eski Who We Are, What We Believe ve Solutions rotaları yayında kalır
+ * fakat görünür üst menüde yer almaz. Insights ve Culture alt sayfaları
+ * da footer/hub ve sayfa içi bağlantılar üzerinden erişilebilir.
  *
  * ## Locale davranışı
  *
@@ -56,7 +54,7 @@ export interface NavItem {
 }
 
 export const MAIN_NAV: NavItem[] = [
-  { labelKey: "whoWeAre", href: "/who-we-are", order: 1 },
+  { labelKey: "culture", href: "/culture", order: 1 },
   {
     labelKey: "whatWeDo",
     href: "/what-we-do",
@@ -66,11 +64,10 @@ export const MAIN_NAV: NavItem[] = [
       label: service.name,
     })),
   },
-  { labelKey: "whatWeBelieve", href: "/what-we-believe", order: 3 },
-  { labelKey: "solutions", href: "/solutions", order: 4 },
-  { labelKey: "clients", href: "/clients", order: 5 },
-  { labelKey: "partners", href: "/partners", order: 6 },
-  { labelKey: "contact", href: "/contact", order: 7 },
+  { labelKey: "work", href: "/work", order: 3 },
+  { labelKey: "clients", href: "/clients", order: 4 },
+  { labelKey: "partners", href: "/partners", order: 5 },
+  { labelKey: "contact", href: "/contact", order: 6 },
 ];
 
 /**
@@ -78,18 +75,18 @@ export const MAIN_NAV: NavItem[] = [
  * içi bağlantılar buradan beslenir; sitemap'te de yer alırlar.
  */
 export const SECONDARY_NAV: Array<{ labelKey: string; href: string }> = [
-  { labelKey: "work", href: "/work" },
   { labelKey: "insights", href: "/insights" },
-  { labelKey: "culture", href: "/culture" },
+  { labelKey: "whoWeAre", href: "/who-we-are" },
+  { labelKey: "whatWeBelieve", href: "/what-we-believe" },
+  { labelKey: "solutions", href: "/solutions" },
 ];
 
 /** Üst menüdeki canonical rotalar — sitemap ve smoke testleri için. */
 export const MAIN_NAV_PATHS = MAIN_NAV.map((item) => item.href);
 
 /**
- * Masaüstü mega menüsü — Header'daki sabit sütun işaretlemesinin veri
- * karşılığı. Sütun sırası ve içerik eskisiyle birebir aynı; tek fark
- * hedeflerin ve etiketlerin artık tek kaynaktan gelmesi.
+ * Masaüstü mega menüsü — Header'daki sütun işaretlemesinin veri
+ * karşılığı. Hizmetler, Culture ve keşif bağlantıları tek kaynaktan gelir.
  */
 export interface MegaMenuLink {
   /** Locale öneki olmadan canonical rota. */
@@ -121,11 +118,11 @@ export const MEGA_MENU: MegaMenuColumn[] = [
     })),
   },
   {
-    headingKey: "about",
+    headingKey: "culture",
+    headingHref: "/culture",
     variant: "links",
     links: [
-      { href: "/who-we-are", labelKey: "whoWeAre" },
-      { href: "/what-we-believe", labelKey: "whatWeBelieve" },
+      { href: "/culture", labelKey: "culture" },
       { href: "/partners", labelKey: "partners" },
     ],
   },
@@ -143,16 +140,10 @@ export const MEGA_MENU: MegaMenuColumn[] = [
 /**
  * Footer "Keşfet" sütunu.
  *
- * Work ilk sırada: üst menüde yok ama sitenin ana iş girişlerinden biri,
- * footer onun birincil giriş noktası. Ardından üst menünün tamamı, sonra
- * Insights geliyor.
- *
- * Not: eski elle tutulan footer listesinde Solutions **eksikti** — üst
- * menüye eklendiği hâlde footer'a yansımamıştı. Tek kaynağa bağlanınca
- * kendiliğinden düzeldi.
+ * Görünür üst menünün sırasını aynen izler; Insights yalnızca footer'a
+ * eklenir. Menüden çıkarılan eski rotalar burada tekrar gösterilmez.
  */
 export const FOOTER_NAV: Array<{ labelKey: string; href: string }> = [
-  { labelKey: "work", href: "/work" },
   ...MAIN_NAV.map((item) => ({ labelKey: item.labelKey, href: item.href })),
   { labelKey: "insights", href: "/insights" },
 ];

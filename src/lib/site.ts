@@ -44,7 +44,11 @@ export const SITE_TAGLINE = "Türkiye's AI-native Creative Production Studio";
 export const SITE_TAGLINE_TR = "Türkiye'nin AI-native kreatif prodüksiyon stüdyosu";
 
 // GEN-04 — marka imzası, her sayfanın footer'ında, değişmez, iki dilde de İngilizce.
-export const BRAND_SIGNATURE = "The future of creativity isn't artificial. It's hybrid.";
+export const BRAND_SIGNATURE_LINES = [
+  "The future of creativity isn't artificial.",
+  "It's hybrid.",
+] as const;
+export const BRAND_SIGNATURE = BRAND_SIGNATURE_LINES.join(" ");
 
 // GEN-05 / CON-03 — footer ve Contact adres kutucuğu.
 //

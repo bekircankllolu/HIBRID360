@@ -273,8 +273,8 @@
 .ctaButton {
   display: inline-block;
   margin-top: var(--space-6);
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   min-height: 3.5rem;

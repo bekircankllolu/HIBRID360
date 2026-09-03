@@ -20,9 +20,8 @@ const MEGA_TRIGGER_HREF = "/what-we-do";
  * içinden geliyor; hizmet listesi de oradan `src/data/services.ts`'e
  * bağlanıyor. Bu bileşende paralel bir menü dizisi **yok** — daha önce
  * `NAV_ITEMS` ve paralel hizmet bağlantıları burada sabit yazılıydı ve
- * veri dosyasıyla elle senkron tutuluyordu; Solutions'ın yanlış sayfaya
- * bakması ve dört maddenin yönlendirme URL'lerine gitmesi bu ikiliğin
- * sonucuydu.
+ * veri dosyasıyla elle senkron tutuluyordu. Yeni Culture / Work sırası ve
+ * kaldırılan Solutions maddesi artık yalnızca veri katmanından yönetilir.
  *
  * Etiketler `messages/*.json` → `nav.*`. Değerler Title Case; başlıkta
  * `text-transform` yok, yani görünen metin etiketin kendisi.

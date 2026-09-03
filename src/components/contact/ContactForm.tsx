@@ -15,7 +15,13 @@ import styles from "./ContactForm.module.css";
  * docs/supabase-schema.sql'deki contact_submissions tablosunda phone
  * sütunu yok. Şema genişletilene kadar bu alan forma eklenmedi.
  */
-export function ContactForm({ locale }: { locale: Locale }) {
+export function ContactForm({
+  locale,
+  theme = "dark",
+}: {
+  locale: Locale;
+  theme?: "dark" | "yellow";
+}) {
   const t = useTranslations("contactForm");
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
@@ -45,7 +51,10 @@ export function ContactForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form
+      className={`${styles.form} ${theme === "yellow" ? styles.yellow : ""}`}
+      onSubmit={onSubmit}
+    >
       {result && !result.ok && (
         <p className={styles.error}>
           {result.reason === "consent" ? t("errorConsent") : t("error")}
@@ -71,12 +80,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
         />
       </label>
 
-      <label className={styles.field}>
-        <span>{t("message")}</span>
-        <textarea value={message} onChange={(event) => setMessage(event.target.value)} />
-      </label>
-
-      <label className={styles.field}>
+      <label className={`${styles.field} ${styles.emailField}`}>
         <span>{t("email")}</span>
         <input
           type="email"
@@ -84,6 +88,11 @@ export function ContactForm({ locale }: { locale: Locale }) {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
+      </label>
+
+      <label className={`${styles.field} ${styles.messageField}`}>
+        <span>{t("message")}</span>
+        <textarea value={message} onChange={(event) => setMessage(event.target.value)} />
       </label>
 
       <label className={styles.consent}>

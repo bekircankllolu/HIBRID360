@@ -93,7 +93,7 @@
   font-weight: var(--font-weight-heading-bold);
   font-size: clamp(1.25rem, 2.6vw, 1.75rem);
   line-height: 1.12;
-  color: var(--color-brand-fuchsia);
+  color: var(--color-brand-yellow);
   transform: translateX(-4px);
   opacity: 0;
   transition:
@@ -104,7 +104,7 @@
 @media (hover: hover) {
   .card:hover,
   .card:focus-within {
-    border-color: var(--color-brand-fuchsia);
+    border-color: var(--color-brand-yellow);
   }
 
   .card:hover::after,
@@ -114,7 +114,7 @@
 
   .card:hover .cardTitle,
   .card:focus-within .cardTitle {
-    color: var(--color-brand-fuchsia);
+    color: var(--color-brand-yellow);
   }
 
   .card:hover .arrow,

@@ -316,8 +316,8 @@
 }
 
 .controlButton:hover {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
 }
 
 .questionList {
@@ -347,9 +347,9 @@
 }
 
 .questionButton[aria-pressed="true"] {
-  background: var(--color-brand-fuchsia);
-  border-color: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  border-color: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
 }
 
 .action {
@@ -363,8 +363,8 @@
 }
 
 .action:hover {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
 }
 
 /* Ana sayfadaki kısa sürüm (brief 11.5) — tek sütun, daha küçük. */
