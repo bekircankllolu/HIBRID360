@@ -3,7 +3,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: min(100svh, 68rem);
+  /* Taslak (Eylül 2026): görsel bantları kısıldı — tam ekran yerine
+     şerit. Alttaki bölümün üst kenarı ekrana giriyor, kaydırma ritmi
+     hızlanıyor. */
+  min-height: min(75svh, 52rem);
   padding: var(--space-16) var(--space-4);
   background: var(--color-brand-black);
   text-align: center;
@@ -53,7 +56,13 @@
   z-index: 1;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
+  /* Taslakta başlık tek satır. Ölçüm: metin 100px puntoda 1845px, yani
+     genişliğin 18.45 katı — token'ın 7vw eğimi 1440px'te 80px verip iki
+     satıra kırıyordu. Taban (2.25rem) ve tavan (5rem) token'la aynı,
+     yalnızca eğim 5.1vw'ye indirildi; 700px üstünde tek satır, altında
+     bilinçli olarak sarıyor (o genişlikte tek satır okunamayacak kadar
+     küçük punto gerektirirdi). */
+  font-size: clamp(2.25rem, 5.1vw, 5rem);
   letter-spacing: 0;
   color: var(--color-brand-yellow);
   text-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.72);

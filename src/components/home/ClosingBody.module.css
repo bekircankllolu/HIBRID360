@@ -1,7 +1,8 @@
 .section {
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  /* Taslak (Eylul 2026): gorsel bandi kisildi - tam ekran yerine serit. */
+  min-height: 75svh;
   padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
   display: grid;
   place-items: center;

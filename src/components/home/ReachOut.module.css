@@ -22,13 +22,25 @@
   text-wrap: balance;
 }
 
+/**
+ * Taslak (Eylül 2026, 2. görsel): siyah çerçeve içinde iki sarı blok.
+ * Duruşta [etiket][ok], imleç gelince ok başa geçer → [ok][etiket].
+ *
+ * Yer değiştirme yalnızca `transform` ile yapılıyor; DOM sırası ve
+ * yerleşim sabit kalıyor. Böylece geçiş compositor'da kalıyor, buton
+ * genişliği hiç değişmiyor ve tıklama hedefi hover sırasında kaymıyor.
+ */
 .cta {
+  --cta-gap: 0.4rem;
+  --cta-arrow-size: 4rem;
+  --cta-ease: cubic-bezier(0.65, 0, 0.35, 1);
+
   display: inline-flex;
   align-items: stretch;
-  gap: 0.35rem;
-  padding: 0;
+  gap: var(--cta-gap);
+  padding: var(--cta-gap);
   border: 0;
-  background: transparent;
+  background: var(--color-brand-black);
   color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
@@ -41,10 +53,7 @@
   place-items: center;
   min-height: 4rem;
   background: var(--color-brand-yellow);
-  border: 1px solid var(--color-brand-yellow);
-  transition:
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 420ms var(--cta-ease);
 }
 
 .ctaLabel {
@@ -52,28 +61,29 @@
 }
 
 .ctaArrow {
-  width: 4rem;
+  width: var(--cta-arrow-size);
   font-size: 1.35rem;
 }
 
-/* Referans hareket (müşterinin GIF'i): dikdörtgen ikili, imleç gelince
-   etiket hap, ok daire hâline gelir. Önceden yalnızca ok yuvarlanıyordu,
-   etiket köşeli kaldığı için ikisi aynı dile ait durmuyordu. */
+/* Etiketin yolu sabit: ok karesi + aradaki boşluk. */
 .cta:hover .ctaLabel,
 .cta:focus-visible .ctaLabel {
-  border-radius: 999px;
-  transform: translateX(-0.2rem);
+  transform: translateX(calc(var(--cta-arrow-size) + var(--cta-gap)));
 }
 
+/* Okun yolu etiket genişliğine bağlı — değeri ReachOut.tsx ölçüp
+   --cta-label-width olarak yazıyor. Ölçüm gelmeden önce 0px: buton
+   hareketsiz ama bozuk değil. */
 .cta:hover .ctaArrow,
 .cta:focus-visible .ctaArrow {
-  border-radius: 50%;
-  transform: translateX(0.25rem) rotate(-35deg);
+  transform: translateX(
+    calc(-1 * (var(--cta-label-width, 0px) + var(--cta-gap)))
+  );
 }
 
 .cta:active .ctaLabel,
 .cta:active .ctaArrow {
-  transform: scale(0.97);
+  transition-duration: 120ms;
 }
 
 .overlay {
@@ -223,8 +233,11 @@
     min-height: 3.5rem;
   }
 
-  .ctaArrow {
-    width: 3.5rem;
+  /* Ok karesi küçülünce etiketin alacağı yol da küçülmeli: kayma
+     mesafesi bu değişkenden türetiliyor. Genişliği doğrudan yazmak
+     ikisini ayrıştırır ve bloklar birbirine biner. */
+  .cta {
+    --cta-arrow-size: 3.5rem;
   }
 }
 
@@ -237,5 +250,15 @@
   .ctaArrow,
   .close {
     transition: none;
+  }
+
+  /* Yer değiştirme tamamen kapalı. Yalnızca `transition: none` deseydik
+     bloklar hover'da anında zıplardı — bu, azaltılmış hareket tercihinin
+     engellemek istediği şeyin ta kendisi. */
+  .cta:hover .ctaLabel,
+  .cta:focus-visible .ctaLabel,
+  .cta:hover .ctaArrow,
+  .cta:focus-visible .ctaArrow {
+    transform: none;
   }
 }
