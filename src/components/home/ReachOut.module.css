@@ -16,7 +16,9 @@
   font-size: clamp(3rem, 7vw, 7.5rem);
   line-height: 0.9;
   margin: 0 0 clamp(2rem, 5vw, 4rem);
-  color: var(--color-brand-yellow);
+  /* Müşteri revizyonu (Eylül 2026): başlık sarı değil beyaz. Siyah zemin
+     üzerinde 21:1 kontrast. */
+  color: var(--color-text-on-black);
   text-wrap: balance;
 }
 
@@ -54,8 +56,12 @@
   font-size: 1.35rem;
 }
 
+/* Referans hareket (müşterinin GIF'i): dikdörtgen ikili, imleç gelince
+   etiket hap, ok daire hâline gelir. Önceden yalnızca ok yuvarlanıyordu,
+   etiket köşeli kaldığı için ikisi aynı dile ait durmuyordu. */
 .cta:hover .ctaLabel,
 .cta:focus-visible .ctaLabel {
+  border-radius: 999px;
   transform: translateX(-0.2rem);
 }
 
