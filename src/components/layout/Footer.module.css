@@ -11,8 +11,11 @@
 
 .topRow {
   display: grid;
-  grid-template-columns: minmax(8rem, 1fr) minmax(20rem, 1.7fr);
-  gap: clamp(2rem, 7vw, 8rem);
+  /* Ölçüm (1440px): ilk cümlenin tek satırda durması için metin sütunu
+     ≥880px olmalı; 1.7fr + 8rem boşluk yalnızca 792px veriyordu ve cümle
+     "isn't"ten kırılıp üç satıra çıkıyordu. */
+  grid-template-columns: minmax(8rem, 1fr) minmax(20rem, 2.4fr);
+  gap: clamp(2rem, 5vw, 6rem);
   align-items: start;
   margin-bottom: clamp(3rem, 5vw, 5rem);
 }
@@ -25,7 +28,10 @@
 }
 
 .statement {
-  max-width: 28ch;
+  /* Referans yerleşimde ilk cümle tek satır: "The future of creativity
+     isn't artificial." / "It's hybrid." 28ch bu cümleyi "isn't"ten
+     kırıp üç satıra çıkarıyordu. */
+  max-width: 44ch;
   margin: 0;
   font-family: var(--font-brand);
   font-size: clamp(1.7rem, 3.25vw, 4rem);

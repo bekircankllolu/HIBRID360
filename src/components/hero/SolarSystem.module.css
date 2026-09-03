@@ -30,24 +30,39 @@
   color: var(--color-brand-white);
 }
 
-/* Üst satır: ince, sakin. Alt satırdaki tracking'in taşıyıcısı olsun
-   diye bilinçli olarak vurgusuz. */
+/**
+ * Referanstan ölçülen (1440 tasarım, ölçek 2.856):
+ *   "One Hybrid Production" mürekkep genişliği 763.8px, doğal genişlik
+ *   11.932em → punto 64px = 4.44vw, harf aralığı 0.
+ *   "ECOSYSTEM" cap 58.8px → punto 83.7px = 5.81vw; mürekkep genişliği
+ *   763.1px, doğal 6.428em → harf aralığı ≈ 0.336em.
+ * İki satır referansta aynı genişlikte bitiyor — tracking bunun için var.
+ */
 .titleLead {
   display: block;
-  font-weight: var(--font-weight-body-regular);
-  font-size: clamp(1.5rem, 3.1vw, 3.4rem);
-  letter-spacing: 0.01em;
+  /* Referansta bu satır ince (Light). Montserrat alt kümesi Eylül 2026'da
+     300'e genişletildi; öncesinde istek 600'e kırpılıyor ve satır
+     tasarımdakinden belirgin kalın çıkıyordu. */
+  font-weight: 300;
+  /* Referans mürekkep genişliği 763.8px. Light ağırlıkta metin 11.506em
+     (600'de 11.931em idi), dolayısıyla punto 763.8/11.506 = 66.4px =
+     4.61vw. */
+  font-size: clamp(1.5rem, 4.61vw, 4.8rem);
+  letter-spacing: 0;
 }
 
+/* Referans: ECOSYSTEM sarı ve kalın; üstteki ince beyaz satırla
+   kasıtlı bir ağırlık/renk karşıtlığı kuruyor. */
 .titleWord {
   display: block;
-  font-weight: var(--font-weight-body-regular);
-  font-size: clamp(1.6rem, 3.4vw, 3.8rem);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.6rem, 5.81vw, 6rem);
+  color: var(--color-brand-yellow);
   text-transform: uppercase;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.336em;
   /* Harf aralığı son harften sonra da boşluk bırakır; ortalanmış metin
      bu yüzden sola kaçık görünür. Negatif sağ pay o boşluğu geri alır. */
-  margin-right: -0.34em;
+  margin-right: -0.336em;
 }
 .instruction {
   margin: 1rem 0 0;
