@@ -1,80 +1,191 @@
 .section {
+  --scroll-progress: 0;
+  /* Paralaksın uç noktadaki toplam yolu. Küçük tutuldu: kompozisyon
+     kayıyor gibi değil, nefes alıyor gibi durmalı. */
+  --parallax-travel: 2.6rem;
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   width: 100%;
-  min-height: 86svh;
   padding: clamp(3rem, 6vw, 6rem) var(--page-gutter) clamp(6rem, 10vw, 10rem);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
 }
 
+/* ---------- Başlık: highlight blokları ---------- */
+
 .title {
+  margin: 0 0 clamp(3rem, 7vw, 7rem);
+  /* Bloklar kendi zeminini taşıdığı için başlığın kendi rengi yok. */
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  max-width: 13ch;
-  font-size: clamp(3rem, 7vw, 8rem);
-  line-height: 0.9;
-  margin: 0 0 clamp(3rem, 7vw, 7rem);
-  color: var(--color-brand-yellow);
-  text-wrap: balance;
+  font-size: clamp(3.25rem, 8.6vw, 9.5rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.35rem, 0.8vw, 0.75rem);
 }
+
+.titleLine {
+  display: block;
+}
+
+/* İkinci satır sağa kayar — referans kompozisyondaki basamaklı blok düzeni. */
+.titleLine:nth-child(2) {
+  padding-left: clamp(1.25rem, 6vw, 7rem);
+}
+
+/* Müşteri revizyonu (Eylül 2026): highlight artık durağan değil, hover
+   anının kendisi. Başlangıçta siyah zeminde beyaz yazı (21:1); imleç
+   gelince arkasına sarı highlight iner.
+   Yazı sarı zeminde SİYAHA döner — CLAUDE.md kontrast kuralı sözleşme
+   maddesi: "Sarı zemin → SİYAH metin (beyaz metin okunmuyor)". Beyaz
+   kalsaydı sarı üzerinde 1.07:1 ile okunamaz olurdu. */
+.titleMark {
+  display: inline-block;
+  /* Yatay dolgu YOK: başlık metni sol kenarda sarı kutularla birebir
+     hizalanmalı. Dolgu verilseydi başlık kutulardan ~37px içeride
+     başlardı. Highlight'ın yatay nefes payı hover'da box-shadow ile
+     veriliyor — o yerleşimi etkilemez, dolayısıyla hizayı bozmaz. */
+  padding: 0.12em 0;
+  background: transparent;
+  color: var(--color-text-on-black);
+  transition:
+    background-color 260ms var(--reveal-ease),
+    box-shadow 260ms var(--reveal-ease),
+    color 260ms var(--reveal-ease),
+    transform 260ms var(--reveal-ease);
+}
+
+.titleMark:hover {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+  box-shadow: 0 0 0 0.1em var(--color-brand-yellow);
+  transform: translate3d(0.4rem, 0, 0);
+}
+
+/* ---------- Kutular ---------- */
 
 .body {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  /* Kritik: stretch olsaydı kutular satırdaki en uzun kutuya uzar ve
+     kısa metinli kutuda yeniden ölü sarı boşluk oluşurdu. */
+  align-items: start;
   gap: clamp(1rem, 2vw, 2rem);
   width: 100%;
   max-width: 100rem;
   margin-inline: auto;
 }
 
+.panelSlot {
+  grid-column: 1 / span 6;
+}
+
+.panelSlot:nth-child(2) {
+  grid-column: 8 / span 5;
+  margin-top: clamp(2rem, 6vw, 6rem);
+}
+
+.panelSlot:nth-child(3) {
+  grid-column: 3 / span 7;
+  margin-top: clamp(1.5rem, 4vw, 4rem);
+}
+
 .panel {
   position: relative;
-  grid-column: span 5;
-  min-height: clamp(14rem, 22vw, 21rem);
-  padding: clamp(1.5rem, 3vw, 3rem);
+  padding: clamp(1.75rem, 3vw, 3rem);
   background: var(--color-brand-yellow);
-  color: var(--color-brand-black);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transform-origin: center;
+  color: var(--color-text-on-yellow);
   transition:
-    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.panel:nth-child(2) {
-  grid-column: 7 / span 6;
-  margin-top: clamp(3rem, 8vw, 8rem);
-}
-
-.panel:nth-child(3) {
-  grid-column: 2 / span 7;
-  margin-top: clamp(-1rem, -2vw, -2rem);
+    transform 420ms var(--reveal-ease),
+    box-shadow 420ms var(--reveal-ease);
 }
 
 .panel:hover,
 .panel:focus-visible {
   z-index: 2;
-  transform: scale(1.035);
+  transform: scale(1.025);
   box-shadow: 0 1.5rem 4rem rgba(255, 252, 0, 0.12);
 }
 
 .index {
-  align-self: flex-end;
+  position: absolute;
+  top: clamp(1.75rem, 3vw, 3rem);
+  right: clamp(1.75rem, 3vw, 3rem);
   font-family: var(--font-brand);
   font-size: 0.75rem;
   font-weight: var(--font-weight-brand);
 }
 
 .panel p {
+  /* Metin artık üstten akıyor; ilk satır numaraya sokulmasın diye sağdan
+     pay. 2.5rem'de en kısa satır numaraya ~40px kalıyordu, sıkışık
+     duruyordu. */
   margin: 0;
-  max-width: 42ch;
+  padding-right: 3.25rem;
+  max-width: 44ch;
   font-family: var(--font-brand);
-  font-size: clamp(1.15rem, 1.6vw, 1.55rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.4rem);
   font-weight: var(--font-weight-heading-semibold);
-  line-height: 1.38;
+  line-height: 1.42;
+}
+
+/* ---------- Hareket ----------
+   Tüm gizleme yalnızca data-motion="on" altında geçerli. Sunucu
+   render'ında ve JS çalışmadığında bölüm tam görünür kalır. */
+
+.section[data-motion="on"] .titleMark,
+.section[data-motion="on"] .panel {
+  opacity: 0;
+  transition:
+    opacity 720ms var(--reveal-ease),
+    transform 720ms var(--reveal-ease),
+    background-color 260ms var(--reveal-ease),
+    box-shadow 420ms var(--reveal-ease);
+}
+
+.section[data-motion="on"] .titleMark {
+  transform: translate3d(-1.5rem, 0, 0);
+}
+
+.section[data-motion="on"] .titleLine:nth-child(2) .titleMark {
+  transform: translate3d(1.5rem, 0, 0);
+}
+
+.section[data-motion="on"] .panel {
+  transform: translate3d(0, 2.75rem, 0);
+  /* Kademeli giriş — kutular aynı anda değil, sırayla oturur. */
+  transition-delay: calc(var(--panel-order, 0) * 120ms);
+}
+
+.section[data-revealed="true"] .titleMark,
+.section[data-revealed="true"] .panel {
+  opacity: 1;
+  transform: none;
+}
+
+.section[data-revealed="true"] .titleMark:hover {
+  transform: translate3d(0.4rem, 0, 0);
+}
+
+.section[data-revealed="true"] .panel:hover,
+.section[data-revealed="true"] .panel:focus-visible {
+  transform: scale(1.025);
+}
+
+/* Paralaks yalnızca beliriverme bittikten sonra ve geniş ekranda.
+   Reveal transform'u .panel üzerinde, paralaks .panelSlot üzerinde —
+   ikisi çakışmasın ve paralaks transition'a takılmasın diye ayrı katman. */
+.section[data-parallax="on"][data-revealed="true"] .panelSlot {
+  transform: translate3d(
+    0,
+    calc(var(--scroll-progress) * var(--panel-speed, 0) * var(--parallax-travel)),
+    0
+  );
+  will-change: transform;
 }
 
 @media (max-width: 800px) {
@@ -82,22 +193,41 @@
     grid-template-columns: 1fr;
   }
 
-  .panel,
-  .panel:nth-child(2),
-  .panel:nth-child(3) {
+  .panelSlot,
+  .panelSlot:nth-child(2),
+  .panelSlot:nth-child(3) {
     grid-column: 1;
-    min-height: 13rem;
     margin-top: 0;
+  }
+
+  .titleLine:nth-child(2) {
+    padding-left: clamp(0.75rem, 4vw, 2rem);
+  }
+
+  .panel p {
+    padding-right: 2rem;
   }
 }
 
+/* CLAUDE.md: prefers-reduced-motion zorunlu destek.
+   `!important` bilinçli: yukarıdaki hareket kuralları data-attribute
+   taşıdığı için daha özgül ([data-parallax][data-revealed] = 0,4,0) ve
+   media query özgüllük eklemiyor. Bu blok erişilebilirlik garantisi —
+   hiçbir koşulda yenilmemeli, aksi hâlde bölüm opacity:0'da kalabilir. */
 @media (prefers-reduced-motion: reduce) {
-  .panel {
-    transition: none;
+  .section .titleMark,
+  .section .panel,
+  .section .panelSlot {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
   }
 
-  .panel:hover,
-  .panel:focus-visible {
-    transform: none;
+  .section .titleMark:hover {
+    /* Highlight tepkisi kalır, hareket kalmaz. */
+    background: var(--color-brand-yellow);
+    color: var(--color-text-on-yellow);
+    box-shadow: 0 0 0 0.1em var(--color-brand-yellow);
   }
 }
