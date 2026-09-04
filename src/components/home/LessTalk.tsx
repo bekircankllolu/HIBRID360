@@ -47,6 +47,35 @@ function splitTitleIntoLines(title: string): string[] {
     .filter((segment) => segment.length > 0);
 }
 
+/**
+ * Madde metnini cümlelere böler — referans tasarımda her cümle yeni
+ * satırda başlıyor, metin değişmiyor.
+ *
+ * Bunun doğal sarma olmadığı ölçümle doğrulandı: 01 maddesinin ikinci
+ * satırı ("Çözüme giden yol budur.") 336px, sütun ise 548px — sonraki
+ * kelime rahat sığardı, yani satır bilerek kırılmış. 02 ve 03 tek
+ * cümleden olustuğu için bu kuraldan etkilenmez ve doğal sarar; yani tek
+ * kural üç maddede de referanstaki kırılımı veriyor.
+ *
+ * Regex lookbehind yerine kelime döngüsü: Safari 16.4 öncesi için de
+ * güvenli ve niyeti daha açık.
+ */
+function splitIntoSentences(text: string): string[] {
+  const lines: string[] = [];
+  let current = "";
+
+  for (const word of text.split(" ")) {
+    current = current ? `${current} ${word}` : word;
+    if (word.endsWith(".")) {
+      lines.push(current);
+      current = "";
+    }
+  }
+  if (current) lines.push(current);
+
+  return lines;
+}
+
 /** Kutu başına paralaks katsayısı — kompozisyon tek parça gibi kaymasın diye farklı. */
 const PANEL_PARALLAX_SPEED = [1, -0.6, 0.45];
 
@@ -182,7 +211,13 @@ export function LessTalk() {
               <span className={styles.index} aria-hidden="true">
                 0{index + 1}
               </span>
-              <p className={styles.itemText}>{paragraph}</p>
+              <p className={styles.itemText}>
+                {splitIntoSentences(paragraph).map((sentence) => (
+                  <span className={styles.sentence} key={sentence}>
+                    {sentence}
+                  </span>
+                ))}
+              </p>
             </article>
           </li>
         ))}
