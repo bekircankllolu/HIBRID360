@@ -58,8 +58,8 @@ export const BELIEF_IMAGES = {
     width: 2560,
     height: 1436,
     alt: {
-      tr: "Mustafa Kemal Atatürk, bir pencerenin yanında düşünceli otururken — marka sarısı duotone",
-      en: "Mustafa Kemal Atatürk sitting thoughtfully beside a window — brand-yellow duotone",
+      tr: "Mustafa Kemal Atatürk bir pencerenin yanında düşünceli otururken, marka sarısı duotone",
+      en: "Mustafa Kemal Atatürk sitting thoughtfully beside a window in brand-yellow duotone",
     },
   },
   littlePrince: {

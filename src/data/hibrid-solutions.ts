@@ -28,7 +28,7 @@ export const hibridSolutions: HibridSolutionLine[] = [
     tr: "Dijital prodüksiyon ekipleri içeriğinizi çeker, kurgu ekibi videolarınızın son rötuşunu yapar.",
   },
   {
-    en: "Live content is broadcast — if you so choose — from your factory, sales points or company headquarters via remote broadcast and/or a studio environment, with a dedicated director and production crew.",
+    en: "If you choose, live content can be broadcast from your factory, sales points or company headquarters via remote broadcast or a studio environment, with a dedicated director and production crew.",
     tr: "İsterseniz canlı içerik; fabrikanızdan, satış noktalarınızdan veya genel merkezinizden uzaktan yayınla ve/veya stüdyo ortamında, kendi yönetmeni ve prodüksiyon ekibiyle yayınlanır.",
   },
   {

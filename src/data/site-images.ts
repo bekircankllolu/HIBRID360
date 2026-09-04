@@ -17,7 +17,8 @@ export const siteImages = {
       alt: "Black and white bicycle handlebar detail",
     },
     closingBody: {
-      src: "/images/site/home/moon-closing.webp",
+      src: "/images/site/home/moon-scroll-poster.webp",
+      videoSrc: "/videos/home-moon-scroll.mp4",
       alt: "Two cyclists crossing a luminous yellow moon",
     },
   },

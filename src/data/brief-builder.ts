@@ -112,11 +112,11 @@ export const briefQuestions: BriefQuestion[] = [
 
 /** brief 18.8 — açılış ve kapanış metinleri, MONA konuşur. */
 export const briefIntro = {
-  en: "Let's build your brief together. Six questions, about two minutes. You'll get the summary in your inbox — and so will we.",
+  en: "Let's build your brief together. Six questions, about two minutes. You'll get the summary in your inbox, and so will we.",
   tr: "Brief'ini birlikte kuralım. Altı soru, yaklaşık iki dakika. Özeti sana da bize de göndereceğim.",
 };
 
 export const briefOutro = {
-  en: "That's a brief. Here's your summary — we'll come back within one working day with a first take and a budget range.",
+  en: "That's a brief. Here's your summary. We'll come back within one working day with a first take and a budget range.",
   tr: "İşte brief'in. Özeti aşağıda; bir iş günü içinde ilk yorumumuz ve bütçe aralığıyla döneceğiz.",
 };

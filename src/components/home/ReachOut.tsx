@@ -141,9 +141,9 @@ export function ReachOut() {
               <p className={styles.popupEyebrow}>HIBRID 360 / CONTACT</p>
               <Image
                 className={styles.illustration}
-                src="/images/site/home/reach-out-illustration-woman-stylized.webp"
+                src="/images/site/home/reach-out-illustration-woman-stylized.svg"
                 alt=""
-                width={1448}
+                width={1449}
                 height={1086}
                 sizes="(max-width: 899px) 100vw, 46vw"
               />

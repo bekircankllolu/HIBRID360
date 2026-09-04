@@ -158,9 +158,8 @@
 
 .popupVisual {
   align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   min-width: 0;
 }
 
@@ -177,8 +176,9 @@
   width: 100%;
   height: auto;
   max-height: 68dvh;
+  align-self: center;
   object-fit: contain;
-  mix-blend-mode: multiply;
+  transform: translateY(clamp(-2.5rem, -2.5vw, -1.25rem));
 }
 
 .popupContent {

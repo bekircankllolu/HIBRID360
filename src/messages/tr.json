@@ -66,7 +66,7 @@
     "reachOut": {
       "title": "Sizin için ne yapabiliriz?",
       "cta": "Bize ulaşın",
-      "popupIntro": "Merhaba. Neyi, ne zaman yapmak istediğinizi yazın — gerisini biz hallederiz.",
+      "popupIntro": "Merhaba. Neyi, ne zaman yapmak istediğinizi yazın. Gerisini biz hallederiz.",
       "close": "Kapat"
     },
     "closing": {
@@ -100,8 +100,8 @@
       "contentFormat": "Format",
       "all": "Tümü"
     },
-    "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz — özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",
-    "seoHeading": "HİBRİD 360 — İDDİALI MARKALAR İÇİN KREATİF HİKÂYE ANLATICILIĞI",
+    "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz; özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",
+    "seoHeading": "HİBRİD 360: İDDİALI MARKALAR İÇİN KREATİF HİKÂYE ANLATICILIĞI",
     "confidentialClient": "Gizli müşteri",
     "projectFallback": "Seçili iş",
     "case": {
@@ -114,7 +114,7 @@
   },
   "whatWeDo": {
     "heroTitle": "NE YAPIYORUZ",
-    "heroBody": "Tek fikir, uçtan uca üretim: strateji, film, fotoğraf, canlı yayın, dijital ve AI — tek çatı, tek ekip.",
+    "heroBody": "Tek fikir, uçtan uca üretim: strateji, film, fotoğraf, canlı yayın, dijital ve AI. Tek çatı, tek ekip.",
     "list": [
       {
         "title": "Creative",
@@ -154,14 +154,14 @@
     "heroTitle": "İLETİŞİME GEÇELİM VE BİRLİKTE HARİKA BİR ŞEY BAŞLATALIM",
     "heroLead1": "Sizden haber almak isteriz.",
     "heroLead2": "Merhaba deyin",
-    "heroBody": "Bağlantı kurmayı seviyoruz — kısa bir merhaba, derin bir yaratıcı iş birliği ya da sosyal medyada bir takip; hepsi olur. Merhaba deyin, ürettiklerimizi takipte kalın!",
+    "heroBody": "Bağlantı kurmayı seviyoruz. Kısa bir merhaba, derin bir yaratıcı iş birliği ya da sosyal medyada bir takip; hepsi olur. Merhaba deyin, ürettiklerimizi takipte kalın!",
     "motionTitle": "MOTION OFFICE’E HOŞ GELDİNİZ",
     "motionBody": [
       "İstanbul merkezli bir ajansız ve nerede olursak olalım ofisteyiz. Ekibimiz uluslararası ve resmiyetten uzak.",
-      "Dünyanın en büyük ofisine sahibiz diyebilirsiniz — duvarsız ve sınırsız. Bu bize Hibrid 360’ın bütün avantajlarını veriyor: hizmetimiz yüzeyin ötesine geçiyor. Markanızın özünü anlatmak için sanatı, tasarımı, teknolojiyi ve etkileşimli, proaktif hikâye anlatımını kullanıyoruz."
+      "Dünyanın en büyük ofisine sahibiz diyebilirsiniz: duvarsız ve sınırsız. Bu bize Hibrid 360’ın bütün avantajlarını veriyor. Hizmetimiz yüzeyin ötesine geçiyor. Markanızın özünü anlatmak için sanatı, tasarımı, teknolojiyi ve etkileşimli, proaktif hikâye anlatımını kullanıyoruz."
     ],
     "motionQuestion": "Motion Office nedir?",
-    "motionIntro": "Hibrid 360’ta ofisin zihinde başladığına ve orada yaşadığına inanıyoruz — yine de bir ofisin temellerinin yere sabitlenmesi gerekir. Bu yüzden ekibimizi üç kademeye ayırdık:",
+    "motionIntro": "Hibrid 360’ta ofisin zihinde başladığına ve orada yaşadığına inanıyoruz. Yine de bir ofisin temellerinin yere sabitlenmesi gerekir. Bu yüzden ekibimizi üç kademeye ayırdık:",
     "teams": [
       {
         "title": "EKİP 1",
@@ -184,7 +184,7 @@
     "addressLabel": "Adres",
     "phoneLabel": "Telefon",
     "emailLabel": "E-posta",
-    "photoCaption": "İstanbul — Boğaziçi Köprüsü, gece"
+    "photoCaption": "İstanbul, Boğaziçi Köprüsü, gece"
   },
   "culture": {
     "hub": {
@@ -209,7 +209,7 @@
       "founderQuote": "“Yapay zekâdan önce aylar süren işi şimdi saniyelerde yapıyoruz. Kazandığımız zamanı fikre geri koyuyoruz.”",
       "secondTitle": "NE YAPIYORSAK OYUZ!",
       "secondBody": [
-        "Hayalinizdeki projeyi bize getirdiğinizde, ona yüreğimizi koymamızı beklersiniz — Hibrid 360’ta tam olarak bunu yapıyoruz.",
+        "Hayalinizdeki projeyi bize getirdiğinizde, ona yüreğimizi koymamızı beklersiniz. Hibrid 360’ta tam olarak bunu yapıyoruz.",
         "Projenizin içine giriyor, beyin fırtınası yapıyor ve size hem estetik hem işlevsel olarak doğru konsepti çıkarıyoruz.",
         "Bizim için sadece bir müşteri hesabı değilsiniz: bütün iletişim kanallarını açıyoruz ve müşterilerimiz bu bağlılığı fark ediyor.",
         "Birlikte neler başarabileceğimizi göstermek için sabırsızlanıyoruz!"
@@ -283,7 +283,7 @@
     "production": {
       "body": [
         "Hibrid 360, etkinlikleriniz için ses, ışık ve sahne prodüksiyonlarını kendi bünyesindeki imkânlarla üreten, yeni nesil çözümler sunan deneyimli bir prodüksiyon ve post prodüksiyon ajansıdır.",
-        "Prodüksiyonda 20 yılı aşkın deneyimimizle; yönetmen ve kamera ekibi, fotoğrafçı, senarist ve metin yazarı, ışık ekibi ve After Effects ile Illustrator gibi programlarda çalışan uzmanlarla — ışık ve renk düzeltme, green screen ve seslendirme dahil — kendi ekibimizle çalışıyoruz."
+        "Prodüksiyonda 20 yılı aşkın deneyimimizle yönetmen ve kamera ekibi, fotoğrafçı, senarist ve metin yazarı, ışık ekibi ve After Effects ile Illustrator gibi programlarda çalışan uzmanlardan oluşan kendi ekibimizle çalışıyoruz. Hizmetlerimize ışık ve renk düzeltme, green screen ve seslendirme de dahildir."
       ],
       "evidenceEmpty": "Doğrulanmış rakam ve iş adı hazırlanıyor."
     },
@@ -293,7 +293,7 @@
         "Hibrid 360 ayrıca 3D mimari render, kinetik tipografi, karakter tasarımı ve AutoCAD animasyonunda deneyimli genç YouTube kuşağı sanatçılarla çalışır.",
         "Masaüstü filmler, sosyal medya videoları, fabrika tanıtım filmleri, ürün videoları, lansman konsept videoları ve şirket toplantıları için ekip ve ekipman sağlamakla kalmıyor; tasarım ve uygulama hizmetleri de veriyoruz."
       ],
-      "microHeadingNote": "Sondan bir önceki plan — ama bizde iş orada bitmiyor."
+      "microHeadingNote": "Sondan bir önceki plan. Ama bizde iş orada bitmiyor."
     },
     "digital": {
       "body": [
@@ -338,15 +338,15 @@
       "evidenceEmpty": "Doğrulanmış rakam ve iş adı hazırlanıyor."
     },
     "cloudTv": {
-      "body": "Hibrid 360, şirketinize özel TV kanalınızı — “Cloudtivi” — bulut tabanlı bir kurumsal portal üzerinde kurar. Şirket TV kanalınız; iç iletişiminiz için şirket içinde ya da üyelik sistemiyle kullanıcılarınız için kullanabileceğiniz etkili bir platformdur.",
+      "body": "Hibrid 360, şirketinize özel “Cloudtivi” TV kanalını bulut tabanlı bir kurumsal portal üzerinde kurar. Şirket TV kanalınız; iç iletişiminiz için şirket içinde ya da üyelik sistemiyle kullanıcılarınız için kullanabileceğiniz etkili bir platformdur.",
       "steps": [
         "İçeriği düzenlemek için web portal ve yönetim paneli kuruyoruz,",
         "bulut tabanlı içerik yayını için gerekli altyapıyı hazırlıyoruz,",
         "sistemin kullanımı için eğitim veriyor, yönetiminize anahtar teslim çözüm sunuyor ve isterseniz operasyon ortağınız olarak yanınızda çalışıyoruz."
       ],
       "bandBody": [
-        "Giderek daha çok şirket; “Cloudtivi” üzerinden çalışanlarına, bayi ağına ve kullanıcılarına doğrudan ulaşıyor — kendi mekânında ve hibrit video içerikle, profesyonel bir yönetmen ekibiyle yapılan canlı yayınlarla.",
-        "Hibrid 360, sürükleyici bir TV kanalının yaptığı her şeyi markanız adına yapar — dahasını da."
+        "Giderek daha çok şirket, “Cloudtivi” üzerinden çalışanlarına, bayi ağına ve kullanıcılarına doğrudan ulaşıyor. Bunu kendi mekânında, hibrit video içerikle ve profesyonel bir yönetmen ekibiyle yapılan canlı yayınlarla gerçekleştiriyor.",
+        "Hibrid 360, sürükleyici bir TV kanalının yaptığı her şeyi ve daha fazlasını markanız adına yapar."
       ],
       "solutionsTitle": "HIBRID ÇÖZÜMLERİ NELERDİR?"
     },
@@ -359,14 +359,14 @@
     },
     "photography": {
       "body": [
-        "Ürün, yemek, portre ve kampanya fotoğrafı — kendi stüdyolarımızda çekilir, kendi ekibimizle stillenir, kendi bünyemizde rötuşlanır.",
+        "Ürün, yemek, portre ve kampanya fotoğrafları kendi stüdyolarımızda çekilir, kendi ekibimizle stillenir ve kendi bünyemizde rötuşlanır.",
         "Tek çekim günü, tek set; kampanyanızın ihtiyaç duyduğu bütün görseller: key visual, packshot, sosyal medya kadrajları ve kamera arkası."
       ]
     }
   },
   "directors": {
     "heroTitle": "KADRAJIN ARKASINDAKİLER.",
-    "heroSubtitle": "Filmleri şirketler çekmez, insanlar çeker — ve bunlar bizimkiler.",
+    "heroSubtitle": "Filmleri şirketler çekmez, insanlar çeker. İşte bizim ekibimiz.",
     "empty": "Kadro hazırlanıyor.",
     "reel": "Reel",
     "reelEmpty": "Reel hazırlanıyor.",
@@ -560,7 +560,7 @@
     "consent": "Gizlilik Politikası’nı ve KVKK Aydınlatma Metni’ni okudum, kabul ediyorum.",
     "send": "Gönder",
     "sending": "Gönderiliyor…",
-    "success": "Teşekkürler — ulaştı. Bir iş günü içinde dönüyoruz.",
+    "success": "Teşekkürler, mesajınız ulaştı. Bir iş günü içinde dönüyoruz.",
     "error": "Bir sorun oldu. Tekrar deneyin veya contact@hibrid360.com adresine yazın.",
     "errorConsent": "Devam etmek için onay kutucuğunu işaretlemelisiniz."
   },
