@@ -5,12 +5,6 @@
   --parallax-travel: 2.6rem;
   --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Referanstaki arka plan ızgarası: ölçülen adım 129.2px, kesikli ince
-     çizgiler ve kesişimlerde küçük artı işaretleri. Tek bir SVG desen
-     olarak veriliyor — ek istek yok, ek dosya yok. */
-  --grid-step: 129.2px;
-
-  position: relative;
   /* Beliriverme sırasında maddeler yanlardan kayıyor; bu dönüşüm sayfanın
      scrollWidth'ini büyütüp yatay kaydırma çubuğu doğuruyordu (390px'te
      ölçülen taşma 36px). `clip`, `hidden`den farklı olarak kaydırma
@@ -21,23 +15,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg stroke='%23ffffff' stroke-opacity='0.10' stroke-width='1'%3E%3Cpath d='M0 .5H40' stroke-dasharray='3 5'/%3E%3Cpath d='M.5 0V40' stroke-dasharray='3 5'/%3E%3Cpath d='M.5 -3.5V4.5M-3.5 .5H4.5' stroke-opacity='0.22'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: var(--grid-step) var(--grid-step);
-}
-
-/* İçerik ızgaranın üstünde kalsın. */
-.title,
-.body {
-  position: relative;
-  z-index: 1;
 }
 
 /* ---------- Başlık ---------- */
