@@ -1,8 +1,4 @@
 .section {
-  --scroll-progress: 0;
-  /* Paralaksın uç noktadaki toplam yolu. Küçük tutuldu: kompozisyon
-     kayıyor gibi değil, nefes alıyor gibi durmalı. */
-  --parallax-travel: 2.6rem;
   --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Beliriverme sırasında maddeler yanlardan kayıyor; bu dönüşüm sayfanın
@@ -11,7 +7,9 @@
      konteyneri yaratmaz ve sticky ataları bozmaz. */
   overflow-x: clip;
   width: 100%;
-  padding: clamp(3rem, 6vw, 6rem) var(--page-gutter) clamp(6rem, 10vw, 10rem);
+  /* Üst boşluk kısıldı: referansta slogan ile AZ LAF arası 101.6px,
+     bende 296px ölçülmüştü. */
+  padding: clamp(1rem, 1.5vw, 1.5rem) var(--page-gutter) clamp(6rem, 10vw, 10rem);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -30,10 +28,10 @@
  */
 .title {
   align-self: center;
-  margin: 0 0 clamp(1.5rem, 3vw, 3rem);
+  margin: 0 0 clamp(1.28rem, 2.55vw, 2.55rem);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(3.25rem, 10.35vw, 12rem);
+  font-size: clamp(2.76rem, 8.8vw, 10.2rem);
   line-height: 0.856;
   letter-spacing: 0;
   /* Büyük harf yalnızca çizimde, metinde değil. Türkçe locale'de
@@ -55,7 +53,7 @@
   /* 28.07vw ham ölçüdür; ÇOK İŞ'in sol yan boşluğu (side bearing)
      eklenince blok 24px sağa kaçıyordu. 26.4vw ile blok merkezi tam
      720px'e, yani sayfa ortasına oturuyor. */
-  padding-left: clamp(1.25rem, 26.4vw, 30rem);
+  padding-left: clamp(1.06rem, 22.44vw, 25.5rem);
 }
 
 .titleMark {
@@ -96,7 +94,9 @@
   /* Boşluklar tek tip değil — referansta madde araları farklı (aşağıda
      madde başına margin-top). */
   gap: 0;
-  width: 100%;
+  /* Yatay kompozisyon %15 kucultuldu; ic yuzdeler bu daralmis
+     govdeye gore cozuldugu icin olcekleme merkeze gore oluyor. */
+  width: 85%;
   max-width: 88rem;
   margin: 0;
   margin-inline: auto;
@@ -120,16 +120,20 @@
    kırıyordu. Gerçek genişlik 633.2px = %46.6.
    Dikey aralıklar da tek tip değil: referansta 01 alt çizgisi ile 02
    numarası arası 49.1px, 02 ile 03 arası yalnızca 6.7px. */
+/* Müşteri isteği: 02 referanstaki 49.1px'ten ~28px daha yukarıda dursun
+   (gönderdiği kırpımda imleç noktasıyla işaretlendi, kırpım 1:1 ölçekte).
+   49.1 - 28 = 21.1px = 1.47vw. 03 akışta 02'yi izlediği için aradaki
+   6.8px'lik referans ilişkisi korunuyor. */
 .itemSlot:nth-child(2) {
   width: 46.6%;
   margin-left: 47.8%;
-  margin-top: clamp(1.5rem, 3.41vw, 3.6rem);
+  margin-top: clamp(0.64rem, 1.25vw, 1.28rem);
 }
 
 .itemSlot:nth-child(3) {
   width: 51.3%;
   margin-left: 19.9%;
-  margin-top: clamp(0.25rem, 0.47vw, 0.5rem);
+  margin-top: clamp(0.21rem, 0.4vw, 0.43rem);
 }
 
 .item {
@@ -139,7 +143,7 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
   /* Referans: numara ile metin arası 17.5px = 1.22vw. */
-  gap: clamp(0.6rem, 1.22vw, 1.3rem);
+  gap: clamp(0.51rem, 1.04vw, 1.1rem);
 }
 
 /* Referans: numara cap yüksekliği 63.7px → punto 90.7px = 6.30vw.
@@ -147,7 +151,7 @@
 .index {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2rem, 6.3vw, 7rem);
+  font-size: clamp(1.7rem, 5.36vw, 5.95rem);
   line-height: 0.8;
   color: var(--color-brand-yellow);
   font-variant-numeric: tabular-nums;
@@ -156,20 +160,23 @@
 .itemText {
   margin: 0;
   /* Çizgi metnin altında, metin sütunu boyunca. */
-  padding-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
+  padding-bottom: clamp(0.64rem, 1.19vw, 1.06rem);
   /* Referansta çizgiler marka sarısı, gri değil. */
   border-bottom: 1px solid var(--color-brand-yellow);
   color: var(--color-text-on-black);
   font-family: var(--font-brand);
-  /* Referans: 'H' cap 18.2px → punto 25.9px = 1.80vw; satır ilerlemesi
-     34.4px → line-height 1.328. */
-  font-size: clamp(1rem, 1.8vw, 1.7rem);
+  /* Referans: 'H' cap 18.2px → punto 25.9px = 1.80vw; %15 küçültmeyle
+     1.53vw. Ölçümde tasarım satırları sütunu tam dolduruyordu (1440'ta
+     pay 0.9px, 1366 altında negatif) ve satırlar sarıyordu; 1.48vw ile
+     her masaüstü genişliğinde 8px+ pay kalıyor. */
+  font-size: clamp(0.9rem, 1.48vw, 1.4rem);
   font-weight: var(--font-weight-body-medium);
   line-height: 1.328;
 }
 
-/* Her cümle kendi satırında başlar; uzun cümle kendi içinde sarar. */
-.sentence {
+/* Tasarımdaki satır kırılımları. Geniş ekranda her satır kendi bloğunda;
+   dar ekranda (aşağıdaki media query) inline'a dönüp doğal sarar. */
+.line {
   display: block;
 }
 
@@ -197,14 +204,20 @@
 }
 
 /* Maddeler kendi tarafından kayarak gelir: 01 ve 03 soldan, 02 sağdan.
-   Önceki sürüm yalnızca 2.75rem yukarı kayıyordu ve fark edilmiyordu. */
+   Yön DEĞİŞKENLE veriliyor, ayrı bir transform kuralıyla değil.
+   Önceki hâlinde yön kuralı `.itemSlot:nth-child(2) .item` seçicisiyle
+   yazılmıştı (özgüllük 5) ve aşağıdaki `[data-revealed] .item` sıfırlama
+   kuralını (özgüllük 3) yeniyordu: 02 maddesi beliriverme bitince bile
+   56px ötelenmiş kalıyor, 03'ün metnine biniyordu. Değişken yuvada
+   tanımlanınca transform tek yerde kalıyor ve sıfırlama her maddede
+   çalışıyor. */
 .section[data-motion="on"] .item {
-  transform: translate3d(-3.5rem, 3.5rem, 0);
+  transform: translate3d(var(--slide-from, -3.5rem), 3.5rem, 0);
   transition-delay: calc(var(--panel-order, 0) * 160ms);
 }
 
-.section[data-motion="on"] .itemSlot:nth-child(2) .item {
-  transform: translate3d(3.5rem, 3.5rem, 0);
+.section .itemSlot:nth-child(2) {
+  --slide-from: 3.5rem;
 }
 
 /* Numara metinden biraz sonra ve büyüyerek girer — okuma sırası
@@ -234,18 +247,6 @@
   transform: translate3d(0.4rem, 0, 0);
 }
 
-/* Paralaks yalnızca beliriverme bittikten sonra ve geniş ekranda.
-   Reveal transform'u .item üzerinde, paralaks .itemSlot üzerinde — ikisi
-   çakışmasın ve paralaks transition'a takılmasın diye ayrı katman. */
-.section[data-parallax="on"][data-revealed="true"] .itemSlot {
-  transform: translate3d(
-    0,
-    calc(var(--scroll-progress) * var(--panel-speed, 0) * var(--parallax-travel)),
-    0
-  );
-  will-change: transform;
-}
-
 @media (max-width: 800px) {
   .body {
     gap: clamp(2rem, 7vw, 3rem);
@@ -268,12 +269,24 @@
   .titleLine:nth-child(2) {
     padding-left: clamp(0.75rem, 4vw, 2rem);
   }
+
+}
+
+/* Tasarım satırları masaüstü sütun genişliğine göre kırılmış. 1000px
+   altında punto clamp tabanına dayandığı için oransallık bozuluyor ve
+   sabit satırlar sütuna sığmıyor; orada satırlar inline'a dönüp metin
+   kendi doğal akışında sarıyor (müşteri: "mobilde falan değişebilir,
+   web sürümünde benim ilettiğim gibi olmalı"). */
+@media (max-width: 1000px) {
+  .line {
+    display: inline;
+  }
 }
 
 /* CLAUDE.md: prefers-reduced-motion zorunlu destek.
    `!important` bilinçli: yukarıdaki hareket kuralları data-attribute
-   taşıdığı için daha özgül ([data-parallax][data-revealed] = 0,4,0) ve
-   media query özgüllük eklemiyor. Bu blok erişilebilirlik garantisi —
+   taşıdığı için daha özgül ([data-motion] / [data-revealed]) ve media
+   query özgüllük eklemiyor. Bu blok erişilebilirlik garantisi —
    hiçbir koşulda yenilmemeli, aksi hâlde bölüm opacity:0'da kalabilir. */
 @media (prefers-reduced-motion: reduce) {
   .section .titleMark,

@@ -48,36 +48,24 @@ function splitTitleIntoLines(title: string): string[] {
 }
 
 /**
- * Madde metnini cümlelere böler — referans tasarımda her cümle yeni
- * satırda başlıyor, metin değişmiyor.
+ * Madde metnindeki tasarım satırları.
  *
- * Bunun doğal sarma olmadığı ölçümle doğrulandı: 01 maddesinin ikinci
- * satırı ("Çözüme giden yol budur.") 336px, sütun ise 548px — sonraki
- * kelime rahat sığardı, yani satır bilerek kırılmış. 02 ve 03 tek
- * cümleden olustuğu için bu kuraldan etkilenmez ve doğal sarar; yani tek
- * kural üç maddede de referanstaki kırılımı veriyor.
+ * Satır kırılımları metnin kendisinde `\n` olarak duruyor (messages/*.json).
+ * Sebebi ölçümle sabit: müşterinin verdiği kırılımlar doğal sarmayla elde
+ * edilemiyor — 02 maddesi için sütunun aynı anda ≥498.3px (1. satır
+ * sığsın diye) ve <474.8px ("her" 4. satıra çıkmasın diye) olması
+ * gerekiyordu; böyle bir genişlik yok. Yani kırılımlar tasarımda elle
+ * verilmiş ve veriyle taşınmaları gerekiyor.
  *
- * Regex lookbehind yerine kelime döngüsü: Safari 16.4 öncesi için de
- * güvenli ve niyeti daha açık.
+ * Dar ekranda bu sabit satırlar taşacağı için CSS'te satırlar inline'a
+ * dönüyor ve metin doğal olarak yeniden sarıyor.
  */
-function splitIntoSentences(text: string): string[] {
-  const lines: string[] = [];
-  let current = "";
-
-  for (const word of text.split(" ")) {
-    current = current ? `${current} ${word}` : word;
-    if (word.endsWith(".")) {
-      lines.push(current);
-      current = "";
-    }
-  }
-  if (current) lines.push(current);
-
-  return lines;
+function splitIntoDesignLines(text: string): string[] {
+  return text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
 }
-
-/** Kutu başına paralaks katsayısı — kompozisyon tek parça gibi kaymasın diye farklı. */
-const PANEL_PARALLAX_SPEED = [1, -0.6, 0.45];
 
 export function LessTalk() {
   const t = useTranslations("home.lessTalk");
@@ -89,7 +77,6 @@ export function LessTalk() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [motionReady, setMotionReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
-  const [parallaxEnabled, setParallaxEnabled] = useState(false);
 
   // Beliriverme. Sunucu render'ında hiçbir hareket niteliği basılmaz; bölüm
   // JS olmadan da tam görünür durur. Mount anında zaten ekrandaysa aynı
@@ -120,53 +107,13 @@ export function LessTalk() {
     return () => observer.disconnect();
   }, [prefersReducedMotion]);
 
-  // Paralaks yalnızca ızgaranın çok kolonlu olduğu genişlikte anlamlı.
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    const query = window.matchMedia("(min-width: 801px)");
-    setParallaxEnabled(query.matches);
-
-    const onChange = (event: MediaQueryListEvent) => setParallaxEnabled(event.matches);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    if (!parallaxEnabled || prefersReducedMotion) return;
-
-    const section = sectionRef.current;
-    if (!section) return;
-
-    let frameId: number | null = null;
-
-    // Tek stil yazımı: bölüm ilerlemesi CSS değişkenine yazılır, kutular
-    // kendi katsayılarıyla ondan türetir. Kare başına üç yerine bir yazım.
-    const update = () => {
-      frameId = null;
-      const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const travel = viewportHeight + rect.height;
-      // Bölüm ekranın altındayken -1, üstünden çıkarken +1.
-      const progress = ((viewportHeight - rect.top) / travel) * 2 - 1;
-      const clamped = Math.max(-1, Math.min(1, progress));
-      section.style.setProperty("--scroll-progress", clamped.toFixed(4));
-    };
-
-    const onScroll = () => {
-      if (frameId === null) frameId = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frameId !== null) cancelAnimationFrame(frameId);
-      section.style.removeProperty("--scroll-progress");
-    };
-  }, [parallaxEnabled, prefersReducedMotion]);
+  // NOT: Maddelere daha önce madde başına farklı hızda paralaks
+  // uygulanıyordu. Referans kompozisyonun dikey boşlukları çok dar (02 ile
+  // 03 arası yalnızca 6.8px) ve paralaks maddeleri birbirine göre ±42px
+  // ötelediği için metinler kaydırma sırasında üst üste biniyordu —
+  // ölçülen en kötü bindirme 1280-1920 arası her genişlikte 24-27px.
+  // Paralaks kaldırıldı; görünür hareketi zaten kademeli beliriverme
+  // sağlıyor ve o, bittiğinde transform bırakmadığı için yerleşimi bozmaz.
 
   // Hareket nitelikleri render anında türetilir, state'e güvenilmez.
   // usePrefersReducedMotion ilk render'da false döner (hydration uyumu
@@ -175,7 +122,6 @@ export function LessTalk() {
   // üzerinde kalırdı — bölüm opacity:0'da donup görünmez olurdu. Türetme
   // bu sıralamadan tamamen bağımsız.
   const motionActive = motionReady && !prefersReducedMotion;
-  const parallaxActive = motionActive && parallaxEnabled;
 
   return (
     <section
@@ -184,7 +130,6 @@ export function LessTalk() {
       aria-labelledby="less-talk-title"
       data-motion={motionActive ? "on" : undefined}
       data-revealed={motionActive ? String(revealed) : undefined}
-      data-parallax={parallaxActive ? "on" : undefined}
     >
       {/* Görünen satırlar virgülsüz ve büyük harf; erişilebilir ad
           deck'teki özgün cümle. */}
@@ -200,21 +145,19 @@ export function LessTalk() {
           <li
             className={styles.itemSlot}
             key={index}
-            style={
-              {
-                "--panel-speed": PANEL_PARALLAX_SPEED[index] ?? 0,
-                "--panel-order": index,
-              } as React.CSSProperties
-            }
+            style={{ "--panel-order": index } as React.CSSProperties}
           >
             <article className={styles.item}>
               <span className={styles.index} aria-hidden="true">
                 0{index + 1}
               </span>
               <p className={styles.itemText}>
-                {splitIntoSentences(paragraph).map((sentence) => (
-                  <span className={styles.sentence} key={sentence}>
-                    {sentence}
+                {splitIntoDesignLines(paragraph).map((line, lineIndex, all) => (
+                  <span className={styles.line} key={line}>
+                    {/* Dar ekranda satırlar inline'a döndüğünde kelimeler
+                        birbirine yapışmasın diye araya boşluk. Blok
+                        hâlindeyken bu boşluk zaten yok sayılır. */}
+                    {lineIndex < all.length - 1 ? `${line} ` : line}
                   </span>
                 ))}
               </p>

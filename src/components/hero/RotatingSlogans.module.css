@@ -1,15 +1,36 @@
+/**
+ * Yükseklik rezervi bölümden yuvaya taşındı.
+ *
+ * Önceden `min-height: min(52svh, 36rem)` (1440'ta 468px) bölümün
+ * tamamına veriliyordu; en uzun slogan ise ölçümde 222px. Aradaki fark
+ * `align-items: flex-start` yüzünden tamamen metnin ALTINDA ölü boşluk
+ * olarak kalıyor, sloganla bir sonraki başlık arasını referanstakinin
+ * (101.6px) üç katına çıkarıyordu.
+ *
+ * Rezerv artık yalnızca slogan yuvasında: döngüde sloganlar farklı
+ * yükseklikte olsa da bölüm boyu sabit kalır (sayfa zıplamaz), ama
+ * fazlalık kadar boşluk doğmaz. Ölçülen en uzun slogan genişliğe göre
+ * 158-222px arasında; clamp bunu karşılıyor.
+ */
 .block {
   width: 100%;
-  min-height: min(52svh, 36rem);
-  padding: clamp(3rem, 5vw, 5rem) var(--page-gutter) clamp(4rem, 7vw, 7rem);
+  padding: clamp(2.5rem, 4vw, 4rem) var(--page-gutter) clamp(1.5rem, 2.5vw, 2.5rem);
   display: flex;
   align-items: flex-start;
   justify-content: center;
   text-align: center;
 }
 
+/**
+ * Genişlik 64rem (1024px) iken "PRECISE. VISIONARY. HUMAN." 80px puntoda
+ * 1279px yer kapladığı için iki satıra kırılıyordu — oysa 1440'ta içerik
+ * kutusu 1358px, yani sığıyor. Sınır kutuya çıkarıldı: kısa sloganlar
+ * geniş ekranda tek satır, en uzun slogan ("Human creativity. AI
+ * precision. Real impact.", 1860px) referanstaki gibi iki satır kalıyor.
+ */
 .slot {
-  max-width: 64rem;
+  max-width: min(86rem, 100%);
+  min-height: clamp(10rem, 20vw, 14rem);
 }
 
 .entering {
@@ -47,17 +68,25 @@
 .lead {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
+  /* "PRECISE. VISIONARY. HUMAN." 15.99em geniş; 1280px'te içerik kutusu
+     1198px olduğu için 80px puntoda iki satıra düşüyordu. 5.8vw sınırı
+     1280'de 74.2px verip tek satıra alıyor, 1440 ve üstünde ise token'ın
+     5rem'i (referansın ölçülen 80px'i) devrede kalıyor. */
+  font-size: min(var(--font-size-display), 5.8vw);
   line-height: 1.1;
   margin: 0;
   color: var(--color-brand-yellow);
   text-wrap: balance;
 }
 
+/* Referans PDF'teki slogan alt yazısız olduğu için burası ölçüyle değil,
+   müşterinin gönderdiği görseldeki ORANLA belirlendi: alt yazının büyük
+   harf yüksekliği sarı satırınkinin ~0.32'si (bende 0.25 idi) ve solgun
+   değil tam beyaz. Opaklığın 1'e çıkması kontrastı da yükseltiyor. */
 .body {
   margin: var(--space-4) 0 0;
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
-  opacity: 0.85;
+  font-size: clamp(1.05rem, 1.75vw, 1.6rem);
+  opacity: 1;
 }
 
 .staticList {
