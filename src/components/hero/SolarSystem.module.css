@@ -55,14 +55,15 @@
    kasıtlı bir ağırlık/renk karşıtlığı kuruyor. */
 .titleWord {
   display: block;
-  font-weight: var(--font-weight-brand);
+  /* Müşteri: ExtraBold değil Montserrat Bold. */
+  font-weight: var(--font-weight-heading-bold);
   font-size: clamp(1.6rem, 5.81vw, 6rem);
   color: var(--color-brand-yellow);
   text-transform: uppercase;
-  letter-spacing: 0.336em;
+  letter-spacing: 0.3457em;
   /* Harf aralığı son harften sonra da boşluk bırakır; ortalanmış metin
      bu yüzden sola kaçık görünür. Negatif sağ pay o boşluğu geri alır. */
-  margin-right: -0.336em;
+  margin-right: -0.3457em;
 }
 .instruction {
   margin: 1rem 0 0;
