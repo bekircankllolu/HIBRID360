@@ -201,8 +201,18 @@ Zemin değişince bölümdeki renkler de uyarlandı:
 
 ### #27 uygulama
 
-Kaynak görselden ölçüldü: figür 714×886 (kırpım x478 y54), boyun y=446,
-kafa katmanı %55,42 yükseklik, dönme ekseni kafa içinde %90,8.
+Kaynak görselden ölçüldü: figür 714×886 (kırpım x478 y54).
+
+Kesme noktası **TV kasasının altıdır (%44,81), boyun değil.** İlk sürümde
+kesim boynun ortasındaydı; boyun hem kafa hem gövde katmanında bulunduğu
+için kafa döndüğünde iki boyun birbirinden kayıyor ve boyun kesikmiş gibi
+görünüyordu (müşteri bildirdi). Boyun artık yalnızca gövdededir —
+anatomik olarak da doğrusu bu: dönen şey TV, boyun gövdeye ait. Kafa
+katmanının alt kenarı ayrıca gradyanla eritildi, böylece hiçbir dönüş
+açısında sert çizgi oluşmuyor.
+
+Son ölçüler: kafa katmanı %48,53 yükseklik, gövde %42,89'dan başlar
+(TV'nin arkasından), dönme ekseni kafa içinde %92,3.
 
 Katmanlar **opak** — arka plan da sahne de siyah olduğu için dikdörtgen
 kenarlar görünmez. Bu, şeffaflık/maskeleme/dikiş sorunlarının tamamını

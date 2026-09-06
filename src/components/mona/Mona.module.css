@@ -53,15 +53,20 @@
 /**
  * Karakter figürü — iki katman.
  *
- * Ölçüler kaynak görselden alındı (1672×941; figür 714×886, boyun y=446):
- *   figür en-boy         = 714/886
- *   kafa katmanı yüksekliği = %55,42
- *   gövde üst konumu        = %49,21   (katmanlar %6,2 örtüşür)
- *   dönme ekseni (kafa içinde) = %90,8 → boyun hizası
+ * KESME NOKTASI: kafa katmanı TV kasasının ALTINDAN kesilir, boyundan
+ * değil. İlk sürümde kesim boynun ortasındaydı; boyun hem kafa hem gövde
+ * katmanında bulunduğu için kafa döndüğünde iki boyun birbirinden kayıyor
+ * ve boyun kesikmiş gibi görünüyordu. Boyun artık yalnızca gövdededir —
+ * anatomik olarak da doğrusu bu: dönen şey TV, boyun gövdeye ait.
+ *
+ * Ölçüler kaynak görselden (1672×941; figür 714×886):
+ *   figür en-boy               = 714/886
+ *   TV kasasının altı          = %44,81  → dönme ekseni
+ *   kafa katmanı yüksekliği    = %48,53  (TV altından 33px aşağı)
+ *   gövde üst konumu           = %42,89  (TV'nin arkasından başlar)
  *
  * Katmanlar opak: arka plan da sahne de siyah olduğu için dikdörtgen
- * kenarlar görünmez. Bu sayede şeffaflık, maskeleme ve kenar dikişi
- * sorunlarının hiçbiri doğmuyor.
+ * kenarlar görünmez — şeffaflık ve kenar dikişi sorunu doğmuyor.
  */
 .figure {
   position: relative;
@@ -76,12 +81,13 @@
 .body {
   position: absolute;
   left: 0;
-  top: 49.21%;
+  top: 42.89%;
   width: 100%;
-  height: 50.79%;
+  height: 57.11%;
   object-fit: fill;
-  /* Gövde imlecin tersine çok hafif kayar — derinlik hissi. */
-  transform: translate3d(calc(var(--gaze-x, 0) * -0.5%), 0, 0);
+  /* Gövde imlecin tersine çok hafif kayar — derinlik hissi. Boyun bu
+     katmanda olduğu için hareket çok küçük tutuldu. */
+  transform: translate3d(calc(var(--gaze-x, 0) * -0.35%), 0, 0);
 }
 
 .headLayer {
@@ -89,14 +95,18 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 55.42%;
+  height: 48.53%;
   cursor: pointer;
-  transform-origin: 50% 90.8%;
+  transform-origin: 50% 92.3%;
   transform: perspective(1200px)
     rotateY(calc(var(--gaze-x, 0) * 11deg))
     rotateX(calc(var(--gaze-y, 0) * -6deg))
     translate3d(calc(var(--gaze-x, 0) * 1.2%), calc(var(--gaze-y, 0) * 0.8%), 0);
   will-change: transform;
+  /* Alt kenar eritiliyor: TV'nin altında kalan kısa boyun payı, altındaki
+     gövde katmanının aynı pikselleriyle karışsın. Sert kenar olmadığı için
+     dönüşte hiçbir açıda çizgi oluşmuyor. */
+  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
 }
 
 .headImage {

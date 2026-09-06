@@ -114,8 +114,9 @@ export function Mona({
         <div className={styles.character}>
           {/* Karakter iki katman: gövde altta, kafa üstte. Kafa imleci
               takip ederek döner (useMonaGaze). Katmanların konumu kaynak
-              görselden ölçüldü (1672×941 içinde figür 714×886, boyun
-              y=446) — ölçüler CSS'te yüzde olarak sabit.
+              görselden ölçüldü (1672×941 içinde figür 714×886). Kesim TV
+              kasasının altından yapılır, boyundan değil — boyun yalnızca
+              gövde katmanındadır.
 
               Arka plan siyah olduğu için katmanlar şeffaf değil: siyah
               üstünde siyah görünmez. Bu hem dosyaları küçültüyor
@@ -139,7 +140,7 @@ export function Mona({
                 src="/images/mona/mona-body-480.webp"
                 alt={t("characterAlt")}
                 width={480}
-                height={303}
+                height={340}
                 decoding="async"
               />
             </picture>
@@ -174,7 +175,7 @@ export function Mona({
                   src="/images/mona/mona-head-480.webp"
                   alt=""
                   width={480}
-                  height={330}
+                  height={289}
                   decoding="async"
                 />
               </picture>
