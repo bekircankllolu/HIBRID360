@@ -211,3 +211,37 @@ riski bilerek onayladı. Etkiyi sınırlamak için alınan önlemler:
 4. **Kaydırmayla açılma efektleri kütüphanesiz.** CSS
    `animation-timeline: view()` kullanıldı; desteklemeyen tarayıcıda
    içerik olduğu gibi görünür, JS beklemez.
+
+### #30 — Kafanın imleci takibi: WebGL değil, CSS 3B
+
+Müşteri, referanstaki gibi karakterin imleci takip etmesini istedi.
+Referans bunu Three.js r165 ile, gerçek bir GLB modelin boyun/gövde
+rotasyonuyla yapıyor (`lisa.additiveRotations.neck`).
+
+**Aynı yol seçilmedi.** Gerekçe kredi değil, bayt ve bütçe:
+
+| Yaklaşım | Higgsfield kredisi | Gerçek maliyet | Karar |
+|---|---|---|---|
+| Three.js + dokulu GLB (`image_to_3d`) | 30 | Three.js ~150 kB + dokulu GLB tipik 3-15 MB. Tek başına 2 MB'lık ilk yükleme sınırını katlar. CLAUDE.md ayrıca WebGL'i Faz 5'e ve aynı anda tek sahneye bağlıyor | **Reddedildi** |
+| Çok açılı sprite seti (9 kare) | 18 | Kare başına karakter tutarlılığı garanti değil; açılar arasında zıplama riski yüksek | **Reddedildi** |
+| Katmanlı CSS 3B (kafa/gövde ayrı) | **0** | +0,7 kB JS, +3 KiB transfer. LCP değişmedi (3,7 sn → 3,7 sn) | **Uygulandı** |
+
+Seçimi mümkün kılan şey MONA'nın kafasının bir KUTU olması: perspektif
+altında dönen düz bir görsel, kutu biçimli bir nesnede ikna edici durur —
+aynı numara bir insan yüzünde çalışmazdı.
+
+Uygulama: kaynak görsel iki katmana ayrıldı (kafa 0-900 px, gövde 862 px
+altı; 38 px örtüşme). Ölçüler kaynaktan alındı — boyun y=835, ekran camı
+x %40,3-79,3 / y %6,4-27,2. Bakış değerleri React state'e değil doğrudan
+CSS özel değişkenine yazılıyor; her karede setState tüm konuşma ağacını
+yeniden render ederdi.
+
+MONA'nın ekranı artık canlı: başlamadan önce başlat etiketi ve yanıp sönen
+blok imleç, brief sırasında adım sayacı (01/06), imleci takip eden bir
+nişangâh halkası. Açık fosfor cam üzerine **siyah** metin — 1984 Macintosh
+görünümü ve ölçülen 9:1 üzeri kontrast; küçük puntoda mint kullanılmaz
+(CLAUDE.md renk kuralı). Ekran içeriği tamamen dekoratiftir (aria-hidden):
+her replik zaten sol panelde ve sayfa altındaki transkriptte tam metin.
+
+`prefers-reduced-motion` açıkken `useMonaGaze` hiçbir dinleyici bağlamaz;
+kafa birim matrisle sabit durur. Doğrulandı.

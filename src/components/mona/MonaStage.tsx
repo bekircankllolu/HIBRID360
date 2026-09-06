@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useMonaConversation } from "@/hooks/useMonaConversation";
+import { useMonaGaze } from "@/hooks/useMonaGaze";
 import { briefQuestions } from "@/data/brief-builder";
 import { AI_DISCLAIMER } from "@/data/mona";
 import styles from "./MonaStage.module.css";
@@ -59,7 +60,10 @@ export function MonaStage({
   const tb = useTranslations("brief");
   const reducedMotion = usePrefersReducedMotion();
   const c = useMonaConversation({ locale, reducedMotion });
-  const panelRef = useRef<HTMLDivElement>(null);
+  const figureRef = useRef<HTMLDivElement>(null);
+
+  // Kafanın imleci takibi. prefers-reduced-motion açıkken hiç bağlanmaz.
+  useMonaGaze(figureRef, { enabled: !reducedMotion });
 
   const { step, briefQuestion, answers, typing, skipTyping } = c;
 
@@ -256,28 +260,87 @@ export function MonaStage({
       </div>
 
       <div className={styles.characterWrap}>
-        <picture>
-          <source
-            type="image/avif"
-            sizes={CHARACTER_SIZES}
-            srcSet="/images/mona/mona-stage-640.avif 640w, /images/mona/mona-stage-960.avif 960w, /images/mona/mona-stage-1400.avif 1400w"
-          />
-          <source
-            type="image/webp"
-            sizes={CHARACTER_SIZES}
-            srcSet="/images/mona/mona-stage-640.webp 640w, /images/mona/mona-stage-960.webp 960w, /images/mona/mona-stage-1400.webp 1400w"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className={styles.character}
-            src="/images/mona/mona-stage-640.webp"
-            alt={t("stage.characterAlt")}
-            width={640}
-            height={1076}
-            fetchPriority="high"
-            decoding="async"
-          />
-        </picture>
+        <div className={styles.figure} ref={figureRef}>
+          {/* Gövde — kafa bölgesi saydam. Kafa ayrı katman olduğu için
+              burada da durursa döndürülen kafanın arkasından sabit bir
+              kafa görünürdü. */}
+          <picture>
+            <source
+              type="image/avif"
+              sizes={CHARACTER_SIZES}
+              srcSet="/images/mona/mona-body-640.avif 640w, /images/mona/mona-body-1400.avif 1400w"
+            />
+            <source
+              type="image/webp"
+              sizes={CHARACTER_SIZES}
+              srcSet="/images/mona/mona-body-640.webp 640w, /images/mona/mona-body-1400.webp 1400w"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className={styles.body}
+              src="/images/mona/mona-body-640.webp"
+              alt={t("stage.characterAlt")}
+              width={640}
+              height={1076}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
+
+          {/* Kafa + ekran birlikte döner. */}
+          <div className={styles.head}>
+            <picture>
+              <source
+                type="image/avif"
+                sizes={CHARACTER_SIZES}
+                srcSet="/images/mona/mona-head-640.avif 640w, /images/mona/mona-head-1400.avif 1400w"
+              />
+              <source
+                type="image/webp"
+                sizes={CHARACTER_SIZES}
+                srcSet="/images/mona/mona-head-640.webp 640w, /images/mona/mona-head-1400.webp 1400w"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className={styles.headImage}
+                src="/images/mona/mona-head-640.webp"
+                alt=""
+                width={640}
+                height={457}
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
+
+            {/* MONA'nın ekranı. Tamamen dekoratif: her replik zaten soldaki
+                panelde ve sayfa altındaki transkriptte tam metin olarak var,
+                bu yüzden ekran içeriği aria-hidden. 1984 Macintosh referansı
+                gereği açık fosfor cam üzerine SİYAH metin — küçük puntoda
+                mint kullanılmaz (CLAUDE.md renk kuralı). */}
+            <div className={styles.screen} aria-hidden="true">
+              <span className={styles.scanlines} />
+              <span
+                className={styles.reticle}
+                style={{ ["--reticle" as string]: c.started ? 1 : 0 }}
+              />
+              {!c.started ? (
+                <span className={styles.screenPrompt}>
+                  {t("stage.start")}
+                  <span className={styles.screenCaret} />
+                </span>
+              ) : (
+                <span className={styles.screenStatus}>
+                  {step.kind === "field" && briefQuestion
+                    ? `${String((step.briefFieldIndex ?? 0) + 1).padStart(2, "0")}/${String(
+                        briefQuestions.length,
+                      ).padStart(2, "0")}`
+                    : null}
+                  <span className={styles.screenCaret} />
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {!c.started && (
@@ -290,7 +353,7 @@ export function MonaStage({
       )}
 
       {c.started && (
-        <div className={styles.panel} ref={panelRef}>
+        <div className={styles.panel}>
           {c.previousText && (
             <p className={styles.previous} aria-hidden="true">
               {c.previousText}

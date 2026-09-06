@@ -73,19 +73,130 @@
   pointer-events: none;
 }
 
-/* Görsel arka planı kaldırılmış (şeffaf PNG kaynağından üretildi), bu yüzden
-   figür doğrudan marka baby pink zemininin üstünde durur. Daha önce arka
-   planlı sürümde görselin kendi pembesi (#e7a3b3) token pembesinden koyu
-   olduğu için ortada görünür bir dikiş oluşuyordu. */
-.character {
+/**
+ * Figür iki katman: gövde (kafa bölgesi saydam) + kafa. Kafa imleci takip
+ * ederken döner. Kutu biçimli bir kafa perspektif altında ikna edici durur.
+ *
+ * Konumlandırmanın tamamı bu en-boy kilitli kutuya göre yüzdedir; ölçüler
+ * kaynak görselden (1260×2119) ölçüldü:
+ *   kafa katmanı yüksekliği  = 900/2119  = %42,47
+ *   boyun (dönme ekseni)     = 835/900   = %92,8   (kafa katmanı içinde)
+ *   ekran camı               = x %40,3   y %15,1   w %39,0   h %49,0
+ * `object-fit: contain` yerine en-boy kilitli kutu kullanılıyor; aksi halde
+ * ekran ve kafa katmanı, kapsayıcının oranı değiştikçe görselden kayardı.
+ */
+.figure {
   position: absolute;
   right: 3%;
   bottom: 0;
   height: 94%;
-  width: auto;
+  aspect-ratio: 1260 / 2119;
   max-width: 56%;
+}
+
+.body {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  object-position: bottom right;
+  /* Gövde de çok hafif karşı yönde kayar — derinlik hissi. */
+  transform: translate3d(calc(var(--gaze-x, 0) * -0.4%), 0, 0);
+}
+
+.head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42.47%;
+  transform-origin: 50% 92.8%;
+  transform: perspective(1100px)
+    rotateY(calc(var(--gaze-x, 0) * 10deg))
+    rotateX(calc(var(--gaze-y, 0) * -6deg))
+    translate3d(calc(var(--gaze-x, 0) * 1.1%), calc(var(--gaze-y, 0) * 0.7%), 0);
+  will-change: transform;
+}
+
+.headImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* --- MONA'nın ekranı --------------------------------------------------- */
+
+.screen {
+  position: absolute;
+  left: 40.3%;
+  top: 15.1%;
+  width: 39%;
+  height: 49%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* Cam açık mint; küçük punto siyah kalır (mint yalnızca büyük puntoda —
+     CLAUDE.md renk kuralı). Ölçülen kontrast 9:1 üzeri. */
+  color: var(--color-text-on-white);
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-brand-black) 9%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* İmleci daha geniş bir yayla takip eden nokta — kafa dönerken ekranın
+   içinde ayrıca kayar, bakışın odaklandığı izlenimini verir. */
+/* Metinle çakışmasın diye ekranın üst yarısına sabitlendi; metin alta
+   hizalı duruyor. Dolu nokta yerine halka: toz zerresi gibi değil,
+   nişan alan bir gösterge gibi okunuyor. */
+.reticle {
+  position: absolute;
+  top: 26%;
+  left: 47%;
+  width: 6%;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-brand-black);
+  border-radius: 50%;
+  opacity: calc(var(--reticle, 0) * 0.65);
+  transform: translate3d(
+    calc(var(--gaze-x, 0) * 260%),
+    calc(var(--gaze-y, 0) * 150%),
+    0
+  );
+  transition: opacity 400ms ease;
+}
+
+.screenPrompt,
+.screenStatus {
+  position: relative;
+  align-self: end;
+  margin-bottom: 14%;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(0.4rem, 1.1vh, 0.75rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 6%;
+  line-height: 1.3;
+}
+
+.screenCaret {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 0.25em;
+  vertical-align: -0.1em;
+  background: var(--color-brand-black);
+  animation: monaCaret 900ms steps(2) infinite;
 }
 
 /* --- Başlat kapısı ---------------------------------------------------- */
@@ -471,15 +582,34 @@
     display: none;
   }
 
-  .character {
+  .figure {
     position: absolute;
-    inset: 0;
-    right: 0;
-    width: 100%;
-    max-width: none;
+    right: auto;
+    left: 50%;
+    bottom: 0;
     height: 100%;
-    object-fit: contain;
-    object-position: bottom center;
+    max-width: none;
+    transform: translateX(-50%);
+    /* Kaynak fotoğraf göğüs hizasında bitiyor. Masaüstünde bu kenar
+       ekranın altında kalıyor; mobilde figürün altında pembe alan olduğu
+       için düz kesik görünüyordu. Aşağı doğru eritiliyor. */
+    mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  }
+
+  /* Ekran camı mobilde ~60px genişliğinde: etiket sığmıyor ve kırpılıyor.
+     Metin zaten dekoratif (aria-hidden) ve gerçek etiket hemen altındaki
+     düğmede duruyor, bu yüzden yalnızca imleç bırakılıyor. */
+  .screenPrompt,
+  .screenStatus {
+    font-size: 0;
+    margin-bottom: 0;
+    align-self: center;
+  }
+
+  .screenCaret {
+    width: 3px;
+    height: 10px;
+    margin-left: 0;
   }
 
   .masthead {
@@ -531,9 +661,18 @@
 /* CLAUDE.md: prefers-reduced-motion zorunlu — daktilo imleci ve geçişler
    durur, içerik değişmez. */
 @media (prefers-reduced-motion: reduce) {
-  .caret {
+  .caret,
+  .screenCaret {
     animation: none;
     opacity: 1;
+  }
+
+  /* Bakış takibi zaten bağlanmıyor (useMonaGaze `enabled: false`); burada
+     kalan geçişler de kapatılıyor ki kafa tamamen sabit dursun. */
+  .head,
+  .body,
+  .reticle {
+    transition: none;
   }
 
   .startButton,
