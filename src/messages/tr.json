@@ -432,6 +432,7 @@
   "mona": {
     "sectionLabel": "MONA",
     "headLabel": "MONA’nın ekranı",
+    "characterAlt": "MONA — kafası eski bir televizyon olan, sarı ceketli karakter",
     "mediaPending": "MONA’nın karakter videosu ve seslendirmesi prodüksiyonda; replikler şimdilik yalnızca yazı olarak akıyor.",
     "mute": "Sesi kapat",
     "unmute": "Sesi aç",

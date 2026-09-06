@@ -6,8 +6,12 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useMonaMachine } from "@/hooks/useMonaMachine";
+import { useMonaGaze } from "@/hooks/useMonaGaze";
 import { monaQuestions, AI_DISCLAIMER, type MonaLine, type MonaQuestion } from "@/data/mona";
 import styles from "./Mona.module.css";
+
+/** Figür masaüstünde en fazla 420px, mobilde kolon genişliği kadar. */
+const FIGURE_SIZES = "(max-width: 900px) 70vw, 420px";
 
 /**
  * MONA — brief-rev12.md Bölüm 11.
@@ -42,10 +46,14 @@ export function Mona({
   const reducedMotion = usePrefersReducedMotion();
   const machine = useMonaMachine({ locale, reducedMotion });
   const sectionRef = useRef<HTMLElement>(null);
+  const figureRef = useRef<HTMLDivElement>(null);
   const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
   const [compactIndex, setCompactIndex] = useState(0);
 
   const { setSectionVisible, silence, speak } = machine;
+
+  // Kafanın imleci takibi. prefers-reduced-motion açıkken hiç bağlanmaz.
+  useMonaGaze(figureRef, { enabled: !reducedMotion });
 
   // brief 11.2: kullanıcı scroll edip başka bölüme geçince MONA susar;
   // geri dönünce kısa bir "geri dönüş" repliği söyler.
@@ -104,33 +112,73 @@ export function Mona({
     >
       <div className={styles.inner}>
         <div className={styles.character}>
-          <div
-            className={styles.head}
-            role="button"
-            tabIndex={0}
-            aria-label={t("headLabel")}
-            onClick={machine.registerHeadTap}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                machine.registerHeadTap();
-              }
-            }}
-          >
-            <span className={styles.cameraNotch} aria-hidden="true" />
-            <div className={styles.screen}>
-              <span className={styles.screenLoop} aria-hidden="true" />
-              <span className={styles.screenGrid} aria-hidden="true" />
-              <span className={styles.screenLabel}>hello</span>
+          {/* Karakter iki katman: gövde altta, kafa üstte. Kafa imleci
+              takip ederek döner (useMonaGaze). Katmanların konumu kaynak
+              görselden ölçüldü (1672×941 içinde figür 714×886, boyun
+              y=446) — ölçüler CSS'te yüzde olarak sabit.
+
+              Arka plan siyah olduğu için katmanlar şeffaf değil: siyah
+              üstünde siyah görünmez. Bu hem dosyaları küçültüyor
+              (960px AVIF ikilisi toplam 40 KB) hem de kenar/dikiş
+              sorununu tamamen ortadan kaldırıyor. */}
+          <div className={styles.figure} ref={figureRef}>
+            <picture>
+              <source
+                type="image/avif"
+                sizes={FIGURE_SIZES}
+                srcSet="/images/mona/mona-body-480.avif 480w, /images/mona/mona-body-960.avif 960w"
+              />
+              <source
+                type="image/webp"
+                sizes={FIGURE_SIZES}
+                srcSet="/images/mona/mona-body-480.webp 480w, /images/mona/mona-body-960.webp 960w"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className={styles.body}
+                src="/images/mona/mona-body-480.webp"
+                alt={t("characterAlt")}
+                width={480}
+                height={303}
+                decoding="async"
+              />
+            </picture>
+
+            <div
+              className={styles.headLayer}
+              role="button"
+              tabIndex={0}
+              aria-label={t("headLabel")}
+              onClick={machine.registerHeadTap}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  machine.registerHeadTap();
+                }
+              }}
+            >
+              <picture>
+                <source
+                  type="image/avif"
+                  sizes={FIGURE_SIZES}
+                  srcSet="/images/mona/mona-head-480.avif 480w, /images/mona/mona-head-960.avif 960w"
+                />
+                <source
+                  type="image/webp"
+                  sizes={FIGURE_SIZES}
+                  srcSet="/images/mona/mona-head-480.webp 480w, /images/mona/mona-head-960.webp 960w"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className={styles.headImage}
+                  src="/images/mona/mona-head-480.webp"
+                  alt=""
+                  width={480}
+                  height={330}
+                  decoding="async"
+                />
+              </picture>
             </div>
-            <span className={styles.statusRail} aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </span>
-            <span className={styles.headBase} aria-hidden="true">
-              <span className={styles.driveSlot} />
-            </span>
           </div>
           <p className={styles.mediaNote}>{t("mediaPending")}</p>
         </div>

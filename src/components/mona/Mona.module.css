@@ -1,8 +1,13 @@
 /* brief-rev12.md Bölüm 11.1: MONA zemini baby pink, metni neon mint.
    CLAUDE.md: bu renkler yalnızca bu bölümde kullanılır. */
+/* 6 Eylül 2026: zemin baby pink'ten siyaha çevrildi. Müşterinin verdiği
+   yeni MONA karakteri siyah zemin için ışıklandırılmış (kenar ışığı, mor
+   parıltı); pembe üstünde karakter dağılıyordu. Brief 11.1'in "baby pink
+   zemin + neon mint" tarifi bu kararla geçersiz — bkz. docs/DECISIONS.md.
+   Sitenin geri kalanı zaten siyah zeminli, bölüm artık ona oturuyor. */
 .stage {
-  background: var(--color-mona-baby-pink);
-  color: var(--color-brand-black);
+  background: var(--color-brand-black);
+  color: var(--color-text-on-black);
   padding: var(--space-12) var(--space-4);
   position: relative;
   overflow: hidden;
@@ -13,8 +18,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
   pointer-events: none;
@@ -45,186 +50,65 @@
   gap: var(--space-4);
 }
 
-/* MONA'nın kafası: 1984 Macintosh (DECISIONS #9 — VARSAYILANLA İLERLE).
-   Gerçek karakter videosu gelene kadar CSS ile çizilmiş silüet duruyor. */
-.head {
-  width: min(260px, 70vw);
-  aspect-ratio: 4 / 5;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.46), transparent 34%),
-    linear-gradient(180deg, #f1eadc 0%, #d6cdbd 100%);
-  border: 2px solid var(--color-brand-black);
-  border-radius: 6px;
-  box-shadow:
-    14px 14px 0 var(--color-brand-black),
-    18px 18px 0 rgba(255, 0, 255, 0.55);
-  padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+/**
+ * Karakter figürü — iki katman.
+ *
+ * Ölçüler kaynak görselden alındı (1672×941; figür 714×886, boyun y=446):
+ *   figür en-boy         = 714/886
+ *   kafa katmanı yüksekliği = %55,42
+ *   gövde üst konumu        = %49,21   (katmanlar %6,2 örtüşür)
+ *   dönme ekseni (kafa içinde) = %90,8 → boyun hizası
+ *
+ * Katmanlar opak: arka plan da sahne de siyah olduğu için dikdörtgen
+ * kenarlar görünmez. Bu sayede şeffaflık, maskeleme ve kenar dikişi
+ * sorunlarının hiçbiri doğmuyor.
+ */
+.figure {
+  position: relative;
+  width: min(420px, 70vw);
+  aspect-ratio: 714 / 886;
+  /* Kaynak fotoğraf ceketin ortasında bitiyor; siyah zeminde bile sarı
+     yüzeyin düz kesildiği yer belli oluyordu. Alt kenar siyaha eritiliyor
+     ki figür zemine karışsın. */
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
+}
+
+.body {
+  position: absolute;
+  left: 0;
+  top: 49.21%;
+  width: 100%;
+  height: 50.79%;
+  object-fit: fill;
+  /* Gövde imlecin tersine çok hafif kayar — derinlik hissi. */
+  transform: translate3d(calc(var(--gaze-x, 0) * -0.5%), 0, 0);
+}
+
+.headLayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 55.42%;
   cursor: pointer;
-  position: relative;
-  transform: perspective(900px) rotateX(1deg) rotateY(-3deg);
-  transition:
-    transform 260ms ease-out,
-    box-shadow 260ms ease-out;
+  transform-origin: 50% 90.8%;
+  transform: perspective(1200px)
+    rotateY(calc(var(--gaze-x, 0) * 11deg))
+    rotateX(calc(var(--gaze-y, 0) * -6deg))
+    translate3d(calc(var(--gaze-x, 0) * 1.2%), calc(var(--gaze-y, 0) * 0.8%), 0);
+  will-change: transform;
 }
 
-.head::before {
-  content: "";
-  position: absolute;
-  inset: var(--space-2);
-  border: 1px solid rgba(0, 0, 0, 0.24);
-  pointer-events: none;
-}
-
-.head::after {
-  content: "";
-  position: absolute;
-  left: 18%;
-  right: 18%;
-  bottom: -16px;
-  height: 16px;
-  background: var(--color-brand-black);
-  transform: skewX(-18deg);
-  transform-origin: top;
-}
-
-.head:hover,
-.head:focus-visible {
-  transform: perspective(900px) rotateX(0deg) rotateY(0deg) translateY(-3px);
-  box-shadow:
-    10px 10px 0 var(--color-brand-black),
-    15px 15px 0 rgba(255, 0, 255, 0.65);
-}
-
-.head:hover .screenLoop,
-.head:focus-visible .screenLoop {
-  /* brief 11.2: imleç ekrana gelince görüntüler hızlanır. */
-  animation-duration: 1.2s;
-}
-
-.cameraNotch {
-  align-self: center;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: var(--color-brand-black);
-}
-
-.screen {
-  flex: 1;
-  background: var(--color-brand-black);
-  border: 2px solid rgba(0, 0, 0, 0.65);
-  box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.08),
-    inset 0 0 26px rgba(255, 0, 255, 0.34);
-  overflow: hidden;
-  position: relative;
-  display: grid;
-  place-items: center;
-}
-
-/* Ekran içi görüntü döngüsü — gerçek 4:3 video varlığı gelene kadar
-   (brief 11.6 teslim listesi) marka renklerinde bir tarama efekti. */
-.screenLoop {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      var(--color-brand-fuchsia) 42%,
-      var(--color-brand-yellow) 52%,
-      transparent 68%
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.08) 0,
-      rgba(255, 255, 255, 0.08) 1px,
-      transparent 1px,
-      transparent 4px
-    );
-  opacity: 0.42;
-  animation: scan 3s linear infinite;
-}
-
-.screenGrid {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(0, 255, 180, 0.14) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 180, 0.12) 1px, transparent 1px);
-  background-size: 18px 18px;
-  mix-blend-mode: screen;
-  opacity: 0.28;
-}
-
-@keyframes scan {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
-
-/* CLAUDE.md + brief 11.6: prefers-reduced-motion açıkken MONA'nın
-   ekranındaki görüntü döngüsü durur, yalnızca yazı akar. */
-@media (prefers-reduced-motion: reduce) {
-  .screenLoop {
-    animation: none;
-    opacity: 0.2;
-  }
-}
-
-.screenLabel {
-  position: relative;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  color: var(--color-mona-neon-mint);
-  font-size: 1.5rem;
-  letter-spacing: 0;
-  text-shadow:
-    2px 0 0 var(--color-brand-fuchsia),
-    -2px 0 0 rgba(255, 252, 0, 0.75),
-    0 0 16px rgba(0, 255, 180, 0.55);
-}
-
-.statusRail {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-1);
-  padding: 0 var(--space-1);
-}
-
-.statusRail span {
-  width: 0.45rem;
-  height: 0.45rem;
-  background: var(--color-brand-black);
-}
-
-.statusRail span:nth-child(2) {
-  background: var(--color-brand-fuchsia);
-}
-
-.statusRail span:nth-child(3) {
-  background: var(--color-brand-yellow);
-}
-
-.headBase {
-  height: 1.25rem;
-  background: var(--color-mona-lilac);
-  border: 1px solid rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  padding: 0 var(--space-3);
-}
-
-.driveSlot {
+.headImage {
   display: block;
-  width: 48%;
-  height: 0.25rem;
-  background: var(--color-brand-black);
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.headLayer:focus-visible {
+  outline: 2px solid var(--color-brand-fuchsia);
+  outline-offset: 6px;
 }
 
 .mediaNote {
@@ -256,7 +140,7 @@
   font-weight: var(--font-weight-heading-bold);
   font-size: clamp(1.25rem, 2.6vw, 2rem);
   line-height: 1.3;
-  color: var(--color-mona-neon-mint);
+  color: var(--color-brand-yellow);
   min-height: 6rem;
   margin: 0;
   overflow-wrap: anywhere;
@@ -306,8 +190,8 @@
 }
 
 .controlButton {
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
+  background: var(--color-brand-white);
+  color: var(--color-text-on-white);
   border: 1px solid var(--color-brand-black);
   font-family: var(--font-body);
   font-size: 0.8125rem;
@@ -334,7 +218,7 @@
   text-align: left;
   background: transparent;
   border: 1px solid var(--color-brand-black);
-  color: var(--color-brand-black);
+  color: var(--color-text-on-black);
   font-family: var(--font-body);
   font-size: 0.9375rem;
   padding: var(--space-3) var(--space-4);
@@ -342,8 +226,8 @@
 }
 
 .questionButton:hover {
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
+  background: var(--color-brand-white);
+  color: var(--color-text-on-white);
 }
 
 .questionButton[aria-pressed="true"] {
@@ -355,8 +239,8 @@
 .action {
   display: inline-block;
   margin-top: var(--space-2);
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
   padding: var(--space-3) var(--space-6);
@@ -374,11 +258,8 @@
   gap: var(--space-6);
 }
 
-.compact .head {
+.compact .figure {
   width: min(180px, 38vw);
-  box-shadow:
-    9px 9px 0 var(--color-brand-black),
-    13px 13px 0 rgba(255, 0, 255, 0.55);
 }
 
 .compact .speech {
@@ -419,18 +300,9 @@
     grid-template-columns: 1fr;
   }
 
-  .head,
-  .compact .head {
-    width: min(210px, 58vw);
-    transform: none;
-    box-shadow:
-      8px 8px 0 var(--color-brand-black),
-      12px 12px 0 rgba(255, 0, 255, 0.55);
-  }
-
-  .head:hover,
-  .head:focus-visible {
-    transform: translateY(-2px);
+  .figure,
+  .compact .figure {
+    width: min(240px, 62vw);
   }
 
   .dialogue {

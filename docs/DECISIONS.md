@@ -170,3 +170,58 @@ müşteri tarafından bildirildi.
 | Contact adresi | **AÇIK** — eski site (2020) ile deck (Ağu 2026) farklı adres veriyor | CURRENT_CONTENT_GAPS.md madde 4 |
 | Solutions giriş paragrafı | **AÇIK** — eski sayfada yoktu, müşteriden isteniyor | CURRENT_CONTENT_GAPS.md madde 19 |
 | `works.category` alanının anlamı | **AÇIK** — arayüzde artık kullanılmıyor; ne anlama geldiği netleşmeli | `supabase/migrations/20260829100050_extend_works_filter_facets.sql` |
+
+## 6 Eylül 2026 — MONA karakteri ve bakış hareketi
+
+Müşteri MONA'nın gerçek karakter görselini verdi (siyah zemin, lila TV kafa,
+sarı ceket) ve karakterin imleci pürüzsüz takip etmesini istedi.
+
+| # | Konu | Karar | Durum |
+|---|---|---|---|
+| 25 | MONA karakter görseli | Müşterinin verdiği görsel esas alındı. `docs/mona/mona-character.png` (1672×941) kaynak olarak repoda | KAPANDI |
+| 26 | **MONA bölümünün zemini** | Baby pink → **siyah**. Brief 11.1'in "baby pink zemin + neon mint metin" tarifi **geçersiz** | KAPANDI — müşteri görseliyle zorunlu |
+| 27 | Bakış hareketi | Katmanlı CSS 3B (kafa/gövde ayrı), WebGL yok | KAPANDI |
+| 28 | MONA seslendirmesi | Müşteri ElevenLabs ile üretip yükleyecek (kadın ses) | AÇIK — dosya bekleniyor |
+
+### #26 gerekçesi
+
+Yeni karakter siyah zemin için ışıklandırılmış: kenar ışığı, mor parıltı,
+koyu kontur. Baby pink zemine yerleştirilince karakter dağılıyor. Zemin
+siyaha çevrildi; sitenin geri kalanı zaten siyah olduğu için bölüm artık
+sayfaya oturuyor.
+
+Zemin değişince bölümdeki renkler de uyarlandı:
+- Replik metni: neon mint → **sarı** (siyah üstünde 19,6:1; karakterin
+  ekranındaki sarı çizgiyle de bağ kuruyor)
+- Soru düğmeleri, kontroller: siyah metin → beyaz / beyaz zemin
+- Izgara dokusu: siyah çizgi → beyaz (siyah üstünde görünmüyordu)
+- `--color-mona-neon-mint` ve `--color-mona-baby-pink` token'ları artık
+  bu bölümde kullanılmıyor. Token'lar silinmedi; marka ekibi onaylarsa
+  başka yerde kullanılabilir (brief 11.7 hâlâ açık).
+
+### #27 uygulama
+
+Kaynak görselden ölçüldü: figür 714×886 (kırpım x478 y54), boyun y=446,
+kafa katmanı %55,42 yükseklik, dönme ekseni kafa içinde %90,8.
+
+Katmanlar **opak** — arka plan da sahne de siyah olduğu için dikdörtgen
+kenarlar görünmez. Bu, şeffaflık/maskeleme/dikiş sorunlarının tamamını
+ortadan kaldırdı ve dosyaları küçülttü: 960px AVIF ikilisi 40 KB, tüm
+varlıklar 172 KB.
+
+Pürüzsüzlük: kare süresine göre normalize edilmiş üstel yaklaşma
+(`useMonaGaze`). Sabit çarpan 60Hz ve 144Hz ekranlarda farklı hızda
+akardı. Değerler React state'e değil doğrudan CSS özel değişkenine
+yazılıyor; her karede setState tüm MONA ağacını render ederdi. Hedefe
+ulaşınca döngü kendini durdurur. `prefers-reduced-motion` açıkken kanca
+hiç bağlanmaz — doğrulandı: kafa birim matrisle sabit.
+
+### #28 — ses geldiğinde yapılacak
+
+Veri modeli hazır: `MonaLine.audioSrc` ve `captionsSrc` alanları
+`src/data/mona.ts` içinde duruyor, şu an null. Bileşende `<audio>`
+öğesi **henüz yok** — dosyalar gelince eklenecek. Gerekenler:
+- Replik başına ayrı dosya, TR + EN ayrı (`opening`, `idle-1…`, `q1…q10`,
+  `return`, `easter-egg`)
+- Her replik için VTT altyazı (brief 11.6: "Altyazı her video/replikte zorunlu")
+- Otomatik çalma YOK; sessiz başlar, kullanıcı ses düğmesiyle açar (brief 11.6)
