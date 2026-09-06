@@ -245,3 +245,38 @@ her replik zaten sol panelde ve sayfa altındaki transkriptte tam metin.
 
 `prefers-reduced-motion` açıkken `useMonaGaze` hiçbir dinleyici bağlamaz;
 kafa birim matrisle sabit durur. Doğrulandı.
+
+### #31 — Seedance 2.5 videosu: tüm figür değil, yalnızca ekran içi
+
+Müşteri "Seedance 2.5 ile video üretip kullansak olmaz mı" diye sordu.
+
+Önce bir yanlış anlaşılmayı kapatmak gerekiyor: **video, imleç takibinin
+yerine geçmez.** Video sabit bir zaman çizelgesidir, imlecin nerede
+olduğunu bilemez. İkisi rakip değil, tamamlayıcıdır — video ortam
+hareketi verir, CSS 3B katmanı imlece tepki verir.
+
+Videonun nereye konacağı üç seçenekti:
+
+| Seçenek | Maliyet | Engel | Karar |
+|---|---|---|---|
+| Tüm figür, pembe zemin gömülü | 45 kredi (5 sn 1080p) | Videonun **dikdörtgen kenarı** düz pembe zeminde net görünür; eski dikişten kötü. Ayrıca sayfanın LCP öğesi olur | Reddedildi |
+| Tüm figür + yeşil perde → VP9+alfa | 45 kredi + işleme | Şeffaflığı çözer, ffmpeg mevcut. Ama parlak pullu kostümde yeşil taşması riski yüksek. Brief 11.6'nın gerçek teslim formatı bu — asıl prodüksiyonda doğru yol | Ertelendi |
+| **Yalnızca ekran içi döngü** | **12,5 kredi** (5 sn 480p 1:1) | Yok: dikdörtgen içine dikdörtgen, şeffaflık gerekmiyor, kafa takibi bozulmuyor | **Uygulandı** |
+
+Üretilen dosya: 5 sn, sessiz, mint fosfor üzerine tel kafes ızgara, dönen
+çokyüzlü, tarama çizgisi süpürmesi. Model, "kasa çizme" talimatına rağmen
+monitör çerçevesi ürettiği için ham video kırpıldı (crop 560×470); sonu
+başına 0,5 sn çapraz geçişle bağlanarak dikişsiz döngü yapıldı.
+Çıktı: WebM/AV1 46 KB + MP4/H.264 35 KB, 480×402.
+
+**Video yalnızca kullanıcı konuşmayı başlattıktan sonra render edilir.**
+Anlatı olarak MONA uyanınca ekranı canlanır; mühendislik olarak ilk yüke
+hiç girmez, dolayısıyla LCP'ye etkisi sıfırdır. `prefers-reduced-motion`
+açıkken hiç render edilmez. Ses yok (dosya sessiz üretildi ve ayrıca
+`muted`) — brief 11.6 otomatik sesi yasaklıyor.
+
+Not: bu boyutta AV1 (46 KB) H.264'ten (35 KB) büyük çıktı; kısa ve küçük
+kareli içerikte AV1'in kazancı ortaya çıkmıyor. CLAUDE.md'nin AV1/WebM
+tercihi korundu (fark 11 KB ve dosya etkileşim sonrası yükleniyor) ama
+kural bayt tasarrufu için var, burada tersini yapıyor — ileride büyük
+video eklenirse ölçülerek karar verilmeli.

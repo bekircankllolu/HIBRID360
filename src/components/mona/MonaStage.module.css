@@ -140,6 +140,20 @@
   color: var(--color-text-on-white);
 }
 
+/* Ekran döngüsü. Cam zaten açık mint olduğu için video onun üstüne
+   yerleşir; kenarları camın kavisiyle örtüşsün diye hafifçe taşırılıyor. */
+.screenVideo {
+  position: absolute;
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+  object-fit: cover;
+  /* Üstteki siyah metnin kontrastı ölçülebilir kalsın diye video hafif
+     saydam: altındaki açık cam her zaman baskın. */
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
 .scanlines {
   position: absolute;
   inset: 0;

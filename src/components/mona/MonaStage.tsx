@@ -318,6 +318,27 @@ export function MonaStage({
                 gereği açık fosfor cam üzerine SİYAH metin — küçük puntoda
                 mint kullanılmaz (CLAUDE.md renk kuralı). */}
             <div className={styles.screen} aria-hidden="true">
+              {/* Ekran döngüsü YALNIZCA kullanıcı konuşmayı başlattıktan
+                  sonra render edilir. İki sebep: (1) anlatı olarak MONA
+                  uyanınca ekranı canlanır, (2) ilk yüke hiç girmez —
+                  sayfa LCP bütçesini zaten aşıyor, buraya karşılıksız bir
+                  video eklemek onu daha da kötüleştirirdi.
+                  Ses yok: dosya sessiz üretildi ve ayrıca `muted`
+                  (brief 11.6 — otomatik ses YASAK).
+                  prefers-reduced-motion açıkken hiç render edilmez. */}
+              {c.started && !reducedMotion && (
+                <video
+                  className={styles.screenVideo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                >
+                  <source src="/images/mona/mona-screen.webm" type="video/webm" />
+                  <source src="/images/mona/mona-screen.mp4" type="video/mp4" />
+                </video>
+              )}
               <span className={styles.scanlines} />
               <span
                 className={styles.reticle}
