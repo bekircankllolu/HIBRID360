@@ -12,7 +12,16 @@
 module.exports = {
   ci: {
     collect: {
-      url: ["http://localhost:3000/tr", "http://localhost:3000/en"],
+      // 6 Eylül 2026: AI Creative Production sayfası listeye eklendi.
+      // Denetimde çıktı ki bütçe yalnızca iki ana sayfada ölçülüyordu;
+      // en ağır sayfa (MONA sahnesi + karakter görseli + Lenis) hiç
+      // ölçülmüyordu, yani "her PR'da bütçe kontrol edilir" iddiası o
+      // sayfa için gerçek değildi.
+      url: [
+        "http://localhost:3000/tr",
+        "http://localhost:3000/en",
+        "http://localhost:3000/tr/what-we-do/ai-creative-production",
+      ],
       startServerCommand: "npm run start",
       startServerReadyPattern: "Ready in",
       startServerReadyTimeout: 30000,

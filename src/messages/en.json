@@ -436,7 +436,18 @@
     "mute": "Mute",
     "unmute": "Unmute",
     "stop": "Stop",
-    "next": "Next"
+    "next": "Next",
+    "stage": {
+      "start": "Start the conversation",
+      "startHint": "MONA stays silent until you start. Turning sound on is entirely up to you.",
+      "characterAlt": "MONA — a character with a vintage computer for a head, wearing a scaled costume",
+      "askQuestions": "Things I’m curious about",
+      "startBrief": "Build a brief",
+      "seeWork": "See the work",
+      "contact": "Contact",
+      "advance": "Continue",
+      "progressLabel": "Brief progress"
+    }
   },
   "aiCreativeProduction": {
     "transcriptTitle": "All lines (text)",

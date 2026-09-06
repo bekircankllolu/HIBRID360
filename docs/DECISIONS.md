@@ -170,3 +170,44 @@ müşteri tarafından bildirildi.
 | Contact adresi | **AÇIK** — eski site (2020) ile deck (Ağu 2026) farklı adres veriyor | CURRENT_CONTENT_GAPS.md madde 4 |
 | Solutions giriş paragrafı | **AÇIK** — eski sayfada yoktu, müşteriden isteniyor | CURRENT_CONTENT_GAPS.md madde 19 |
 | `works.category` alanının anlamı | **AÇIK** — arayüzde artık kullanılmıyor; ne anlama geldiği netleşmeli | `supabase/migrations/20260829100050_extend_works_filter_facets.sql` |
+
+## 6 Eylül 2026 müşteri revizyonu — AI Creative Production
+
+Müşteri, referans olarak interaktif asistanlı bir iletişim sayfası gösterdi
+(locomotive.ca/en/contact) ve AI Creative Production sayfasının **bu yapıda**
+olmasını istedi. Referansın incelemesi şunu gösterdi: sayfa bir form değil,
+karakterli bir asistanla yürüyen bir konuşma — başlat kapısı, dallanan menü,
+tek ekranda tek soru, geri düğmesi, kalıcı ses anahtarı.
+
+Bu yapı Hibrid 360'ta zaten iki ayrı parça olarak vardı: MONA (brief 11) ve
+Brief Builder (brief 18.8). Revizyon ikisini tek akışta birleştirdi.
+**Referanstan yalnızca yapı alındı; karakter, replikler, renk sistemi ve
+tipografi tamamen Hibrid 360'ındır. Referansın metni kopyalanmadı.**
+
+| # | Konu | Karar | Durum | Etki |
+|---|---|---|---|---|
+| 25 | AI Creative Production sayfa yapısı | Sayfa MONA merkezli yeniden kuruldu: ilk ekran tam sahne (başlat → menü → dal → altı soruluk brief), altında AI-01..09 anlatısı | KAPANDI — müşteri kararı | `MonaStage.tsx`, `useMonaConversation.ts`, `mona-conversation.ts`. AI-01..09 metinleri değişmedi, yalnızca yerleşimleri değişti |
+| 26 | Yumuşak kaydırma (smooth scroll) | Lenis eklendi | KAPANDI — müşteri kararı | **Performans bütçesinden bilinçli sapma.** Bkz. aşağıdaki not |
+| 27 | MONA karakter görseli | Yapay zekâ ile üretilmiş **yer tutucu** kullanılıyor | AÇIK | Gerçek prodüksiyon (brief 11.6: WebM VP9+alfa + MP4) gelene kadar geçerli. Görsel brief 11.1 tarifine uygun: eski bilgisayar kafa, pullu kostüm, baby pink zemin |
+| 28 | `mona.stage.*` arayüz etiketleri | Dokuz yeni anahtar yazıldı ("Konuşmayı başlat", "Brief oluştur", "Merak ettiklerim" vb.) | AÇIK — copy onayı bekliyor | Bunlar SİTEYE GİRECEK METİN kutusundan gelmedi; işlevsel arayüz metnidir. Müşteri onayına sunulmalı |
+| 29 | Brief Builder'ın iki girişi | Aynı akış hem `/brief` sayfasında hem MONA sahnesinde | AÇIK | İkisi de `brief_submissions` tablosuna yazıyor; gelen kaydın hangi girişten geldiği **ayırt edilemiyor**. Bir `source` sütunu gerekiyor |
+
+### #26 hakkında — performans bütçesi sapması
+
+CLAUDE.md performans bütçesini "sözleşme maddesi, pazarlık konusu değil"
+olarak tanımlar. Smooth scroll kütüphanesi bu maddeye aykırıdır; müşteri
+riski bilerek onayladı. Etkiyi sınırlamak için alınan önlemler:
+
+1. **Lenis layout'a değil, yalnızca bu sayfaya bağlandı.** Kütüphane rota
+   parçasında kalır; ana sayfanın ilk yükü etkilenmez (paylaşılan bundle
+   103 kB'de sabit kaldı).
+2. **`respectReducedMotion` varsayılanı korundu.** Lenis, kullanıcının
+   `prefers-reduced-motion` ayarını kendisi karşılar; bu ayar ASLA
+   `false` yapılmamalıdır.
+3. **Lighthouse ölçümüne bu sayfa eklendi.** Denetimde çıktı ki
+   `lighthouserc.js` yalnızca `/tr` ve `/en` ana sayfalarını ölçüyordu —
+   yani en ağır sayfa hiç ölçülmüyordu ve bütçe iddiası o sayfa için
+   gerçek değildi. Artık ölçülüyor.
+4. **Kaydırmayla açılma efektleri kütüphanesiz.** CSS
+   `animation-timeline: view()` kullanıldı; desteklemeyen tarayıcıda
+   içerik olduğu gibi görünür, JS beklemez.

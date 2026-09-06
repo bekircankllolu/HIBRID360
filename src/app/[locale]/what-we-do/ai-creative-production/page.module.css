@@ -1,42 +1,36 @@
-.hero {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4) var(--space-12);
+/**
+ * 6 Eylül 2026 revizyonu — sayfa MONA sahnesiyle açılıyor.
+ *
+ * Hero blokları (.hero/.heroTitle/.heroLead) kaldırıldı: h1 ve giriş
+ * cümlesi artık MonaStage'in içinde, sahnenin üst köşesinde duruyor
+ * (bkz. MonaStage.module.css .masthead). Anlatı katmanı sahnenin altından
+ * başlar ve siyah zemine döner.
+ */
+.narrative {
+  position: relative;
+  z-index: 1;
+  background: var(--color-brand-black);
 }
 
-/* brief 11.4 Soru 5 / 11.8: "CREATE THE FUTURE." MONA'nın yanında,
-   neon mint yeşili. Baby pink zemin dışında mint kullanılmadığı için
-   başlık siyah zeminde beyaz kalır; mint yalnızca MONA bölümünde. */
-.heroTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  margin: 0 0 var(--space-6);
-}
-
-.heroLead {
-  max-width: 46rem;
-  margin: 0;
-}
-
-/* AI-02 — hero altı dönüşümlü slogan. Deck'te "loop" olarak tarifli;
-   burada basitleştirilip iki satır art arda gösteriliyor (RotatingSlogans
-   gibi ayrı bir döngü bileşeni kurulmadı — TODO: istenirse eklenecek). */
+/* AI-02 — sloganlar. Referans yapıdaki kademeli yığın tipografinin
+   karşılığı: satırlar tek blok halinde değil, kaydırma ilerledikçe
+   sırayla belirir. CLAUDE.md: sloganlar TR sürümde de İngilizce kalır. */
 .slogans {
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 0 var(--space-4) var(--space-16);
+  padding: var(--space-24) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-4);
 }
 
 .sloganLine {
   font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1rem, 2.2vw, 1.375rem);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.1;
+  max-width: 24ch;
   margin: 0;
-  opacity: 0.9;
 }
 
 .block {
@@ -193,4 +187,37 @@
 .transcriptList dd {
   margin: var(--space-2) 0 0;
   opacity: 0.85;
+}
+
+/**
+ * Kaydırmayla açılma — CSS scroll-driven animation.
+ *
+ * Kütüphane kullanılmadı: `animation-timeline: view()` desteklemeyen
+ * tarayıcıda @supports bloğu hiç uygulanmaz, içerik olduğu gibi görünür.
+ * IntersectionObserver tabanlı bir çözüm ise JS gelene kadar içeriği
+ * gizli tutar — CLAUDE.md performans bütçesi ve erişilebilirlik açısından
+ * kabul edilemez.
+ *
+ * prefers-reduced-motion açıkken blok hiç çalışmaz (CLAUDE.md zorunlu).
+ */
+@keyframes aiReveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .block,
+    .sloganLine {
+      animation: aiReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 30%;
+    }
+  }
 }

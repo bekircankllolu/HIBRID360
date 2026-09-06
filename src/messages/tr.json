@@ -436,7 +436,18 @@
     "mute": "Sesi kapat",
     "unmute": "Sesi aç",
     "stop": "Sustur",
-    "next": "Devam"
+    "next": "Devam",
+    "stage": {
+      "start": "Konuşmayı başlat",
+      "startHint": "MONA sen başlatana kadar sessiz. Sesi açmak tamamen isteğine bağlı.",
+      "characterAlt": "MONA — kafası eski bir bilgisayar olan, pullu kostüm giyen karakter",
+      "askQuestions": "Merak ettiklerim",
+      "startBrief": "Brief oluştur",
+      "seeWork": "İşleri gör",
+      "contact": "İletişim",
+      "advance": "Devam et",
+      "progressLabel": "Brief ilerlemesi"
+    }
   },
   "aiCreativeProduction": {
     "transcriptTitle": "Tüm replikler (metin)",
