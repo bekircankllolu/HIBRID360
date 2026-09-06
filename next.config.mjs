@@ -25,6 +25,7 @@ const LEGACY_ROUTE_MAP = [
   ["/culture/who-we-are", "/who-we-are"],
   ["/culture/what-we-believe", "/what-we-believe"],
   ["/culture/partners", "/partners"],
+  ["/insights", "/think-and-thank"],
   // Photography bağımsız hizmet sayfası olmaktan çıktı; en yakın canonical
   // üst sayfa What We Do hub'ı.
   ["/what-we-do/photography", "/what-we-do"],
@@ -40,13 +41,20 @@ const nextConfig = {
   outputFileTracingRoot: path.dirname(fileURLToPath(import.meta.url)),
 
   async redirects() {
-    return LOCALES.flatMap((locale) =>
-      LEGACY_ROUTE_MAP.map(([from, to]) => ({
-        source: `/${locale}${from}`,
-        destination: `/${locale}${to}`,
+    return [
+      ...LOCALES.flatMap((locale) =>
+        LEGACY_ROUTE_MAP.map(([from, to]) => ({
+          source: `/${locale}${from}`,
+          destination: `/${locale}${to}`,
+          permanent: true,
+        })),
+      ),
+      ...LOCALES.map((locale) => ({
+        source: `/${locale}/insights/:slug`,
+        destination: `/${locale}/think-and-thank/:slug`,
         permanent: true,
       })),
-    );
+    ];
   },
 };
 

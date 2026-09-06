@@ -9,6 +9,7 @@ import {
 } from "@/data/sustainability";
 import type { Locale } from "@/i18n/routing";
 import styles from "@/components/legal/LegalPage.module.css";
+import local from "./page.module.css";
 
 /**
  * Sustainability — brief-rev12.md Bölüm 18.11.
@@ -59,6 +60,12 @@ export default async function SustainabilityPage({
       />
       <h1 className={styles.title}>{t("title")}</h1>
 
+      <header className={local.hero}>
+        <p className={local.kicker}>OUR HOME IS THE WORLD.</p>
+        <h2>ZERO CARBON.<br />FULL IMPACT.</h2>
+        <p>{t("intro")}</p>
+      </header>
+
       {!publishable && <p className={styles.notice}>{t("pendingEvidence")}</p>}
 
       <section className={styles.section}>
@@ -108,6 +115,8 @@ export default async function SustainabilityPage({
         <h2 className={styles.heading}>{t("onSetTitle")}</h2>
         <EmptyState message={t("onSetPending")} />
       </section>
+
+      <p className={local.closing}>CREATE MORE. CARBON LESS.</p>
     </div>
   );
 }

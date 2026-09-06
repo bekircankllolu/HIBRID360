@@ -105,6 +105,7 @@ export function ReachOut() {
       <h2 id="reach-out-title" className={styles.title}>
         {t("title")}
       </h2>
+      <p className={styles.bodyCopy}>{t("body")}</p>
       <button
         ref={ctaRef}
         type="button"
@@ -137,8 +138,8 @@ export function ReachOut() {
             >
               <span aria-hidden="true" />
             </button>
+            <p className={styles.popupEyebrow}>HIBRID 360 / CONTACT</p>
             <div className={styles.popupVisual} aria-hidden="true">
-              <p className={styles.popupEyebrow}>HIBRID 360 / CONTACT</p>
               <Image
                 className={styles.illustration}
                 src="/images/site/home/reach-out-illustration-woman-stylized.svg"

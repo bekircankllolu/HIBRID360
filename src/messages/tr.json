@@ -9,16 +9,16 @@
   },
   "nav": {
     "whoWeAre": "Biz Kimiz",
-    "whatWeDo": "Ne Yapıyoruz",
+    "whatWeDo": "What We Do",
     "whatWeBelieve": "Neye İnanıyoruz",
     "solutions": "Çözümler",
-    "clients": "Müşteriler",
-    "friends": "Müşteriler",
-    "partners": "İş Ortakları",
-    "contact": "İletişim",
-    "work": "İşler",
-    "insights": "İçgörüler",
-    "culture": "Kültür",
+    "clients": "Friends",
+    "friends": "Friends",
+    "partners": "Partners",
+    "contact": "Contact",
+    "work": "Works",
+    "insights": "Think & Thank",
+    "culture": "Our Culture",
     "about": "Hakkımızda",
     "explore": "Keşfet",
     "legal": "Yasal",
@@ -65,6 +65,7 @@
     "tagline": "Türkiye’nin AI-native kreatif prodüksiyon stüdyosu",
     "reachOut": {
       "title": "Sizin için ne yapabiliriz?",
+      "body": "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz. Tam da bu yüzden her iş için ayrı bir prodüksiyon modeli, size özel bir çözüm kuruyoruz.",
       "cta": "Bize ulaşın",
       "popupIntro": "Merhaba. Neyi, ne zaman yapmak istediğinizi yazın. Gerisini biz hallederiz.",
       "close": "Kapat"
@@ -73,13 +74,19 @@
       "title": "EN İYİ İŞ, İŞ GİBİ HİSSETTİRMEZ",
       "subtitle": "Neyle meşgulüz, görmek ister misiniz?"
     },
-    "closingBody": "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz. Tam da bu yüzden her iş için ayrı bir prodüksiyon modeli, size özel bir çözüm kuruyoruz."
+    "closingBody": "The future of creativity isn't artificial. It's hybrid."
   },
   "insights": {
-    "heroTitle": "ÜRETİRKEN ÖĞRENDİKLERİMİZ.",
-    "heroSubtitle": "Kendi prodüksiyonlarımızdan sayılar, yöntemler ve hatalar; doğrudan işi yürütenlerden.",
+    "heroEyebrow": "HIBRID 360 MAG",
+    "heroTitle": "THINK & THANK",
+    "heroLead": "Fikirden etkiye.",
+    "heroSubtitle": "Hibrid 360’ın çalışma alanlarını anlatan editoryal yazılar.",
     "categoryLabel": "Kategori",
     "categoryAll": "Tümü",
+    "articleCount": "{count} yazı",
+    "articleInfo": "Yazı bilgileri",
+    "readTime": "{minutes} dk okuma",
+    "backToIndex": "Think & Thank’e dön",
     "comingSoon": "İlk yazılar hazırlanıyor.",
     "readMore": "Devamını oku"
   },
@@ -190,6 +197,7 @@
     "hub": {
       "whoWeAre": "Biz Kimiz",
       "whatWeBelieve": "Neye İnanıyoruz",
+      "thinkAndThank": "Think & Thank",
       "directors": "Yönetmenler ve Ekip",
       "partners": "İş Ortakları",
       "sustainability": "Sürdürülebilirlik"
@@ -400,8 +408,11 @@
     ]
   },
   "clients": {
-    "heroTitle": "MÜŞTERİLERİMİZ",
+    "heroTitle": "THANK YOU",
+    "heroSupport": "2004'ten beri bize inanan ve destekleyen herkese gönülden teşekkür ederiz.",
     "heroBody": "Birlikte çalıştığımız markalarla dürüst, uzun soluklu ve cesur iş birlikleri kuruyoruz. Global ikonlar. Ortak yaratıcı enerji.",
+    "friendsBody": "Birlikte çalıştığımız insanları seviyoruz. Ajansımızda onlara müşteri değil, dost diyoruz: en yakın çalışma arkadaşları arasında kurulabilecek kadar dürüst ve sadık bir kimya.",
+    "anniversaryAlt": "Hibrid 360'ın yirmi yılı aşan yolculuğunu kutlayan yıl dönümü görseli",
     "index": {
       "label": "Marka dizini",
       "all": "Tümü",
@@ -433,6 +444,9 @@
     "sectionLabel": "MONA",
     "headLabel": "MONA’nın ekranı",
     "mediaPending": "MONA’nın karakter videosu ve seslendirmesi prodüksiyonda; replikler şimdilik yalnızca yazı olarak akıyor.",
+    "pointerHint": "İmleci hareket ettirin. MONA sizi izliyor.",
+    "generalQuestions": "HIBRID 360",
+    "aiQuestions": "AI & HYBRID PRODUCTION",
     "mute": "Sesi kapat",
     "unmute": "Sesi aç",
     "stop": "Sustur",
@@ -513,6 +527,7 @@
   },
   "sustainability": {
     "title": "Sürdürülebilirlik",
+    "intro": "Dijital yaratıcılığın dünyayı ağır bir iz bırakmadan ileri taşıyabileceğine inanıyoruz. Dünya bizim. Sorumluluk da öyle.",
     "measurementTitle": "Ölçüm",
     "reductionTitle": "Azaltım",
     "offsetTitle": "Denkleştirme",

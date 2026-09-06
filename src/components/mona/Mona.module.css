@@ -33,49 +33,39 @@
    Mobil (brief 11.2): MONA üstte, soru listesi dikey olarak altında. */
 @media (min-width: 900px) {
   .inner {
-    grid-template-columns: minmax(280px, 420px) 1fr;
+    grid-template-columns: minmax(360px, 540px) 1fr;
     align-items: start;
   }
 }
 
 .character {
+  --mona-tilt-x: 0deg;
+  --mona-tilt-y: 0deg;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
 }
 
-/* MONA'nın kafası: 1984 Macintosh (DECISIONS #9 — VARSAYILANLA İLERLE).
-   Gerçek karakter videosu gelene kadar CSS ile çizilmiş silüet duruyor. */
+/* Etkileşimli MONA videosu: klip masaüstünde imleçle taranır, dokunmatik
+   cihazlarda sessiz döngü olarak oynar. */
 .head {
-  width: min(260px, 70vw);
-  aspect-ratio: 4 / 5;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.46), transparent 34%),
-    linear-gradient(180deg, #f1eadc 0%, #d6cdbd 100%);
+  width: min(540px, 88vw);
+  aspect-ratio: 16 / 9;
+  background: var(--color-brand-black);
   border: 2px solid var(--color-brand-black);
   border-radius: 6px;
   box-shadow:
     14px 14px 0 var(--color-brand-black),
     18px 18px 0 rgba(255, 0, 255, 0.55);
-  padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  padding: 0;
   cursor: pointer;
   position: relative;
-  transform: perspective(900px) rotateX(1deg) rotateY(-3deg);
+  overflow: hidden;
+  transform: perspective(1100px) rotateX(var(--mona-tilt-x)) rotateY(var(--mona-tilt-y));
   transition:
     transform 260ms ease-out,
     box-shadow 260ms ease-out;
-}
-
-.head::before {
-  content: "";
-  position: absolute;
-  inset: var(--space-2);
-  border: 1px solid rgba(0, 0, 0, 0.24);
-  pointer-events: none;
 }
 
 .head::after {
@@ -92,139 +82,31 @@
 
 .head:hover,
 .head:focus-visible {
-  transform: perspective(900px) rotateX(0deg) rotateY(0deg) translateY(-3px);
   box-shadow:
     10px 10px 0 var(--color-brand-black),
     15px 15px 0 rgba(255, 0, 255, 0.65);
 }
 
-.head:hover .screenLoop,
-.head:focus-visible .screenLoop {
-  /* brief 11.2: imleç ekrana gelince görüntüler hızlanır. */
-  animation-duration: 1.2s;
+.characterVideo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
-.cameraNotch {
-  align-self: center;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: var(--color-brand-black);
-}
-
-.screen {
-  flex: 1;
-  background: var(--color-brand-black);
-  border: 2px solid rgba(0, 0, 0, 0.65);
-  box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.08),
-    inset 0 0 26px rgba(255, 0, 255, 0.34);
-  overflow: hidden;
-  position: relative;
-  display: grid;
-  place-items: center;
-}
-
-/* Ekran içi görüntü döngüsü — gerçek 4:3 video varlığı gelene kadar
-   (brief 11.6 teslim listesi) marka renklerinde bir tarama efekti. */
-.screenLoop {
+.videoSheen {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      var(--color-brand-fuchsia) 42%,
-      var(--color-brand-yellow) 52%,
-      transparent 68%
-    ),
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.08) 0,
-      rgba(255, 255, 255, 0.08) 1px,
+      rgba(255, 255, 255, 0.045) 0,
+      rgba(255, 255, 255, 0.045) 1px,
       transparent 1px,
-      transparent 4px
+      transparent 5px
     );
-  opacity: 0.42;
-  animation: scan 3s linear infinite;
-}
-
-.screenGrid {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(0, 255, 180, 0.14) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 180, 0.12) 1px, transparent 1px);
-  background-size: 18px 18px;
+  pointer-events: none;
   mix-blend-mode: screen;
-  opacity: 0.28;
-}
-
-@keyframes scan {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
-
-/* CLAUDE.md + brief 11.6: prefers-reduced-motion açıkken MONA'nın
-   ekranındaki görüntü döngüsü durur, yalnızca yazı akar. */
-@media (prefers-reduced-motion: reduce) {
-  .screenLoop {
-    animation: none;
-    opacity: 0.2;
-  }
-}
-
-.screenLabel {
-  position: relative;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  color: var(--color-mona-neon-mint);
-  font-size: 1.5rem;
-  letter-spacing: 0;
-  text-shadow:
-    2px 0 0 var(--color-brand-fuchsia),
-    -2px 0 0 rgba(255, 252, 0, 0.75),
-    0 0 16px rgba(0, 255, 180, 0.55);
-}
-
-.statusRail {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-1);
-  padding: 0 var(--space-1);
-}
-
-.statusRail span {
-  width: 0.45rem;
-  height: 0.45rem;
-  background: var(--color-brand-black);
-}
-
-.statusRail span:nth-child(2) {
-  background: var(--color-brand-fuchsia);
-}
-
-.statusRail span:nth-child(3) {
-  background: var(--color-brand-yellow);
-}
-
-.headBase {
-  height: 1.25rem;
-  background: var(--color-mona-lilac);
-  border: 1px solid rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  padding: 0 var(--space-3);
-}
-
-.driveSlot {
-  display: block;
-  width: 48%;
-  height: 0.25rem;
-  background: var(--color-brand-black);
 }
 
 .mediaNote {
@@ -329,6 +211,18 @@
   gap: var(--space-2);
 }
 
+.questionGroups {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.groupTitle {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-brand);
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+}
+
 .questionButton {
   width: 100%;
   text-align: left;
@@ -375,7 +269,7 @@
 }
 
 .compact .head {
-  width: min(180px, 38vw);
+  width: min(280px, 42vw);
   box-shadow:
     9px 9px 0 var(--color-brand-black),
     13px 13px 0 rgba(255, 0, 255, 0.55);
@@ -421,7 +315,7 @@
 
   .head,
   .compact .head {
-    width: min(210px, 58vw);
+    width: min(420px, 88vw);
     transform: none;
     box-shadow:
       8px 8px 0 var(--color-brand-black),

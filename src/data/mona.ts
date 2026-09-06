@@ -1,4 +1,5 @@
 import type { Locale } from "@/i18n/routing";
+import monaFaq from "@/data/mona-faq.json";
 
 /**
  * MONA replik kütüphanesi — brief-rev12.md Bölüm 11.3, 11.4, 11.5.
@@ -6,11 +7,10 @@ import type { Locale } from "@/i18n/routing";
  * Tüm replikler "MONA REPLİĞİ" kutularından birebir alınmıştır; TR ve EN
  * sürümleri brief'te ayrı ayrı verilmiştir, üzerinde değişiklik yapılmadı.
  *
- * Ses ve video varlıkları HENÜZ YOK (bkz. brief 11.6 teslim listesi):
- *   - MONA karakter videosu (WebM VP9+alfa + MP4 yedek)
+ * Karakter videosu `/public/videos/mona-tv-head.mp4` olarak yayında.
+ * Ses varlıkları HENÜZ YOK (bkz. brief 11.6 teslim listesi):
  *   - Replik başına ayrı ses dosyası (TR + EN)
  *   - VTT altyazı dosyaları (TR + EN)
- *   - Ekran içi görüntü döngüsü (4:3)
  * TODO: docs/DECISIONS.md #8 bekleniyor — MONA ses kararı (insan
  * seslendirme önerisi). Karar + prodüksiyon tamamlanınca her replik için
  * `audioSrc` ve `captionsSrc` alanları doldurulacak; state machine bu
@@ -86,7 +86,7 @@ export const returnLine: MonaLine = {
 };
 
 /** brief 11.4 — soru-cevap kütüphanesi (10 soru). */
-export const monaQuestions: MonaQuestion[] = [
+export const legacyMonaQuestions: MonaQuestion[] = [
   {
     id: "q1",
     question: { en: "Who are you?", tr: "Sen kimsin?" },
@@ -202,6 +202,29 @@ export const monaQuestions: MonaQuestion[] = [
     ...noMedia,
   },
 ];
+
+/**
+ * Eylul 2026 tarihli, musteri tarafindan teslim edilen iki dilli MONA
+ * dokumanindaki 28 soru-cevap. JSON, scripts/import-mona-faq.py ile iki
+ * DOCX dosyasindan ayni soru numarasi uzerinden uretilir.
+ */
+export const monaQuestions: MonaQuestion[] = monaFaq.map((item) => ({
+  ...item,
+  ...noMedia,
+  ...(item.id === "q9"
+    ? { action: { href: "/work", label: { en: "WORKS →", tr: "WORKS →" } } }
+    : item.id === "q14" || item.id === "q28"
+      ? {
+          action: {
+            href: "/contact",
+            label: {
+              en: "Let's Build Something Extraordinary.",
+              tr: "Let's Build Something Extraordinary.",
+            },
+          },
+        }
+      : {}),
+}));
 
 /**
  * brief 11.4 — easter egg. Sıralı listede değil; MONA'nın kafasına üç kez

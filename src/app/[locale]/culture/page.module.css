@@ -8,7 +8,16 @@
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
   font-size: var(--font-size-display);
-  margin: 0 0 var(--space-16);
+  margin: 0;
+  color: var(--color-brand-yellow);
+}
+
+.lead {
+  max-width: 40rem;
+  margin: var(--space-6) 0 var(--space-16) auto;
+  font-family: var(--font-brand);
+  font-size: clamp(1.25rem, 3vw, 2.5rem);
+  line-height: 1.15;
 }
 
 /* Beş bölüm — düz bağlantı listesi yerine numaralı kartlar. */

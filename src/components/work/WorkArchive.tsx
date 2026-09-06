@@ -33,16 +33,18 @@ export function WorkArchive({
   works,
   locale,
   confidentialLabel,
+  initialService = ALL,
 }: {
   works: Work[];
   locale: "tr" | "en";
   confidentialLabel: string;
+  initialService?: string;
 }) {
   const t = useTranslations("work");
   const tFilter = useTranslations("work.filter");
   const [year, setYear] = useState(ALL);
   const [filters, setFilters] = useState<Record<FilterKey, string>>({
-    service: ALL,
+    service: initialService,
     industry: ALL,
   });
 

@@ -1,16 +1,96 @@
 .article {
-  max-width: 42rem;
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+  padding: clamp(4rem, 8vw, 8rem) var(--page-gutter) var(--space-24);
+}
+
+.articleHeader {
+  max-width: 72rem;
 }
 
 .article h1 {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-heading);
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  line-height: 0.98;
+  color: var(--color-brand-yellow);
+}
+
+.category {
+  margin: 0 0 var(--space-4);
+  color: var(--color-brand-yellow);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.summary {
+  margin: var(--space-6) 0 0;
+  max-width: 52rem;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  line-height: 1.4;
+  opacity: 0.84;
+}
+
+.articleContent {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 2.2fr);
+  gap: clamp(2rem, 8vw, 9rem);
+  align-items: start;
+  margin-top: clamp(3rem, 7vw, 7rem);
+}
+
+.meta {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-6));
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-brand-yellow);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  opacity: 0.78;
 }
 
 .body {
-  margin-top: var(--space-8);
-  line-height: var(--line-height-body);
+  max-width: 49rem;
+}
+
+.body p {
+  margin: 0 0 clamp(1.75rem, 4vw, 3rem);
+  font-size: clamp(1.08rem, 1.55vw, 1.3rem);
+  line-height: 1.72;
+}
+
+.body p:first-child::first-letter {
+  float: left;
+  margin: 0.06em 0.12em 0 0;
+  color: var(--color-brand-yellow);
+  font-family: var(--font-brand);
+  font-size: 4.2em;
+  font-weight: var(--font-weight-brand);
+  line-height: 0.8;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  border-bottom: 1px solid var(--color-brand-yellow);
+  color: var(--color-brand-yellow);
+  font-weight: var(--font-weight-body-medium);
+  padding-bottom: var(--space-1);
+}
+
+@media (max-width: 760px) {
+  .articleContent {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .meta {
+    position: static;
+    grid-template-columns: 1fr;
+  }
 }

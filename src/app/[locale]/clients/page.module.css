@@ -13,6 +13,15 @@
   padding: clamp(2.5rem, 5vw, 5rem) var(--page-gutter);
 }
 
+.eyebrow {
+  margin: 0;
+  color: var(--color-brand-yellow);
+  font-family: var(--font-brand);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.12em;
+}
+
 .heroTitle {
   margin: 0;
   font-family: var(--font-brand);
@@ -22,11 +31,75 @@
   letter-spacing: 0;
 }
 
+.heroSupport {
+  max-width: 30ch;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(1.5rem, 4vw, 4rem);
+  font-weight: var(--font-weight-heading-bold);
+  line-height: 1.02;
+  color: var(--color-brand-yellow);
+}
+
 .body {
   max-width: 52rem;
   margin: 0;
   font-size: clamp(1rem, 1.5vw, 1.35rem);
   line-height: 1.45;
+}
+
+.anniversary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.85fr);
+  min-height: min(80svh, 54rem);
+  border-block: 1px solid rgba(255, 252, 0, 0.35);
+}
+
+.anniversaryImageWrap {
+  position: relative;
+  min-height: 34rem;
+  overflow: hidden;
+  background: #000;
+}
+
+.anniversaryImage {
+  object-fit: cover;
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+.anniversaryCopy {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(2rem, 6vw, 6rem) var(--page-gutter);
+  background: var(--color-brand-yellow);
+  color: var(--color-brand-black);
+}
+
+.anniversaryDate {
+  margin: 0 0 auto;
+  font-family: var(--font-brand);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.14em;
+}
+
+.anniversaryCopy h2 {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-brand);
+  font-size: clamp(2.25rem, 6vw, 6rem);
+  line-height: 0.88;
+}
+
+.anniversaryCopy p:last-child {
+  margin: 0;
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+}
+
+@media (hover: hover) {
+  .anniversary:hover .anniversaryImage { transform: scale(var(--media-zoom-scale)); }
 }
 
 .testimonials,
@@ -81,4 +154,7 @@
   .heroTitle {
     font-size: clamp(1.8rem, 9vw, 3.25rem);
   }
+
+  .anniversary { grid-template-columns: 1fr; }
+  .anniversaryImageWrap { min-height: 25rem; }
 }

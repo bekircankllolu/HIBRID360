@@ -64,8 +64,8 @@
 
 .yellow .submit {
   justify-self: start;
-  background: transparent;
-  color: var(--color-brand-black);
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
   border: 2px solid var(--color-brand-black);
   min-width: 10rem;
   transition: background 180ms ease, color 180ms ease;
@@ -75,6 +75,7 @@
 .yellow .submit:focus-visible {
   background: var(--color-brand-black);
   color: var(--color-brand-yellow);
+  transform: translateY(-2px);
 }
 
 .yellow .error {

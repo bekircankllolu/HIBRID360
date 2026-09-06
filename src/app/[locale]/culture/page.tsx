@@ -24,6 +24,9 @@ import styles from "./page.module.css";
 export const metadata = { title: "Culture" };
 
 const SECTIONS = [
+  { href: "/who-we-are", key: "whoWeAre" },
+  { href: "/what-we-believe", key: "whatWeBelieve" },
+  { href: "/think-and-thank", key: "thinkAndThank" },
   { href: "/culture/directors", key: "directors" },
   { href: "/culture/sustainability", key: "sustainability" },
 ] as const;
@@ -45,6 +48,11 @@ export default async function CulturePage({
         ])}
       />
       <h1 className={styles.title}>CULTURE</h1>
+      <p className={styles.lead}>
+        {locale === "tr"
+          ? "Bizi tanımlayan fikirler, insanlar ve değerler."
+          : "The ideas, people and values that shape who we are."}
+      </p>
 
       <ul className={styles.grid}>
         {SECTIONS.map((section, index) => (

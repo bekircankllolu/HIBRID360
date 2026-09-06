@@ -3,51 +3,31 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { MAIN_NAV, MEGA_MENU, type MegaMenuLink } from "@/data/navigation";
+import { MAIN_NAV, type NavChild } from "@/data/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./Header.module.css";
 
 const MENU_ID = "main-navigation";
 const MEGA_MENU_ID = "desktop-mega-menu";
 
-/** Mega menüde alt menüsü açılan madde. */
-const MEGA_TRIGGER_HREF = "/what-we-do";
-
-/**
- * Üst menü.
- *
- * Menü maddeleri, sıra ve mega menü sütunları `src/data/navigation.ts`
- * içinden geliyor; hizmet listesi de oradan `src/data/services.ts`'e
- * bağlanıyor. Bu bileşende paralel bir menü dizisi **yok** — daha önce
- * `NAV_ITEMS` ve paralel hizmet bağlantıları burada sabit yazılıydı ve
- * veri dosyasıyla elle senkron tutuluyordu. Yeni Culture / Work sırası ve
- * kaldırılan Solutions maddesi artık yalnızca veri katmanından yönetilir.
- *
- * Etiketler `messages/*.json` → `nav.*`. Değerler Title Case; başlıkta
- * `text-transform` yok, yani görünen metin etiketin kendisi.
- */
+/** Tek kaynaklı, klavye ve mobil erişimli ana navigasyon. */
 export function Header() {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMegaOpen, setIsMegaOpen] = useState(false);
+  const [activeMenuHref, setActiveMenuHref] = useState<string | null>(null);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const wasMenuOpen = useRef(false);
 
-  /** Hizmet adları çevrilmez (marka dili); menü maddeleri çevrilir. */
-  const linkLabel = (link: MegaMenuLink) =>
-    link.labelKey ? t(link.labelKey) : link.label;
-
-  /** Mobil panelde What We Do'nun altında açılan hizmet listesi. */
-  const services =
-    MAIN_NAV.find((item) => item.href === MEGA_TRIGGER_HREF)?.children ?? [];
+  const activeMenu = MAIN_NAV.find((item) => item.href === activeMenuHref);
+  const linkLabel = (link: NavChild) => link.label;
 
   useEffect(() => {
     setIsMenuOpen(false);
-    setIsMegaOpen(false);
+    setActiveMenuHref(null);
     setIsLanguageOpen(false);
   }, [pathname]);
 
@@ -55,12 +35,12 @@ export function Header() {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setIsMenuOpen(false);
-      setIsMegaOpen(false);
+      setActiveMenuHref(null);
       setIsLanguageOpen(false);
     };
+    const closeOnScroll = () => setActiveMenuHref(null);
 
     window.addEventListener("keydown", closeOnEscape);
-    const closeOnScroll = () => setIsMegaOpen(false);
     window.addEventListener("scroll", closeOnScroll, { passive: true });
     return () => {
       window.removeEventListener("keydown", closeOnEscape);
@@ -95,7 +75,7 @@ export function Header() {
     event: React.FocusEvent<HTMLElement>,
   ) => {
     if (!headerRef.current?.contains(event.relatedTarget as Node | null)) {
-      setIsMegaOpen(false);
+      setActiveMenuHref(null);
     }
   };
 
@@ -103,7 +83,7 @@ export function Header() {
     <header
       ref={headerRef}
       className={styles.header}
-      onMouseLeave={() => setIsMegaOpen(false)}
+      onMouseLeave={() => setActiveMenuHref(null)}
       onBlur={closeDesktopMenuWhenFocusLeaves}
     >
       <div className={styles.inner}>
@@ -115,32 +95,40 @@ export function Header() {
           id={MENU_ID}
           className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ""}`}
           aria-label={t("menuLabel")}
-          onMouseEnter={() => setIsMegaOpen(true)}
         >
           <ul className={styles.navList}>
             {MAIN_NAV.map((item, index) => {
-              const isMegaTrigger = item.href === MEGA_TRIGGER_HREF;
+              const hasChildren = Boolean(item.children?.length);
 
               return (
-                <li key={item.href} className={styles.navItem}>
+                <li
+                  key={item.href}
+                  className={styles.navItem}
+                  onMouseEnter={() =>
+                    setActiveMenuHref(hasChildren ? item.href : null)
+                  }
+                >
                   <Link
                     href={item.href}
                     ref={index === 0 ? firstLinkRef : undefined}
-                    className={
-                      pathname === item.href ? styles.activeLink : undefined
+                    className={pathname === item.href ? styles.activeLink : undefined}
+                    aria-haspopup={hasChildren ? "true" : undefined}
+                    aria-expanded={
+                      hasChildren ? activeMenuHref === item.href : undefined
                     }
-                    aria-expanded={isMegaTrigger ? isMegaOpen : undefined}
-                    aria-controls={isMegaTrigger ? MEGA_MENU_ID : undefined}
-                    onFocus={() => setIsMegaOpen(true)}
+                    aria-controls={hasChildren ? MEGA_MENU_ID : undefined}
+                    onFocus={() =>
+                      setActiveMenuHref(hasChildren ? item.href : null)
+                    }
                   >
                     {t(item.labelKey)}
                   </Link>
 
-                  {isMegaTrigger && (
+                  {hasChildren && (
                     <ul className={styles.mobileServices}>
-                      {services.map((service) => (
-                        <li key={service.href}>
-                          <Link href={service.href}>{service.label}</Link>
+                      {item.children?.map((child) => (
+                        <li key={child.href}>
+                          <Link href={child.href}>{linkLabel(child)}</Link>
                         </li>
                       ))}
                     </ul>
@@ -158,7 +146,7 @@ export function Header() {
               setIsLanguageOpen(open);
               if (open) {
                 setIsMenuOpen(false);
-                setIsMegaOpen(false);
+                setActiveMenuHref(null);
               }
             }}
           />
@@ -182,40 +170,29 @@ export function Header() {
 
       <div
         id={MEGA_MENU_ID}
-        className={`${styles.megaMenu} ${isMegaOpen ? styles.megaMenuOpen : ""}`}
-        aria-hidden={!isMegaOpen}
-        onMouseEnter={() => setIsMegaOpen(true)}
+        className={`${styles.megaMenu} ${activeMenu ? styles.megaMenuOpen : ""}`}
+        aria-hidden={!activeMenu}
+        onMouseEnter={() => activeMenu && setActiveMenuHref(activeMenu.href)}
       >
         <div className={styles.megaInner}>
           <p className={styles.megaBrand}>HIBRID 360</p>
-
-          {MEGA_MENU.map((column) =>
-            column.variant === "services" ? (
-              <div key={column.headingKey} className={styles.megaColumnWide}>
-                <Link
-                  href={column.headingHref ?? "/"}
-                  className={styles.megaHeading}
-                >
-                  {t(column.headingKey)}
-                </Link>
-                <ul className={styles.serviceGrid}>
-                  {column.links.map((link) => (
-                    <li key={link.href}>
-                      <Link href={link.href}>{linkLabel(link)}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <div key={column.headingKey} className={styles.megaColumn}>
-                <p className={styles.megaHeading}>{t(column.headingKey)}</p>
-                {column.links.map((link) => (
-                  <Link key={link.href} href={link.href}>
-                    {linkLabel(link)}
-                  </Link>
+          {activeMenu && (
+            <div className={styles.megaColumnWide}>
+              <Link href={activeMenu.href} className={styles.megaHeading}>
+                {t(activeMenu.labelKey)}
+              </Link>
+              <ul
+                className={`${styles.serviceGrid} ${
+                  activeMenu.href === "/what-we-do" ? styles.serviceGridWide : ""
+                }`}
+              >
+                {activeMenu.children?.map((child) => (
+                  <li key={child.href}>
+                    <Link href={child.href}>{linkLabel(child)}</Link>
+                  </li>
                 ))}
-              </div>
-            ),
+              </ul>
+            </div>
           )}
         </div>
       </div>

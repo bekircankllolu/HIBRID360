@@ -9,8 +9,8 @@ import styles from "./Footer.module.css";
  * Footer.
  *
  * Keşfet sütunu `src/data/navigation.ts` → `FOOTER_NAV` üzerinden geliyor
- * (üst menünün tamamı + Insights). Böylece müşteri revizyonundaki menü
- * sırası footer'a da tek kaynaktan yansır.
+ * (üst menünün tamamı). Böylece müşteri revizyonundaki menü sırası
+ * footer'a da tek kaynaktan yansır.
  *
  * Etiketler `messages/*.json` → `nav.*` ve `footer.*`.
  */
@@ -49,7 +49,13 @@ export function Footer() {
               <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
                 {CONTACT.phone}
               </a>
-              <span>{CONTACT.addressLines.join(" ")}</span>
+              <span className={styles.address}>
+                {CONTACT.addressLines.map((line) => (
+                  <span className={styles.addressLine} key={line}>
+                    {line}
+                  </span>
+                ))}
+              </span>
             </address>
           </section>
 

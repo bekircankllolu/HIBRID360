@@ -22,7 +22,10 @@ test.describe("Mobil menü (390px)", () => {
 
     await toggle.click();
     await expect(nav).toBeVisible();
-    await expect(nav.getByRole("link", { name: "Kültür" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Our Culture" })).toBeVisible();
+    await expect(
+      nav.getByRole("link", { name: "THINK & THANK", exact: true }).first(),
+    ).toBeVisible();
     await expect(page.getByRole("button", { name: "Dil" })).toBeVisible();
 
     await page.keyboard.press("Escape");
@@ -35,7 +38,7 @@ test.describe("Mobil menü (390px)", () => {
 
     await page.getByRole("button", { name: "Menüyü aç" }).click();
     const nav = page.locator("#main-navigation");
-    await nav.getByRole("link", { name: "İletişim" }).click();
+    await nav.getByRole("link", { name: "Contact" }).click();
 
     await expect(page).toHaveURL(/\/tr\/contact$/);
   });

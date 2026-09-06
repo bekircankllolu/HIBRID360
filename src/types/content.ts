@@ -99,10 +99,17 @@ export interface InsightsPost {
   body_tr: string | null;
   body_en: string | null;
   cover_image_url: string | null;
+  /** Stable filtering key from Supabase or the local article import. */
   category: string | null;
+  /** Local-only overrides until these columns are added to Supabase. */
+  category_tr?: string | null;
+  category_en?: string | null;
+  read_time_minutes?: number | null;
   published_at: string | null;
   last_reviewed_at: string | null;
   author_name: string | null;
+  author_name_tr?: string | null;
+  author_name_en?: string | null;
   author_title: string | null;
   is_published: boolean;
 }

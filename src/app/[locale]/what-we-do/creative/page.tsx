@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
-import { EmptyState } from "@/components/EmptyState";
+import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import serviceStyles from "@/styles/service-page.module.css";
@@ -18,16 +19,14 @@ import creativeStyles from "./page.module.css";
  */
 
 const SERVICES = [
+  "CREATIVE STRATEGY",
+  "CREATIVE DIRECTION",
   "BRAND CONSULTANCY",
   "CORPORATE IDENTITY",
-  "MARKETING PLAN AND STRATEGY",
   "CONCEPT DEVELOPMENT",
   "CONTENT GENERATION",
-  "COMMERCIALS",
+  "COMMERCIALS · TVC · PRESS · RADIO CAMPAIGN",
   "PACKAGING",
-  "TV",
-  "PRESS",
-  "RADIO CAMPAIGNS",
 ];
 
 export async function generateMetadata({
@@ -66,14 +65,26 @@ export default async function CreativePage({
           ])}
         />
 
+        <p className={creativeStyles.eyebrow}>CREATIVE</p>
         <h1 className={`${serviceStyles.heroTitle} ${creativeStyles.heroTitle}`}>
-          CREATIVITY WITHOUT LIMITS
+          PURE. SIMPLE. POWERFUL.
         </h1>
         <p className={`${serviceStyles.heroSubtitle} ${creativeStyles.heroSubtitle}`}>
           {t("heroSubtitle")}
         </p>
-        <div className={creativeStyles.visual} aria-hidden="true">
-          <span className={creativeStyles.sparkle} />
+        <div className={creativeStyles.showreel}>
+          <video
+            className={creativeStyles.showreelVideo}
+            src="/videos/hibrid-stone-loop-20260827.mp4"
+            poster="/videos/hibrid-stone-poster.webp"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label={locale === "tr" ? "Hibrid 360 yaratıcı film döngüsü" : "Hibrid 360 creative film loop"}
+          />
+          <p className={creativeStyles.showreelLabel}>WE DON&rsquo;T REPLACE CREATIVITY. WE EXPAND IT.</p>
         </div>
 
         <div className={`${serviceStyles.body} ${creativeStyles.body}`}>
@@ -95,12 +106,30 @@ export default async function CreativePage({
 
         <section className={`${serviceStyles.band} ${creativeStyles.band}`}>
           <p className={`${serviceStyles.bandText} ${creativeStyles.bandText}`}>
-            {t("band")}
+            WE DON&rsquo;T REPLACE CREATIVITY. WE EXPAND IT.
           </p>
         </section>
 
-        <section className={serviceStyles.section}>
-          <EmptyState message={t("galleryEmpty")} />
+        <section className={creativeStyles.workPrompt}>
+          <Image
+            src="/images/site/services/creative.webp"
+            alt={locale === "tr" ? "Yaratıcı fikirleri simgeleyen ampuller" : "Light bulbs representing creative ideas"}
+            fill
+            sizes="100vw"
+            className={creativeStyles.workPromptImage}
+          />
+          <Link href="/work?service=Creative" className={creativeStyles.workPromptLink}>
+            WANNA KNOW WHAT KEEPS US BUSY?
+          </Link>
+        </section>
+
+        <section className={creativeStyles.closing}>
+          <p className={creativeStyles.closingKicker}>READY TO CREATE WHAT&rsquo;S NEXT?</p>
+          <h2>Hibrid 360 is building that future today.</h2>
+          <p>Let&rsquo;s build the future of your brand together.</p>
+          <Link href="/contact" className={creativeStyles.closingLink}>
+            LET&rsquo;S BUILD SOMETHING EXTRAORDINARY.
+          </Link>
         </section>
       </div>
     </div>

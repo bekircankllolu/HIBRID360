@@ -48,7 +48,7 @@ const ROUTES = [
   "/culture",
   "/culture/directors",
   "/culture/sustainability",
-  "/insights",
+  "/think-and-thank",
   "/contact",
   "/brief",
   "/privacy",
