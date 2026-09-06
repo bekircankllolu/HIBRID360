@@ -24,7 +24,7 @@ import {
 // böylece imkânsız.
 const STATIC_PATHS = [
   "",
-  ...MAIN_NAV_PATHS,
+  ...MAIN_NAV_PATHS.filter((path) => path !== "/think-and-thank"),
   ...SERVICE_PATHS,
   ...WHAT_WE_DO_EXTRA_PATHS,
   "/brief",
@@ -49,13 +49,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const conditionalPaths = [
     ...(directors.length > 0 ? ["/culture/directors"] : []),
     ...(isSustainabilityPublishable() ? ["/culture/sustainability"] : []),
-    ...(insights.length > 0 ? ["/insights"] : []),
+    ...(insights.length > 0 ? ["/think-and-thank"] : []),
   ];
 
   const dynamicPaths = [
     ...works.map((work) => `/work/${work.slug}`),
     ...directors.map((director) => `/culture/directors/${director.slug}`),
-    ...insights.map((post) => `/insights/${post.slug}`),
+    ...insights.map((post) => `/think-and-thank/${post.slug}`),
   ];
 
   return [...STATIC_PATHS, ...conditionalPaths, ...dynamicPaths].flatMap((path) =>

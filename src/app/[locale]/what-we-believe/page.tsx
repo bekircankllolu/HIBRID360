@@ -6,6 +6,7 @@ import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import { BeliefFounderVideo } from "@/components/culture/BeliefFounderVideo";
 import { BELIEF_IMAGES } from "@/data/what-we-believe";
+import { CULTURE_INTRO, CULTURE_VALUES } from "@/data/culture-values";
 import styles from "@/styles/culture-page.module.css";
 import belief from "./page.module.css";
 
@@ -132,6 +133,23 @@ export default async function WhatWeBelievePage({
           {edict.items.map((item) => (
             <li key={item} className={styles.listSentence}>
               {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className={belief.values} aria-labelledby="culture-values-title">
+        <div className={belief.valuesIntro}>
+          <h2 id="culture-values-title">CULTURE IS WHAT WE PRACTISE</h2>
+          {CULTURE_INTRO[locale].map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+        <ul className={belief.valuesGrid}>
+          {CULTURE_VALUES.map((value) => (
+            <li key={value.title}>
+              <h3>{value.title}</h3>
+              <p>{value.body[locale]}</p>
             </li>
           ))}
         </ul>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
@@ -82,9 +83,29 @@ export default async function ClientsPage({
       />
 
       <header className={styles.hero}>
+        <p className={styles.eyebrow}>FRIENDS SINCE 2004</p>
         <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
+        <p className={styles.heroSupport}>{t("heroSupport")}</p>
         <p className={styles.body}>{t("heroBody")}</p>
       </header>
+
+      <section className={styles.anniversary} aria-labelledby="friends-champions">
+        <div className={styles.anniversaryImageWrap}>
+          <Image
+            src="/images/site/friends-anniversary.png"
+            alt={t("anniversaryAlt")}
+            fill
+            sizes="(max-width: 760px) 100vw, 50vw"
+            className={styles.anniversaryImage}
+            priority
+          />
+        </div>
+        <div className={styles.anniversaryCopy}>
+          <p className={styles.anniversaryDate}>2004 → TODAY</p>
+          <h2 id="friends-champions">WORK WITH THE CHAMPIONS</h2>
+          <p>{t("friendsBody")}</p>
+        </div>
+      </section>
 
       <ClientNameIndex
         clients={[

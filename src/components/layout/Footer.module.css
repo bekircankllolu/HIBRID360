@@ -23,7 +23,7 @@
 .wordmark {
   margin: 0;
   font-family: var(--font-brand);
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1.25vw, 1.35rem);
   font-weight: var(--font-weight-brand);
 }
 
@@ -46,8 +46,8 @@
 
 .columns {
   display: grid;
-  grid-template-columns: minmax(18rem, 2fr) repeat(3, minmax(9rem, 1fr));
-  gap: clamp(2rem, 5vw, 6rem);
+  grid-template-columns: minmax(30rem, 2.6fr) repeat(3, minmax(7rem, 1fr));
+  gap: clamp(1.25rem, 3vw, 3rem);
   padding-block: clamp(2rem, 4vw, 4rem);
   border-top: 1px solid rgba(0, 0, 0, 0.45);
 }
@@ -103,8 +103,17 @@
   flex-direction: column;
   gap: 0.75rem;
   font-style: normal;
-  font-size: clamp(0.95rem, 1.35vw, 1.25rem);
+  font-size: clamp(0.9rem, 1.05vw, 1.1rem);
   line-height: 1.45;
+}
+
+.address,
+.addressLine {
+  display: block;
+}
+
+.addressLine:first-child {
+  white-space: nowrap;
 }
 
 .social {
@@ -144,13 +153,17 @@
   text-transform: uppercase;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .topRow {
     grid-template-columns: 1fr;
   }
 
   .columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .addressLine:first-child {
+    white-space: normal;
   }
 }
 

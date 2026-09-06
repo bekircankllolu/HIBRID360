@@ -1,0 +1,310 @@
+[
+  {
+    "id": "q1",
+    "question": {
+      "tr": "Hibrid 360 tam olarak ne ajansı?",
+      "en": "What kind of agency is Hibrid 360?"
+    },
+    "text": {
+      "tr": "Hibrid 360; strateji, yaratıcı fikir, tasarım, prodüksiyon, dijital içerik ve yapay zekâ destekli iş akışlarını tek çatı altında buluşturan AI-native yaratıcı operasyon sistemidir. Kısacası, markaların fikrini yalnızca görünür kılmakla kalmaz; onu doğru kanallarda, doğru hızla ve ölçülebilir etkiyle hayata geçiririz.",
+      "en": "Hibrid 360 is an AI-native creative operating system that brings strategy, creative ideas, design, production, digital content and AI-powered workflows together under one roof. In short, we do more than make ideas visible: we bring them to life through the right channels, at the right pace and with measurable impact."
+    }
+  },
+  {
+    "id": "q2",
+    "question": {
+      "tr": "Hibrid 360 yalnızca bir video prodüksiyon şirketi mi?",
+      "en": "Is Hibrid 360 only a video production company?"
+    },
+    "text": {
+      "tr": "Hayır. Premium prodüksiyon kasımız işin güçlü bir parçası; ancak yaklaşımımız bunun çok ötesinde. Marka stratejisinden yaratıcı yöne, fotoğraf ve filmden sosyal medyaya, dijital deneyimden performans analizine kadar uçtan uca çalışırız.",
+      "en": "No. Premium production is one of our strongest capabilities, but our approach goes far beyond it. We work end to end, from brand strategy and creative direction to photography, film, social media, digital experiences and performance analytics."
+    }
+  },
+  {
+    "id": "q3",
+    "question": {
+      "tr": "Klasik bir reklam ajansından veya Dijital Ajanslardan farkınız ne?",
+      "en": "How are you different from a traditional advertising or digital agency?"
+    },
+    "text": {
+      "tr": "Ajans disipliniyle prodüksiyon kalitesini, teknoloji ve yapay zekâ destekli çevik çalışma biçimiyle birleştiriyoruz. Böylece fikir, onay, üretim ve uyarlama süreçleri daha entegre; uctan uca daha hızlı ve daha tutarlı ilerliyor.",
+      "en": "We combine agency discipline and production quality with an agile, technology- and AI-powered way of working. This makes ideation, approvals, production and adaptation more connected, faster and more consistent from end to end."
+    }
+  },
+  {
+    "id": "q4",
+    "question": {
+      "tr": "“AI-native” olmak ne demek?",
+      "en": "What does “AI-native” mean?"
+    },
+    "text": {
+      "tr": "Yapay zekâyı yalnızca işin sonuna eklenen bir araç olarak görmemek demek. İçgörü üretiminden taslak oluşturmaya, içerik varyasyonlarından operasyonel planlamaya kadar süreçlerimizi insan yaratıcılığını güçlendirecek şekilde tasarlıyoruz.",
+      "en": "It means we do not see artificial intelligence as a tool added at the end of a project. From generating insight and developing concepts to content variation and operational planning, we design our processes to strengthen human creativity."
+    }
+  },
+  {
+    "id": "q5",
+    "question": {
+      "tr": "Yapay zekâ kullanımı markamın özgün sesini kaybettirir mi?",
+      "en": "Will using AI make my brand lose its unique voice?"
+    },
+    "text": {
+      "tr": "Hayır; doğru sistem kurulduğunda tam tersine markanın sesini daha tutarlı hale getirir. Önce marka DNA’sını, hedef kitleyi, dili ve görsel dünyayı netleştiririz. Yapay zekâ bu çerçevenin içinde hız ve seçenek üretir; son sözü her zaman strateji ve yaratıcı değerlendirme söyler.",
+      "en": "No. When the right system is in place, it makes your brand voice more consistent. We first define your brand DNA, audience, language and visual world. AI then creates speed and options within that framework; strategy and creative judgement always have the final say."
+    }
+  },
+  {
+    "id": "q6",
+    "question": {
+      "tr": "Hangi hizmetleri sunuyorsunuz?",
+      "en": "What services do you offer?"
+    },
+    "text": {
+      "tr": "Marka stratejisi ve kimlik, yaratıcı konsept ve kampanya, reklam filmi ve sosyal içerik prodüksiyonu, fotoğraf, müzik/ses, tasarım, sosyal medya, SEO, dijital deneyim, performans analitiği ve AI destekli içerik sistemleri. İhtiyaca göre tek bir hizmetten uçtan uca iş ortaklığına kadar esnek bir yapı kurarız.",
+      "en": "We offer brand strategy and identity, creative concepts and campaigns, commercial film and social-content production, photography, music and sound, design, social media, SEO, digital experiences, performance analytics and AI-powered content systems. We can work on a single service or build a flexible end-to-end partnership around your needs."
+    }
+  },
+  {
+    "id": "q7",
+    "question": {
+      "tr": "Bir projeye nereden başlıyorsunuz?",
+      "en": "Where do you start on a project?"
+    },
+    "text": {
+      "tr": "Önce “ne üretelim?”den önce “neyi değiştirmek istiyoruz?” sorusunu sorarız. Hedef, kitle, marka algısı, kanal ve başarı ölçütleri netleşir. Ardından yaratıcı yön, üretim planı ve yayın akışı birlikte şekillenir.",
+      "en": "Before asking “What should we make?”, we ask “What do we want to change?” We clarify the goal, audience, brand perception, channels and measures of success. Then the creative direction, production plan and publishing flow take shape together."
+    }
+  },
+  {
+    "id": "q8",
+    "question": {
+      "tr": "Hızlı çalışmak kaliteyi düşürür mü?",
+      "en": "Does working faster reduce quality?"
+    },
+    "text": {
+      "tr": "Hız, kaliteyi azaltmak zorunda değildir. Tekrarlayan operasyonları akıllılaştırıp karar akışlarını netleştirerek yaratıcı ekibin odağını fikre ve işçiliğe ayırırız. Amaç daha kısa sürede daha çok üretmek değil; daha doğru etkiyi daha verimli üretmektir.",
+      "en": "Speed does not have to reduce quality. By making recurring operations smarter and decision flows clearer, we give creative teams more room to focus on ideas and craft. Our aim is not to make more in less time; it is to create the right impact more efficiently."
+    }
+  },
+  {
+    "id": "q9",
+    "question": {
+      "tr": "Hibrid 360 hangi ölçekte markalarla çalışır?",
+      "en": "What size of brands does Hibrid 360 work with?"
+    },
+    "text": {
+      "tr": "Yeni nesil girişimlerden büyüyen yerel markalara ve global ekipleri olan kurumsal yapılara kadar farklı ölçeklerde çalışırız. İş modelimizi markanın ihtiyacına, ekibinin çalışma biçimine ve hedeflediği etkiye göre kurarız.",
+      "en": "We work with organisations of different scales: next-generation start-ups, growing local brands and global corporate teams. We tailor the working model to each brand’s needs, the way its teams operate and the impact it wants to create."
+    }
+  },
+  {
+    "id": "q10",
+    "question": {
+      "tr": "Sadece kampanya mı yapıyorsunuz, yoksa sürekli içerik de üretiyor musunuz?",
+      "en": "Do you only create campaigns, or do you also produce ongoing content?"
+    },
+    "text": {
+      "tr": "İkisini de yapıyoruz. Büyük fikir ve kampanyalardan, her gün yaşayan sosyal medya ve performans içeriklerine kadar markanın tüm iletişim ritmini destekleyebiliyoruz. İsterseniz tek bir lansman, isterseniz sürdürülebilir bir içerik motoru tasarlarız.",
+      "en": "We do both. From big ideas and campaigns to always-on social and performance content, we can support the full rhythm of a brand’s communications. We can design a single launch or a sustainable content engine."
+    }
+  },
+  {
+    "id": "q11",
+    "question": {
+      "tr": "Üretilen içerikler farklı platformlara nasıl uyarlanıyor?",
+      "en": "How do you adapt content for different platforms?"
+    },
+    "text": {
+      "tr": "Her formatı tek tek yeniden icat etmek yerine, ana fikri koruyan modüler içerik sistemleri kurarız. Böylece film, kısa video, sosyal içerik, görsel, dikey format, dijital reklam ve satış materyali aynı marka hissini taşıyarak kanalın ihtiyacına uyum sağlar.",
+      "en": "Rather than reinventing every format from scratch, we build modular content systems that protect the core idea. Film, short-form video, social content, visuals, vertical formats, digital ads and sales materials can then adapt to each channel while carrying the same brand feeling."
+    }
+  },
+  {
+    "id": "q12",
+    "question": {
+      "tr": "Veri ve performans yaratıcı sürece nasıl giriyor?",
+      "en": "How do data and performance feed into the creative process?"
+    },
+    "text": {
+      "tr": "Veri, yaratıcılığın karşıtı değil; daha iyi sorular sormamızı sağlayan bir araçtır. Kitle davranışlarını, içerik performansını ve kanal içgörülerini izler; sonuçları bir sonraki fikrin, formatın ve dağıtım kararının parçası haline getiririz.",
+      "en": "Data is not the opposite of creativity; it helps us ask better questions. We track audience behaviour, content performance and channel insights, then make those findings part of the next idea, format and distribution decision."
+    }
+  },
+  {
+    "id": "q13",
+    "question": {
+      "tr": "Hibrid 360’ın prodüksiyon yaklaşımı nedir?",
+      "en": "What is Hibrid 360’s production approach?"
+    },
+    "text": {
+      "tr": "Sinematik kaliteyi stratejik netlikle buluştururuz. Her kare estetik olarak güçlü olmalı; aynı zamanda markanın hedefi, mesajı ve izleyicinin davranışıyla ilişki kurmalıdır.",
+      "en": "We bring cinematic quality together with strategic clarity. Every frame should be visually powerful, while also connecting with the brand’s objective, message and the audience’s behaviour."
+    }
+  },
+  {
+    "id": "q14",
+    "question": {
+      "tr": "Birlikte çalışmaya başlamak için neye ihtiyacınız var?",
+      "en": "What do you need to begin working together?"
+    },
+    "text": {
+      "tr": "Kısa bir hedef tanımıyla başlayabiliriz: ulaşmak istediğiniz sonuç, hedef kitle, mevcut marka materyalleri, zamanlama ve varsa bütçe aralığı. Bunlar ilk görüşmede doğru ekibi ve çalışma modelini oluşturmamıza yardımcı olur.",
+      "en": "We can begin with a concise brief: the outcome you want, your audience, existing brand materials, timing and, if available, a budget range. These help us build the right team and working model from the first conversation."
+    }
+  },
+  {
+    "id": "q15",
+    "question": {
+      "tr": "Süreç boyunca kimlerle çalışacağız?",
+      "en": "Who will we work with throughout the process?"
+    },
+    "text": {
+      "tr": "İşin ihtiyacına göre stratejist, yaratıcı yönetmen, metin yazarı, tasarımcı, yönetmen, yapım ekibi, sosyal medya ve performans uzmanlarından oluşan disiplinler arası bir ekip kurulur. Tek bir temas noktasıyla ilerlersiniz; arka planda doğru uzmanlıklar birlikte çalışır.",
+      "en": "Depending on the project, we form an interdisciplinary team of strategists, creative directors, copywriters, designers, directors, production professionals, social media specialists and performance experts. You move forward with one point of contact while the right expertise works together behind the scenes."
+    }
+  },
+  {
+    "id": "q16",
+    "question": {
+      "tr": "Fikrin ve üretilen işlerin sahipliği nasıl ele alınıyor?",
+      "en": "How is ownership of ideas and produced work handled?"
+    },
+    "text": {
+      "tr": "Kapsam, kullanım alanları ve teslim biçimleri proje başında açıkça tanımlanır. Amaç, markanızın üretilen içeriği ihtiyaç duyduğu kanallarda güvenle ve verimli biçimde kullanabilmesidir.",
+      "en": "Scope, usage areas and delivery formats are defined clearly at the beginning of the project. The aim is for your brand to use the produced content confidently and efficiently wherever it is needed."
+    }
+  },
+  {
+    "id": "q17",
+    "question": {
+      "tr": "Hibrid 360 ile çalışmanın en büyük avantajı nedir?",
+      "en": "What is the greatest advantage of working with Hibrid 360?"
+    },
+    "text": {
+      "tr": "Fikirden etkiye uzanan sürecin tek bir yaratıcı ve operasyonel sistem içinde ilerlemesi. Daha az kopukluk, daha güçlü marka tutarlılığı, daha hızlı öğrenme ve daha yüksek üretim çevikliği sağlar.",
+      "en": "The journey from idea to impact moves through one integrated creative and operational system. That means fewer disconnects, stronger brand consistency, faster learning and greater production agility."
+    }
+  },
+  {
+    "id": "q18",
+    "question": {
+      "tr": "Mona kim?",
+      "en": "Who is Mona?"
+    },
+    "text": {
+      "tr": "Mona, Hibrid 360’ın dijital rehberi. Merak ettiklerinizi yalın biçimde yanıtlamak, doğru hizmete yönlendirmek ve ilk adımı kolaylaştırmak için burada. Bir sorunuz varsa Mona’ya sorun; birlikte en doğru yaratıcı rotayı bulalım.",
+      "en": "Mona is Hibrid 360’s digital guide. She is here to answer what you are curious about in a clear way, guide you to the right service and make the first step easier. Ask Mona a question and let’s find the right creative route together."
+    }
+  },
+  {
+    "id": "q19",
+    "question": {
+      "tr": "Mona, sen tamamen yapay zekâ mısın?",
+      "en": "Mona, are you entirely AI?"
+    },
+    "text": {
+      "tr": "Evet. Mona, Hibrid 360’ın web sitesinde ziyaretçilerin sorularını yanıtlamak, bilgiyi doğru başlığa yönlendirmek ve ilk keşif sürecini kolaylaştırmak üzere tasarlanmış yapay zekâ destekli dijital karakteridir. Mona’nın görevi karar vermek veya insan uzmanlığının yerini almak değil; Hibrid’in çalışma biçimini anlaşılır hale getirmek ve doğru insan uzmanına giden yolu hızlandırmaktır.",
+      "en": "Yes. Mona is an AI-powered digital character designed to answer visitors’ questions on Hibrid 360’s website, route information to the right topic and make the first discovery stage easier. Mona’s role is not to make decisions or replace human expertise; it is to make Hibrid’s way of working easy to understand and accelerate the path to the right human expert."
+    }
+  },
+  {
+    "id": "q20",
+    "question": {
+      "tr": "Hibrid prodüksiyon nedir?",
+      "en": "What is hybrid production?"
+    },
+    "text": {
+      "tr": "Hibrid prodüksiyon; canlı çekim, tasarım, CGI, motion, animation,yapay zekâ destekli görsel üretim ve dijital post-prodüksiyonun tek bir yaratıcı sistem içinde birlikte planlanmasıdır. Her işte tüm teknolojiler kullanılmaz; fikre, hedefe, marka kurallarına ve bütçeye en uygun üretim bileşimi seçilir.",
+      "en": "Hybrid production is the integrated planning of live-action filming, design, CGI, motion, animation, AI-assisted visual generation and digital post-production within one creative system. Not every technology is used in every project; we select the production mix that best suits the idea, objective, brand rules and budget."
+    }
+  },
+  {
+    "id": "q21",
+    "question": {
+      "tr": "Yapay zekâ bugün prodüksiyon sürecine somut olarak nerelerde katkı sağlıyor?",
+      "en": "Where does AI make a practical contribution to production today?"
+    },
+    "text": {
+      "tr": "AI; ön görselleştirme, moodboard ve stil alternatifleri, storyboard prototipleri, mekan/ürün/atmosfer keşfi, içerik varyasyonları, farklı formatlara uyarlama, post-prodüksiyon destekleri ve hızlı test senaryolarında hız kazandırır. En güçlü etkisi, çekimden önce daha fazla yaratıcı seçeneği görünür kılması ve çekimden sonra ana varlığın daha verimli ölçeklenmesidir.",
+      "en": "AI accelerates pre-visualisation, moodboards and style options, storyboard prototypes, location, product and atmosphere exploration, content variations, adaptation into different formats, post-production support and rapid testing scenarios. Its greatest impact is making more creative options visible before a shoot and scaling the core asset more efficiently afterwards."
+    }
+  },
+  {
+    "id": "q22",
+    "question": {
+      "tr": "Yapay zekâ kullanımı gerçek çekimin yerini alacak mı?",
+      "en": "Will AI replace live-action shoots?"
+    },
+    "text": {
+      "tr": "Bazı ihtiyaçlarda AI ile üretilen ya da zenginleştirilen görseller doğru çözüm olabilir; ancak insan performansı, gerçek ürün deneyimi, fiziksel doku, belgesel gerçeklik ve duygusal güven gereken birçok işte canlı çekim vazgeçilmezdir. Hibrid yaklaşım “AI mi, çekim mi?” ikilemini kurmaz; hangi katmanın hangi sonuca daha iyi hizmet ettiğini tasarlar.",
+      "en": "For some needs, AI-generated or AI-enhanced visuals may be the right solution. Yet live-action filming remains essential when human performance, real product experience, physical texture, documentary authenticity or emotional trust matter. The Hibrid approach does not frame the choice as “AI or shoot?”; it designs the mix that best serves the desired outcome."
+    }
+  },
+  {
+    "id": "q23",
+    "question": {
+      "tr": "Hibrid 360 AI destekli bir projeyi nasıl yönetiyor?",
+      "en": "How does Hibrid 360 manage an AI-powered project?"
+    },
+    "text": {
+      "tr": "Süreç, hedef ve marka DNA’sının tanımlanmasıyla başlar. Ardından yaratıcı yön, kullanılacak üretim teknikleri, referanslar, onay noktaları, telif/güvenlik kriterleri ve teslim formatları netleştirilir. Prototipler üzerinden erken test yapılır; seçilen yön insan yaratıcı ekip tarafından detaylandırılır, kalite kontrolü yapılır ve yayın ihtiyaçlarına göre hazırlanır.",
+      "en": "The process begins by defining the objective and the brand DNA. We then establish the creative direction, production techniques, references, approval points, copyright and security criteria, and delivery formats. We test early through prototypes; the selected direction is developed by the human creative team, quality-checked and prepared for publishing needs."
+    }
+  },
+  {
+    "id": "q24",
+    "question": {
+      "tr": "Marka tutarlılığını AI üretimlerinde nasıl koruyorsunuz?",
+      "en": "How do you protect brand consistency in AI production?"
+    },
+    "text": {
+      "tr": "Markanın renk, tipografi, ton, görsel kodlar, ürün doğruluğu, hedef kitle ve “asla yapılmaması gerekenler” için net bir yaratıcı çerçeve oluşturuyoruz. Her üretim bu kuralların içinde değerlendirilir. Böylece AI, markadan bağımsız rastlantısal görseller üretmek yerine, tanımlanmış bir marka evrenini destekleyen bir üretim katmanına dönüşür.",
+      "en": "We create a clear creative framework covering the brand’s colours, typography, tone of voice, visual codes, product accuracy, audience and “never-do” rules. Every output is evaluated inside that framework. This turns AI from a source of disconnected, random images into a production layer that supports a defined brand universe."
+    }
+  },
+  {
+    "id": "q25",
+    "question": {
+      "tr": "AI üretimlerinde insanın rolü nedir?",
+      "en": "What is the human role in AI production?"
+    },
+    "text": {
+      "tr": "İnsan ekip; strateji, fikir, sanat yönetimi, anlatı, estetik seçim, etik kontrol, marka doğrulaması ve nihai kalite kararından sorumludur. AI hız ve seçenek üretir; ancak hangi seçeneğin markaya, kültüre ve hedefe doğru geldiğini deneyimli insan gözü belirler. Bu nedenle Hibrid’de AI, kreatif direktörün yerine geçmez; onun kapasitesini genişletir.",
+      "en": "The human team is responsible for strategy, ideas, art direction, storytelling, aesthetic selection, ethical review, brand validation and the final quality decision. AI creates speed and options, but an experienced human eye decides which option is right for the brand, culture and objective. At Hibrid, AI does not replace the creative director; it expands the creative director’s capacity."
+    }
+  },
+  {
+    "id": "q26",
+    "question": {
+      "tr": "Yapay zekâ markaya maliyet ve zaman açısından ne kazandırır?",
+      "en": "What does AI bring to a brand in terms of time and cost?"
+    },
+    "text": {
+      "tr": "Ön üretimde daha hızlı keşif ve prototipleme, içerik varyasyonlarında daha kısa çevrim, aynı ana fikrin farklı kanal ve formatlara daha verimli uyarlanması mümkün olur. Buna karşılık, her işin aynı oranda hızlanacağı varsayılmaz. Karmaşık çekimler, hassas ürün detayları veya yüksek güven gerektiren anlatılar için doğru kalite seviyesi zaman ve insan uzmanlığı ister.",
+      "en": "It enables faster exploration and prototyping in pre-production, shorter cycles for content variations and more efficient adaptation of one core idea to different channels and formats. That said, not every project should be expected to accelerate at the same rate. Complex shoots, sensitive product details and high-trust narratives still require the right level of time and human expertise."
+    }
+  },
+  {
+    "id": "q27",
+    "question": {
+      "tr": "Telif, gizlilik ve marka güvenliği nasıl ele alınıyor?",
+      "en": "How do you approach copyright, privacy and brand safety?"
+    },
+    "text": {
+      "tr": "Proje başında hangi varlıkların, verilerin ve referansların kullanılacağı tanımlanır; hassas bilgiler kontrollü akışta tutulur. Lisans, kullanım hakkı, ürün doğruluğu ve marka güvenliği kontrolleri proje kapsamına göre değerlendirilir. Hedefimiz yalnızca etkileyici sonuç değil, markanın güvenle kullanabileceği sorumlu bir üretim sürecidir.",
+      "en": "At the beginning of a project, we define which assets, data and references will be used, and sensitive information is kept within a controlled workflow. Licensing, usage rights, product accuracy and brand-safety checks are evaluated according to the project scope. Our goal is not only an impressive result, but a responsible process the brand can use with confidence."
+    }
+  },
+  {
+    "id": "q28",
+    "question": {
+      "tr": "Hibrid 360 markama bu yaklaşımda ne tür bir değer katar?",
+      "en": "What value does Hibrid 360 bring to my brand through this approach?"
+    },
+    "text": {
+      "tr": "Hibrid 360; stratejiyi, yaratıcı fikri, prodüksiyon kalitesini ve teknolojiyi ayrı ekipler arasında kaybolan adımlar olmaktan çıkarır. Markaya daha fazla keşif alanı, daha tutarlı bir içerik sistemi, daha hızlı öğrenme döngüsü ve platformlar arasında daha güçlü bir görsel anlatı sunar. Değerimiz yalnızca içerik üretmek değil; markanın gelecekte de kullanabileceği yaratıcı bir üretim altyapısı kurmaktır.",
+      "en": "Hibrid 360 prevents strategy, creative ideas, production quality and technology from becoming steps that get lost between separate teams. We give brands more room to explore, a more consistent content system, faster learning loops and a stronger visual narrative across platforms. Our value is not merely producing content; it is building a creative production infrastructure your brand can continue to use in the future."
+    }
+  }
+]

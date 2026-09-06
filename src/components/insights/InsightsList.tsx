@@ -5,6 +5,11 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import type { Locale } from "@/i18n/routing";
+import {
+  getInsightCategory,
+  getInsightSummary,
+  getInsightTitle,
+} from "@/lib/insights";
 import type { InsightsPost } from "@/types/content";
 import styles from "./InsightsList.module.css";
 
@@ -26,6 +31,17 @@ export function InsightsList({
     [posts],
   );
 
+  const categoryLabels = useMemo(
+    () =>
+      new Map(
+        categories.map((category) => {
+          const post = posts.find((candidate) => candidate.category === category);
+          return [category, post ? getInsightCategory(post, locale) ?? category : category];
+        }),
+      ),
+    [categories, locale, posts],
+  );
+
   const filteredPosts = useMemo(
     () =>
       activeCategory === "all"
@@ -34,48 +50,63 @@ export function InsightsList({
     [posts, activeCategory],
   );
 
-  // Hiç yazı yokken de, filtre sonucu boşken de sitenin geri kalanıyla aynı
-  // "içerik hazırlanıyor" sunumu kullanılır — burada çıplak bir <p> vardı,
-  // Work ve Directors ise rozetli kutuyu gösteriyordu.
   if (posts.length === 0) {
     return <EmptyState message={t("comingSoon")} />;
   }
 
   return (
     <div>
-      {categories.length > 1 && (
-        <div className={styles.filters} role="group" aria-label={t("categoryLabel")}>
-          <button
-            type="button"
-            className={styles.filterButton}
-            aria-pressed={activeCategory === "all"}
-            onClick={() => setActiveCategory("all")}
-          >
-            {t("categoryAll")}
-          </button>
-          {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              className={styles.filterButton}
-              aria-pressed={activeCategory === category}
-              onClick={() => setActiveCategory(category)}
+      <div className={styles.toolbar}>
+        <p className={styles.resultCount}>{t("articleCount", { count: filteredPosts.length })}</p>
+        {categories.length > 1 && (
+          <label className={styles.categoryControl}>
+            <span>{t("categoryLabel")}</span>
+            <select
+              value={activeCategory}
+              onChange={(event) => setActiveCategory(event.target.value)}
             >
-              {category}
-            </button>
-          ))}
-        </div>
-      )}
+              <option value="all">{t("categoryAll")}</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {categoryLabels.get(category)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+      </div>
 
       {filteredPosts.length === 0 ? (
         <EmptyState message={t("comingSoon")} />
       ) : (
         <div className={styles.grid}>
           {filteredPosts.map((post) => (
-            <Link key={post.id} href={`/insights/${post.slug}`} className={styles.card}>
-              {post.category && <span className={styles.cardCategory}>{post.category}</span>}
-              <span className={styles.cardTitle}>
-                {locale === "tr" ? post.title_tr : post.title_en}
+            <Link
+              key={post.id}
+              href={`/think-and-thank/${post.slug}`}
+              className={styles.card}
+            >
+              <span className={styles.cardIndex} aria-hidden="true">
+                {String(posts.indexOf(post) + 1).padStart(2, "0")}
+              </span>
+              <span className={styles.cardMain}>
+                {post.category && (
+                  <span className={styles.cardCategory}>
+                    {getInsightCategory(post, locale)}
+                  </span>
+                )}
+                <span className={styles.cardTitle}>{getInsightTitle(post, locale)}</span>
+                {getInsightSummary(post, locale) && (
+                  <span className={styles.cardSummary}>
+                    {getInsightSummary(post, locale)}
+                  </span>
+                )}
+              </span>
+              <span className={styles.cardMeta}>
+                {post.read_time_minutes && (
+                  <span>{t("readTime", { minutes: post.read_time_minutes })}</span>
+                )}
+                <span className={styles.cardArrow} aria-hidden="true">↗</span>
               </span>
             </Link>
           ))}

@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   breadcrumbListJsonLd,
+  articleJsonLd,
   organizationJsonLd,
   videoObjectJsonLd,
 } from "@/lib/schema";
+import { insightsPosts } from "@/data/insights";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -68,6 +70,28 @@ describe("organizationJsonLd", () => {
   it("organization açıklamasını locale'e göre üretir", () => {
     expect(organizationJsonLd("tr").description).toContain("Türkiye'nin");
     expect(organizationJsonLd("en").description).toContain("Türkiye's");
+  });
+});
+
+describe("articleJsonLd", () => {
+  it("uses localized editorial metadata", () => {
+    const post = insightsPosts[0];
+    const tr = articleJsonLd("tr", post);
+    const en = articleJsonLd("en", post);
+
+    expect(tr).toMatchObject({
+      headline: post.title_tr,
+      inLanguage: "tr",
+      articleSection: post.category_tr,
+      timeRequired: `PT${post.read_time_minutes}M`,
+      author: { name: post.author_name_tr },
+    });
+    expect(en).toMatchObject({
+      headline: post.title_en,
+      inLanguage: "en",
+      articleSection: post.category_en,
+      author: { name: post.author_name_en },
+    });
   });
 });
 

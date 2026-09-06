@@ -27,8 +27,7 @@
 
 export const CONTACT = {
   addressLines: [
-    "Feneryolu Mahallesi, Ebru Sokak,",
-    "Manolya Apt. No: 3A-3B,",
+    "Feneryolu Mahallesi, Ebru Sokak, Manolya Apt. No: 3A-3B",
     "İstanbul | Türkiye",
   ],
   streetAddress: "Feneryolu Mahallesi, Ebru Sokak, Manolya Apt. No: 3A-3B",

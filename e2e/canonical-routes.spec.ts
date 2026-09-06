@@ -22,6 +22,7 @@ const CANONICAL_ROUTES = [
   "/partners",
   "/contact",
   "/work",
+  "/think-and-thank",
 ] as const;
 
 const LOCALES = ["tr", "en"] as const;
@@ -46,7 +47,7 @@ const OVERFLOW_ROUTES = [
   "/partners",
   "/contact",
   "/work",
-  "/insights",
+  "/think-and-thank",
   "/brief",
   "/culture",
   "/culture/directors",
@@ -69,6 +70,7 @@ const LEGACY_REDIRECTS = [
   ["/culture/who-we-are", "/who-we-are"],
   ["/culture/what-we-believe", "/what-we-believe"],
   ["/culture/partners", "/partners"],
+  ["/insights", "/think-and-thank"],
   ["/what-we-do/photography", "/what-we-do"],
 ] as const;
 

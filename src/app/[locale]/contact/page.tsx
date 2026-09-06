@@ -147,6 +147,7 @@ export default async function ContactPage({
           (CLAUDE.md kontrast kuralı; beyaz metin AA geçmiyor). */}
       <section className={styles.yellowBand}>
         <p className={styles.yellowBandLead}>{t("heroLead2")}</p>
+        <p className={styles.yellowBandLabel}>E-MAIL US</p>
         <a className={styles.yellowBandEmail} href={`mailto:${CONTACT.email}`}>
           {CONTACT.email}
         </a>
@@ -195,8 +196,15 @@ export default async function ContactPage({
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
           </p>
           <p className={styles.socialInvite}>
-            {t("socialInvite")}: {SOCIAL_LINKS.map((link) => link.name).join(" · ")}
+            {t("socialInvite")}
           </p>
+          <nav className={styles.socialLinks} aria-label={t("socialInvite")}>
+            {SOCIAL_LINKS.map((link) => (
+              <a key={link.name} href={link.href} target="_blank" rel="noreferrer" aria-label={link.name}>
+                <span aria-hidden="true">{link.name === "LinkedIn" ? "in" : link.name.slice(0, 2).toUpperCase()}</span>
+              </a>
+            ))}
+          </nav>
         </div>
       </section>
 
@@ -228,7 +236,6 @@ export default async function ContactPage({
         <aside className={styles.formAside}>
           <p className={styles.bookingLead}>{t("bookingLead")}</p>
           <div className={styles.bookingLinks}>
-            <a href={`mailto:${CONTACT.email}`}>{tCta("email")}</a>
             <a href={whatsappUrl()} target="_blank" rel="noreferrer">
               {tCta("whatsapp")}
             </a>

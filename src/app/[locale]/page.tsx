@@ -4,7 +4,6 @@ import { RotatingSlogans } from "@/components/hero/RotatingSlogans";
 import { SolarSystem } from "@/components/hero/SolarSystem";
 import { LessTalk } from "@/components/home/LessTalk";
 import { MakeBrandBand } from "@/components/home/MakeBrandBand";
-import { Tagline } from "@/components/home/Tagline";
 import { ReachOut } from "@/components/home/ReachOut";
 import { ClosingBand } from "@/components/home/ClosingBand";
 import { ClosingBody } from "@/components/home/ClosingBody";
@@ -18,16 +17,15 @@ import { localizedAlternates, SITE_NAME, SITE_TAGLINE, SITE_TAGLINE_TR } from "@
  * Bölüm 4 KARAR kutusu: ayrı splash sayfa Google'a "içeriksiz sayfa"
  * sinyali verir).
  *
- * Ekran sırası deck'teki HOME-01..13 numaralamasıyla birebir:
+ * Eylül 2026 revizyonundan sonraki ekran sırası:
  *   01-03 HeroTypography (dev tipografi + hero sloganı + showreel sahnesi)
  *   04    RotatingSlogans
- *   05    LessTalk
+ *   05    ClosingBody (scroll kontrollü E.T. sahnesi)
  *   06    MakeBrandBand
  *   07    SolarSystem
- *   08    Tagline
- *   09    ReachOut
- *   10    ClosingBand
- *   11    ClosingBody
+ *   08    ReachOut (E.T. sahnesindeki eski açıklama metniyle)
+ *   09    ClosingBand
+ *   10    LessTalk
  *
  * TODO: brief Bölüm 4 KARAR — "İlk ziyaretten sonra animasyonun kısa
  * sürümü gösterilir (çerezle hatırlanır)": çerez onay bandı kuruldu, rıza
@@ -74,13 +72,12 @@ export default async function HomePage({
       </h1>
       <HeroTypography />
       <RotatingSlogans />
-      <LessTalk />
+      <ClosingBody />
       <MakeBrandBand />
       <SolarSystem />
-      <Tagline />
       <ReachOut />
       <ClosingBand />
-      <ClosingBody />
+      <LessTalk />
     </div>
   );
 }

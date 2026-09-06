@@ -10,12 +10,13 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
 
   const navigation = page.locator("#main-navigation");
   await expect(navigation.locator(":scope > ul > li > a")).toHaveText([
-    "Kültür",
-    "Ne Yapıyoruz",
-    "İşler",
-    "Müşteriler",
-    "İş Ortakları",
-    "İletişim",
+    "Our Culture",
+    "What We Do",
+    "Works",
+    "Friends",
+    "Partners",
+    "Think & Thank",
+    "Contact",
   ]);
   await expect(
     navigation.getByRole("link", { name: "Çözümler", exact: true }),
@@ -29,7 +30,7 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
 
   await page
     .locator("#main-navigation")
-    .getByRole("link", { name: "Ne Yapıyoruz", exact: true })
+    .getByRole("link", { name: "What We Do", exact: true })
     .hover();
   const mega = page.locator("#desktop-mega-menu");
   await expect(mega).toBeVisible();
@@ -38,6 +39,23 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
   const megaBounds = (await mega.boundingBox())!;
   expect(megaBounds.x).toBeLessThanOrEqual(1);
   expect(megaBounds.width).toBeGreaterThanOrEqual(1439);
+
+  await navigation
+    .getByRole("link", { name: "Our Culture", exact: true })
+    .hover();
+  await expect(mega.getByRole("link", { name: "WHO WE ARE" })).toBeVisible();
+  await expect(
+    mega.getByRole("link", { name: "WHAT WE BELIEVE" }),
+  ).toBeVisible();
+  await expect(
+    mega.getByRole("link", { name: "THINK & THANK" }),
+  ).toBeVisible();
+
+  await navigation.getByRole("link", { name: "Partners", exact: true }).hover();
+  await expect(mega.getByRole("link", { name: "STUDIO ROOM" })).toBeVisible();
+  await expect(
+    mega.getByRole("link", { name: "MARRY ME KITCHEN" }),
+  ).toBeVisible();
 
   await page.screenshot({ path: testInfo.outputPath("desktop-header-hero.png") });
 
@@ -79,6 +97,56 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),
   ).toBeLessThanOrEqual(0);
+});
+
+test("homepage revision order, copy and footer details stay intact", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/tr");
+  await acceptCookies(page);
+
+  const etScene = page.locator("section[data-scroll-scrub]");
+  const reachOut = page.getByRole("region", {
+    name: "Sizin için ne yapabiliriz?",
+  });
+  const lessTalk = page.getByRole("region", { name: "Az Laf, Çok İş" });
+  const positions = await Promise.all(
+    [etScene, reachOut, lessTalk].map((locator) =>
+      locator.evaluate((element) => (element as HTMLElement).offsetTop),
+    ),
+  );
+
+  expect(positions[0]).toBeLessThan(positions[1]);
+  expect(positions[1]).toBeLessThan(positions[2]);
+  await expect(etScene).toContainText(
+    "The future of creativity isn't artificial.It's hybrid.",
+  );
+  await expect(reachOut).toContainText(
+    "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz.",
+  );
+  await expect(lessTalk.getByRole("heading")).toHaveCSS(
+    "color",
+    "rgb(255, 252, 0)",
+  );
+
+  await expect(
+    page.getByRole("link", { name: "Birlikte sıra dışı bir şey üretelim." }),
+  ).toHaveCount(0);
+
+  const headerLogo = page.locator("header").getByRole("link", {
+    name: "HIBRID 360",
+  });
+  const footerLogo = page.locator("footer").getByText("HIBRID 360", {
+    exact: true,
+  });
+  expect(await footerLogo.evaluate((element) => getComputedStyle(element).fontSize)).toBe(
+    await headerLogo.evaluate((element) => getComputedStyle(element).fontSize),
+  );
+  await expect(page.locator("footer address").locator("span > span")).toHaveText([
+    "Feneryolu Mahallesi, Ebru Sokak, Manolya Apt. No: 3A-3B",
+    "İstanbul | Türkiye",
+  ]);
 });
 
 test("representative showreel expands from the top-right frame to the viewport", async ({

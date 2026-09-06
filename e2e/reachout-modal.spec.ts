@@ -18,6 +18,12 @@ test.describe("ReachOut pop-up — klavye erişilebilirliği", () => {
     await expect(dialog).toBeVisible();
     await expect(dialog).toHaveCSS("background-color", "rgb(255, 252, 0)");
     await expect(dialog.locator("img")).toBeVisible();
+    const close = dialog.getByRole("button", { name: "Kapat" });
+    await expect(close).toHaveCSS("background-color", "rgb(0, 0, 0)");
+    await expect(close).toHaveCSS("color", "rgb(255, 252, 0)");
+    const submit = dialog.getByRole("button", { name: "Gönder" });
+    await expect(submit).toHaveCSS("background-color", "rgb(0, 0, 0)");
+    await expect(submit).toHaveCSS("color", "rgb(255, 252, 0)");
     await expect(dialog.getByRole("textbox", { name: "E-posta" })).toBeVisible();
     await expect(
       dialog.getByRole("textbox", { name: "Ne yapmak istiyorsunuz?" }),

@@ -64,7 +64,7 @@
      veriliyor — o yerleşimi etkilemez, dolayısıyla hizayı bozmaz. */
   padding: 0.12em 0;
   background: transparent;
-  color: var(--color-text-on-black);
+  color: var(--color-brand-yellow);
   transition:
     background-color 260ms var(--reveal-ease),
     box-shadow 260ms var(--reveal-ease),
@@ -72,8 +72,7 @@
     transform 260ms var(--reveal-ease);
 }
 
-/* Durağan hâl beyaz; highlight hover anının kendisi. Sarı zeminde yazı
-   SİYAHA döner — CLAUDE.md kontrast sözleşmesi. */
+/* Durağan hâl sarı; hover'da sarı zemin üzerinde yazı siyaha döner. */
 .titleMark:hover {
   background: var(--color-brand-yellow);
   color: var(--color-text-on-yellow);

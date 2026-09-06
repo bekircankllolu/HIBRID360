@@ -23,9 +23,9 @@ import styles from "./Mona.module.css";
  * TODO: docs/DECISIONS.md #8 bekleniyor — MONA ses kararı. Karar +
  * prodüksiyon tamamlanınca src/data/mona.ts içindeki audioSrc/captionsSrc
  * alanları dolacak ve buradaki <audio> + <track> bloğu devreye girecek.
- * TODO: brief 11.6 — MONA karakter videosu (WebM VP9+alfa + MP4) ve 4:3
- * ekran içi görüntü döngüsü teslim edilince .head bloğundaki CSS silüet
- * gerçek video ile değiştirilecek.
+ * MONA karakter videosu sessiz ve etkileşimli çalışır. Masaüstünde
+ * imlecin yatay konumu klibin zaman çizelgesini, dikey konumu ise hafif
+ * perspektif eğimini yönetir; dokunmatik cihazlarda klip döngüye girer.
  */
 
 export function Mona({
@@ -42,6 +42,9 @@ export function Mona({
   const reducedMotion = usePrefersReducedMotion();
   const machine = useMonaMachine({ locale, reducedMotion });
   const sectionRef = useRef<HTMLElement>(null);
+  const characterRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const pointerFrameRef = useRef<number | null>(null);
   const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
   const [compactIndex, setCompactIndex] = useState(0);
 
@@ -69,6 +72,59 @@ export function Mona({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [silence]);
+
+  // Masaustunde yatay imlec konumu videonun zaman cizelgesine baglanir.
+  // Boylece klipteki televizyon kafa saga ve sola bakarak imleci izler.
+  // Dikey konum yalnizca cok hafif bir perspektif egimi verir. Dokunmatik
+  // cihazlarda video sessiz bir dongu olarak oynar.
+  useEffect(() => {
+    const video = videoRef.current;
+    const character = characterRef.current;
+    if (!video || !character) return;
+
+    const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    const positionAtRest = () => {
+      if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+      video.pause();
+      video.currentTime = video.duration * 0.5;
+    };
+
+    const onLoadedMetadata = () => {
+      if (reducedMotion) {
+        positionAtRest();
+      } else if (hasFinePointer) {
+        positionAtRest();
+      } else {
+        void video.play().catch(() => undefined);
+      }
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (!hasFinePointer || reducedMotion || !Number.isFinite(video.duration)) return;
+      if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
+
+      pointerFrameRef.current = requestAnimationFrame(() => {
+        const xProgress = Math.min(1, Math.max(0, event.clientX / window.innerWidth));
+        const yProgress = Math.min(1, Math.max(0, event.clientY / window.innerHeight));
+        const safeStart = video.duration * 0.06;
+        const safeRange = video.duration * 0.88;
+        video.currentTime = safeStart + safeRange * xProgress;
+        character.style.setProperty("--mona-tilt-x", `${(0.5 - yProgress) * 4}deg`);
+        character.style.setProperty("--mona-tilt-y", `${(xProgress - 0.5) * 5}deg`);
+      });
+    };
+
+    video.addEventListener("loadedmetadata", onLoadedMetadata);
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    if (video.readyState >= 1) onLoadedMetadata();
+
+    return () => {
+      video.removeEventListener("loadedmetadata", onLoadedMetadata);
+      window.removeEventListener("pointermove", onPointerMove);
+      if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
+    };
+  }, [reducedMotion]);
 
   const onQuestionClick = (question: MonaQuestion) => {
     setActiveQuestionId(question.id);
@@ -103,7 +159,7 @@ export function Mona({
       aria-label={t("sectionLabel")}
     >
       <div className={styles.inner}>
-        <div className={styles.character}>
+        <div ref={characterRef} className={styles.character}>
           <div
             className={styles.head}
             role="button"
@@ -117,22 +173,19 @@ export function Mona({
               }
             }}
           >
-            <span className={styles.cameraNotch} aria-hidden="true" />
-            <div className={styles.screen}>
-              <span className={styles.screenLoop} aria-hidden="true" />
-              <span className={styles.screenGrid} aria-hidden="true" />
-              <span className={styles.screenLabel}>hello</span>
-            </div>
-            <span className={styles.statusRail} aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </span>
-            <span className={styles.headBase} aria-hidden="true">
-              <span className={styles.driveSlot} />
-            </span>
+            <video
+              ref={videoRef}
+              className={styles.characterVideo}
+              src="/videos/mona-tv-head.mp4"
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+            />
+            <span className={styles.videoSheen} aria-hidden="true" />
           </div>
-          <p className={styles.mediaNote}>{t("mediaPending")}</p>
+          <p className={styles.mediaNote}>{t("pointerHint")}</p>
         </div>
 
         <div className={styles.dialogue}>
@@ -182,20 +235,42 @@ export function Mona({
           </div>
 
           {variant === "full" && (
-            <ul className={styles.questionList}>
-              {monaQuestions.map((question) => (
-                <li key={question.id}>
-                  <button
-                    type="button"
-                    className={styles.questionButton}
-                    aria-pressed={activeQuestionId === question.id}
-                    onClick={() => onQuestionClick(question)}
-                  >
-                    {question.question[locale]}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className={styles.questionGroups}>
+              <section>
+                <h2 className={styles.groupTitle}>{t("generalQuestions")}</h2>
+                <ul className={styles.questionList}>
+                  {monaQuestions.slice(0, 18).map((question) => (
+                    <li key={question.id}>
+                      <button
+                        type="button"
+                        className={styles.questionButton}
+                        aria-pressed={activeQuestionId === question.id}
+                        onClick={() => onQuestionClick(question)}
+                      >
+                        {question.question[locale]}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h2 className={styles.groupTitle}>{t("aiQuestions")}</h2>
+                <ul className={styles.questionList}>
+                  {monaQuestions.slice(18).map((question) => (
+                    <li key={question.id}>
+                      <button
+                        type="button"
+                        className={styles.questionButton}
+                        aria-pressed={activeQuestionId === question.id}
+                        onClick={() => onQuestionClick(question)}
+                      >
+                        {question.question[locale]}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
           )}
 
           {activeAction && (

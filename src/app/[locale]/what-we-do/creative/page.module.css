@@ -1,122 +1,152 @@
 .surface {
-  background: #f2d9ec;
-  color: var(--color-brand-black);
-  --empty-state-label-color: var(--color-brand-black);
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
 }
 
-.page {
-  color: var(--color-brand-black);
+.page { color: var(--color-brand-white); }
+
+.eyebrow {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-brand);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-heading-bold);
+  color: var(--color-brand-yellow);
+  letter-spacing: 0.12em;
 }
 
 .heroTitle {
-  color: var(--color-brand-black);
+  max-width: 11ch;
+  color: var(--color-brand-yellow);
 }
 
 .heroSubtitle {
-  color: var(--color-brand-black);
+  max-width: 44rem;
+  color: var(--color-brand-white);
 }
 
-.heroSubtitle::after {
-  background: linear-gradient(
-    90deg,
-    var(--color-brand-fuchsia),
-    var(--color-brand-black) 62%,
-    transparent
-  );
-}
+.heroSubtitle::after { background: var(--color-brand-yellow); }
 
-.visual {
+.showreel {
   position: relative;
-  min-height: clamp(17rem, 42vw, 31rem);
-  margin: var(--space-12) calc(var(--space-4) * -1);
+  width: calc(100% + (2 * var(--page-gutter)));
+  min-height: min(76svh, 52rem);
+  margin: clamp(3rem, 7vw, 7rem) calc(-1 * var(--page-gutter));
   overflow: hidden;
-  background:
-    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.88) 0 1px, transparent 2px),
-    radial-gradient(circle at 78% 28%, rgba(255, 252, 0, 0.88) 0 1px, transparent 2px),
-    radial-gradient(circle at 46% 72%, rgba(255, 0, 255, 0.72) 0 1px, transparent 2px),
-    repeating-linear-gradient(
-      135deg,
-      rgba(255, 0, 255, 0.28) 0 2px,
-      rgba(0, 0, 0, 0.06) 2px 4px,
-      rgba(255, 255, 255, 0.25) 4px 6px
-    ),
-    #e8bfdc;
-  border-top: 2px solid var(--color-brand-black);
-  border-bottom: 2px solid var(--color-brand-black);
+  background: #050505;
 }
 
-.visual::before {
-  content: "";
+.showreelVideo {
   position: absolute;
-  inset: 12% 10%;
-  background:
-    linear-gradient(90deg, var(--color-brand-black) 0 2px, transparent 2px),
-    linear-gradient(0deg, var(--color-brand-black) 0 2px, transparent 2px);
-  background-size: 4.5rem 4.5rem;
-  opacity: 0.16;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
 }
 
-.visual::after {
-  content: "CREATIVE";
+.showreelLabel {
   position: absolute;
-  right: clamp(1rem, 6vw, 4rem);
-  bottom: clamp(1rem, 5vw, 3.5rem);
+  left: var(--page-gutter);
+  bottom: clamp(2rem, 6vw, 6rem);
+  z-index: 1;
+  max-width: 12ch;
+  margin: 0;
   font-family: var(--font-brand);
+  font-size: clamp(2rem, 7vw, 7rem);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(3rem, 12vw, 9rem);
-  line-height: 0.9;
-  color: var(--color-brand-black);
-  text-shadow:
-    0.06em 0.06em 0 var(--color-brand-fuchsia),
-    -0.025em -0.025em 0 var(--color-brand-yellow);
-}
-
-.sparkle {
-  position: absolute;
-  left: clamp(1rem, 5vw, 4rem);
-  top: clamp(1rem, 5vw, 4rem);
-  width: clamp(5rem, 18vw, 13rem);
-  aspect-ratio: 1;
-  background:
-    linear-gradient(45deg, transparent 48%, var(--color-brand-black) 48% 52%, transparent 52%),
-    linear-gradient(-45deg, transparent 48%, var(--color-brand-black) 48% 52%, transparent 52%),
-    var(--color-brand-yellow);
-  clip-path: polygon(50% 0, 62% 36%, 100% 50%, 62% 64%, 50% 100%, 38% 64%, 0 50%, 38% 36%);
-  box-shadow: 1rem 1rem 0 var(--color-brand-fuchsia);
+  line-height: 0.88;
+  color: var(--color-brand-yellow);
 }
 
 .body {
-  opacity: 0.86;
+  max-width: 58rem;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
 }
 
-.tagList {
-  border-top-color: rgba(0, 0, 0, 0.28);
+.tagList { border-top-color: rgba(255, 252, 0, 0.45); }
+.tag { border-bottom-color: rgba(255, 255, 255, 0.18); }
+.tag::before,
+.bandText { color: var(--color-brand-yellow); }
+.band { border-top-color: rgba(255, 252, 0, 0.45); }
+
+.workPrompt {
+  position: relative;
+  min-height: min(70svh, 48rem);
+  margin: var(--space-16) calc(-1 * var(--page-gutter)) 0;
+  overflow: hidden;
+  background: #080808;
 }
 
-.tag {
-  border-bottom-color: rgba(0, 0, 0, 0.22);
+.workPromptImage {
+  object-fit: cover;
+  filter: brightness(0.55) contrast(1.12);
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
 }
 
-.tag::before {
-  color: var(--color-brand-fuchsia);
+.workPromptLink {
+  position: absolute;
+  left: var(--page-gutter);
+  right: var(--page-gutter);
+  bottom: clamp(2rem, 6vw, 5rem);
+  z-index: 1;
+  display: block;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--color-brand-yellow);
+  color: var(--color-brand-yellow);
+  font-family: var(--font-brand);
+  font-size: clamp(1rem, 2.5vw, 2rem);
+  font-weight: var(--font-weight-heading-bold);
+  text-align: center;
 }
 
-.band {
-  border-top-color: rgba(0, 0, 0, 0.28);
-}
-
-.bandText {
+.workPromptLink:hover,
+.workPromptLink:focus-visible {
+  background: var(--color-brand-yellow);
   color: var(--color-brand-black);
 }
 
-@media (max-width: 640px) {
-  .visual {
-    min-height: 19rem;
-  }
+.closing {
+  padding: clamp(5rem, 12vw, 10rem) 0 0;
+  max-width: 64rem;
+}
 
-  .visual::after {
-    right: var(--space-4);
-    bottom: var(--space-4);
-    font-size: clamp(3.4rem, 19vw, 5.5rem);
+.closingKicker {
+  color: var(--color-brand-yellow);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+}
+
+.closing h2 {
+  margin: var(--space-4) 0;
+  font-family: var(--font-brand);
+  font-size: clamp(2rem, 6vw, 5.5rem);
+  line-height: 0.94;
+}
+
+.closingLink {
+  display: inline-block;
+  margin-top: var(--space-8);
+  padding: 1rem 1.5rem;
+  background: var(--color-brand-yellow);
+  color: var(--color-brand-black);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+}
+
+@media (hover: hover) {
+  .showreel:hover .showreelVideo,
+  .workPrompt:hover .workPromptImage {
+    transform: scale(var(--media-zoom-scale));
   }
+}
+
+@media (max-width: 640px) {
+  .showreel,
+  .workPrompt { min-height: 60svh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showreelVideo,
+  .workPromptImage { transition: none; }
 }

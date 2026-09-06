@@ -63,7 +63,7 @@ export const clients: ClientEntry[] = [
   { name: "Panavia Suites", verified: true },
   { name: "Sultan Makamı Evleri", verified: true },
 
-  { name: "Regie Ottoman Hotel", verified: true },
+  { name: "Regi Ottoman Hotel", verified: true },
   { name: "Grand Yazıcı Otelleri", verified: true },
   { name: "Mares Hotel Marmaris", verified: true },
   { name: "Turban Hotel Marmaris", verified: true },
@@ -93,7 +93,7 @@ export const clients: ClientEntry[] = [
   { name: "Calibre", verified: true },
   { name: "Balçova Rotary Kulübü", verified: true },
 
-  { name: "Türkiye Yarış Atları Yetiştiricileri ve Sahipleri Derneği", verified: true },
+  { name: "Türkiye Yarış Atları ve Sahipleri Derneği", verified: true },
   { name: "Türkiye Hayvanları Koruma Derneği", verified: true },
 
   // [DOĞRULA] — deck bu beşini ayrı işaretledi, yayın öncesi teyit gerekiyor.
@@ -126,5 +126,5 @@ export const newClients: string[] = [
   "Ticari Liderlik Programı",
 ];
 
-/** TODO: docs/DECISIONS.md — FRD-03 [KARAR] kapanınca true yapılacak. */
-export const SHOW_NEW_CLIENTS = false;
+/** Eylul 2026 musteri revizyonu: yeni isimler dizinde gosterilecek. */
+export const SHOW_NEW_CLIENTS = true;

@@ -12,13 +12,13 @@
     "whatWeDo": "What We Do",
     "whatWeBelieve": "What We Believe",
     "solutions": "Solutions",
-    "clients": "Clients",
-    "friends": "Clients",
+    "clients": "Friends",
+    "friends": "Friends",
     "partners": "Partners",
     "contact": "Contact",
-    "work": "Work",
-    "insights": "Insights",
-    "culture": "Culture",
+    "work": "Works",
+    "insights": "Think & Thank",
+    "culture": "Our Culture",
     "about": "About",
     "explore": "Explore",
     "legal": "Legal",
@@ -65,6 +65,7 @@
     "tagline": "Türkiye’s AI-native Creative Production Studio",
     "reachOut": {
       "title": "What can we do for you?",
+      "body": "Here at Hibrid 360, we are serious about the final touch for that gleaming finish of your product. That’s exactly why we create a distinct production model, a tailor-made solution that fits your needs.",
       "cta": "Reach out",
       "popupIntro": "Hi. Tell us what you’re making and when. We’ll take it from there.",
       "close": "Close"
@@ -73,13 +74,19 @@
       "title": "THE BEST WORK DOESN’T FEEL LIKE WORK",
       "subtitle": "Wanna Know What Keeps Us Busy?"
     },
-    "closingBody": "Here at Hibrid 360, we are serious about the final touch for that gleaming finish of your product. That’s exactly why we create a distinct production model, a tailor-made solution that fits your needs."
+    "closingBody": "The future of creativity isn't artificial. It's hybrid."
   },
   "insights": {
-    "heroTitle": "WHAT WE LEARNED MAKING IT.",
-    "heroSubtitle": "Numbers, methods and mistakes from our own productions, written by the people who ran them.",
+    "heroEyebrow": "HIBRID 360 MAG",
+    "heroTitle": "THINK & THANK",
+    "heroLead": "From idea to impact.",
+    "heroSubtitle": "Editorial articles exploring the fields Hibrid 360 works in.",
     "categoryLabel": "Category",
     "categoryAll": "All",
+    "articleCount": "{count} articles",
+    "articleInfo": "Article information",
+    "readTime": "{minutes} min read",
+    "backToIndex": "Back to Think & Thank",
     "comingSoon": "The first posts are on the way.",
     "readMore": "Read more"
   },
@@ -190,6 +197,7 @@
     "hub": {
       "whoWeAre": "Who We Are",
       "whatWeBelieve": "What We Believe",
+      "thinkAndThank": "Think & Thank",
       "directors": "Directors & Crew",
       "partners": "Partners",
       "sustainability": "Sustainability"
@@ -400,8 +408,11 @@
     ]
   },
   "clients": {
-    "heroTitle": "OUR CLIENTS",
+    "heroTitle": "THANK YOU",
+    "heroSupport": "We extend heartfelt thanks to everyone who has believed in and supported us since 2004.",
     "heroBody": "We build honest, long-term and ambitious partnerships with the brands we work with. Global icons. Shared creative energy.",
+    "friendsBody": "We love the people we work with. At our agency we call them our friends, not clients: the kind of honest, loyal chemistry you only get with your closest collaborators.",
+    "anniversaryAlt": "Hibrid 360 anniversary artwork celebrating more than twenty years",
     "index": {
       "label": "Client index",
       "all": "All",
@@ -433,6 +444,9 @@
     "sectionLabel": "MONA",
     "headLabel": "MONA’s screen",
     "mediaPending": "MONA’s character video and voice-over are in production; for now the lines run as text only.",
+    "pointerHint": "Move your pointer. MONA is watching.",
+    "generalQuestions": "HIBRID 360",
+    "aiQuestions": "AI & HYBRID PRODUCTION",
     "mute": "Mute",
     "unmute": "Unmute",
     "stop": "Stop",
@@ -513,6 +527,7 @@
   },
   "sustainability": {
     "title": "Sustainability",
+    "intro": "We believe digital creativity can move the world forward without leaving a heavy footprint behind. The world is ours. The responsibility is, too.",
     "measurementTitle": "Measurement",
     "reductionTitle": "Reduction",
     "offsetTitle": "Offset",

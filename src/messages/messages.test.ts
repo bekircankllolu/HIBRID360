@@ -32,12 +32,16 @@ describe("locale message contracts", () => {
   });
 
   it.each([
-    "insights.heroTitle",
     "insights.heroSubtitle",
     "contact.heroTitle",
     "services.cloudTv.solutionsTitle",
   ])("provides an actual Turkish translation for %s", (key) => {
     expect(trMessages[key]).not.toBe(enMessages[key]);
+  });
+
+  it("keeps the Think & Thank brand name identical in both locales", () => {
+    expect(tr.insights.heroTitle).toBe("THINK & THANK");
+    expect(en.insights.heroTitle).toBe("THINK & THANK");
   });
 
   it("contains no Unicode replacement characters", () => {

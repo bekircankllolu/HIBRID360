@@ -32,10 +32,13 @@ export async function generateMetadata({
 
 export default async function WorkPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ service?: string }>;
 }) {
   const { locale } = await params;
+  const { service } = await searchParams;
   const t = await getTranslations("work");
   const works = await getPublishedWorks();
 
@@ -49,17 +52,33 @@ export default async function WorkPage({
       />
 
       <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>{t("pageTitle")}</h1>
+        <video
+          className={styles.heroVideo}
+          src="/videos/hibrid-stone-loop-20260827.mp4"
+          poster="/videos/hibrid-stone-poster.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
+        <div className={styles.heroCopy}>
+          <h1 className={styles.heroTitle}>THE ART OF TEAM WORK</h1>
+          <p className={styles.heroLead}>{t("showreelBody")}</p>
+        </div>
       </header>
 
+      <h2 className={styles.archiveTitle}>{t("recentTitle")}</h2>
       <WorkArchive
         works={works}
         locale={locale}
         confidentialLabel={t("confidentialClient")}
+        initialService={service}
       />
 
       <div className={styles.outro}>
-        <p className={styles.seoHeading}>{t("seoHeading")}</p>
+        <p className={styles.seoHeading}>{t("tagline")}</p>
         <p className={styles.closingLead}>{t("ctaLead")}</p>
       </div>
     </main>

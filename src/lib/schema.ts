@@ -7,6 +7,7 @@ import {
   CONTACT,
 } from "@/lib/site";
 import type { Locale } from "@/i18n/routing";
+import type { InsightsPost } from "@/types/content";
 
 /**
  * schema.org yapılandırılmış veri üreticileri — CLAUDE.md / brief-rev12.md
@@ -68,6 +69,35 @@ export function breadcrumbListJsonLd(
       name: locale === "tr" ? (trNames[item.name] ?? item.name) : item.name,
       item: `${SITE_URL}/${locale}${item.path}`,
     })),
+  };
+}
+
+export function articleJsonLd(locale: Locale, post: InsightsPost) {
+  const headline = locale === "tr" ? post.title_tr : post.title_en;
+  const description = locale === "tr" ? post.summary_tr : post.summary_en;
+  const authorName =
+    (locale === "tr" ? post.author_name_tr : post.author_name_en) ?? post.author_name;
+  const articleSection =
+    (locale === "tr" ? post.category_tr : post.category_en) ?? post.category;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline,
+    inLanguage: locale,
+    ...(description ? { description } : {}),
+    ...(articleSection ? { articleSection } : {}),
+    ...(post.read_time_minutes
+      ? { timeRequired: `PT${post.read_time_minutes}M` }
+      : {}),
+    ...(post.cover_image_url ? { image: post.cover_image_url } : {}),
+    ...(post.published_at ? { datePublished: post.published_at } : {}),
+    ...(post.last_reviewed_at ? { dateModified: post.last_reviewed_at } : {}),
+    ...(authorName
+      ? { author: { "@type": "Organization", name: authorName } }
+      : {}),
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: `${SITE_URL}/${locale}/think-and-thank/${post.slug}`,
   };
 }
 

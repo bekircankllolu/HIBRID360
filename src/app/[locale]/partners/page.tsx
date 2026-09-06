@@ -16,8 +16,8 @@ import styles from "@/styles/culture-page.module.css";
  * reklamcılıkta David Ogilvy'ye ait olduğunu belirtiyor ama kesin
  * doğrulama istiyor — attribütü olduğu gibi bırakıp deck'in kendi
  * belirsizliğini burada da not düşüyoruz (TODO).
- * PAR-03: MOTIVE partner listesinden çıktı; Studio Food Room artık tek
- * partner, ortak galeri/anlatım yok (deck'in kendi notu).
+ * Eylül 2026 revizyonu: açılır menüde Studio Room ve Marry Me Kitchen
+ * birlikte gösterilir. Teslim edilen mevcut Studio Room açıklaması korunur.
  */
 
 export async function generateMetadata({
@@ -43,6 +43,20 @@ export default async function PartnersPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("culture.partners");
+  const partners = [
+    {
+      id: "studio-room",
+      name: "STUDIO ROOM",
+      body: t("partnerBody"),
+      url: t("partnerUrl"),
+    },
+    {
+      id: "marry-me-kitchen",
+      name: "MARRY ME KITCHEN",
+      body: null,
+      url: null,
+    },
+  ] as const;
 
   return (
     <div className={styles.page}>
@@ -63,18 +77,22 @@ export default async function PartnersPage({
         <p className={styles.quoteAuthor}>{t("quoteAuthor")}</p>
       </section>
 
-      <div className={styles.partnerItem}>
-        <p className={styles.partnerName}>{t("partnerName")}</p>
-        <p className={styles.partnerBody}>{t("partnerBody")}</p>
-        <a
-          href={`https://${t("partnerUrl")}`}
-          target="_blank"
-          rel="noreferrer"
-          className={styles.partnerLink}
-        >
-          {t("partnerUrl")}
-        </a>
-      </div>
+      {partners.map((partner) => (
+        <section id={partner.id} className={styles.partnerItem} key={partner.id}>
+          <h2 className={styles.partnerName}>{partner.name}</h2>
+          {partner.body && <p className={styles.partnerBody}>{partner.body}</p>}
+          {partner.url && (
+            <a
+              href={`https://${partner.url}`}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.partnerLink}
+            >
+              {partner.url}
+            </a>
+          )}
+        </section>
+      ))}
     </div>
   );
 }

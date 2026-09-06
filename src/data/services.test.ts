@@ -54,16 +54,17 @@ describe("hizmet kataloğu", () => {
 });
 
 describe("navigasyon", () => {
-  it("üst menü müşterinin verdiği altı maddeyi bu sırayla içerir", () => {
+  it("üst menü müşterinin verdiği yedi maddeyi bu sırayla içerir", () => {
     expect(MAIN_NAV.map((item) => item.href)).toEqual([
       "/culture",
       "/what-we-do",
       "/work",
       "/clients",
       "/partners",
+      "/think-and-thank",
       "/contact",
     ]);
-    expect(MAIN_NAV.map((item) => item.order)).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(MAIN_NAV.map((item) => item.order)).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
 
   it("eski sayfalar görünür menüden çıkar ama rotaları yaşamaya devam eder", () => {
@@ -73,11 +74,14 @@ describe("navigasyon", () => {
     );
   });
 
-  it("mega menü yalnızca What We Do'da ve hizmet kataloğundan gelir", () => {
+  it("açılır menüler Culture, What We Do ve Partners için tanımlıdır", () => {
     const withChildren = MAIN_NAV.filter((item) => item.children);
-    expect(withChildren).toHaveLength(1);
-    expect(withChildren[0].href).toBe("/what-we-do");
-    expect(withChildren[0].children?.map((child) => child.href)).toEqual(
+    expect(withChildren.map((item) => item.href)).toEqual([
+      "/culture",
+      "/what-we-do",
+      "/partners",
+    ]);
+    expect(withChildren[1].children?.map((child) => child.href)).toEqual(
       SERVICE_PATHS,
     );
   });
@@ -89,12 +93,13 @@ describe("navigasyon", () => {
     }
   });
 
-  it("TR menüsü Türkçe, EN menüsü İngilizce etiket kullanır", () => {
-    // Müşteri revizyonu: "Türkçe karşılıklarını TR locale'de kullan."
-    expect(tr.nav.culture).toBe("Kültür");
-    expect(tr.nav.clients).toBe("Müşteriler");
-    expect(en.nav.culture).toBe("Culture");
-    expect(en.nav.clients).toBe("Clients");
+  it("marka menüsü iki locale'de de onaylı İngilizce etiketleri kullanır", () => {
+    expect(tr.nav.culture).toBe("Our Culture");
+    expect(tr.nav.clients).toBe("Friends");
+    expect(tr.nav.insights).toBe("Think & Thank");
+    expect(en.nav.culture).toBe("Our Culture");
+    expect(en.nav.clients).toBe("Friends");
+    expect(en.nav.insights).toBe("Think & Thank");
   });
 
   it("etiketler Title Case — başlıkta text-transform yok", () => {
