@@ -11,6 +11,8 @@
 
 # next.js
 /.next/
+/.next-*/
+/tmp/mona-tts-deps/
 /out/
 
 # production

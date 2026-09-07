@@ -69,9 +69,11 @@ export default async function AiCreativeProductionPage({
         ])}
       />
 
+      <Mona locale={locale} />
+
       {/* AI-01 */}
       <div className={styles.hero}>
-        <h1 className={styles.heroTitle}>CREATE THE FUTURE.</h1>
+        <h2 className={styles.heroTitle}>CREATE THE FUTURE.</h2>
         <p className={styles.heroLead}>{t("heroLead")}</p>
       </div>
 
@@ -83,8 +85,6 @@ export default async function AiCreativeProductionPage({
           </p>
         ))}
       </div>
-
-      <Mona locale={locale} />
 
       {/* AI-03 — ayrıştırıcı soru bloğu */}
       <section className={styles.block}>

@@ -10,6 +10,8 @@ import {
   getInsightSummary,
   getInsightTitle,
 } from "@/lib/insights";
+import { getInsightVisual } from "@/data/insight-visuals";
+import { EditorialImage } from "@/components/insights/EditorialImage";
 import type { InsightsPost } from "@/types/content";
 import styles from "./InsightsList.module.css";
 
@@ -80,36 +82,56 @@ export function InsightsList({
         <EmptyState message={t("comingSoon")} />
       ) : (
         <div className={styles.grid}>
-          {filteredPosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/think-and-thank/${post.slug}`}
-              className={styles.card}
-            >
-              <span className={styles.cardIndex} aria-hidden="true">
-                {String(posts.indexOf(post) + 1).padStart(2, "0")}
-              </span>
-              <span className={styles.cardMain}>
-                {post.category && (
-                  <span className={styles.cardCategory}>
-                    {getInsightCategory(post, locale)}
+          {filteredPosts.map((post, filteredIndex) => {
+            const visual = getInsightVisual(post, locale);
+            const absoluteIndex = posts.indexOf(post);
+
+            return (
+              <Link
+                key={post.id}
+                href={`/think-and-thank/${post.slug}`}
+                className={styles.card}
+                data-tone={visual.tone}
+                data-featured={filteredIndex === 0 ? "true" : undefined}
+              >
+                <span className={styles.cardVisual}>
+                  <EditorialImage
+                    src={visual.src}
+                    alt={visual.alt}
+                    sizes={
+                      filteredIndex === 0
+                        ? "(max-width: 760px) 100vw, 60vw"
+                        : "(max-width: 760px) 100vw, 50vw"
+                    }
+                  />
+                </span>
+                <span className={styles.cardMain}>
+                  <span className={styles.cardTopline}>
+                    <span className={styles.cardIndex} aria-hidden="true">
+                      {String(absoluteIndex + 1).padStart(2, "0")}
+                    </span>
+                    {post.category && (
+                      <span className={styles.cardCategory}>
+                        {getInsightCategory(post, locale)}
+                      </span>
+                    )}
                   </span>
-                )}
-                <span className={styles.cardTitle}>{getInsightTitle(post, locale)}</span>
-                {getInsightSummary(post, locale) && (
-                  <span className={styles.cardSummary}>
-                    {getInsightSummary(post, locale)}
+                  <span className={styles.cardTitle}>{getInsightTitle(post, locale)}</span>
+                  {getInsightSummary(post, locale) && (
+                    <span className={styles.cardSummary}>
+                      {getInsightSummary(post, locale)}
+                    </span>
+                  )}
+                  <span className={styles.cardMeta}>
+                    {post.read_time_minutes && (
+                      <span>{t("readTime", { minutes: post.read_time_minutes })}</span>
+                    )}
+                    <span className={styles.cardArrow} aria-hidden="true">↗</span>
                   </span>
-                )}
-              </span>
-              <span className={styles.cardMeta}>
-                {post.read_time_minutes && (
-                  <span>{t("readTime", { minutes: post.read_time_minutes })}</span>
-                )}
-                <span className={styles.cardArrow} aria-hidden="true">↗</span>
-              </span>
-            </Link>
-          ))}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

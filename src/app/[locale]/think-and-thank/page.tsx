@@ -7,7 +7,10 @@ import { getPublishedInsights } from "@/lib/content";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
-import styles from "../insights/page.module.css";
+import { EditorialImage } from "@/components/insights/EditorialImage";
+import { YouTubeLite } from "@/components/insights/YouTubeLite";
+import { siteImages } from "@/data/site-images";
+import styles from "./page.module.css";
 
 export async function generateMetadata({
   params,
@@ -40,7 +43,7 @@ export default async function ThinkAndThankPage({
     fromDb.length > 0 ? fromDb : insightsPosts.filter((post) => post.is_published);
 
   return (
-    <div>
+    <div className={styles.page}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -48,10 +51,23 @@ export default async function ThinkAndThankPage({
         ])}
       />
       <header className={styles.hero}>
-        <p className={styles.heroEyebrow}>{t("heroEyebrow")}</p>
-        <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
-        <p className={styles.heroLead}>{t("heroLead")}</p>
-        <p className={styles.heroSubtitle}>{t("heroSubtitle")}</p>
+        <div className={styles.contours} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className={styles.heroInner}>
+          <p className={styles.heroEyebrow}>{t("heroEyebrow")} / 01</p>
+          <h1 className={styles.heroTitle}>
+            <span>THINK</span>
+            {" "}
+            <span>&amp; THANK</span>
+          </h1>
+          <div className={styles.heroCopy}>
+            <p className={styles.heroLead}>{t("heroLead")}</p>
+            <p className={styles.heroSubtitle}>{t("heroSubtitle")}</p>
+          </div>
+        </div>
       </header>
       <section className={styles.featuredVideo} aria-labelledby="featured-thinking-film">
         <div className={styles.featuredVideoCopy}>
@@ -61,13 +77,30 @@ export default async function ThinkAndThankPage({
           </h2>
         </div>
         <div className={styles.videoFrame}>
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/yj9rokSeack?rel=0"
+          <YouTubeLite
             title={locale === "tr" ? "Hibrid 360 Think & Thank videosu" : "Hibrid 360 Think & Thank video"}
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
+            playLabel={locale === "tr" ? "Think & Thank videosunu oynat" : "Play the Think & Thank video"}
+          />
+        </div>
+      </section>
+      <section className={styles.objectStudy} aria-labelledby="object-study-title">
+        <div className={styles.objectCopy}>
+          <p>OBJECT / STUDY 01</p>
+          <h2 id="object-study-title">
+            {locale === "tr" ? "Fikirler dolaşır. Form değiştirir." : "Ideas travel. Form changes."}
+          </h2>
+          <span>
+            {locale === "tr"
+              ? "Kültür, ses ve görüntü aynı yaratıcı sistemde buluşur."
+              : "Culture, sound and image meet inside one creative system."}
+          </span>
+        </div>
+        <div className={styles.objectVisual}>
+          <EditorialImage
+            src={siteImages.thinkAndThank.culture.src}
+            alt={siteImages.thinkAndThank.culture.alt[locale]}
+            sizes="(max-width: 760px) 80vw, 38vw"
+            rotating
           />
         </div>
       </section>

@@ -1,0 +1,118 @@
+{
+  "opening": {
+    "tr": "/audio/mona/tr/opening.mp3",
+    "en": "/audio/mona/en/opening.mp3"
+  },
+  "q1": {
+    "tr": "/audio/mona/tr/q1.mp3",
+    "en": "/audio/mona/en/q1.mp3"
+  },
+  "q2": {
+    "tr": "/audio/mona/tr/q2.mp3",
+    "en": "/audio/mona/en/q2.mp3"
+  },
+  "q3": {
+    "tr": "/audio/mona/tr/q3.mp3",
+    "en": "/audio/mona/en/q3.mp3"
+  },
+  "q4": {
+    "tr": "/audio/mona/tr/q4.mp3",
+    "en": "/audio/mona/en/q4.mp3"
+  },
+  "q5": {
+    "en": "/audio/mona/en/q5.mp3",
+    "tr": "/audio/mona/tr/q5.mp3"
+  },
+  "q6": {
+    "tr": "/audio/mona/tr/q6.mp3",
+    "en": "/audio/mona/en/q6.mp3"
+  },
+  "q7": {
+    "tr": "/audio/mona/tr/q7.mp3",
+    "en": "/audio/mona/en/q7.mp3"
+  },
+  "q8": {
+    "tr": "/audio/mona/tr/q8.mp3",
+    "en": "/audio/mona/en/q8.mp3"
+  },
+  "q9": {
+    "tr": "/audio/mona/tr/q9.mp3",
+    "en": "/audio/mona/en/q9.mp3"
+  },
+  "q10": {
+    "tr": "/audio/mona/tr/q10.mp3",
+    "en": "/audio/mona/en/q10.mp3"
+  },
+  "q11": {
+    "tr": "/audio/mona/tr/q11.mp3",
+    "en": "/audio/mona/en/q11.mp3"
+  },
+  "q12": {
+    "tr": "/audio/mona/tr/q12.mp3",
+    "en": "/audio/mona/en/q12.mp3"
+  },
+  "q13": {
+    "tr": "/audio/mona/tr/q13.mp3",
+    "en": "/audio/mona/en/q13.mp3"
+  },
+  "q14": {
+    "tr": "/audio/mona/tr/q14.mp3",
+    "en": "/audio/mona/en/q14.mp3"
+  },
+  "q15": {
+    "tr": "/audio/mona/tr/q15.mp3",
+    "en": "/audio/mona/en/q15.mp3"
+  },
+  "q16": {
+    "tr": "/audio/mona/tr/q16.mp3",
+    "en": "/audio/mona/en/q16.mp3"
+  },
+  "q17": {
+    "tr": "/audio/mona/tr/q17.mp3",
+    "en": "/audio/mona/en/q17.mp3"
+  },
+  "q18": {
+    "tr": "/audio/mona/tr/q18.mp3",
+    "en": "/audio/mona/en/q18.mp3"
+  },
+  "q19": {
+    "tr": "/audio/mona/tr/q19.mp3",
+    "en": "/audio/mona/en/q19.mp3"
+  },
+  "q20": {
+    "tr": "/audio/mona/tr/q20.mp3",
+    "en": "/audio/mona/en/q20.mp3"
+  },
+  "q21": {
+    "tr": "/audio/mona/tr/q21.mp3",
+    "en": "/audio/mona/en/q21.mp3"
+  },
+  "q22": {
+    "tr": "/audio/mona/tr/q22.mp3",
+    "en": "/audio/mona/en/q22.mp3"
+  },
+  "q23": {
+    "tr": "/audio/mona/tr/q23.mp3",
+    "en": "/audio/mona/en/q23.mp3"
+  },
+  "q24": {
+    "tr": "/audio/mona/tr/q24.mp3",
+    "en": "/audio/mona/en/q24.mp3"
+  },
+  "q25": {
+    "tr": "/audio/mona/tr/q25.mp3",
+    "en": "/audio/mona/en/q25.mp3"
+  },
+  "q26": {
+    "tr": "/audio/mona/tr/q26.mp3",
+    "en": "/audio/mona/en/q26.mp3"
+  },
+  "q27": {
+    "tr": "/audio/mona/tr/q27.mp3",
+    "en": "/audio/mona/en/q27.mp3"
+  },
+  "q28": {
+    "tr": "/audio/mona/tr/q28.mp3",
+    "en": "/audio/mona/en/q28.mp3"
+  }
+}

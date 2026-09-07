@@ -1,362 +1,83 @@
-/* brief-rev12.md Bölüm 11.1: MONA zemini baby pink, metni neon mint.
-   CLAUDE.md: bu renkler yalnızca bu bölümde kullanılır. */
-.stage {
-  background: var(--color-mona-baby-pink);
-  color: var(--color-brand-black);
-  padding: var(--space-12) var(--space-4);
-  position: relative;
-  overflow: hidden;
+.stage { background: #000; color: #fff; letter-spacing: 0; }
+.experience { height: calc(100svh - 72px); min-height: 560px; max-height: 1100px; position: relative; overflow: hidden; scroll-margin-top: 72px; }
+.intro { position: absolute; top: 42px; left: 3%; z-index: 2; pointer-events: none; }
+.eyebrow { font-size: 11px; font-weight: 600; margin: 0 0 14px; }
+.intro h1, .intro h2 { font-size: 58px; line-height: 1; color: #fff; margin: 0; font-weight: 800; letter-spacing: 0; }
+.intro h1 span, .intro h2 span { color: #fffc00; }
+.signature { margin-top: 22px; font-size: 12px; line-height: 1.5; color: #b7abbf; }
+.status { position: absolute; right: 3%; top: 46px; display: flex; gap: 8px; align-items: center; font-size: 11px; color: #b7abbf; z-index: 2; }
+.statusDot { width: 6px; height: 6px; border-radius: 50%; background: #fffc00; }
+.portrait { position: absolute; inset: 0; width: 100%; }
+.videoSurface { position: relative; width: 100%; height: 100%; }
+.video { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+.motionControl { position: absolute; right: 3%; top: 86px; z-index: 3; width: 38px; height: 38px; display: grid; place-items: center; color: #fffc00; background: #080808; border: 1px solid #524e55; border-radius: 50%; cursor: pointer; }
+.motionControl:hover { border-color: #fffc00; }
+.characterTarget { position: absolute; inset: 7% 32% 45%; background: transparent; border: 0; border-radius: 8px; cursor: pointer; touch-action: pan-y; }
+.characterTarget:focus-visible { outline: 2px solid #fffc00; outline-offset: 10px; }
+.caption { position: absolute; bottom: 86px; left: 50%; transform: translateX(-50%); width: min(760px, 70%); min-height: 68px; padding: 12px 20px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 17px; line-height: 1.5; color: #ede6f2; background: rgb(0 0 0 / 88%); pointer-events: none; }
+.caption:empty { visibility: hidden; }
+.toolbar { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2; }
+.startButton { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 24px; background: #fffc00; color: #000; border: 1px solid #fffc00; border-radius: 0; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .2s; }
+.startButton:hover { background: #fff; border-color: #fff; }
+.controls { display: flex; gap: 8px; }
+.controls button { width: 46px; height: 46px; display: grid; place-items: center; color: #fffc00; background: #141316; border: 1px solid #37303e; border-radius: 50%; cursor: pointer; transition: border-color .2s, background .2s; }
+.controls button:hover { background: #27232d; border-color: #fffc00; }
+.controls button:disabled { opacity: .4; cursor: default; }
+.stage button:focus-visible, .stage a:focus-visible { outline: 2px solid #fffc00; outline-offset: 5px; }
+.askLink { position: absolute; right: 3%; bottom: 34px; display: flex; align-items: center; gap: 14px; color: #fffc00; background: none; border: none; padding: 8px 0; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.askLink span { color: #9d90a6; }
+.disclaimer { position: absolute; left: 3%; bottom: 34px; color: #938a99; font-size: 11px; margin: 0; }
+.audioNote { margin: 0; padding: 20px 4%; color: #fffc00; text-align: center; font-size: 14px; }
+.answer { border-top: 1px solid #29252d; display: grid; grid-template-columns: 1fr 2fr; gap: 48px; padding: 52px 6%; background: #111013; scroll-margin-top: 90px; }
+.answerLabel { font-size: 18px; font-weight: 600; color: #b49bd8; margin: 0; }
+.answer > div > p { font-size: 20px; line-height: 1.7; margin: 0; white-space: pre-line; max-width: 960px; }
+.action { margin-top: 24px; display: inline-flex; align-items: center; gap: 12px; color: #fffc00; font-size: 14px; }
+.questionDeck { padding: 60px 4% 80px; background: #e8def2; color: #151218; scroll-margin-top: 72px; }
+.questionHeader { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 38px; border-bottom: 1px solid #aea1b7; }
+.questionHeader h2 { font-size: 42px; line-height: 1.15; color: #151218; margin: 0; }
+.questionHeader p { font-size: 11px; font-weight: 600; margin: 0; }
+.questionGroups { display: grid; grid-template-columns: 1fr 1fr; gap: 7%; margin-top: 40px; }
+.questionGroups h3 { color: #151218; font-size: 13px; margin: 0 0 24px; }
+.questionGroups ul { list-style: none; padding: 0; margin: 0; }
+.questionGroups li { border-top: 1px solid #b9acc3; }
+.questionGroups li:last-child { border-bottom: 1px solid #b9acc3; }
+.questionGroups button { width: 100%; display: grid; grid-template-columns: 28px 1fr 20px; gap: 12px; align-items: start; text-align: left; padding: 20px 4px; border: 0; background: none; color: inherit; font-size: 16px; line-height: 1.45; cursor: pointer; transition: background .2s; }
+.questionGroups button:hover, .questionGroups button[aria-pressed="true"] { background: #fffc00; }
+.questionDeck button:focus-visible { outline-color: #151218; outline-offset: 2px; }
+.questionNumber { font-size: 11px; line-height: 24px; }
+@media (min-width: 1600px) { .intro h1, .intro h2 { font-size: 72px; } }
+@media (max-width: 1000px) {
+  .experience { min-height: 600px; }
+  .portrait { inset-block: 40px 0; }
+  .intro h1, .intro h2 { font-size: 40px; }
+  .signature { font-size: 10px; margin-top: 15px; }
+  .caption { width: 78%; font-size: 16px; }
 }
-
-.stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
-  pointer-events: none;
-}
-
-.inner {
-  position: relative;
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  display: grid;
-  gap: var(--space-8);
-  grid-template-columns: 1fr;
-}
-
-/* Masaüstü: MONA solda, soru listesi sağda.
-   Mobil (brief 11.2): MONA üstte, soru listesi dikey olarak altında. */
-@media (min-width: 900px) {
-  .inner {
-    grid-template-columns: minmax(360px, 540px) 1fr;
-    align-items: start;
-  }
-}
-
-.character {
-  --mona-tilt-x: 0deg;
-  --mona-tilt-y: 0deg;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-/* Etkileşimli MONA videosu: klip masaüstünde imleçle taranır, dokunmatik
-   cihazlarda sessiz döngü olarak oynar. */
-.head {
-  width: min(540px, 88vw);
-  aspect-ratio: 16 / 9;
-  background: var(--color-brand-black);
-  border: 2px solid var(--color-brand-black);
-  border-radius: 6px;
-  box-shadow:
-    14px 14px 0 var(--color-brand-black),
-    18px 18px 0 rgba(255, 0, 255, 0.55);
-  padding: 0;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transform: perspective(1100px) rotateX(var(--mona-tilt-x)) rotateY(var(--mona-tilt-y));
-  transition:
-    transform 260ms ease-out,
-    box-shadow 260ms ease-out;
-}
-
-.head::after {
-  content: "";
-  position: absolute;
-  left: 18%;
-  right: 18%;
-  bottom: -16px;
-  height: 16px;
-  background: var(--color-brand-black);
-  transform: skewX(-18deg);
-  transform-origin: top;
-}
-
-.head:hover,
-.head:focus-visible {
-  box-shadow:
-    10px 10px 0 var(--color-brand-black),
-    15px 15px 0 rgba(255, 0, 255, 0.65);
-}
-
-.characterVideo {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-.videoSheen {
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.045) 0,
-      rgba(255, 255, 255, 0.045) 1px,
-      transparent 1px,
-      transparent 5px
-    );
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-.mediaNote {
-  /* 0.6875rem (11px) idi — yardımcı/disclosure metni olsa bile mobilde
-     okunabilirlik sınırının altındaydı. 0.8125rem (13px) gövde
-     metninden hâlâ belirgin biçimde küçük, yani kompakt hiyerarşi
-     korunuyor. */
-  font-size: 0.8125rem;
-  opacity: 0.58;
-  text-align: center;
-  /* 390px'te metin ekran kenarına 11px kalıyordu — mobil için güvenli
-     kenar mesafesinin (16px) altında. `max-width` artık kenar boşluğunu
-     da hesaba katıyor, böylece not her ekranda ortak gutter'ın içinde
-     kalıyor. */
-  max-width: min(24rem, 100% - 2 * var(--page-gutter));
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.dialogue {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
-/* brief 11.1: metin rengi neon mint, büyük punto. */
-.speech {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 2.6vw, 2rem);
-  line-height: 1.3;
-  color: var(--color-mona-neon-mint);
-  min-height: 6rem;
-  margin: 0;
-  overflow-wrap: anywhere;
-  transition: opacity 400ms ease;
-}
-
-/* Replik değişirken kısa bir solma. 0.55 metni baby pink zemine fazla
-   yaklaştırıp kontrastı 2.24'e düşürüyordu (WCAG AA = 4.5); 0.8'de
-   efektif kontrast 5.24 ile sınırın üstünde kalıyor. */
-.speechFading {
-  opacity: 0.8;
-}
-
-.caret {
-  display: inline-block;
-  width: 0.5ch;
-  background: currentColor;
-  animation: blink 1s steps(2, start) infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .caret {
-    animation: none;
-  }
-
-  /* Hareket azaltmada replik solmadan değişir — geçiş de solma da yok. */
-  .speech {
-    transition: none;
-  }
-
-  .speechFading {
-    opacity: 1;
-  }
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.controlButton {
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
-  border: 1px solid var(--color-brand-black);
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  padding: var(--space-2) var(--space-4);
-  cursor: pointer;
-}
-
-.controlButton:hover {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-}
-
-.questionList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.questionGroups {
-  display: grid;
-  gap: var(--space-8);
-}
-
-.groupTitle {
-  margin: 0 0 var(--space-3);
-  font-family: var(--font-brand);
-  font-size: 0.8125rem;
-  letter-spacing: 0.1em;
-}
-
-.questionButton {
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: 1px solid var(--color-brand-black);
-  color: var(--color-brand-black);
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  padding: var(--space-3) var(--space-4);
-  cursor: pointer;
-}
-
-.questionButton:hover {
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
-}
-
-.questionButton[aria-pressed="true"] {
-  background: var(--color-brand-yellow);
-  border-color: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-}
-
-.action {
-  display: inline-block;
-  margin-top: var(--space-2);
-  background: var(--color-brand-black);
-  color: var(--color-brand-white);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
-}
-
-.action:hover {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-}
-
-/* Ana sayfadaki kısa sürüm (brief 11.5) — tek sütun, daha küçük. */
-.compact .inner {
-  grid-template-columns: minmax(8rem, 0.42fr) 1fr;
-  align-items: center;
-  gap: var(--space-6);
-}
-
-.compact .head {
-  width: min(280px, 42vw);
-  box-shadow:
-    9px 9px 0 var(--color-brand-black),
-    13px 13px 0 rgba(255, 0, 255, 0.55);
-}
-
-.compact .speech {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-  min-height: 4rem;
-}
-
-.compact .dialogue {
-  align-items: flex-start;
-}
-
-.compact .mediaNote {
-  max-width: 12rem;
-}
-
-/* MONA-16 — zorunlu "AI-generated character" ibaresi, MONA'nın altında. */
-.disclaimer {
-  position: relative;
-  max-width: var(--content-max-width);
-  margin: var(--space-6) auto 0;
-  /* 0.6875rem (11px) idi — yardımcı/disclosure metni olsa bile mobilde
-     okunabilirlik sınırının altındaydı. 0.8125rem (13px) gövde
-     metninden hâlâ belirgin biçimde küçük, yani kompakt hiyerarşi
-     korunuyor. */
-  font-size: 0.8125rem;
-  letter-spacing: 0.04em;
-  opacity: 0.65;
-  text-align: center;
-}
-
 @media (max-width: 640px) {
-  .stage {
-    padding: var(--space-10) var(--space-4);
-  }
-
-  .inner,
-  .compact .inner {
-    grid-template-columns: 1fr;
-  }
-
-  .head,
-  .compact .head {
-    width: min(420px, 88vw);
-    transform: none;
-    box-shadow:
-      8px 8px 0 var(--color-brand-black),
-      12px 12px 0 rgba(255, 0, 255, 0.55);
-  }
-
-  .head:hover,
-  .head:focus-visible {
-    transform: translateY(-2px);
-  }
-
-  .dialogue {
-    gap: var(--space-4);
-  }
-
-  .compact .dialogue {
-    align-items: stretch;
-  }
-
-  .speech {
-    text-align: center;
-    padding: 0 var(--space-2);
-  }
-
-  .controls {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2);
-  }
-
-  .controls .controlButton:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-  }
-
-  .controlButton,
-  .action {
-    display: block;
-    text-align: center;
-  }
-
-  .compact .mediaNote {
-    max-width: 18rem;
-  }
+  .experience { min-height: 610px; max-height: 880px; }
+  .intro { top: 28px; left: 20px; }
+  .intro h1, .intro h2 { font-size: 36px; }
+  .eyebrow { font-size: 9px; margin-bottom: 10px; }
+  .signature { display: none; }
+  .status { top: 34px; right: 20px; font-size: 9px; }
+  .portrait { inset-block: 110px 132px; }
+  .video { object-fit: cover; }
+  .motionControl { right: 20px; top: 10px; }
+  .characterTarget { inset: 8% 17% 45%; }
+  .caption { width: calc(100% - 40px); bottom: 94px; min-height: 102px; font-size: 14px; line-height: 1.45; }
+  .toolbar { bottom: 53px; }
+  .controls button { width: 40px; height: 40px; }
+  .startButton { min-height: 40px; }
+  .askLink { bottom: 13px; right: 20px; font-size: 10px; gap: 8px; }
+  .disclaimer { left: 20px; bottom: 24px; font-size: 9px; }
+  .answer { grid-template-columns: 1fr; gap: 20px; padding: 32px 20px; }
+  .answer > div > p { font-size: 17px; line-height: 1.65; }
+  .answerLabel { font-size: 15px; }
+  .questionDeck { padding: 36px 20px 50px; }
+  .questionHeader { display: block; padding-bottom: 24px; }
+  .questionHeader h2 { font-size: 30px; }
+  .questionHeader p { margin-top: 12px; }
+  .questionGroups { grid-template-columns: 1fr; gap: 42px; margin-top: 30px; }
+  .questionGroups button { font-size: 15px; }
 }
+@media (prefers-reduced-motion: reduce) { .stage *, .stage *::before, .stage *::after { transition: none !important; scroll-behavior: auto; } }

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { insightsPosts } from "@/data/insights";
+import { getInsightVisual } from "@/data/insight-visuals";
 import { getInsightParagraphs } from "@/lib/insights";
 
 describe("Think & Thank article import", () => {
@@ -28,5 +29,19 @@ describe("Think & Thank article import", () => {
 
   it("contains no Unicode replacement characters", () => {
     expect(JSON.stringify(insightsPosts)).not.toContain("\uFFFD");
+  });
+
+  it("assigns every article a localized editorial visual", () => {
+    const visualSources = new Set<string>();
+
+    for (const post of insightsPosts) {
+      const visual = getInsightVisual(post, "tr");
+      expect(visual.src).toMatch(/^\/images\/site\/think-and-thank\/.+\.webp$/);
+      expect(visual.alt).toBeTruthy();
+      expect(["mint", "pink", "lilac", "paper"]).toContain(visual.tone);
+      visualSources.add(visual.src);
+    }
+
+    expect(visualSources.size).toBe(insightsPosts.length);
   });
 });
