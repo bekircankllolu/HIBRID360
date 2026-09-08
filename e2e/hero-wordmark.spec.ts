@@ -41,4 +41,30 @@ test.describe("Hero wordmark", () => {
     await page.waitForTimeout(1000);
     await expect(fallback).toHaveCSS("opacity", "1");
   });
+
+  test("yedek sahneyle ayni maskeyi ve dokulu dolguyu kullanir", async ({
+    page,
+  }) => {
+    // Yedek gorunur kalsin diye hareket azaltma ile aciyoruz.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/tr", { waitUntil: "networkidle" });
+
+    const fallback = page.getByRole("img", { name: "HIBRID", exact: true });
+
+    // Sekil: WebGL sahnesiyle AYNI maske dosyasi. Duz metne geri donulurse
+    // (0c33610'daki gibi) glif konturlari sahneden ayrisir.
+    const mask = await fallback.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return cs.maskImage || cs.webkitMaskImage || "";
+    });
+    expect(mask).toContain("hibrid-wordmark.png");
+
+    // Dolgu: duz renk degil, gradyan + grain. Duz renge donulurse sayfa
+    // acilisinda gozle secilen bir renk sicramasi olusur.
+    const bg = await fallback.evaluate(
+      (el) => getComputedStyle(el).backgroundImage,
+    );
+    expect(bg).toContain("linear-gradient");
+    expect(bg).toContain("svg+xml");
+  });
 });

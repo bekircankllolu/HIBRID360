@@ -54,41 +54,9 @@ export function HibridWebGL() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const [live, setLive] = useState(false);
-  const [sceneReady, setSceneReady] = useState(false);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setSceneReady(false);
-      return;
-    }
-
-    let active = true;
-
-    // Sahne ilk boyamanın hemen ardından açılır: ziyaretçi sayfayı
-    // açtığında dokulu wordmark'ı görmeli (müşteri kararı, 8 Eylül 2026).
-    // Önceden pointermove/touch/scroll bekleniyordu; bu, imleç oynayana
-    // kadar düz fuksya yedeğin durmasına yol açıyordu ve kabul edilmedi.
-    //
-    // İki katlı requestAnimationFrame, tarayıcının ilk karesini çizmesini
-    // bekler; böylece LCP ölçümü yedek metinle tamamlanır ve WebGL kurulumu
-    // ilk boyamayla yarışmaz — b9d6a5c'nin "ilk boyamadan sonra" kazanımı
-    // korunur, yalnızca etkileşim şartı kalkar.
-    // Tek kare bekle: bu effect zaten hydration sonrasi calisiyor, yani
-    // yedek metin coktan boyanmis oluyor (olcum: JS ~277ms'de hazir, ilk
-    // boyama cok daha once). Iki kat rAF gereksiz gecikme ekliyordu.
-    const frame = requestAnimationFrame(() => {
-      if (active) setSceneReady(true);
-    });
-
-    return () => {
-      active = false;
-      cancelAnimationFrame(frame);
-    };
-  }, [reducedMotion]);
-
   useEffect(() => {
     // Hareket azaltma açıksa sahne hiç kurulmaz — statik PNG kalır.
-    if (reducedMotion || !sceneReady) return;
+    if (reducedMotion) return;
 
     const canvas = canvasRef.current;
     const stage = stageRef.current;
@@ -235,19 +203,19 @@ export function HibridWebGL() {
       if (holdsLock) releaseSceneLock(holder);
       setLive(false);
     };
-  }, [reducedMotion, sceneReady]);
+  }, [reducedMotion]);
 
   return (
     <div className={styles.stage} ref={stageRef}>
       {/* İlk kare doğrudan metin olarak çizilir; görsel kaynağı ve çözme
           gecikmesi yoktur. WebGL, orijinal maskeyle bunun üstüne gelir. */}
+      {/* Sekli maskeden, rengi/dokusu CSS'ten gelen yedek. Metin dugumu
+          yok: glifler maskeyle ciziliyor, erisilebilir ad aria-label'da. */}
       <span
         className={`${styles.fallback} ${live ? styles.fallbackHidden : ""}`}
         role="img"
         aria-label="HIBRID"
-      >
-        HIBRID
-      </span>
+      />
       {!reducedMotion && (
         <canvas
           ref={canvasRef}

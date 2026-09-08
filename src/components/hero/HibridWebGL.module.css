@@ -78,17 +78,31 @@
   left: 0;
   width: 100%;
   aspect-ratio: 1920 / 528;
-  display: flex;
-  align-items: center;
-  padding-left: 4.5cqw;
-  font-family: "Arial Black", Arial, sans-serif;
-  font-size: 23.6cqw;
-  font-weight: 900;
-  line-height: 1;
-  white-space: nowrap;
-  color: var(--color-brand-fuchsia);
-  transform: scaleX(0.975);
-  transform-origin: left center;
+
+  /* Sekil maskeden gelir: WebGL sahnesi de ayni PNG'yi maske olarak
+     kullaniyor, dolayisiyla yedegin harf konturlari sahneyle BIREBIR
+     ayni. (Onceki Arial Black metin yedegi farkli glifler uretiyordu.) */
+  -webkit-mask-image: url("/images/hibrid-wordmark.png");
+  mask-image: url("/images/hibrid-wordmark.png");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  /* Renk ve doku CSS'ten gelir -- ek istek yok, JS beklenmez, ilk
+     boyamada hazir. Degerler sahnenin gercek karesinden olculdu:
+     dikey gradyan #d17ec8 -> #a0339d, grain parlaklik p5..p95 = 83..174.
+     Amac sahneyle birebir ayni kare degil; goz gecisi secmesin diye
+     yeterince yakin bir baslangic karesi. */
+  /* Gradyan ve grain, sahnenin gercek karesinden OLCULEREK ayarlandi
+     (yedek vs sahne karsilastirmasi): hedef ust #ce7cc5, alt #a73fa3;
+     grain parlaklik araligi p5..p95 = 85..178. feComponentTransfer'daki
+     slope, gri gurultunun kontrastini bu araliga yaklastirir. */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3.2' intercept='-1.1'/%3E%3CfeFuncG type='linear' slope='3.2' intercept='-1.1'/%3E%3CfeFuncB type='linear' slope='3.2' intercept='-1.1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #ce78c2 0%, #ac48a4 50%, #8c1a88 100%);
+  background-blend-mode: overlay;
+  background-size: 140px 140px, 100% 100%;
 }
 
 /* WebGL devreye girince yedek gizlenir -- ikisi ust uste gorunmez.
