@@ -66,6 +66,21 @@ for (const locale of ["tr", "en"] as const) {
       await page.goto(url, { waitUntil: "networkidle" });
 
       const results = await new AxeBuilder({ page })
+        // Ucuncu taraf gomulerin ic DOM'u kapsam disi. @axe-core/playwright
+        // her frame'e axe'i ayri ayri enjekte eder (runPartialRecursive), bu
+        // yuzden YouTube oynaticisinin kendi markup'i bizim ihlalimiz gibi
+        // raporlaniyordu: /think-and-thank'te aria-allowed-attr,
+        // aria-prohibited-attr ve button-name — ucu de YouTube'un player
+        // DOM'unda, bizim duzeltemeyecegimiz yerde. axe-core'un kendi
+        // `iframes: false` secenegi bu akista ise yaramiyor (AxeBuilder
+        // frame'leri Playwright API'siyle kendi geziyor), context exclude
+        // gerekiyor.
+        //
+        // Bunun bedeli: iframe ETIKETININ kendisi de taramadan cikar, yani
+        // frame-title artik burada kontrol edilmez. Telafisi asagidaki
+        // "gomulu iframe'lerin erisilebilir adi var" testi — kaybi kapatmak
+        // icin eklendi, silinmemeli.
+        .exclude("iframe")
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
         .analyze();
 
@@ -79,6 +94,37 @@ for (const locale of ["tr", "en"] as const) {
       );
 
       expect(summary, summary.join("\n\n")).toEqual([]);
+    });
+  }
+}
+
+/**
+ * frame-title telafisi: yukaridaki taramada `.exclude("iframe")` oldugu icin
+ * axe artik iframe etiketlerini gormuyor. Gomulu oynaticinin ICI bizim
+ * sorumlulugumuz degil ama ETIKETIN erisilebilir adi bizim — ekran okuyucu
+ * kullanicisi "iframe" diye adsiz bir bolgeye dusmemeli (WCAG 2.4.1 / 4.1.2).
+ */
+const EMBED_ROUTES = ["/think-and-thank", "/contact"];
+for (const locale of ["tr", "en"] as const) {
+  for (const route of EMBED_ROUTES) {
+    const url = `/${locale}${route}`;
+    test(`gomulu iframe'lerin erisilebilir adi var — ${url}`, async ({ page }) => {
+      await page.goto(url, { waitUntil: "networkidle" });
+
+      const frames = page.locator("iframe");
+      const count = await frames.count();
+
+      for (let i = 0; i < count; i += 1) {
+        const frame = frames.nth(i);
+        const title = (await frame.getAttribute("title")) ?? "";
+        const ariaLabel = (await frame.getAttribute("aria-label")) ?? "";
+        const src = (await frame.getAttribute("src")) ?? "(src yok)";
+
+        expect(
+          title.trim() || ariaLabel.trim(),
+          `${url} icindeki iframe'in title/aria-label'i yok: ${src}`,
+        ).not.toBe("");
+      }
     });
   }
 }
