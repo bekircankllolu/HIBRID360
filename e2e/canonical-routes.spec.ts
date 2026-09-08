@@ -88,27 +88,6 @@ async function seedConsent(page: Page) {
   });
 }
 
-/**
- * Ucuncu taraf gomu gurultusu -- konsol nobetcisinin gormezden geldigi
- * TEK istisna listesi.
- *
- * YouTube oynaticisi (/think-and-thank) sistem yuku altinda
- * compute-pressure API'sini yokluyor. iframe'in allow listesinde olmadigi
- * icin tarayici "Permissions policy violation" yaziyor. Oynaticinin kendi
- * davranisi: bizim kodumuz uretmiyor, biz de ona fazladan API izni vermek
- * istemiyoruz (gereksiz yetki genisletmesi).
- *
- * Yuke bagli oldugu icin testi RASTGELE kiriyordu: ayni test --repeat-each=6
- * ile 12/12 gecerken tam takim kosusunda dusebiliyor. Olcum yapildi,
- * tek basina 16 turda hic uretilmedi.
- *
- * Liste bilerek dar: baska hicbir permissions-policy ihlali susturulmuyor,
- * bizim kodumuzdan gelen ayni tur hata testi kirmaya devam eder.
- */
-const THIRD_PARTY_CONSOLE_NOISE = [
-  /Permissions policy violation: compute-pressure/,
-];
-
 test.describe("Canonical rotalar", () => {
   for (const locale of LOCALES) {
     for (const route of CANONICAL_ROUTES) {
@@ -119,10 +98,7 @@ test.describe("Canonical rotalar", () => {
 
         const errors: string[] = [];
         page.on("console", (message) => {
-          if (message.type() !== "error") return;
-          const text = message.text();
-          if (THIRD_PARTY_CONSOLE_NOISE.some((p) => p.test(text))) return;
-          errors.push(text);
+          if (message.type() === "error") errors.push(message.text());
         });
         page.on("pageerror", (error) => errors.push(error.message));
 
