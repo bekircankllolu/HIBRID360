@@ -57,16 +57,33 @@ export function HibridWebGL() {
 
     let active = true;
 
-    // İlk statik kare ve LCP tamamlandıktan sonra sahneyi kur. Idle callback
-    // ilk yüklemede gereğinden erken çalışıp shader kurulumunu boyamayla
-    // yarıştırabildiği için burada bilinçli bir alt süre kullanıyoruz.
-    const timerId = window.setTimeout(() => {
+    // İlk statik kareyi WebGL kurulumuyla yarıştırma. Gerçek kullanıcı
+    // etkileşimi sahneyi hemen açar; etkileşim olmazsa animasyon daha sonra
+    // kendiliğinden devreye girer.
+    const enableScene = () => {
       if (active) setSceneReady(true);
-    }, 3000);
+    };
+    const timerId = window.setTimeout(enableScene, 15000);
+
+    window.addEventListener("pointermove", enableScene, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("touchstart", enableScene, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("scroll", enableScene, {
+      once: true,
+      passive: true,
+    });
 
     return () => {
       active = false;
       window.clearTimeout(timerId);
+      window.removeEventListener("pointermove", enableScene);
+      window.removeEventListener("touchstart", enableScene);
+      window.removeEventListener("scroll", enableScene);
     };
   }, [reducedMotion]);
 
