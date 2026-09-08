@@ -70,14 +70,14 @@ export default async function ThinkAndThankPage({
         </div>
       </header>
       <section
-        className={styles.statementStory}
+        className={styles.statementPure}
         aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
       >
-        <div className={styles.statementVisualStory}>
+        <div className={styles.statementVisualPure}>
           <EditorialImage
-            src={siteImages.thinkAndThank.statementStory.src}
-            alt={siteImages.thinkAndThank.statementStory.alt[locale]}
-            sizes="(max-width: 760px) 88vw, 46vw"
+            src={siteImages.thinkAndThank.statementPure.src}
+            alt={siteImages.thinkAndThank.statementPure.alt[locale]}
+            sizes="(max-width: 760px) 74vw, 40vw"
             ambient
           />
         </div>

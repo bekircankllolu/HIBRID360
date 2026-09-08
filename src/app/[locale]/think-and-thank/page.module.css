@@ -112,26 +112,27 @@
 }
 
 /* Musteriden hazir grafik olarak gelen marka ifadesi gorseli
-   (8 Eylul 2026 e-posta eki, "IT'S YOUR STORY..." kalp/elmas
-   illustrasyonu) -- metin gorselin icine gomulu, sayfa kopyasi olarak
-   ayrica yazilmaz. Ambient zoom EditorialImage'dan gelir.
-   Ayni e-postadaki diger iki grafik ("PURE. SIMPLE. POWERFUL." ve
-   "FROM IDEA TO IMPACT...") 8 Eylul'de sayfadan kaldirildi -- musteri
-   geri bildirimi: sayfa akisinda alakasiz durdular. Gorseller ve
-   site-images.ts kayitlari silinmedi, ileride baska bir sayfada
+   (8 Eylul 2026 e-posta eki, "PURE. SIMPLE. POWERFUL." grafigi) --
+   metin gorselin icine gomulu, sayfa kopyasi olarak ayrica yazilmaz.
+   Ambient zoom EditorialImage'dan gelir. Sarı zemin marka sarisiyla
+   (#fffc00) piksel duzeyinde eslesiyor, gorsel sayfaya kaynasik
+   goruyor. Ayni e-postadaki diger iki grafik ("IT'S YOUR STORY..." ve
+   fusyali "FROM IDEA TO IMPACT...") musteri geri bildirimiyle
+   sayfadan kaldirildi -- sayfa akisinda alakasiz durdular. Gorseller
+   ve site-images.ts kayitlari silinmedi, ileride baska bir sayfada
    kullanilabilir (bkz. DECISIONS.md madde 26-27). */
-.statementStory {
+.statementPure {
   display: grid;
   place-items: center;
   padding: clamp(3rem, 8vw, 7rem) var(--page-gutter);
-  background: var(--mag-lilac);
-  color: var(--color-brand-black);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
 }
 
-.statementVisualStory {
+.statementVisualPure {
   position: relative;
   aspect-ratio: 1;
-  width: min(46rem, 86vw);
+  width: min(40rem, 78vw);
 }
 
 .featuredVideo {

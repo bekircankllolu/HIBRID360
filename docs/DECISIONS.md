@@ -192,7 +192,7 @@ e-posta ekiyle 4 hazır tipografi grafiği geldi. Üçü sayfaya eklendi:
 
 | # | Konu | Karar | Durum | Etki |
 |---|---|---|---|---|
-| 26 | Think & Thank marka ifadesi görseli | Müşteri grafiklerinden yalnızca "IT'S YOUR STORY..." (lila zemin) kalıcı — "PURE. SIMPLE. POWERFUL." ve fuşyalı "FROM IDEA TO IMPACT..." aynı gün geri alındı (bkz. not) | KAPANDI | `think-and-thank/page.tsx` — hero sonrası, tek bölüm. `EditorialImage`'a `ambient` prop'u eklendi (sürekli nefes alan zoom, hover'a bağlı değil) — brief'in landonorris.com/oryzo.ai referansı. Kullanılmayan iki görselin WebP dosyası ve `site-images.ts` kaydı silinmedi, ileride başka sayfada kullanılabilir |
+| 26 | Think & Thank marka ifadesi görseli | Müşteri grafiklerinden yalnızca "PURE. SIMPLE. POWERFUL." (sarı zemin) kalıcı — "IT'S YOUR STORY..." ve fuşyalı "FROM IDEA TO IMPACT..." aynı gün geri alındı (bkz. not — kullanıcı bir önceki revizyonda yanlış görseli işaret ettiğini belirtti) | KAPANDI | `think-and-thank/page.tsx` — hero sonrası, tek bölüm. `EditorialImage`'a `ambient` prop'u eklendi (sürekli nefes alan zoom, hover'a bağlı değil) — brief'in landonorris.com/oryzo.ai referansı. Kullanılmayan iki görselin WebP dosyası ve `site-images.ts` kaydı silinmedi, ileride başka sayfada kullanılabilir |
 | 27 | "FROM IDEA TO IMPACT..." düz sürüm kullanılmadı | Aynı mesajın fuşya vurgusuz hali (client dosyası `2.jpeg`) sayfaya eklenmedi — aynı sayfada aynı cümlenin iki kez tekrarı olurdu | AÇIK | İstenirse başka bir sayfaya (ör. Digital, Creative) yerleştirilebilir. Kaynak dosya işlenmedi, kullanıcıda duruyor |
 | 28 | "YOUR BRAND. CROWNED." + döner taç | Sitede hâlâ yok, ama `Downloads/Hibrid-360-Crown-Rotation.zip` içinde bağımsız bir HTML prototipi bulundu (tek görsel + CSS `rotateY` sallanma animasyonu, 22s döngü, marka renklerinde yıldız tozu zemini, `prefers-reduced-motion` destekli). Prototipte "YOUR BRAND. CROWNED." metni YOK, yalnızca taç hareketi | AÇIK | Prototip Next.js koduna hiç entegre edilmedi, hiçbir sayfa kullanmıyor. Nereye konacağı (ana sayfa hero'su mu, ayrı bölüm mü) netleşmeden implementasyon başlamadı |
 
@@ -210,12 +210,20 @@ Görselin koyu dolgusu sharp ile piksel bazında saf siyaha çekildi
 (metne dokunulmadan); dosya kullanılmasa da düzeltilmiş haliyle
 diskte duruyor.
 
-**Aynı gün geri alma:** Kullanıcı sayfayı canlı gördükten sonra
-"PURE. SIMPLE. POWERFUL." ve fuşyalı "IMPACT" bölümlerinin "sayfa
-akışında alakasız durduğunu" belirtti — yalnızca "IT'S YOUR STORY..."
-korundu. Aynı geri bildirimde hero başlığındaki "THINK" / "& THANK"
-arasının aşırı ayrık göründüğü de belirtildi: `.heroTitle`'daki
-`justify-content: space-between` iki kelimeyi konteynerin zıt
-kenarlarına itiyordu (geniş ekranda büyük bir boş orta alan). `
-flex-start` + daha dar bir `gap` ile tek bir başlık bloğu gibi
+**Aynı gün geri alma (1. tur):** Kullanıcı sayfayı canlı gördükten
+sonra "PURE. SIMPLE. POWERFUL." ve fuşyalı "IMPACT" bölümlerinin
+"sayfa akışında alakasız durduğunu" belirtti — yalnızca
+"IT'S YOUR STORY..." korundu. Aynı geri bildirimde hero başlığındaki
+"THINK" / "& THANK" arasının aşırı ayrık göründüğü de belirtildi:
+`.heroTitle`'daki `justify-content: space-between` iki kelimeyi
+konteynerin zıt kenarlarına itiyordu (geniş ekranda büyük bir boş orta
+alan). `flex-start` + daha dar bir `gap` ile tek bir başlık bloğu gibi
 okunacak şekilde düzeltildi.
+
+**Aynı gün geri alma (2. tur):** Kullanıcı bir sonraki mesajında yanlış
+görseli işaret ettiğini belirtti — asıl kalması gereken
+"PURE. SIMPLE. POWERFUL." imiş. `.statementStory`/`statementVisualStory`
+sınıfları `.statementPure`/`.statementVisualPure`'a çevrildi (sarı
+zemin, `--color-text-on-yellow`); "IT'S YOUR STORY..." kaldırıldı.
+Üçü de (story, pure, impact) `site-images.ts`'te ve diskte duruyor,
+hiçbiri silinmedi.
