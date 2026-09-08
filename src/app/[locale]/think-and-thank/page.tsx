@@ -96,19 +96,6 @@ export default async function ThinkAndThankPage({
           />
         </div>
       </section>
-      <section
-        className={styles.statementPure}
-        aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
-      >
-        <div className={styles.statementVisualPure}>
-          <EditorialImage
-            src={siteImages.thinkAndThank.statementPure.src}
-            alt={siteImages.thinkAndThank.statementPure.alt[locale]}
-            sizes="(max-width: 760px) 74vw, 30vw"
-            ambient
-          />
-        </div>
-      </section>
       <section className={styles.objectStudy} aria-labelledby="object-study-title">
         <div className={styles.objectCopy}>
           <p>OBJECT / STUDY 01</p>
@@ -127,19 +114,6 @@ export default async function ThinkAndThankPage({
             alt={siteImages.thinkAndThank.culture.alt[locale]}
             sizes="(max-width: 760px) 80vw, 38vw"
             rotating
-          />
-        </div>
-      </section>
-      <section
-        className={styles.statementImpact}
-        aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
-      >
-        <div className={styles.statementVisualImpact}>
-          <EditorialImage
-            src={siteImages.thinkAndThank.statementImpact.src}
-            alt={siteImages.thinkAndThank.statementImpact.alt[locale]}
-            sizes="(max-width: 760px) 78vw, 34vw"
-            ambient
           />
         </div>
       </section>

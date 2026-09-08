@@ -35,8 +35,8 @@
 .heroTitle {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: clamp(1.5rem, 4vw, 5rem);
+  justify-content: flex-start;
+  gap: clamp(1rem, 2.4vw, 2.5rem);
   margin: auto 0;
   color: var(--color-brand-black);
   font-family: var(--font-brand);
@@ -111,42 +111,28 @@
   animation-duration: 29s;
 }
 
-/* Musteriden hazir grafik olarak gelen marka ifadesi gorselleri
-   (8 Eylul 2026 e-posta eki) -- metin gorselin icine gomulu, sayfa
-   kopyasi olarak ayrica yazilmaz. Ambient zoom EditorialImage'dan gelir. */
-.statementStory,
-.statementPure,
-.statementImpact {
+/* Musteriden hazir grafik olarak gelen marka ifadesi gorseli
+   (8 Eylul 2026 e-posta eki, "IT'S YOUR STORY..." kalp/elmas
+   illustrasyonu) -- metin gorselin icine gomulu, sayfa kopyasi olarak
+   ayrica yazilmaz. Ambient zoom EditorialImage'dan gelir.
+   Ayni e-postadaki diger iki grafik ("PURE. SIMPLE. POWERFUL." ve
+   "FROM IDEA TO IMPACT...") 8 Eylul'de sayfadan kaldirildi -- musteri
+   geri bildirimi: sayfa akisinda alakasiz durdular. Gorseller ve
+   site-images.ts kayitlari silinmedi, ileride baska bir sayfada
+   kullanilabilir (bkz. DECISIONS.md madde 26-27). */
+.statementStory {
   display: grid;
   place-items: center;
   padding: clamp(3rem, 8vw, 7rem) var(--page-gutter);
-}
-
-.statementStory {
   background: var(--mag-lilac);
   color: var(--color-brand-black);
 }
 
-.statementPure {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-}
-
-.statementImpact {
-  background: var(--color-brand-black);
-  color: var(--color-text-on-black);
-}
-
-.statementVisualStory,
-.statementVisualPure,
-.statementVisualImpact {
+.statementVisualStory {
   position: relative;
   aspect-ratio: 1;
+  width: min(46rem, 86vw);
 }
-
-.statementVisualStory { width: min(46rem, 86vw); }
-.statementVisualPure { width: min(30rem, 62vw); }
-.statementVisualImpact { width: min(34rem, 68vw); }
 
 .featuredVideo {
   display: grid;
