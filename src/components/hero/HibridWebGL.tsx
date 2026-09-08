@@ -57,33 +57,26 @@ export function HibridWebGL() {
 
     let active = true;
 
-    // İlk statik kareyi WebGL kurulumuyla yarıştırma. Gerçek kullanıcı
-    // etkileşimi sahneyi hemen açar; etkileşim olmazsa animasyon daha sonra
-    // kendiliğinden devreye girer.
-    const enableScene = () => {
-      if (active) setSceneReady(true);
-    };
-    const timerId = window.setTimeout(enableScene, 15000);
-
-    window.addEventListener("pointermove", enableScene, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("touchstart", enableScene, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("scroll", enableScene, {
-      once: true,
-      passive: true,
+    // Sahne ilk boyamanın hemen ardından açılır: ziyaretçi sayfayı
+    // açtığında dokulu wordmark'ı görmeli (müşteri kararı, 8 Eylül 2026).
+    // Önceden pointermove/touch/scroll bekleniyordu; bu, imleç oynayana
+    // kadar düz fuksya yedeğin durmasına yol açıyordu ve kabul edilmedi.
+    //
+    // İki katlı requestAnimationFrame, tarayıcının ilk karesini çizmesini
+    // bekler; böylece LCP ölçümü yedek metinle tamamlanır ve WebGL kurulumu
+    // ilk boyamayla yarışmaz — b9d6a5c'nin "ilk boyamadan sonra" kazanımı
+    // korunur, yalnızca etkileşim şartı kalkar.
+    let innerFrame = 0;
+    const outerFrame = requestAnimationFrame(() => {
+      innerFrame = requestAnimationFrame(() => {
+        if (active) setSceneReady(true);
+      });
     });
 
     return () => {
       active = false;
-      window.clearTimeout(timerId);
-      window.removeEventListener("pointermove", enableScene);
-      window.removeEventListener("touchstart", enableScene);
-      window.removeEventListener("scroll", enableScene);
+      cancelAnimationFrame(outerFrame);
+      cancelAnimationFrame(innerFrame);
     };
   }, [reducedMotion]);
 

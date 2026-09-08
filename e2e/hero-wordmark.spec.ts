@@ -2,27 +2,43 @@ import { test, expect } from "@playwright/test";
 
 /**
  * Hero wordmark iki katmanlidir: ilk boyamada Arial Black ile cizilen
- * yedek metin, ustune de marka fontunun maskesiyle calisan WebGL canvas.
+ * yedek metin, ustune de marka fontunun maskesiyle calisan WebGL canvas
+ * (shader'da hash grain -- dokulu marka gorunumu).
  *
- * WebGL devreye girdiginde yedek GIZLENMELI. Gizlenmezse iki farkli font
- * ust uste binip cift kontur / kaymis golge olusturuyor -- 8 Eylul 2026
- * regresyonu (0c33610 yedegi PNG'den metne cevirirken .fallbackHidden
- * mantigi dusmustu). Sahne etkilesimle acildigi icin bozukluk ancak fare
- * hareket ettikten sonra gorunuyordu; bu test o anı yakalar.
+ * Musteri karari (8 Eylul 2026): ziyaretci sayfayi actiginda DOKULU hali
+ * gormeli. Once duz fuksya yedegin durup imlec oynayinca dokulu hale
+ * gecmesi kabul edilmedi; sahne ilk boyamanin hemen ardindan acilir.
+ *
+ * Yedek, WebGL devreye girdiginde GIZLENMELI: yedek Arial Black, maske
+ * ise marka fontu -- glif sekilleri ortusmedigi icin ust uste binerlerse
+ * kaymis cift kontur olusuyor (8 Eylul regresyonu).
  */
 test.describe("Hero wordmark", () => {
-  test("WebGL devreye girince yedek metin gizlenir", async ({ page }) => {
+  test("sayfa acilir acilmaz dokulu sahne devreye girer, yedek gizlenir", async ({
+    page,
+  }) => {
     await page.goto("/tr", { waitUntil: "networkidle" });
 
     const fallback = page.getByRole("img", { name: "HIBRID", exact: true });
 
-    // Ilk boyamada yedek gorunur olmali (LCP ogesi).
+    // HICBIR etkilesim olmadan: sahne acilmis, yedek cekilmis olmali.
+    await expect(fallback).toHaveCSS("opacity", "0", { timeout: 10000 });
+    await expect(page.locator("canvas").first()).toBeVisible();
+  });
+
+  test("hareket azaltmada sahne kurulmaz, yedek gorunur kalir", async ({
+    page,
+  }) => {
+    // CLAUDE.md: prefers-reduced-motion destegi zorunlu.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/tr", { waitUntil: "networkidle" });
+
+    const fallback = page.getByRole("img", { name: "HIBRID", exact: true });
     await expect(fallback).toHaveCSS("opacity", "1");
 
-    // Sahne yalnizca gercek etkilesimle aciliyor.
+    // Imlec oynasa bile sahne acilmamali.
     await page.mouse.move(700, 500);
-
-    // Maske hazir olunca yedek cekilmeli -- ustuste binme olmamali.
-    await expect(fallback).toHaveCSS("opacity", "0", { timeout: 15000 });
+    await page.waitForTimeout(1000);
+    await expect(fallback).toHaveCSS("opacity", "1");
   });
 });
