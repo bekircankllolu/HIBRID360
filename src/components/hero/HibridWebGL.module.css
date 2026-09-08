@@ -89,7 +89,6 @@
   color: var(--color-brand-fuchsia);
   transform: scaleX(0.975);
   transform-origin: left center;
-  transition: opacity 220ms ease;
 }
 
 /* WebGL devreye girince yedek gizlenir -- ikisi ust uste gorunmez.
@@ -108,7 +107,6 @@
   height: 100%;
   display: block;
   opacity: 0;
-  transition: opacity 220ms ease;
 }
 
 .canvasLive {

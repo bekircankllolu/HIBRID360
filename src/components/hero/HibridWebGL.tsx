@@ -1,5 +1,6 @@
 "use client";
 
+import { preload } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
@@ -14,6 +15,12 @@ import {
 import styles from "./HibridWebGL.module.css";
 
 const MASK_URL = "/images/hibrid-wordmark.png";
+
+// Maske, sahnenin acilabilmesi icin gereken tek varlik. Preload olmadan
+// istegi ancak JS inip hydration bitince baslıyordu (olcum: ~277ms);
+// dosyanin kendisi 17KB ve 2ms'de iniyor. Preload, indirmeyi HTML parse
+// anina cekerek yedegin gorunur kaldigi sureyi kisaltir.
+preload(MASK_URL, { as: "image", fetchPriority: "high" });
 
 /**
  * HIBRID sıvı tipografi — brief 4.1'in "harf içi dolgu + pırıltı +
@@ -66,17 +73,16 @@ export function HibridWebGL() {
     // bekler; böylece LCP ölçümü yedek metinle tamamlanır ve WebGL kurulumu
     // ilk boyamayla yarışmaz — b9d6a5c'nin "ilk boyamadan sonra" kazanımı
     // korunur, yalnızca etkileşim şartı kalkar.
-    let innerFrame = 0;
-    const outerFrame = requestAnimationFrame(() => {
-      innerFrame = requestAnimationFrame(() => {
-        if (active) setSceneReady(true);
-      });
+    // Tek kare bekle: bu effect zaten hydration sonrasi calisiyor, yani
+    // yedek metin coktan boyanmis oluyor (olcum: JS ~277ms'de hazir, ilk
+    // boyama cok daha once). Iki kat rAF gereksiz gecikme ekliyordu.
+    const frame = requestAnimationFrame(() => {
+      if (active) setSceneReady(true);
     });
 
     return () => {
       active = false;
-      cancelAnimationFrame(outerFrame);
-      cancelAnimationFrame(innerFrame);
+      cancelAnimationFrame(frame);
     };
   }, [reducedMotion]);
 
