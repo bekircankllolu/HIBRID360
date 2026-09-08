@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
 import { ClientNameIndex } from "@/components/friends/ClientNameIndex";
+import { CrownReveal } from "@/components/friends/CrownReveal";
 import { TestimonialList } from "@/components/testimonials/TestimonialList";
 import { Link } from "@/i18n/navigation";
 import { getPublishedTestimonials } from "@/lib/content";
@@ -81,6 +82,8 @@ export default async function ClientsPage({
           { name: "Clients", path: "/clients" },
         ])}
       />
+
+      <CrownReveal />
 
       <header className={styles.hero}>
         <p className={styles.eyebrow}>FRIENDS SINCE 2004</p>

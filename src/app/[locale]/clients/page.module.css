@@ -1,6 +1,5 @@
 .page {
   width: 100%;
-  padding-top: clamp(5rem, 8vw, 8rem);
   background: var(--color-brand-black);
 }
 
