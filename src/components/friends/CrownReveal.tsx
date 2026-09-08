@@ -3,6 +3,9 @@
 import { useEffect, useRef } from "react";
 import styles from "./CrownReveal.module.css";
 
+const SCRUB_FRAME_SECONDS = 1 / 24;
+const MIN_SEEK_INTERVAL_MS = 1000 / 24;
+
 const clamp = (value: number, min = 0, max = 1) =>
   Math.min(max, Math.max(min, value));
 
@@ -43,6 +46,10 @@ export function CrownReveal() {
       "(prefers-reduced-motion: reduce)",
     );
     let frameId = 0;
+    let seekTimerId = 0;
+    let lastSeekStartedAt = Number.NEGATIVE_INFINITY;
+    let targetProgress = 0;
+    let disposed = false;
 
     const setCopy = (
       element: HTMLElement,
@@ -53,14 +60,52 @@ export function CrownReveal() {
       element.style.transform = `translate3d(0, ${(distance * (1 - opacity)).toFixed(2)}px, 0)`;
     };
 
+    const seekToTarget = () => {
+      if (disposed) return;
+
+      const waitTime =
+        MIN_SEEK_INTERVAL_MS - (performance.now() - lastSeekStartedAt);
+      if (waitTime > 0) {
+        if (seekTimerId === 0) {
+          seekTimerId = window.setTimeout(() => {
+            seekTimerId = 0;
+            seekToTarget();
+          }, waitTime);
+        }
+        return;
+      }
+
+      if (
+        video.readyState < 1 ||
+        !Number.isFinite(video.duration) ||
+        video.seeking
+      ) {
+        return;
+      }
+
+      const lastFrame = Math.max(0, video.duration - 0.05);
+      const rawTarget = targetProgress * lastFrame;
+      const targetTime =
+        targetProgress >= 1
+          ? lastFrame
+          : Math.min(
+              lastFrame,
+              Math.round(rawTarget / SCRUB_FRAME_SECONDS) *
+                SCRUB_FRAME_SECONDS,
+            );
+
+      if (Math.abs(video.currentTime - targetTime) >= SCRUB_FRAME_SECONDS) {
+        lastSeekStartedAt = performance.now();
+        video.currentTime = targetTime;
+      }
+    };
+
     const render = () => {
       frameId = 0;
 
       if (reducedMotion.matches) {
-        const finalFrame = Math.max(0, video.duration - 0.05);
-        if (Number.isFinite(finalFrame) && video.readyState >= 1) {
-          video.currentTime = finalFrame;
-        }
+        targetProgress = 1;
+        seekToTarget();
         setCopy(firstLine, 1, 0);
         setCopy(accentLine, 1, 0);
         setCopy(body, 1, 0);
@@ -71,12 +116,8 @@ export function CrownReveal() {
       const scrollDistance = Math.max(1, section.offsetHeight - window.innerHeight);
       const progress = clamp(-rect.top / scrollDistance);
 
-      if (video.readyState >= 1 && Number.isFinite(video.duration)) {
-        const targetTime = progress * Math.max(0, video.duration - 0.05);
-        if (Math.abs(video.currentTime - targetTime) > 0.015) {
-          video.currentTime = targetTime;
-        }
-      }
+      targetProgress = progress;
+      seekToTarget();
 
       setCopy(firstLine, revealWindow(progress, 0.03, 0.14, 0.48, 0.6), 42);
       setCopy(accentLine, revealWindow(progress, 0.14, 0.26, 0.48, 0.6), 56);
@@ -90,14 +131,18 @@ export function CrownReveal() {
     section.dataset.enhanced = "true";
     video.pause();
     video.addEventListener("loadedmetadata", requestRender);
+    video.addEventListener("seeked", seekToTarget);
     window.addEventListener("scroll", requestRender, { passive: true });
     window.addEventListener("resize", requestRender);
     reducedMotion.addEventListener("change", requestRender);
     requestRender();
 
     return () => {
+      disposed = true;
       if (frameId !== 0) window.cancelAnimationFrame(frameId);
+      if (seekTimerId !== 0) window.clearTimeout(seekTimerId);
       video.removeEventListener("loadedmetadata", requestRender);
+      video.removeEventListener("seeked", seekToTarget);
       window.removeEventListener("scroll", requestRender);
       window.removeEventListener("resize", requestRender);
       reducedMotion.removeEventListener("change", requestRender);
