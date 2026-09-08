@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { preload } from "react-dom";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   acquireSceneLock,
@@ -44,11 +43,6 @@ const MASK_URL = "/images/hibrid-wordmark.png";
  *   - "prefers-reduced-motion zorunlu": hero animasyonu bu ayarda kapalı.
  */
 export function HibridWebGL() {
-  preload("/images/hibrid-wordmark-1280.webp", {
-    as: "image",
-    fetchPriority: "high",
-  });
-
   const reducedMotion = usePrefersReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -246,10 +240,11 @@ export function HibridWebGL() {
 
   return (
     <div className={styles.stage} ref={stageRef}>
-      {/* Kalıcı yedek, aynı alfa maskesini CSS üzerinden çizer. Böylece
-          ilk kare HTML'deki büyük bir img/LCP adayına dönüşmez; erişilebilir
-          adı ise korunur. WebGL aynı geometriyle bunun üstüne gelir. */}
-      <span className={styles.fallback} role="img" aria-label="HIBRID" />
+      {/* İlk kare doğrudan metin olarak çizilir; görsel kaynağı ve çözme
+          gecikmesi yoktur. WebGL, orijinal maskeyle bunun üstüne gelir. */}
+      <span className={styles.fallback} role="img" aria-label="HIBRID">
+        HIBRID
+      </span>
       {!reducedMotion && (
         <canvas
           ref={canvasRef}
