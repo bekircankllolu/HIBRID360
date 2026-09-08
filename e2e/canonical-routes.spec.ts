@@ -139,13 +139,21 @@ test.describe("Eski yol yönlendirmeleri", () => {
 
 test.describe("İçerik ve düzen sözleşmeleri", () => {
   for (const locale of LOCALES) {
-    test(`/${locale}/work — RECENT başlığı ve üçlü filtre çubuğu`, async ({
+    test(`/${locale}/work — hero, iş arşivi ve üçlü filtre çubuğu`, async ({
       page,
     }) => {
       await seedConsent(page);
       await page.goto(`/${locale}/work`, { waitUntil: "networkidle" });
 
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText("RECENT");
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "THE ART OF TEAM WORK",
+      );
+      await expect(
+        page.getByRole("heading", {
+          level: 2,
+          name: locale === "tr" ? "Son İşler" : "Recent Works",
+        }),
+      ).toBeVisible();
       const filters = page.getByRole("group", {
         name: locale === "tr" ? "Filtre" : "Filter",
       });

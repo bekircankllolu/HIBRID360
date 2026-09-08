@@ -78,12 +78,6 @@
   width: 100%;
   height: auto;
   display: block;
-  transition: opacity 220ms ease;
-}
-
-/* WebGL devreye girince yedek gizlenir — ikisi üst üste görünmez. */
-.fallbackHidden {
-  opacity: 0;
 }
 
 .canvas {
@@ -102,7 +96,6 @@
 
 /* Hareket azaltma açıkken geçişler de kapanır (CLAUDE.md zorunlu kural). */
 @media (prefers-reduced-motion: reduce) {
-  .fallback,
   .canvas {
     transition: none;
   }

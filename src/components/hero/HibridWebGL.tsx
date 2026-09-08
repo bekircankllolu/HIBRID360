@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   acquireSceneLock,
@@ -24,15 +23,15 @@ const MASK_URL = "/images/hibrid-wordmark.png";
  * src/lib/hibrid-wordmark-scene.ts).
  *
  * Katmanlama — LCP ve yedek aynı anda çözülüyor:
- *   1. Statik PNG (next/image, kaynak 17KB) her zaman render edilir ve
- *      sayfanın LCP elemanıdır. `priority` prop'u Next'e hem
- *      fetchPriority="high" hem de optimize edilmiş src'yle birebir
- *      eşleşen bir <link rel="preload"> ürettirir — ilk boyama JS'i
- *      beklemez. Önceki SVG glif-path yaklaşımı da aynı LCP sorununu
+ *   1. Statik PNG (kaynak 17KB) her zaman render edilir ve sayfanın LCP
+ *      elemanıdır. Doğrudan public URL'si, eager yükleme ve yüksek istek
+ *      önceliği ilk boyamanın JS'i veya dinamik görsel hattını beklememesini
+ *      sağlar. Önceki SVG glif-path yaklaşımı da aynı LCP sorununu
  *      (web font indirmesini bekleyen ilk boyama) çözüyordu; maske
  *      görseli onun yerini alıyor.
- *   2. WebGL canvas üstüne biner ve maske dokusu hazır olunca açılır;
- *      o an PNG gizlenir (ikisi üst üste görünmez, kenar taşması olmaz).
+ *   2. WebGL canvas üstüne biner ve maske dokusu hazır olunca açılır.
+ *      PNG aynı maskeyle altta kalır; böylece canvas dışında taşma olmaz
+ *      ve LCP öğesi geç bir görünürlük değişimiyle yeniden boyanmaz.
  *   3. WebGL yoksa/başarısızsa veya prefers-reduced-motion açıksa canvas
  *      hiç kurulmaz — PNG görünür kalır, içerik eksilmez.
  *
@@ -48,10 +47,37 @@ export function HibridWebGL() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const [live, setLive] = useState(false);
+  const [sceneReady, setSceneReady] = useState(false);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setSceneReady(false);
+      return;
+    }
+
+    let active = true;
+    const enableScene = () => {
+      if (active) setSceneReady(true);
+    };
+    let cancelSchedule: () => void;
+
+    if (typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(enableScene, { timeout: 1500 });
+      cancelSchedule = () => window.cancelIdleCallback(idleId);
+    } else {
+      const timerId = window.setTimeout(enableScene, 0);
+      cancelSchedule = () => window.clearTimeout(timerId);
+    }
+
+    return () => {
+      active = false;
+      cancelSchedule();
+    };
+  }, [reducedMotion]);
 
   useEffect(() => {
     // Hareket azaltma açıksa sahne hiç kurulmaz — statik PNG kalır.
-    if (reducedMotion) return;
+    if (reducedMotion || !sceneReady) return;
 
     const canvas = canvasRef.current;
     const stage = stageRef.current;
@@ -198,24 +224,23 @@ export function HibridWebGL() {
       if (holdsLock) releaseSceneLock(holder);
       setLive(false);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, sceneReady]);
 
   return (
     <div className={styles.stage} ref={stageRef}>
-      {/* LCP elemanı + kalıcı yedek. WebGL devreye girince gizlenir.
-          next/image: sayfa maks. genişliği 1440px (--content-max-width),
-          altında viewport genişliği kadar — bkz. HeroTypography .inner.
-          priority, sağdaki fetchPriority="high" + otomatik <link
-          rel="preload">'u (URL'i optimize edilmiş src ile birebir eşleşir)
-          kendisi üretir; manuel preload artık gereksiz. */}
-      <Image
+      {/* LCP elemanı + kalıcı yedek. WebGL aynı maskeyle üstüne çizilir.
+          Kaynak yalnızca 17KB; doğrudan public URL'si Next'in dinamik
+          optimizer yanıtını beklemeden parser tarafından keşfedilir. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={MASK_URL}
         alt="HIBRID"
         width={1920}
         height={528}
-        sizes="(min-width: 1440px) 1440px, 100vw"
-        priority
-        className={`${styles.fallback} ${live ? styles.fallbackHidden : ""}`}
+        loading="eager"
+        fetchPriority="high"
+        decoding="sync"
+        className={styles.fallback}
       />
       {!reducedMotion && (
         <canvas
