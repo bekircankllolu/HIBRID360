@@ -10,6 +10,10 @@ type EditorialImageProps = {
   sizes: string;
   priority?: boolean;
   rotating?: boolean;
+  /** Sürekli, kendiliğinden nefes alan zoom in/out döngüsü (hover'a bağlı
+   * değil) — brief'te referans verilen landonorris.com/oryzo.ai tarzı
+   * ambient hareket. `rotating` ile birlikte kullanılmaz. */
+  ambient?: boolean;
 };
 
 type MotionStyle = CSSProperties & {
@@ -23,6 +27,7 @@ export function EditorialImage({
   sizes,
   priority = false,
   rotating = false,
+  ambient = false,
 }: EditorialImageProps) {
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
     if (event.pointerType === "touch") return;
@@ -40,7 +45,7 @@ export function EditorialImage({
 
   return (
     <div
-      className={`${styles.frame} ${rotating ? styles.rotating : ""}`}
+      className={`${styles.frame} ${rotating ? styles.rotating : ""} ${ambient ? styles.ambient : ""}`}
       onPointerMove={handlePointerMove}
       onPointerLeave={resetPointer}
       style={

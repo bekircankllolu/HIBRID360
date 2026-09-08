@@ -69,6 +69,19 @@ export default async function ThinkAndThankPage({
           </div>
         </div>
       </header>
+      <section
+        className={styles.statementStory}
+        aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
+      >
+        <div className={styles.statementVisualStory}>
+          <EditorialImage
+            src={siteImages.thinkAndThank.statementStory.src}
+            alt={siteImages.thinkAndThank.statementStory.alt[locale]}
+            sizes="(max-width: 760px) 88vw, 46vw"
+            ambient
+          />
+        </div>
+      </section>
       <section className={styles.featuredVideo} aria-labelledby="featured-thinking-film">
         <div className={styles.featuredVideoCopy}>
           <p>WATCH / THINK / THANK</p>
@@ -80,6 +93,19 @@ export default async function ThinkAndThankPage({
           <YouTubeLite
             title={locale === "tr" ? "Hibrid 360 Think & Thank videosu" : "Hibrid 360 Think & Thank video"}
             playLabel={locale === "tr" ? "Think & Thank videosunu oynat" : "Play the Think & Thank video"}
+          />
+        </div>
+      </section>
+      <section
+        className={styles.statementPure}
+        aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
+      >
+        <div className={styles.statementVisualPure}>
+          <EditorialImage
+            src={siteImages.thinkAndThank.statementPure.src}
+            alt={siteImages.thinkAndThank.statementPure.alt[locale]}
+            sizes="(max-width: 760px) 74vw, 30vw"
+            ambient
           />
         </div>
       </section>
@@ -101,6 +127,19 @@ export default async function ThinkAndThankPage({
             alt={siteImages.thinkAndThank.culture.alt[locale]}
             sizes="(max-width: 760px) 80vw, 38vw"
             rotating
+          />
+        </div>
+      </section>
+      <section
+        className={styles.statementImpact}
+        aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
+      >
+        <div className={styles.statementVisualImpact}>
+          <EditorialImage
+            src={siteImages.thinkAndThank.statementImpact.src}
+            alt={siteImages.thinkAndThank.statementImpact.alt[locale]}
+            sizes="(max-width: 760px) 78vw, 34vw"
+            ambient
           />
         </div>
       </section>

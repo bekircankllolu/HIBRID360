@@ -111,6 +111,43 @@
   animation-duration: 29s;
 }
 
+/* Musteriden hazir grafik olarak gelen marka ifadesi gorselleri
+   (8 Eylul 2026 e-posta eki) -- metin gorselin icine gomulu, sayfa
+   kopyasi olarak ayrica yazilmaz. Ambient zoom EditorialImage'dan gelir. */
+.statementStory,
+.statementPure,
+.statementImpact {
+  display: grid;
+  place-items: center;
+  padding: clamp(3rem, 8vw, 7rem) var(--page-gutter);
+}
+
+.statementStory {
+  background: var(--mag-lilac);
+  color: var(--color-brand-black);
+}
+
+.statementPure {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}
+
+.statementImpact {
+  background: var(--color-brand-black);
+  color: var(--color-text-on-black);
+}
+
+.statementVisualStory,
+.statementVisualPure,
+.statementVisualImpact {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.statementVisualStory { width: min(46rem, 86vw); }
+.statementVisualPure { width: min(30rem, 62vw); }
+.statementVisualImpact { width: min(34rem, 68vw); }
+
 .featuredVideo {
   display: grid;
   grid-template-columns: minmax(15rem, 0.36fr) minmax(0, 1fr);

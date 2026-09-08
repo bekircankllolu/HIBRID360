@@ -66,6 +66,30 @@ export const siteImages = {
         en: "Kinetic culture composition with an ear, tuning fork and yellow record",
       },
     },
+    // Müşteriden hazır grafik olarak gelen marka manifestosu görselleri
+    // (8 Eylül 2026 e-posta eki) — metin görselin içine gömülü, ayrıca
+    // sayfa kopyası olarak tekrarlanmaz.
+    statementStory: {
+      src: "/images/site/think-and-thank/statement-your-story.webp",
+      alt: {
+        tr: "Pembe zemin üzerinde kırmızı, krem ve mavi renklerle 'IT'S YOUR STORY. MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.' yazan kalp biçimli mücevher illüstrasyonu",
+        en: "Heart-shaped faceted gem illustration on a pink background reading 'IT'S YOUR STORY. MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.' in red, cream and blue",
+      },
+    },
+    statementPure: {
+      src: "/images/site/think-and-thank/statement-pure-simple-powerful.webp",
+      alt: {
+        tr: "Sarı zemin üzerinde siyah büyük harflerle 'PURE. SIMPLE. POWERFUL.' yazısı",
+        en: "Bold black type reading 'PURE. SIMPLE. POWERFUL.' on a yellow background",
+      },
+    },
+    statementImpact: {
+      src: "/images/site/think-and-thank/statement-idea-to-impact.webp",
+      alt: {
+        tr: "Siyah zemin üzerinde beyaz ve fuşya harflerle 'FROM IDEA TO IMPACT WE MAKE BRANDS MOVE' yazısı, IMPACT kelimesi fuşya renkte",
+        en: "White and fuchsia type reading 'FROM IDEA TO IMPACT WE MAKE BRANDS MOVE' on a black background, with IMPACT highlighted in fuchsia",
+      },
+    },
   },
   services: {
     creative: {

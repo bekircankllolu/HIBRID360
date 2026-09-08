@@ -38,11 +38,30 @@
   to { transform: scale(1.1) rotate(360deg); }
 }
 
+/* Sürekli nefes alan zoom in/out — hover'dan bağımsız, kendiliğinden
+   döngü. Metni gömülü statik grafikler icin (brief'in "tüm fotolar
+   zoom in-zoom out olur" talebi). */
+.ambient .image {
+  animation: editorialBreathe 9s ease-in-out infinite;
+}
+
+.ambient:hover .image {
+  animation-play-state: paused;
+  transform: scale(1.12);
+}
+
+@keyframes editorialBreathe {
+  0%, 100% { transform: scale(1.03); }
+  50% { transform: scale(1.11); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .image,
   .frame:hover .image,
   .rotating .image,
-  .rotating:hover .image {
+  .rotating:hover .image,
+  .ambient .image,
+  .ambient:hover .image {
     animation: none;
     transform: none;
     transition: none;

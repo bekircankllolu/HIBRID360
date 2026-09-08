@@ -3,7 +3,12 @@ import type { Locale } from "@/i18n/routing";
 import type { InsightsPost } from "@/types/content";
 
 export type InsightTone = "mint" | "pink" | "lilac" | "paper";
-export type InsightVisualKey = keyof typeof siteImages.thinkAndThank;
+// site-images.ts'teki thinkAndThank anahtarlarindan yalnizca konu
+// gorseli olarak kullanilanlar. keyof ile turetilmiyor cunku sayfaya
+// eklenen marka ifadesi gorselleri (statementStory vb.) birer konu
+// fallback'i degil -- her yeni anahtar bu tipi otomatik genisletip
+// asagidaki Record'lari kirmasin diye acikca sabitlendi.
+export type InsightVisualKey = "strategy" | "production" | "ai" | "culture";
 
 type InsightVisual = {
   key: string;

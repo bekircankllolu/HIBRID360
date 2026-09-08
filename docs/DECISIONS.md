@@ -184,3 +184,27 @@ kullanıcı tarafından doğrulandı ve bu satırla kayda geçirildi. Benzer
 durumlarda metin doğrudan koda gömülmeden önce buraya yazılmalı —
 aksi halde tek kaynağı git history olur ve sözleşme testleri sessizce
 eskir.
+
+## 8 Eylül 2026 — Think & Thank marka ifadesi görselleri
+
+Müşteriden "THINK & THANK SAYFAYA EKLENECEK GÖRSELER" başlıklı bir
+e-posta ekiyle 4 hazır tipografi grafiği geldi. Üçü sayfaya eklendi:
+
+| # | Konu | Karar | Durum | Etki |
+|---|---|---|---|---|
+| 26 | Think & Thank marka ifadesi görselleri | Müşteri grafiklerinden 3'ü eklendi: "IT'S YOUR STORY..." (lila zemin), "PURE. SIMPLE. POWERFUL." (sarı zemin), "FROM IDEA TO IMPACT..." fuşya vurgulu sürüm (siyah zemin) | KAPANDI | `think-and-thank/page.tsx` — hero sonrası, video ile object-study arası, object-study ile blog listesi arası. `EditorialImage`'a `ambient` prop'u eklendi (sürekli nefes alan zoom, hover'a bağlı değil) — brief'in landonorris.com/oryzo.ai referansı |
+| 27 | "FROM IDEA TO IMPACT..." düz sürüm kullanılmadı | Aynı mesajın fuşya vurgusuz hali (client dosyası `2.jpeg`) sayfaya eklenmedi — aynı sayfada aynı cümlenin iki kez tekrarı olurdu | AÇIK | İstenirse başka bir sayfaya (ör. Digital, Creative) yerleştirilebilir. Kaynak dosya işlenmedi, kullanıcıda duruyor |
+| 28 | "YOUR BRAND. CROWNED." + döner taç | Sitede hâlâ yok, ama `Downloads/Hibrid-360-Crown-Rotation.zip` içinde bağımsız bir HTML prototipi bulundu (tek görsel + CSS `rotateY` sallanma animasyonu, 22s döngü, marka renklerinde yıldız tozu zemini, `prefers-reduced-motion` destekli). Prototipte "YOUR BRAND. CROWNED." metni YOK, yalnızca taç hareketi | AÇIK | Prototip Next.js koduna hiç entegre edilmedi, hiçbir sayfa kullanmıyor. Nereye konacağı (ana sayfa hero'su mu, ayrı bölüm mü) netleşmeden implementasyon başlamadı |
+
+**Renk notu:** "IT'S YOUR STORY..." görseli kırmızı/mavi içeriyor,
+marka paletinde (siyah/beyaz/fuşya/sarı) yok. Müşteriden geldiği için
+renklerine dokunulmadan kullanıldı — bu sayfanın kendi `--mag-mint`,
+`--mag-pink`, `--mag-lilac`, `--mag-paper` pastel bölüm renkleri zaten
+sıkı marka paletinin dışında, precedent var. "PURE. SIMPLE. POWERFUL."
+ve fuşyalı "IMPACT" sürümü zaten tam marka renklerinde.
+
+**Teknik not:** "FROM IDEA TO IMPACT..." görselinin "siyah" zemini
+aslında tam siyah değildi (~rgb(4,10,24)) — sayfanın gerçek siyahıyla
+(#000000) yan yana geldiğinde hafif bir kare çerçeve görünüyordu.
+Görselin koyu dolgusu sharp ile piksel bazında saf siyaha çekildi
+(metne dokunulmadan), görsel artık sayfaya kaynaşık görünüyor.
