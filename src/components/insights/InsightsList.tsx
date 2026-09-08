@@ -12,15 +12,18 @@ import {
 } from "@/lib/insights";
 import { getInsightVisual } from "@/data/insight-visuals";
 import { EditorialImage } from "@/components/insights/EditorialImage";
+import { TextFadeIn } from "@/components/ui/TextFadeIn";
 import type { InsightsPost } from "@/types/content";
 import styles from "./InsightsList.module.css";
 
 export function InsightsList({
   posts,
   locale,
+  animateTitles = false,
 }: {
   posts: InsightsPost[];
   locale: Locale;
+  animateTitles?: boolean;
 }) {
   const t = useTranslations("insights");
   const [activeCategory, setActiveCategory] = useState<string>("all");
@@ -85,6 +88,7 @@ export function InsightsList({
           {filteredPosts.map((post, filteredIndex) => {
             const visual = getInsightVisual(post, locale);
             const absoluteIndex = posts.indexOf(post);
+            const title = getInsightTitle(post, locale);
 
             return (
               <Link
@@ -116,7 +120,11 @@ export function InsightsList({
                       </span>
                     )}
                   </span>
-                  <span className={styles.cardTitle}>{getInsightTitle(post, locale)}</span>
+                  {animateTitles ? (
+                    <TextFadeIn className={styles.cardTitle}>{title}</TextFadeIn>
+                  ) : (
+                    <span className={styles.cardTitle}>{title}</span>
+                  )}
                   {getInsightSummary(post, locale) && (
                     <span className={styles.cardSummary}>
                       {getInsightSummary(post, locale)}

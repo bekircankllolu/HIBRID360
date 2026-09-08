@@ -1,0 +1,122 @@
+.filterDefinitions {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.title {
+  position: relative;
+}
+
+.segment {
+  position: relative;
+  display: inline-grid;
+  isolation: isolate;
+}
+
+.segment > span {
+  grid-area: 1 / 1;
+}
+
+.visible {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  filter: blur(14px);
+  transform: scaleX(0.72) scaleY(1.08);
+  transform-origin: center;
+  animation: morphResolve 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: filter, opacity, transform;
+}
+
+.ghost {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  filter: url("#think-title-distortion") blur(1.5px);
+  transform: scaleX(0.82);
+  transform-origin: center;
+  animation: morphGhost 1.25s ease-out forwards;
+  pointer-events: none;
+  will-change: filter, opacity, transform;
+}
+
+.segment:nth-child(2) .visible,
+.segment:nth-child(2) .ghost {
+  animation-delay: 140ms;
+}
+
+.highlight {
+  flex: 0 0 auto;
+  padding: 0.06em 0.1em 0.1em;
+  background: var(--color-brand-yellow);
+  color: var(--color-brand-black);
+}
+
+@keyframes morphResolve {
+  0% {
+    opacity: 0;
+    filter: blur(14px);
+    transform: scaleX(0.72) scaleY(1.08);
+  }
+
+  24% {
+    opacity: 0.72;
+    filter: blur(7px);
+    transform: scaleX(0.88) scaleY(1.04);
+  }
+
+  56% {
+    opacity: 1;
+    filter: blur(2px);
+    transform: scaleX(1.04) scaleY(0.99);
+  }
+
+  76% {
+    filter: blur(0.6px);
+    transform: scaleX(0.99) scaleY(1);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes morphGhost {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.7) scaleY(1.12);
+  }
+
+  24% {
+    opacity: 0.42;
+  }
+
+  48% {
+    opacity: 0.28;
+    transform: scaleX(1.08) scaleY(0.96);
+  }
+
+  76%,
+  100% {
+    opacity: 0;
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visible {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none;
+  }
+
+  .ghost {
+    display: none;
+    animation: none;
+  }
+}
