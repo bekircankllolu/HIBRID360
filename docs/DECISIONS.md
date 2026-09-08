@@ -227,3 +227,40 @@ sınıfları `.statementPure`/`.statementVisualPure`'a çevrildi (sarı
 zemin, `--color-text-on-yellow`); "IT'S YOUR STORY..." kaldırıldı.
 Üçü de (story, pure, impact) `site-images.ts`'te ve diskte duruyor,
 hiçbiri silinmedi.
+
+## 9 Eylül 2026 — Contact haritası marka renklerine boyandı
+
+Kullanıcı isteği: Google Maps'in varsayılan açık gri/bej paletini
+"sarı-siyah-koyu gri, cool" bir temaya çekmek, site renkleriyle uyumlu
+olacak şekilde.
+
+| # | Konu | Karar | Durum | Etki |
+|---|---|---|---|---|
+| 29 | Contact haritası koyu tema | CSS `filter` + `mix-blend-mode: color` katmanıyla harita marka renklerine (siyah zemin, sarı yollar/etiketler) boyandı | KAPANDI | `ContactMap.tsx` (wrapper eklendi) · `contact/page.module.css` (`.mapFrame`, `.map` filter, `.mapTint`) |
+
+**Neden JS Maps API / Mapbox değil:** Madde 168'deki "Harita sağlayıcısı"
+kararı hâlâ geçerli — anahtarsız Google sorgu gömmesi korunuyor.
+Google'ın gerçek `styles` JSON'uyla (JS Maps API) boyama, anahtar +
+faturalandırma hesabı gerektirir; Mapbox GL ek JS ağırlığıyla
+performans bütçesini zorlar (ikisi de o kararda zaten elenmişti).
+Bu yüzden CSS-only bir çözüm seçildi: iframe'e karartan bir `filter`
+uygulanıyor, üstüne `mix-blend-mode: color` ile saf marka sarısı
+(`--color-brand-yellow`) bindiriliyor — bu blend modu yalnızca temel
+katmanın PARLAKLIĞINI koruyup tonunu değiştirdiği için gerçek siyaha
+yakın bölgeler siyah kalıyor, yollar/etiketler gibi açık alanlar
+sarıya boyanıyor. Ek bağımlılık yok, anahtar yok, koordinat
+uydurulmadı — madde 168'in üç şartı da korundu.
+
+**Değerler nasıl bulundu:** Gözle tahmin edilmedi — gerçek harita
+üzerinde 10+ filtre/blend kombinasyonu bağımsız bir test sayfasında
+karşılaştırıldı (arka plan siyaha yakın kalsın, sokak etiketleri
+okunur kalsın dengesi arandı), sonra üretim sayfasında aynı sonucun
+tekrarlandığı ekran görüntüsüyle doğrulandı (masaüstü + mobil).
+
+**Bilinen sınır:** İframe üçüncü taraf içerik olduğu için harita
+ETKİLEŞİMDEYKEN (sürükleme, zoom) Google'ın kendi UI'ı (± butonları,
+Street View adamı vb.) filtre/tint'ten aynı şekilde etkileniyor —
+bunlar da koyu/sarı görünüyor, ayrı stillendirilemiyor.
+
+Doğrulama: tsc temiz, 154 unit, 168/168 e2e (a11y dahil), masaüstü +
+mobil ekran görüntüsü.

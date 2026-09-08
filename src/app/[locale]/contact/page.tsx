@@ -214,11 +214,20 @@ export default async function ContactPage({
         <h2 id="contact-map" className={styles.visuallyHidden}>
           {t("mapTitle")}
         </h2>
-        <ContactMap
-          className={styles.map}
-          src={mapEmbedUrl()}
-          title={t("mapTitle")}
-        />
+        <div className={styles.mapFrame}>
+          <ContactMap
+            className={styles.map}
+            src={mapEmbedUrl()}
+            title={t("mapTitle")}
+          />
+          {/* Google'ın varsayılan gri/bej paletini marka renklerine
+              (siyah + sarı) çeken dekoratif katman. iframe içeriği
+              üçüncü taraf olduğu için CSS'ten yeniden boyanamıyor;
+              filter .map'te karartıyor, bu katman mix-blend-mode:
+              color ile yalnızca aydınlık alanları (yollar, etiketler)
+              sarıya çekiyor, gerçek siyah kalan bölgeler etkilenmiyor. */}
+          <div className={styles.mapTint} aria-hidden="true" />
+        </div>
         <p className={styles.mapFallback}>
           <span>{t("mapNote")}</span>{" "}
           <a href={directionsHref} target="_blank" rel="noreferrer">
