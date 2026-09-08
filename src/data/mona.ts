@@ -1,21 +1,8 @@
 import type { Locale } from "@/i18n/routing";
 import monaFaq from "@/data/mona-faq.json";
+import audioManifest from "@/data/mona-audio.json";
 
-/**
- * MONA replik kütüphanesi — brief-rev12.md Bölüm 11.3, 11.4, 11.5.
- *
- * Tüm replikler "MONA REPLİĞİ" kutularından birebir alınmıştır; TR ve EN
- * sürümleri brief'te ayrı ayrı verilmiştir, üzerinde değişiklik yapılmadı.
- *
- * Karakter videosu `/public/videos/mona-tv-head.mp4` olarak yayında.
- * Ses varlıkları HENÜZ YOK (bkz. brief 11.6 teslim listesi):
- *   - Replik başına ayrı ses dosyası (TR + EN)
- *   - VTT altyazı dosyaları (TR + EN)
- * TODO: docs/DECISIONS.md #8 bekleniyor — MONA ses kararı (insan
- * seslendirme önerisi). Karar + prodüksiyon tamamlanınca her replik için
- * `audioSrc` ve `captionsSrc` alanları doldurulacak; state machine bu
- * alanlar null iken de eksiksiz çalışır (yalnızca yazı akar).
- */
+/** Curated bilingual MONA content. Live FAQ voices are supplied by the local audio manifest. */
 
 export interface MonaLine {
   id: string;
@@ -37,14 +24,22 @@ const noMedia = {
   captionsSrc: { tr: null, en: null },
 };
 
+function mediaFor(id: string) {
+  const assets = (audioManifest as Record<string, Partial<Record<Locale, string>>>)[id];
+  return {
+    audioSrc: { tr: assets?.tr ?? null, en: assets?.en ?? null },
+    captionsSrc: { tr: assets?.tr?.replace(/\.mp3$/, ".json") ?? null, en: assets?.en?.replace(/\.mp3$/, ".json") ?? null },
+  };
+}
+
 /** brief 11.3 — açılış repliği. Sessiz, yalnızca yazı. */
 export const openingLine: MonaLine = {
   id: "opening",
   text: {
-    en: "Hello. I'm MONA. My head is a 1984 Macintosh. My taste is entirely up to date. Ask me anything about how this place works.",
-    tr: "Merhaba. Ben MONA. Kafam 1984 model bir bilgisayar. Zevkim tamamen güncel. Burada işlerin nasıl yürüdüğünü sorabilirsin.",
+    en: "Hello. I'm MONA. My head is a little retro. My taste is entirely up to date. Ask me anything about how this place works.",
+    tr: "Merhaba. Ben MONA. Kafam biraz retro. Zevkim tamamen güncel. Burada işlerin nasıl yürüdüğünü sorabilirsin.",
   },
-  ...noMedia,
+  ...mediaFor("opening"),
 };
 
 /** brief 11.3 — boşta (idle) replikleri, sırayla döner. Sessiz. */
@@ -210,7 +205,7 @@ export const legacyMonaQuestions: MonaQuestion[] = [
  */
 export const monaQuestions: MonaQuestion[] = monaFaq.map((item) => ({
   ...item,
-  ...noMedia,
+  ...mediaFor(item.id),
   ...(item.id === "q9"
     ? { action: { href: "/work", label: { en: "WORKS →", tr: "WORKS →" } } }
     : item.id === "q14" || item.id === "q28"

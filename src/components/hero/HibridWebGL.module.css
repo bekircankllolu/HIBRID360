@@ -42,6 +42,7 @@
  */
 .stage {
   position: relative;
+  container-type: inline-size;
   width: calc(100% * 1920 / 1683);
   margin-left: calc(-100% * 119 / 1683);
   margin-block: calc(-100% * 97 / 1683);
@@ -76,14 +77,18 @@
   top: 5.102%;
   left: 0;
   width: 100%;
-  height: auto;
-  display: block;
-  transition: opacity 220ms ease;
-}
-
-/* WebGL devreye girince yedek gizlenir — ikisi üst üste görünmez. */
-.fallbackHidden {
-  opacity: 0;
+  aspect-ratio: 1920 / 528;
+  display: flex;
+  align-items: center;
+  padding-left: 4.5cqw;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: 23.6cqw;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-brand-fuchsia);
+  transform: scaleX(0.975);
+  transform-origin: left center;
 }
 
 .canvas {
@@ -102,7 +107,6 @@
 
 /* Hareket azaltma açıkken geçişler de kapanır (CLAUDE.md zorunlu kural). */
 @media (prefers-reduced-motion: reduce) {
-  .fallback,
   .canvas {
     transition: none;
   }

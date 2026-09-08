@@ -33,6 +33,8 @@ const LEGACY_ROUTE_MAP = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Keep an isolated preview from rewriting another running server's build.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   // Next 15, birden fazla lockfile görünce workspace kökünü kendisi tahmin
   // ediyor ve bu makinede ev dizinindeki alakasız bir package-lock.json'ı
   // seçiyordu. Kök yanlış olduğunda output file tracing yanlış dosya kümesini

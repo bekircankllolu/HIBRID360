@@ -163,7 +163,7 @@ test.describe("Eski yol yönlendirmeleri", () => {
 
 test.describe("İçerik ve düzen sözleşmeleri", () => {
   for (const locale of LOCALES) {
-    test(`/${locale}/work — hero başlığı ve üçlü filtre çubuğu`, async ({
+    test(`/${locale}/work — hero, iş arşivi ve üçlü filtre çubuğu`, async ({
       page,
     }) => {
       await seedConsent(page);
@@ -171,11 +171,18 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
 
       // Musteri revizyonu: hero basligi "RECENT" iken "THE ART OF TEAM WORK"
       // oldu. Marka slogani oldugu icin TR sayfada da Ingilizce kalir
-      // (CLAUDE.md i18n kurali: sloganlar marka dilidir). Son isler listesi
-      // artik h2 "Son Isler"/"Recent Work" altinda duruyor.
+      // (CLAUDE.md i18n kurali: sloganlar marka dilidir). Kaynagi
+      // DECISIONS.md madde 25'te. Son isler listesi artik ayri bir h2
+      // altinda -- asagida onu da dogruluyoruz.
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
         "THE ART OF TEAM WORK",
       );
+      await expect(
+        page.getByRole("heading", {
+          level: 2,
+          name: locale === "tr" ? "Son İşler" : "Recent Works",
+        }),
+      ).toBeVisible();
       const filters = page.getByRole("group", {
         name: locale === "tr" ? "Filtre" : "Filter",
       });

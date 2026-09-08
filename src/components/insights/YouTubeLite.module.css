@@ -1,0 +1,61 @@
+.embed {
+  position: absolute;
+  inset: 0;
+}
+
+.poster,
+.player {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.poster {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 0;
+  color: var(--color-brand-yellow);
+  background:
+    linear-gradient(rgb(0 0 0 / 34%), rgb(0 0 0 / 52%)),
+    url("https://i.ytimg.com/vi/yj9rokSeack/maxresdefault.jpg") center / cover no-repeat;
+  cursor: pointer;
+}
+
+.poster::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 255 255 / 16%);
+  content: "";
+  pointer-events: none;
+}
+
+.play {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: clamp(4rem, 7vw, 6rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 72%);
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.poster:hover .play,
+.poster:focus-visible .play {
+  color: var(--color-brand-black);
+  background: var(--color-brand-yellow);
+  transform: scale(1.08);
+}
+
+.poster:focus-visible {
+  outline: 3px solid var(--color-brand-black);
+  outline-offset: -6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play { transition: none; }
+}

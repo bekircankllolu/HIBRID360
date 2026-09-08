@@ -28,6 +28,45 @@ export const siteImages = {
       alt: "A clapperboard marked Your Story on a vivid production set",
     },
   },
+  culture: {
+    standFor: {
+      src: "/images/site/culture/what-we-stand-for-cinematic.webp",
+      alt: {
+        tr: "Dayanışma içinde kenetlenmiş iki elin siyah beyaz yakın planı",
+        en: "Black-and-white close-up of two hands clasped in solidarity",
+      },
+    },
+  },
+  thinkAndThank: {
+    strategy: {
+      src: "/images/site/think-and-thank/strategy.webp",
+      alt: {
+        tr: "Siyah katmanlar, saydam yüzeyler ve sarı ibreden oluşan editoryal pusula",
+        en: "Editorial compass made of black layers, clear surfaces and a yellow pointer",
+      },
+    },
+    production: {
+      src: "/images/site/think-and-thank/production.webp",
+      alt: {
+        tr: "Kamera, film şeridi ve sarı ışıkla kurulan editoryal prodüksiyon kompozisyonu",
+        en: "Editorial production composition with a camera, film strip and yellow light",
+      },
+    },
+    ai: {
+      src: "/images/site/think-and-thank/ai.webp",
+      alt: {
+        tr: "Saydam katmanlar ve hareket çizgilerinden oluşan yapay zeka başı",
+        en: "Artificial intelligence head formed from clear layers and motion lines",
+      },
+    },
+    culture: {
+      src: "/images/site/think-and-thank/culture.webp",
+      alt: {
+        tr: "Kulak, ses çatalı ve sarı plakla kurulan kinetik kültür kompozisyonu",
+        en: "Kinetic culture composition with an ear, tuning fork and yellow record",
+      },
+    },
+  },
   services: {
     creative: {
       src: "/images/site/services/creative.webp",

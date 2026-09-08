@@ -16,7 +16,9 @@ import {
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import type { InsightsPost } from "@/types/content";
-import styles from "../../insights/[slug]/page.module.css";
+import { getInsightVisual } from "@/data/insight-visuals";
+import { EditorialImage } from "@/components/insights/EditorialImage";
+import styles from "./page.module.css";
 
 export function generateStaticParams() {
   return insightsPosts
@@ -67,9 +69,10 @@ export default async function ThinkAndThankPostPage({
   const category = getInsightCategory(post, locale);
   const author = getInsightAuthor(post, locale);
   const paragraphs = getInsightParagraphs(post, locale);
+  const visual = getInsightVisual(post, locale);
 
   return (
-    <article className={styles.article}>
+    <article className={styles.article} data-tone={visual.tone}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -79,9 +82,22 @@ export default async function ThinkAndThankPostPage({
       />
       <JsonLd data={articleJsonLd(locale, post)} />
       <header className={styles.articleHeader}>
-        {category && <p className={styles.category}>{category}</p>}
-        <h1>{title}</h1>
-        {summary && <p className={styles.summary}>{summary}</p>}
+        <div className={styles.headerCopy}>
+          <div className={styles.headerTopline}>
+            <span>HIBRID 360 MAG</span>
+            {category && <span className={styles.category}>{category}</span>}
+          </div>
+          <h1>{title}</h1>
+          {summary && <p className={styles.summary}>{summary}</p>}
+        </div>
+        <div className={styles.headerVisual}>
+          <EditorialImage
+            src={visual.src}
+            alt={visual.alt}
+            sizes="(max-width: 760px) 100vw, 50vw"
+            priority
+          />
+        </div>
       </header>
       <div className={styles.articleContent}>
         <aside className={styles.meta} aria-label={t("articleInfo")}>
@@ -98,8 +114,8 @@ export default async function ThinkAndThankPostPage({
           )}
         </aside>
         <div className={styles.body}>
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+          {paragraphs.map((paragraph, index) => (
+            <p key={`${index}-${paragraph}`}>{paragraph}</p>
           ))}
           <Link href="/think-and-thank" className={styles.backLink}>
             <span aria-hidden="true">←</span> {t("backToIndex")}

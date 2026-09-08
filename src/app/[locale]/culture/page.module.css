@@ -1,4 +1,8 @@
 .page {
+  overflow: hidden;
+}
+
+.hub {
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--space-24) var(--space-4);
@@ -140,6 +144,198 @@
   }
 }
 
+.standFor {
+  margin-top: clamp(2rem, 7vw, 7rem);
+  background: #050505;
+  color: #fff;
+}
+
+.standForIntro {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-4);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: clamp(4rem, 9vw, 8rem) var(--space-4);
+}
+
+.standForMarker {
+  position: absolute;
+  top: 0;
+  left: var(--space-4);
+  width: clamp(4rem, 8vw, 8rem);
+  height: 0.625rem;
+  background: var(--color-brand-yellow);
+}
+
+.standForEyebrow {
+  grid-column: 1 / 4;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-heading-bold);
+}
+
+.standForTitle {
+  grid-column: 4 / -1;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(3.25rem, 8.5vw, 8rem);
+  font-weight: var(--font-weight-brand);
+  line-height: 0.86;
+  color: var(--color-brand-yellow);
+}
+
+.standForLead {
+  grid-column: 6 / -2;
+  display: grid;
+  gap: var(--space-3);
+  margin: clamp(2.5rem, 6vw, 5rem) 0 0;
+  font-size: clamp(1.125rem, 2vw, 1.625rem);
+  line-height: 1.35;
+}
+
+.standForLead strong {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+}
+
+.standForImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 19 / 8.4;
+  margin: 0;
+  overflow: hidden;
+  background: #080808;
+  border-block: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.standForImage img {
+  object-fit: cover;
+  object-position: 50% 50%;
+  transform: scale(1.01);
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-4) clamp(4rem, 8vw, 8rem);
+  list-style: none;
+}
+
+.value {
+  position: relative;
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 4rem) clamp(1.25rem, 2.5vw, 2.5rem);
+  border-right: 1px solid rgba(255, 255, 255, 0.24);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  transition:
+    background-color 260ms ease-out,
+    color 260ms ease-out;
+}
+
+.value:first-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.valueNumber {
+  display: block;
+  margin-bottom: clamp(4rem, 8vw, 8rem);
+  font-family: var(--font-brand);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-heading-bold);
+}
+
+.valueTitle {
+  max-width: 12ch;
+  min-height: 2.2em;
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-brand);
+  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+  font-weight: var(--font-weight-brand);
+  line-height: 1;
+  color: var(--color-brand-yellow);
+}
+
+.valueBody {
+  margin: 0;
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.55;
+}
+
+@media (hover: hover) {
+  .standForImage:hover img {
+    transform: scale(1.035);
+  }
+
+  .value:hover {
+    background: var(--color-brand-yellow);
+    color: #050505;
+  }
+
+  .value:hover .valueNumber,
+  .value:hover .valueTitle {
+    color: #050505;
+  }
+}
+
+@media (max-width: 760px) {
+  .hub {
+    padding-top: var(--space-16);
+  }
+
+  .standForIntro {
+    grid-template-columns: 1fr;
+    padding-block: var(--space-16);
+  }
+
+  .standForEyebrow,
+  .standForTitle,
+  .standForLead {
+    grid-column: 1;
+  }
+
+  .standForTitle {
+    margin-top: var(--space-8);
+    font-size: clamp(3.25rem, 17vw, 5.75rem);
+  }
+
+  .standForLead {
+    margin-top: var(--space-8);
+  }
+
+  .standForImage {
+    aspect-ratio: 4 / 3;
+  }
+
+  .standForImage img {
+    object-position: 50% 50%;
+  }
+
+  .values {
+    grid-template-columns: 1fr;
+    padding-bottom: var(--space-16);
+  }
+
+  .value,
+  .value:first-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.24);
+    border-left: 1px solid rgba(255, 255, 255, 0.24);
+  }
+
+  .valueNumber {
+    margin-bottom: var(--space-12);
+  }
+
+  .valueTitle {
+    min-height: 0;
+  }
+}
+
 /* CLAUDE.md zorunlu kuralı: hareket azaltmada geçişler anlık/sade. */
 @media (prefers-reduced-motion: reduce) {
   .card::after,
@@ -151,5 +347,10 @@
   .arrow {
     opacity: 1;
     transform: none;
+  }
+
+  .standForImage img,
+  .value {
+    transition: none;
   }
 }

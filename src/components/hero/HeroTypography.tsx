@@ -86,6 +86,17 @@ export function HeroTypography() {
         ? 1
         : Math.min(1, Math.max(0, -rect.top / travel));
 
+      // İlk konum zaten stylesheet'te 0/1 olarak tanımlı. Hydration anında
+      // aynı değerleri inline stile yeniden yazmak tüm hero'yu gereksiz
+      // boyayıp LCP zamanını hydration sonrasına taşıyordu.
+      if (
+        progress === 0 &&
+        !stage.style.getPropertyValue("--showreel-progress")
+      ) {
+        frame = 0;
+        return;
+      }
+
       stage.style.setProperty("--showreel-progress", progress.toFixed(4));
       stage.style.setProperty("--showreel-rest", (1 - progress).toFixed(4));
       frame = 0;
@@ -163,8 +174,8 @@ export function HeroTypography() {
                 width={1600}
                 height={900}
                 alt={HOME_SHOWREEL.title[locale]}
-                loading="eager"
-                fetchPriority="high"
+                loading="lazy"
+                fetchPriority="low"
                 decoding="async"
               />
             )}
