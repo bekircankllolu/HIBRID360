@@ -76,8 +76,28 @@
   top: 5.102%;
   left: 0;
   width: 100%;
-  height: auto;
+  aspect-ratio: 1920 / 528;
   display: block;
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-fuchsia),
+    #ff35f2 48%,
+    var(--color-brand-fuchsia)
+  );
+  -webkit-mask-image: image-set(
+    url("/images/hibrid-wordmark-640.webp") 1x,
+    url("/images/hibrid-wordmark-1280.webp") 2x
+  );
+  mask-image: image-set(
+    url("/images/hibrid-wordmark-640.webp") 1x,
+    url("/images/hibrid-wordmark-1280.webp") 2x
+  );
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
 .canvas {

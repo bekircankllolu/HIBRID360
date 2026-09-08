@@ -240,20 +240,10 @@ export function HibridWebGL() {
 
   return (
     <div className={styles.stage} ref={stageRef}>
-      {/* LCP elemanı + kalıcı yedek. WebGL aynı maskeyle üstüne çizilir.
-          Kaynak yalnızca 17KB; doğrudan public URL'si Next'in dinamik
-          optimizer yanıtını beklemeden parser tarafından keşfedilir. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={MASK_URL}
-        alt="HIBRID"
-        width={1920}
-        height={528}
-        loading="eager"
-        fetchPriority="high"
-        decoding="sync"
-        className={styles.fallback}
-      />
+      {/* Kalıcı yedek, aynı alfa maskesini CSS üzerinden çizer. Böylece
+          ilk kare HTML'deki büyük bir img/LCP adayına dönüşmez; erişilebilir
+          adı ise korunur. WebGL aynı geometriyle bunun üstüne gelir. */}
+      <span className={styles.fallback} role="img" aria-label="HIBRID" />
       {!reducedMotion && (
         <canvas
           ref={canvasRef}
