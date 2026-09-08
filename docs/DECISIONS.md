@@ -170,3 +170,17 @@ müşteri tarafından bildirildi.
 | Contact adresi | **AÇIK** — eski site (2020) ile deck (Ağu 2026) farklı adres veriyor | CURRENT_CONTENT_GAPS.md madde 4 |
 | Solutions giriş paragrafı | **AÇIK** — eski sayfada yoktu, müşteriden isteniyor | CURRENT_CONTENT_GAPS.md madde 19 |
 | `works.category` alanının anlamı | **AÇIK** — arayüzde artık kullanılmıyor; ne anlama geldiği netleşmeli | `supabase/migrations/20260829100050_extend_works_filter_facets.sql` |
+
+## 6 Eylül 2026 içerik dalgası — Work hero başlığı
+
+| # | Konu | Karar | Durum | Etki |
+|---|---|---|---|---|
+| 25 | Work sayfası hero başlığı | **THE ART OF TEAM WORK.** Eski başlık "RECENT" idi | KAPANDI | `work/page.tsx` H1'i sabit metin taşır. Marka sloganı olduğu için TR sayfada da İngilizce kalır (CLAUDE.md i18n kuralı: sloganlar marka dilidir). "Son İşler"/"Recent Work" artık h2 olarak arşiv listesinin başında. Öksüz kalan `messages/*.json` → `work.pageTitle` anahtarı kaldırıldı. Sözleşme testi: `e2e/canonical-routes.spec.ts` |
+
+**Metnin kaynağı hakkında not:** Bu başlık `97f42fa` ("feat: roll out
+content and Mona revisions") ile geldi ama brief-rev12.md dahil hiçbir
+dokümanda geçmiyordu; metnin müşteri revizyonu olduğu 8 Eylül 2026'da
+kullanıcı tarafından doğrulandı ve bu satırla kayda geçirildi. Benzer
+durumlarda metin doğrudan koda gömülmeden önce buraya yazılmalı —
+aksi halde tek kaynağı git history olur ve sözleşme testleri sessizce
+eskir.

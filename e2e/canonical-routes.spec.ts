@@ -139,13 +139,19 @@ test.describe("Eski yol yönlendirmeleri", () => {
 
 test.describe("İçerik ve düzen sözleşmeleri", () => {
   for (const locale of LOCALES) {
-    test(`/${locale}/work — RECENT başlığı ve üçlü filtre çubuğu`, async ({
+    test(`/${locale}/work — hero başlığı ve üçlü filtre çubuğu`, async ({
       page,
     }) => {
       await seedConsent(page);
       await page.goto(`/${locale}/work`, { waitUntil: "networkidle" });
 
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText("RECENT");
+      // Musteri revizyonu: hero basligi "RECENT" iken "THE ART OF TEAM WORK"
+      // oldu. Marka slogani oldugu icin TR sayfada da Ingilizce kalir
+      // (CLAUDE.md i18n kurali: sloganlar marka dilidir). Son isler listesi
+      // artik h2 "Son Isler"/"Recent Work" altinda duruyor.
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "THE ART OF TEAM WORK",
+      );
       const filters = page.getByRole("group", {
         name: locale === "tr" ? "Filtre" : "Filter",
       });
