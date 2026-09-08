@@ -89,6 +89,16 @@
   color: var(--color-brand-fuchsia);
   transform: scaleX(0.975);
   transform-origin: left center;
+  transition: opacity 220ms ease;
+}
+
+/* WebGL devreye girince yedek gizlenir -- ikisi ust uste gorunmez.
+   Yedek Arial Black ile cizilir, WebGL maskesi ise marka fontunu
+   kullanir; sekiller ortusmedigi icin gizlenmezse cift kontur olusur.
+   Opaklik degisimi layout kaydirmaz ve `live` ancak etkilesimden sonra
+   true oldugu icin LCP olcumu coktan bitmis olur. */
+.fallbackHidden {
+  opacity: 0;
 }
 
 .canvas {

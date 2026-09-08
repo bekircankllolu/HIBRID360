@@ -242,7 +242,11 @@ export function HibridWebGL() {
     <div className={styles.stage} ref={stageRef}>
       {/* İlk kare doğrudan metin olarak çizilir; görsel kaynağı ve çözme
           gecikmesi yoktur. WebGL, orijinal maskeyle bunun üstüne gelir. */}
-      <span className={styles.fallback} role="img" aria-label="HIBRID">
+      <span
+        className={`${styles.fallback} ${live ? styles.fallbackHidden : ""}`}
+        role="img"
+        aria-label="HIBRID"
+      >
         HIBRID
       </span>
       {!reducedMotion && (
