@@ -56,22 +56,17 @@ export function HibridWebGL() {
     }
 
     let active = true;
-    const enableScene = () => {
-      if (active) setSceneReady(true);
-    };
-    let cancelSchedule: () => void;
 
-    if (typeof window.requestIdleCallback === "function") {
-      const idleId = window.requestIdleCallback(enableScene, { timeout: 1500 });
-      cancelSchedule = () => window.cancelIdleCallback(idleId);
-    } else {
-      const timerId = window.setTimeout(enableScene, 0);
-      cancelSchedule = () => window.clearTimeout(timerId);
-    }
+    // İlk statik kare ve LCP tamamlandıktan sonra sahneyi kur. Idle callback
+    // ilk yüklemede gereğinden erken çalışıp shader kurulumunu boyamayla
+    // yarıştırabildiği için burada bilinçli bir alt süre kullanıyoruz.
+    const timerId = window.setTimeout(() => {
+      if (active) setSceneReady(true);
+    }, 3000);
 
     return () => {
       active = false;
-      cancelSchedule();
+      window.clearTimeout(timerId);
     };
   }, [reducedMotion]);
 

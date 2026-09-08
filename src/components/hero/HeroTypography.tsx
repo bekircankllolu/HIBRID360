@@ -163,8 +163,8 @@ export function HeroTypography() {
                 width={1600}
                 height={900}
                 alt={HOME_SHOWREEL.title[locale]}
-                loading="eager"
-                fetchPriority="high"
+                loading="lazy"
+                fetchPriority="low"
                 decoding="async"
               />
             )}
