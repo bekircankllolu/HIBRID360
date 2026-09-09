@@ -39,3 +39,53 @@ export const FOUNDER: Founder = {
   name: "ZÜHRE DİDEM GÖDEK",
   title: "PRESIDENT & CCO",
 };
+
+/**
+ * Ekip filmi (CUL-06) — kaydırmayla büyüyen dairesel video bölümü.
+ *
+ * GERÇEK FİLM TESLİM EDİLMEDİ. `CULTURE_FILM` bu yüzden `null`; sayfa bu
+ * durumda mevcut `EmptyState` ("Ekip filmi hazırlanıyor.") ile dürüst
+ * biçimde yayında kalır — sahte kişi, sahte video posteri veya sahte
+ * replik eklenmedi (CLAUDE.md: placeholder/lorem yasak).
+ *
+ * Varlık gelince tek değişiklik bu sabiti doldurmak:
+ *
+ *   export const CULTURE_FILM: CultureFilm | null = {
+ *     sources: [
+ *       { src: "/videos/meet-the-crew.webm", type: "video/webm; codecs=av01" },
+ *       { src: "/videos/meet-the-crew.mp4", type: "video/mp4" },
+ *     ],
+ *     poster: { src: "/images/site/culture/meet-the-crew-poster.webp",
+ *               width: 1920, height: 1920 },
+ *     alt: { tr: "…", en: "…" },
+ *     captions: [
+ *       { src: "/videos/meet-the-crew.tr.vtt", srcLang: "tr", label: "Türkçe" },
+ *       { src: "/videos/meet-the-crew.en.vtt", srcLang: "en", label: "English" },
+ *     ],
+ *   };
+ *
+ * Kurallar (CLAUDE.md): altyazı zorunlu (VTT, TR+EN) · otomatik ses yasak
+ * (sessiz başlar, native controls açık) · preload="none" + poster ·
+ * AV1/WebM + MP4. `poster` verilip `sources` boş bırakılırsa bölüm
+ * "kontrollü poster modunda" çalışır — daire ve wordmark animasyonu aynı,
+ * oynatma yok (BELIEF_FOUNDER_VIDEO ile aynı desen).
+ */
+export interface CultureFilmSource {
+  src: string;
+  type: string;
+}
+
+export interface CultureFilmCaption {
+  src: string;
+  srcLang: string;
+  label: string;
+}
+
+export interface CultureFilm {
+  sources: CultureFilmSource[];
+  poster: { src: string; width: number; height: number };
+  alt: Record<"tr" | "en", string>;
+  captions?: CultureFilmCaption[];
+}
+
+export const CULTURE_FILM: CultureFilm | null = null;
