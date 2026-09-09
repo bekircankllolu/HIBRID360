@@ -15,7 +15,7 @@ import styles from "@/styles/service-page.module.css";
  */
 
 const SERVICES = [
-  "EVENT ORGANIZATION",
+  "EVENT ORGANISATION",
   "CONVENTIONS – CONFERENCES",
   "CONCERTS",
   "GUERRILLA MARKETING",

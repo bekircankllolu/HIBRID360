@@ -32,7 +32,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "How a project runs here, what it costs, and how long it takes."
-        : "Bir projenin Hibrid 360'ta nasıl ilerlediği, bütçe yapısı ve üretim takvimi.",
+        : "Bir projenin Hibrid 360’ta nasıl ilerlediği, bütçe yapısı ve üretim takvimi.",
     alternates: localizedAlternates(locale, "/what-we-do/how-we-work"),
   };
 }

@@ -16,7 +16,9 @@ export async function generateMetadata({
   return {
     title: "Brief Builder",
     description:
-      "Six questions, about two minutes. You'll get the summary in your inbox — and so will we.",
+      locale === "en"
+        ? "Six questions, about two minutes. You’ll get the summary in your inbox, and so will we."
+        : "Altı soru, yaklaşık iki dakika. Özeti hem size hem bize göndereceğiz.",
     alternates: localizedAlternates(locale, "/brief"),
   };
 }

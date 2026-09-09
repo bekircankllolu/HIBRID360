@@ -24,11 +24,11 @@
   {
     "id": "q3",
     "question": {
-      "tr": "Klasik bir reklam ajansından veya Dijital Ajanslardan farkınız ne?",
+      "tr": "Klasik bir reklam ajansından veya dijital ajanslardan farkınız ne?",
       "en": "How are you different from a traditional advertising or digital agency?"
     },
     "text": {
-      "tr": "Ajans disipliniyle prodüksiyon kalitesini, teknoloji ve yapay zekâ destekli çevik çalışma biçimiyle birleştiriyoruz. Böylece fikir, onay, üretim ve uyarlama süreçleri daha entegre; uctan uca daha hızlı ve daha tutarlı ilerliyor.",
+      "tr": "Ajans disipliniyle prodüksiyon kalitesini, teknoloji ve yapay zekâ destekli çevik çalışma biçimiyle birleştiriyoruz. Böylece fikir, onay, üretim ve uyarlama süreçleri daha entegre; uçtan uca daha hızlı ve daha tutarlı ilerliyor.",
       "en": "We combine agency discipline and production quality with an agile, technology- and AI-powered way of working. This makes ideation, approvals, production and adaptation more connected, faster and more consistent from end to end."
     }
   },
@@ -50,7 +50,7 @@
       "en": "Will using AI make my brand lose its unique voice?"
     },
     "text": {
-      "tr": "Hayır; doğru sistem kurulduğunda tam tersine markanın sesini daha tutarlı hale getirir. Önce marka DNA’sını, hedef kitleyi, dili ve görsel dünyayı netleştiririz. Yapay zekâ bu çerçevenin içinde hız ve seçenek üretir; son sözü her zaman strateji ve yaratıcı değerlendirme söyler.",
+      "tr": "Hayır; doğru sistem kurulduğunda tam tersine markanın sesini daha tutarlı hâle getirir. Önce marka DNA’sını, hedef kitleyi, dili ve görsel dünyayı netleştiririz. Yapay zekâ bu çerçevenin içinde hız ve seçenek üretir; son sözü her zaman strateji ve yaratıcı değerlendirme söyler.",
       "en": "No. When the right system is in place, it makes your brand voice more consistent. We first define your brand DNA, audience, language and visual world. AI then creates speed and options within that framework; strategy and creative judgement always have the final say."
     }
   },
@@ -72,8 +72,8 @@
       "en": "Where do you start on a project?"
     },
     "text": {
-      "tr": "Önce “ne üretelim?”den önce “neyi değiştirmek istiyoruz?” sorusunu sorarız. Hedef, kitle, marka algısı, kanal ve başarı ölçütleri netleşir. Ardından yaratıcı yön, üretim planı ve yayın akışı birlikte şekillenir.",
-      "en": "Before asking “What should we make?”, we ask “What do we want to change?” We clarify the goal, audience, brand perception, channels and measures of success. Then the creative direction, production plan and publishing flow take shape together."
+      "tr": "“Ne üretelim?”den önce “neyi değiştirmek istiyoruz?” sorusunu sorarız. Hedef, kitle, marka algısı, kanal ve başarı ölçütleri netleşir. Ardından yaratıcı yön, üretim planı ve yayın akışı birlikte şekillenir.",
+      "en": "Before asking “What should we make?” we ask “What do we want to change?” We clarify the goal, audience, brand perception, channels and measures of success. Then the creative direction, production plan and publishing flow take shape together."
     }
   },
   {
@@ -127,7 +127,7 @@
       "en": "How do data and performance feed into the creative process?"
     },
     "text": {
-      "tr": "Veri, yaratıcılığın karşıtı değil; daha iyi sorular sormamızı sağlayan bir araçtır. Kitle davranışlarını, içerik performansını ve kanal içgörülerini izler; sonuçları bir sonraki fikrin, formatın ve dağıtım kararının parçası haline getiririz.",
+      "tr": "Veri, yaratıcılığın karşıtı değil; daha iyi sorular sormamızı sağlayan bir araçtır. Kitle davranışlarını, içerik performansını ve kanal içgörülerini izler; sonuçları bir sonraki fikrin, formatın ve dağıtım kararının parçası hâline getiririz.",
       "en": "Data is not the opposite of creativity; it helps us ask better questions. We track audience behaviour, content performance and channel insights, then make those findings part of the next idea, format and distribution decision."
     }
   },
@@ -189,23 +189,23 @@
   {
     "id": "q18",
     "question": {
-      "tr": "Mona kim?",
-      "en": "Who is Mona?"
+      "tr": "MONA kim?",
+      "en": "Who is MONA?"
     },
     "text": {
-      "tr": "Mona, Hibrid 360’ın dijital rehberi. Merak ettiklerinizi yalın biçimde yanıtlamak, doğru hizmete yönlendirmek ve ilk adımı kolaylaştırmak için burada. Bir sorunuz varsa Mona’ya sorun; birlikte en doğru yaratıcı rotayı bulalım.",
-      "en": "Mona is Hibrid 360’s digital guide. She is here to answer what you are curious about in a clear way, guide you to the right service and make the first step easier. Ask Mona a question and let’s find the right creative route together."
+      "tr": "MONA, Hibrid 360’ın dijital rehberi. Merak ettiklerinizi yalın biçimde yanıtlamak, doğru hizmete yönlendirmek ve ilk adımı kolaylaştırmak için burada. Bir sorunuz varsa MONA’ya sorun; birlikte en doğru yaratıcı rotayı bulalım.",
+      "en": "MONA is Hibrid 360’s digital guide. She is here to answer what you are curious about in a clear way, guide you to the right service and make the first step easier. Ask MONA a question and let’s find the right creative route together."
     }
   },
   {
     "id": "q19",
     "question": {
-      "tr": "Mona, sen tamamen yapay zekâ mısın?",
-      "en": "Mona, are you entirely AI?"
+      "tr": "MONA, tamamen yapay zekâ mısınız?",
+      "en": "MONA, are you entirely AI?"
     },
     "text": {
-      "tr": "Evet. Mona, Hibrid 360’ın web sitesinde ziyaretçilerin sorularını yanıtlamak, bilgiyi doğru başlığa yönlendirmek ve ilk keşif sürecini kolaylaştırmak üzere tasarlanmış yapay zekâ destekli dijital karakteridir. Mona’nın görevi karar vermek veya insan uzmanlığının yerini almak değil; Hibrid’in çalışma biçimini anlaşılır hale getirmek ve doğru insan uzmanına giden yolu hızlandırmaktır.",
-      "en": "Yes. Mona is an AI-powered digital character designed to answer visitors’ questions on Hibrid 360’s website, route information to the right topic and make the first discovery stage easier. Mona’s role is not to make decisions or replace human expertise; it is to make Hibrid’s way of working easy to understand and accelerate the path to the right human expert."
+      "tr": "Evet. MONA, Hibrid 360’ın web sitesinde ziyaretçilerin sorularını yanıtlamak, bilgiyi doğru başlığa yönlendirmek ve ilk keşif sürecini kolaylaştırmak üzere tasarlanmış yapay zekâ destekli dijital karakteridir. MONA’nın görevi karar vermek veya insan uzmanlığının yerini almak değil; Hibrid 360’ın çalışma biçimini anlaşılır hâle getirmek ve doğru insan uzmanına giden yolu hızlandırmaktır.",
+      "en": "Yes. MONA is an AI-powered digital character designed to answer visitors’ questions on Hibrid 360’s website, route information to the right topic and make the first discovery stage easier. MONA’s role is not to make decisions or replace human expertise; it is to make Hibrid 360’s way of working easy to understand and accelerate the path to the right human expert."
     }
   },
   {
@@ -215,7 +215,7 @@
       "en": "What is hybrid production?"
     },
     "text": {
-      "tr": "Hibrid prodüksiyon; canlı çekim, tasarım, CGI, motion, animation,yapay zekâ destekli görsel üretim ve dijital post-prodüksiyonun tek bir yaratıcı sistem içinde birlikte planlanmasıdır. Her işte tüm teknolojiler kullanılmaz; fikre, hedefe, marka kurallarına ve bütçeye en uygun üretim bileşimi seçilir.",
+      "tr": "Hibrid prodüksiyon; canlı çekim, tasarım, CGI, motion, animation, yapay zekâ destekli görsel üretim ve dijital post-prodüksiyonun tek bir yaratıcı sistem içinde birlikte planlanmasıdır. Her işte tüm teknolojiler kullanılmaz; fikre, hedefe, marka kurallarına ve bütçeye en uygun üretim bileşimi seçilir.",
       "en": "Hybrid production is the integrated planning of live-action filming, design, CGI, motion, animation, AI-assisted visual generation and digital post-production within one creative system. Not every technology is used in every project; we select the production mix that best suits the idea, objective, brand rules and budget."
     }
   },
@@ -226,7 +226,7 @@
       "en": "Where does AI make a practical contribution to production today?"
     },
     "text": {
-      "tr": "AI; ön görselleştirme, moodboard ve stil alternatifleri, storyboard prototipleri, mekan/ürün/atmosfer keşfi, içerik varyasyonları, farklı formatlara uyarlama, post-prodüksiyon destekleri ve hızlı test senaryolarında hız kazandırır. En güçlü etkisi, çekimden önce daha fazla yaratıcı seçeneği görünür kılması ve çekimden sonra ana varlığın daha verimli ölçeklenmesidir.",
+      "tr": "AI; ön görselleştirme, moodboard ve stil alternatifleri, storyboard prototipleri, mekân/ürün/atmosfer keşfi, içerik varyasyonları, farklı formatlara uyarlama, post-prodüksiyon destekleri ve hızlı test senaryolarında hız kazandırır. En güçlü etkisi, çekimden önce daha fazla yaratıcı seçeneği görünür kılması ve çekimden sonra ana varlığın daha verimli ölçeklenmesidir.",
       "en": "AI accelerates pre-visualisation, moodboards and style options, storyboard prototypes, location, product and atmosphere exploration, content variations, adaptation into different formats, post-production support and rapid testing scenarios. Its greatest impact is making more creative options visible before a shoot and scaling the core asset more efficiently afterwards."
     }
   },
@@ -238,7 +238,7 @@
     },
     "text": {
       "tr": "Bazı ihtiyaçlarda AI ile üretilen ya da zenginleştirilen görseller doğru çözüm olabilir; ancak insan performansı, gerçek ürün deneyimi, fiziksel doku, belgesel gerçeklik ve duygusal güven gereken birçok işte canlı çekim vazgeçilmezdir. Hibrid yaklaşım “AI mi, çekim mi?” ikilemini kurmaz; hangi katmanın hangi sonuca daha iyi hizmet ettiğini tasarlar.",
-      "en": "For some needs, AI-generated or AI-enhanced visuals may be the right solution. Yet live-action filming remains essential when human performance, real product experience, physical texture, documentary authenticity or emotional trust matter. The Hibrid approach does not frame the choice as “AI or shoot?”; it designs the mix that best serves the desired outcome."
+      "en": "For some needs, AI-generated or AI-enhanced visuals may be the right solution. Yet live-action filming remains essential when human performance, real product experience, physical texture, documentary authenticity or emotional trust matter. The Hibrid 360 approach does not frame the choice as “AI or shoot?” It designs the mix that best serves the desired outcome."
     }
   },
   {
@@ -270,8 +270,8 @@
       "en": "What is the human role in AI production?"
     },
     "text": {
-      "tr": "İnsan ekip; strateji, fikir, sanat yönetimi, anlatı, estetik seçim, etik kontrol, marka doğrulaması ve nihai kalite kararından sorumludur. AI hız ve seçenek üretir; ancak hangi seçeneğin markaya, kültüre ve hedefe doğru geldiğini deneyimli insan gözü belirler. Bu nedenle Hibrid’de AI, kreatif direktörün yerine geçmez; onun kapasitesini genişletir.",
-      "en": "The human team is responsible for strategy, ideas, art direction, storytelling, aesthetic selection, ethical review, brand validation and the final quality decision. AI creates speed and options, but an experienced human eye decides which option is right for the brand, culture and objective. At Hibrid, AI does not replace the creative director; it expands the creative director’s capacity."
+      "tr": "İnsan ekip; strateji, fikir, sanat yönetimi, anlatı, estetik seçim, etik kontrol, marka doğrulaması ve nihai kalite kararından sorumludur. AI hız ve seçenek üretir; ancak hangi seçeneğin markaya, kültüre ve hedefe doğru geldiğini deneyimli insan gözü belirler. Bu nedenle Hibrid 360’ta AI, kreatif direktörün yerine geçmez; onun kapasitesini genişletir.",
+      "en": "The human team is responsible for strategy, ideas, art direction, storytelling, aesthetic selection, ethical review, brand validation and the final quality decision. AI creates speed and options, but an experienced human eye decides which option is right for the brand, culture and objective. At Hibrid 360, AI does not replace the creative director; it expands the creative director’s capacity."
     }
   },
   {

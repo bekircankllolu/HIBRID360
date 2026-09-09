@@ -24,7 +24,7 @@ export async function generateMetadata({
   const hasPublishedPosts =
     fromDb.length > 0 || insightsPosts.some((post) => post.is_published);
   return {
-    title: "Insights",
+    title: "Think & Thank",
     description: t("heroSubtitle"),
     robots: hasPublishedPosts ? undefined : { index: false, follow: true },
     alternates: localizedAlternates(locale, "/insights"),

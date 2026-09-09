@@ -32,7 +32,7 @@ export const hibridSolutions: HibridSolutionLine[] = [
     tr: "İsterseniz canlı içerik; fabrikanızdan, satış noktalarınızdan veya genel merkezinizden uzaktan yayınla ve/veya stüdyo ortamında, kendi yönetmeni ve prodüksiyon ekibiyle yayınlanır.",
   },
   {
-    en: "We shoot promotional videos for events, products and training, corporate social media and factory facilities, and prepare 3D–2D animation, infographics, motion graphics, track motion and desktop videos.",
-    tr: "Etkinlik, ürün ve eğitim videoları, kurumsal sosyal medya ve fabrika tanıtım filmleri çekiyor; 3D–2D animasyon, infografik, motion graphic, track motion ve masaüstü videolar hazırlıyoruz.",
+    en: "We shoot promotional videos for events, products and training, corporate social media and factory facilities, and prepare 3D and 2D animation, infographics, motion graphics, track motion and desktop videos.",
+    tr: "Etkinlik, ürün ve eğitim videoları, kurumsal sosyal medya ve fabrika tanıtım filmleri çekiyor; 3D ve 2D animasyon, infografik, motion graphic, track motion ve masaüstü videolar hazırlıyoruz.",
   },
 ];

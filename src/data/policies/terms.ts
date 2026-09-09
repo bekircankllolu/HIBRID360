@@ -14,21 +14,22 @@ import type { LegalDoc } from "@/types/legal";
 
 export const termsOfUseTr: LegalDoc = {
   title: "KULLANIM KOŞULLARI",
-  subtitle: "HIBRID360 Platform, Web Deneyimi ve Genel Hizmet Kullanım Şartları",
+  subtitle: "Hibrid 360 Platform, Web Deneyimi ve Genel Hizmet Kullanım Şartları",
+  lastUpdated: "Son Güncelleme: Temmuz 2026",
   blocks: [
     { kind: "heading", text: "1. Taraflar ve Sözleşmenin Kabulü" },
     {
       kind: "paragraph",
-      text: 'Bu Kullanım Koşulları ("Koşullar"), www.hibrid360.com web sitesini, dijital platformları ve HIBRID360 tarafından sunulan hizmetleri kullanan tüm ziyaretçiler ve müşteriler için geçerlidir.',
+      text: "Bu Kullanım Koşulları (“Koşullar”), www.hibrid360.com web sitesini, dijital platformları ve Hibrid 360 tarafından sunulan hizmetleri kullanan tüm ziyaretçiler ve müşteriler için geçerlidir.",
     },
     {
       kind: "paragraph",
-      text: "Platformu ziyaret ederek veya HIBRID360 ile projelerde çalışarak bu Koşulları kabul etmiş sayılırsınız.",
+      text: "Platformu ziyaret ederek veya Hibrid 360 ile projelerde çalışarak bu Koşulları kabul etmiş sayılırsınız.",
     },
     { kind: "heading", text: "2. Hizmet Disiplinleri ve Kapsam" },
     {
       kind: "paragraph",
-      text: "HIBRID360 aşağıdaki 5 ana alanda yüksek standartlı hizmetler sunar:",
+      text: "Hibrid 360 aşağıdaki 5 ana alanda yüksek standartlı hizmetler sunar:",
     },
     {
       kind: "list",
@@ -43,7 +44,7 @@ export const termsOfUseTr: LegalDoc = {
     { kind: "heading", text: "3. Fikri ve Sınai Mülkiyet Hakları" },
     {
       kind: "paragraph",
-      text: "Platform Hakları: www.hibrid360.com üzerinde yer alan tüm kodlar, WebGL şablonları, 3D tasarımlar, arayüzler ve yazılımlar HIBRID360'ın mülkiyetindedir.",
+      text: "Platform Hakları: www.hibrid360.com üzerinde yer alan tüm kodlar, WebGL şablonları, 3D tasarımlar, arayüzler ve yazılımlar Hibrid 360’ın mülkiyetindedir.",
     },
     {
       kind: "paragraph",
@@ -51,14 +52,14 @@ export const termsOfUseTr: LegalDoc = {
     },
     {
       kind: "callout",
-      text: "Konsept Taslakları: Proje öncesi sunulan seçilmeyen kreatif konseptler ve yapay zekâ taslakları HIBRID360'a aittir.",
+      text: "Konsept Taslakları: Proje öncesi sunulan seçilmeyen kreatif konseptler ve yapay zekâ taslakları Hibrid 360’a aittir.",
     },
     { kind: "heading", text: "4. Kullanım Kuralları ve Yasaklar" },
     { kind: "paragraph", text: "Kullanıcılar aşağıdaki eylemleri gerçekleştiremezler:" },
     {
       kind: "list",
       items: [
-        "HIBRID360 araçlarını, WebGL kodlarını veya yapay zekâ sistemlerini tersine mühendislikle kopyalamak.",
+        "Hibrid 360 araçlarını, WebGL kodlarını veya yapay zekâ sistemlerini tersine mühendislikle kopyalamak.",
         "Hukuka aykırı, telif ihlali barındıran veya yanıltıcı materyalleri sisteme yüklemek.",
         "Otomatik veri çekme araçları (bot, scraper) kullanarak siteden veri toplamak.",
         "Sistem güvenliğini tehdit edecek siber saldırı veya sızma girişiminde bulunmak.",
@@ -67,15 +68,15 @@ export const termsOfUseTr: LegalDoc = {
     { kind: "heading", text: "5. Sorumluluğun Sınırlandırılması" },
     {
       kind: "paragraph",
-      text: "HIBRID360, platformun kesintisiz ve hatasız çalışması için makul özeni gösterir; ancak sunucu kesintileri veya 3. taraf altyapı aksaklıklarından kaynaklanan dolaylı zararlardan sorumlu tutulamaz.",
+      text: "Hibrid 360, platformun kesintisiz ve hatasız çalışması için makul özeni gösterir; ancak sunucu kesintileri veya 3. taraf altyapı aksaklıklarından kaynaklanan dolaylı zararlardan sorumlu tutulamaz.",
     },
     { kind: "heading", text: "6. Uygulanacak Hukuk ve Yetkili Mahkeme" },
     {
       kind: "paragraph",
-      text: "Bu Koşulların uygulanmasında Türkiye Cumhuriyeti Hukuku geçerlidir. Doğabilecek uyuşmazlıklarda İstanbul (Çağlayan) Mahkemeleri ve İcra Daireleri yetkilidir.",
+      text: "Bu Koşulların uygulanmasında Türkiye Cumhuriyeti hukuku geçerlidir. Doğabilecek uyuşmazlıklarda İstanbul (Çağlayan) Mahkemeleri ve İcra Daireleri yetkilidir.",
     },
     { kind: "heading", text: "7. İletişim" },
-    { kind: "paragraph", text: "HIBRID360 Hukuk Departmanı" },
+    { kind: "paragraph", text: "Hibrid 360 Hukuk Departmanı" },
     { kind: "paragraph", text: "E-posta: contact@hibrid360.com | zuhre@hibrid360.com" },
     { kind: "paragraph", text: "Web: www.hibrid360.com" },
   ],
@@ -83,21 +84,22 @@ export const termsOfUseTr: LegalDoc = {
 
 export const termsOfUseEn: LegalDoc = {
   title: "TERMS OF USE",
-  subtitle: "HIBRID360 Master Platform Conditions, Creative & Web Experience Usage Standards",
+  subtitle: "Hibrid 360 Master Platform Conditions, Creative & Web Experience Usage Standards",
+  lastUpdated: "Last Updated: July 2026",
   blocks: [
     { kind: "heading", text: "1. Binding Agreement & Acceptance" },
     {
       kind: "paragraph",
-      text: 'These Terms of Use ("Terms") constitute a legal agreement between you ("User", "Client", or "Visitor") and HIBRID360 regarding access to and use of our web platform (www.hibrid360.com), proprietary creative tools, interactive web experiences, and production services.',
+      text: "These Terms of Use (“Terms”) constitute a legal agreement between you (“User”, “Client”, or “Visitor”) and Hibrid 360 regarding access to and use of our web platform (www.hibrid360.com), proprietary creative tools, interactive web experiences, and production services.",
     },
     {
       kind: "paragraph",
-      text: "By navigating our platform or engaging HIBRID360 for Creative Production, AI Solutions, Brand Experience, Web Experience, or Film Production services, you agree to be bound by these Terms.",
+      text: "By navigating our platform or engaging Hibrid 360 for Creative Production, AI Solutions, Brand Experience, Web Experience, or Film Production services, you agree to be bound by these Terms.",
     },
     { kind: "heading", text: "2. Multi-Disciplinary Service Scope" },
     {
       kind: "paragraph",
-      text: "HIBRID360 operates an integrated studio structured around five core pillars:",
+      text: "Hibrid 360 operates an integrated studio structured around five core pillars:",
     },
     {
       kind: "list",
@@ -112,7 +114,7 @@ export const termsOfUseEn: LegalDoc = {
     { kind: "heading", text: "3. Intellectual Property Rights & Ownership" },
     {
       kind: "paragraph",
-      text: "HIBRID360 Platform IP: All interface elements, WebGL shaders, source code, 3D interactive models, brand marks, and custom AI tools contained within www.hibrid360.com remain the exclusive intellectual property of HIBRID360.",
+      text: "Hibrid 360 Platform IP: All interface elements, WebGL shaders, source code, 3D interactive models, brand marks, and custom AI tools contained within www.hibrid360.com remain the exclusive intellectual property of Hibrid 360.",
     },
     {
       kind: "paragraph",
@@ -120,12 +122,12 @@ export const termsOfUseEn: LegalDoc = {
     },
     {
       kind: "callout",
-      text: "Exploratory Pitch Material: Preliminary concepts, AI visual pitch decks, and unselected creative proposals remain the sole property of HIBRID360.",
+      text: "Exploratory Pitch Material: Preliminary concepts, AI visual pitch decks, and unselected creative proposals remain the sole property of Hibrid 360.",
     },
     { kind: "heading", text: "4. Prohibited Conduct & Platform Integrity" },
     {
       kind: "paragraph",
-      text: "When accessing or interacting with HIBRID360 digital assets, users agree not to:",
+      text: "When accessing or interacting with Hibrid 360 digital assets, users agree not to:",
     },
     {
       kind: "list",
@@ -139,11 +141,11 @@ export const termsOfUseEn: LegalDoc = {
     { kind: "heading", text: "5. Disclaimer of Warranties & Limitation of Liability" },
     {
       kind: "paragraph",
-      text: 'HIBRID360 digital platforms and interactive previews are provided "as is" and "as available". HIBRID360 makes no warranties regarding uninterrupted availability, zero latency in 3D WebGL rendering, or third-party API reliability.',
+      text: "Hibrid 360 digital platforms and interactive previews are provided “as is” and “as available”. Hibrid 360 makes no warranties regarding uninterrupted availability, zero latency in 3D WebGL rendering, or third-party API reliability.",
     },
     {
       kind: "paragraph",
-      text: "HIBRID360 shall not be liable for direct, indirect, incidental, or consequential damages resulting from platform downtime, network latency, or service interruptions.",
+      text: "Hibrid 360 shall not be liable for direct, indirect, incidental, or consequential damages resulting from platform downtime, network latency, or service interruptions.",
     },
     { kind: "heading", text: "6. Governing Law & Legal Forum" },
     {
@@ -155,7 +157,7 @@ export const termsOfUseEn: LegalDoc = {
       text: "Any dispute arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the Courts and Execution Offices of Istanbul, Türkiye.",
     },
     { kind: "heading", text: "7. Contact Information" },
-    { kind: "paragraph", text: "HIBRID360 Legal Department" },
+    { kind: "paragraph", text: "Hibrid 360 Legal Department" },
     { kind: "paragraph", text: "Email: contact@hibrid360.com | zuhre@hibrid360.com" },
     { kind: "paragraph", text: "Website: www.hibrid360.com" },
   ],

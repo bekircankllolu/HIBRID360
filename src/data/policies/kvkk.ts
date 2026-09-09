@@ -19,7 +19,7 @@ import type { LegalDoc } from "@/types/legal";
 
 export const kvkkNoticeTr: LegalDoc = {
   title: "KVKK AYDINLATMA METNİ",
-  subtitle: "6698 Sayılı Kişisel Verilerin Korunması Kanunu Madde 10 Uyarınca",
+  subtitle: "6698 sayılı Kişisel Verilerin Korunması Kanunu’nun 10. maddesi uyarınca",
   lastUpdated: "Son Güncelleme: Temmuz 2026",
   // Resmî şirket ünvanı A.Ş./Ltd. Şti. teslim edilmediği için marka adı
   // kullanılıyor; sayfa bu karar kapanana kadar noindex olarak yayınlanır.
@@ -29,12 +29,12 @@ export const kvkkNoticeTr: LegalDoc = {
     { kind: "heading", text: "1. Veri Sorumlusunun Kimliği" },
     {
       kind: "paragraph",
-      text: 'HIBRID360 ("Şirket" veya "Biz") olarak; Üst Düzey Kreatif Prodüksiyon, Yapay Zekâ (AI) Çözümleri, Marka Deneyimi Tasarımı, Web Deneyimi Mühendisliği ve Film Prodüksiyonu alanlarında entegre stüdyo hizmetleri sunmaktayız. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu\'nun ("KVKK") 10. maddesi uyarınca veri sorumlusu sıfatıyla hazırlanmıştır.',
+      text: "Hibrid 360 (“Şirket” veya “Biz”) olarak; Üst Düzey Kreatif Prodüksiyon, Yapay Zekâ (AI) Çözümleri, Marka Deneyimi Tasarımı, Web Deneyimi Mühendisliği ve Film Prodüksiyonu alanlarında entegre stüdyo hizmetleri sunmaktayız. Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVKK”) 10. maddesi uyarınca veri sorumlusu sıfatıyla hazırlanmıştır.",
     },
     { kind: "heading", text: "2. Kişisel Verilerin İşlenme Amaçları" },
     {
       kind: "paragraph",
-      text: "Kişisel verileriniz, KVKK'nın 5. ve 6. maddelerinde belirtilen hukuki sebeplere uygun olarak aşağıdaki amaçlarla işlenmektedir:",
+      text: "Kişisel verileriniz, KVKK’nın 5. ve 6. maddelerinde belirtilen hukuki sebeplere uygun olarak aşağıdaki amaçlarla işlenmektedir:",
     },
     {
       kind: "table",
@@ -42,7 +42,7 @@ export const kvkkNoticeTr: LegalDoc = {
       rows: [
         [
           "Teklif Hazırlama ve Sözleşme İfası",
-          "Kimlik, İletişim, Proje Brief'leri",
+          "Kimlik, İletişim, Proje Briefleri",
           "Sözleşmenin Kurulması/İfası (KVKK 5/2-c)",
         ],
         [
@@ -65,7 +65,7 @@ export const kvkkNoticeTr: LegalDoc = {
     { kind: "heading", text: "3. İşlenen Kişisel Verilerin Aktarıldığı Taraflar" },
     {
       kind: "paragraph",
-      text: "Veri aktarımları, KVKK'nın 8. ve 9. maddelerine uygun olarak akdedilen Veri İşleme Sözleşmeleri (DPA) kapsamında, kurumsal düzeyde güvenlik standartlarına sahip altyapı tedarikçileriyle (AWS, Google Cloud Platform, GA4) sınırlı olarak gerçekleştirilir.",
+      text: "Veri aktarımları, KVKK’nın 8. ve 9. maddelerine uygun olarak akdedilen Veri İşleme Sözleşmeleri (DPA) kapsamında, kurumsal düzeyde güvenlik standartlarına sahip altyapı tedarikçileriyle (AWS, Google Cloud Platform, GA4) sınırlı olarak gerçekleştirilir.",
     },
     { kind: "heading", text: "4. İlgili Kişinin Hakları (KVKK Madde 11)" },
     { kind: "paragraph", text: "KVKK madde 11 uyarınca veri sahipleri;" },
@@ -88,7 +88,7 @@ export const kvkkNoticeTr: LegalDoc = {
 export const kvkkNoticeEn: LegalDoc = {
   title: "KVKK DISCLOSURE NOTICE",
   subtitle: "Pursuant to Article 10 of Turkish Law No. 6698 on the Protection of Personal Data",
-  lastUpdated: "Effective Date: July 2026",
+  lastUpdated: "Last Updated: July 2026",
   // LEG-03 says only "GDPR Notice — English version of the same text" —
   // an instruction to translate, not literal copy. Faithful EN mirror of
   // the TR intro below; the legal entity name is still pending.
@@ -98,7 +98,7 @@ export const kvkkNoticeEn: LegalDoc = {
     { kind: "heading", text: "1. Identity of the Data Controller" },
     {
       kind: "paragraph",
-      text: 'At HIBRID360 ("we", "our", or "us"), we operate at the cutting edge of Creative Production, Artificial Intelligence (AI) Solutions, Brand Experience Design, Web Experience Engineering, and Film Production. This notice is prepared in our capacity as data controller under Article 10 of Turkish Law No. 6698 on the Protection of Personal Data ("KVKK").',
+      text: "At Hibrid 360 (“we”, “our”, or “us”), we operate at the cutting edge of Creative Production, Artificial Intelligence (AI) Solutions, Brand Experience Design, Web Experience Engineering, and Film Production. This notice is prepared in our capacity as data controller under Article 10 of Turkish Law No. 6698 on the Protection of Personal Data (“KVKK”).",
     },
     { kind: "heading", text: "2. Purposes of Processing" },
     {
@@ -137,7 +137,7 @@ export const kvkkNoticeEn: LegalDoc = {
       text: "Data transfers take place, to a limited extent, with vetted infrastructure providers (AWS, Google Cloud Platform, GA4) under legally binding Data Processing Agreements (DPAs), in accordance with Articles 8 and 9 of KVKK.",
     },
     { kind: "heading", text: "4. Your Rights as a Data Subject (KVKK Article 11)" },
-    { kind: "paragraph", text: "Under Article 11 of KVKK, data subjects have the right to:" },
+    { kind: "paragraph", text: "Under Article 11 of KVKK, data subjects have the following rights:" },
     {
       kind: "list",
       items: [

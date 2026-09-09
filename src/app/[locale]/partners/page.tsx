@@ -46,7 +46,7 @@ export default async function PartnersPage({
   const partners = [
     {
       id: "studio-room",
-      name: "STUDIO ROOM",
+      name: "STUDIO FOOD ROOM",
       body: t("partnerBody"),
       url: t("partnerUrl"),
     },
@@ -68,7 +68,7 @@ export default async function PartnersPage({
       />
 
       <h1 className={styles.heroTitle}>PARTNERS</h1>
-      <p className={styles.heroLead}>Love Is On The Air</p>
+      <p className={styles.heroLead}>Love Is on the Air</p>
 
       <section className={styles.section}>
         {/* TODO: PAR-02 [DOĞRULA] — David Ogilvy atfı teyit edilmeden

@@ -74,10 +74,11 @@
       "title": "EN İYİ İŞ, İŞ GİBİ HİSSETTİRMEZ",
       "subtitle": "Neyle meşgulüz, görmek ister misiniz?"
     },
-    "closingBody": "The future of creativity isn't artificial. It's hybrid."
+    "slogansLabel": "Sloganlar",
+    "closingBody": "The future of creativity isn’t artificial. It’s hybrid."
   },
   "insights": {
-    "heroEyebrow": "HIBRID 360 MAG",
+    "heroEyebrow": "Hibrid 360 Mag",
     "heroTitle": "THINK & THANK",
     "heroLead": "Fikirden etkiye.",
     "heroSubtitle": "Hibrid 360’ın çalışma alanlarını anlatan editoryal yazılar.",
@@ -106,8 +107,7 @@
       "contentFormat": "Format",
       "all": "Tümü"
     },
-    "ctaLead": "İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz; özellikle de AYNI FREKANSTA, aynı bakış açısındaysanız.",
-    "seoHeading": "HİBRİD 360: İDDİALI MARKALAR İÇİN KREATİF HİKÂYE ANLATICILIĞI",
+    "ctaLead": "Aynı frekanstaysak tanışalım.",
     "confidentialClient": "Gizli müşteri",
     "projectFallback": "Seçili iş",
     "case": {
@@ -355,13 +355,13 @@
         "Giderek daha çok şirket, “Cloudtivi” üzerinden çalışanlarına, bayi ağına ve kullanıcılarına doğrudan ulaşıyor. Bunu kendi mekânında, hibrit video içerikle ve profesyonel bir yönetmen ekibiyle yapılan canlı yayınlarla gerçekleştiriyor.",
         "Hibrid 360, sürükleyici bir TV kanalının yaptığı her şeyi ve daha fazlasını markanız adına yapar."
       ],
-      "solutionsTitle": "HIBRID ÇÖZÜMLERİ NELERDİR?"
+      "solutionsTitle": "<brand>Hibrid 360</brand> çözümleri nelerdir?"
     },
     "eventManagement": {
       "body": [
         "Hibrid 360 olarak ulusal ve uluslararası kurumsal müşterilerin etkinlik, toplantı ve lansman organizasyonlarına yaratıcı bir bakış ve yenilikçi fikirlerle hizmet veriyoruz.",
         "Farkı unutulmayan etkinliklerle yaratıyoruz.",
-        "Konsept projelerden saha aktivitelerine, roadshow’lardan test sürüşlerine; fuarlardan festivallere, şirket partilerinden açılışlara, ödül törenlerinden sosyal sorumluluk projelerine kadar sıra dışı bir hizmet yelpazesi sunuyoruz."
+        "Konsept projelerden saha aktivitelerine, roadshowlardan test sürüşlerine; fuarlardan festivallere, şirket partilerinden açılışlara, ödül törenlerinden sosyal sorumluluk projelerine kadar sıra dışı bir hizmet yelpazesi sunuyoruz."
       ]
     },
     "photography": {
@@ -408,10 +408,10 @@
   },
   "clients": {
     "heroTitle": "THANK YOU",
-    "heroSupport": "2004'ten beri bize inanan ve destekleyen herkese gönülden teşekkür ederiz.",
+    "heroSupport": "2004’ten beri bize inanan ve bizi destekleyen herkese gönülden teşekkür ederiz.",
     "heroBody": "Birlikte çalıştığımız markalarla dürüst, uzun soluklu ve cesur iş birlikleri kuruyoruz. Global ikonlar. Ortak yaratıcı enerji.",
     "friendsBody": "Birlikte çalıştığımız insanları seviyoruz. Ajansımızda onlara müşteri değil, dost diyoruz: en yakın çalışma arkadaşları arasında kurulabilecek kadar dürüst ve sadık bir kimya.",
-    "anniversaryAlt": "Hibrid 360'ın yirmi yılı aşan yolculuğunu kutlayan yıl dönümü görseli",
+    "anniversaryAlt": "Hibrid 360’ın yirmi yılı aşan yolculuğunu kutlayan yıl dönümü görseli",
     "index": {
       "label": "Marka dizini",
       "all": "Tümü",
@@ -431,7 +431,7 @@
     "budgetTitle": "Bütçe bandı",
     "pendingShort": "belirlenecek",
     "pendingHint": "Başlangıç bantları ve süreler netleştiğinde bu tablo güncellenecek.",
-    "cta": "Brief’ini oluştur",
+    "cta": "Briefinizi oluşturun",
     "table": {
       "format": "Format",
       "startingFrom": "Başlangıç",
@@ -447,9 +447,8 @@
     "headLabel": "MONA’nın ekranı",
     "mediaPending": "MONA’nın tüm replikleri ses kapalıyken de yazı olarak okunabilir.",
     "pointerHint": "İmleci hareket ettirin. MONA sizi izliyor.",
-    "eyebrow": "HIBRID 360 / MONA",
     "introTitle": "Birlikte düşünelim.",
-    "startHint": "Mona’yı uyandırın, imlecinizle yönlendirin ve merak ettiğiniz soruyu seçin.",
+    "startHint": "MONA’yı uyandırın, imlecinizle yönlendirin ve merak ettiğiniz soruyu seçin.",
     "start": "MONA’YI BAŞLAT",
     "standby": "BEKLİYOR",
     "online": "ÇEVRİM İÇİ",
@@ -459,7 +458,7 @@
     "screenReady": "BANA BİR ŞEY SOR",
     "questionsLabel": "MONA’YA SOR",
     "questionCount": "28 SORU / 2 KONU",
-    "generalQuestions": "HIBRID 360",
+    "generalQuestions": "Hibrid 360",
     "aiQuestions": "AI & HYBRID PRODUCTION",
     "mute": "Sesi kapat",
     "unmute": "Sesi aç",
@@ -475,10 +474,10 @@
     ],
     "diffTitle": "Hibrid 360 sadece bir video prodüksiyon şirketi mi?",
     "diffBody": "Hayır. Yüksek kaliteli prodüksiyon genlerimizde olsa da Hibrid 360 bir AI-Native Kreatif ve Prodüksiyon Stüdyosu olarak çalışır. Stratejiyi, markayı, tasarımı, dijital içeriği, fotoğrafı, sesi ve analitiği uçtan uca tek bir AI Kreatif İşletim Sistemi’nde birleştirerek hayal ile uygulama arasındaki mesafeyi kapatıyoruz. Yapay zekâyı yalnızca araç olarak kullanmıyor; kültürde iz bırakan, ölçeklenebilir ve teknolojiyle kurulmuş yaratıcı iş akışları inşa ediyoruz.",
-    "proofTitle": "NEDEN HİBRİD 360?",
+    "proofTitle": "Neden <brand>Hibrid 360</brand>?",
     "proofLead": "Fikirden etkiye: Daha hızlı · Daha akıllı · Daha esnek · Daha sürdürülebilir · Daha insan",
     "proofList": [
-      "10 kat hızlı prodüksiyon",
+      "10 kat daha hızlı prodüksiyon",
       "Daha çok yaratıcı seçenek",
       "Premium görsel kalite",
       "Global markalar için kurulmuş"
@@ -510,10 +509,10 @@
     "next": "İleri",
     "send": "Gönder",
     "sending": "Gönderiliyor…",
-    "sent": "Brief’in bize ulaştı.",
+    "sent": "Briefiniz bize ulaştı.",
     "summaryTitle": "Özet",
     "notAnswered": "—",
-    "consent": "KVKK aydınlatma metnini okudum, verilerimin teklif süreci için işlenmesine açık rıza veriyorum.",
+    "consent": "KVKK Aydınlatma Metni’ni okudum, verilerimin teklif süreci için işlenmesine açık rıza veriyorum.",
     "privacyNote": "Toplanan veri yalnızca teklif süreci için kullanılır.",
     "aiNote": "Bu özet yapay zekâ desteğiyle hazırlanır; teklifi insan yazar.",
     "budgetPending": "Bütçe bantları netleştiğinde bu listeye eklenecek.",
@@ -550,7 +549,7 @@
     "measurement": "Ölçüm — bu site sayfa görüntüleme başına yaklaşık {grams} g CO₂ salıyor; {tool} ile {date} tarihinde ölçüldü.",
     "measurementPending": "Ölçüm bekleniyor: sayfa başına gram CO₂, ölçüm aracı ve tarih.",
     "hostingPending": "Yeşil enerjiyle çalışan hosting sağlayıcısının adı bekleniyor.",
-    "offset": "Karbon denkleştirme — kalan salım {program} üzerinden denkleştirildi, sertifika no. {certificate}.",
+    "offset": "Karbon denkleştirme — kalan salım {program} üzerinden denkleştirildi, sertifika numarası: {certificate}.",
     "offsetPending": "Denkleştirme bekleniyor: program adı ve sertifika numarası.",
     "onSetPending": "Prodüksiyonda ulaşım, catering, atık ve ekipman uygulamaları yazılacak."
   },
@@ -576,7 +575,7 @@
     "soundOn": "Sesi aç",
     "soundOff": "Sesi kapat",
     "subtitles": "Altyazı",
-    "playShowreel": "Showreel’i oynat",
+    "playShowreel": "Showreeli oynat",
     "watchFilm": "Filmi izle",
     "aiGenerated": "AI ile üretilmiş temsili görseldir"
   },

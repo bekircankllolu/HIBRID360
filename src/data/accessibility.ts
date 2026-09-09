@@ -33,8 +33,8 @@ export const ACCESSIBILITY_FEEDBACK = {
  */
 export const knownLimitations: Array<{ tr: string; en: string }> = [
   {
-    en: "MONA's voice-over and VTT caption files have not been produced yet. Every line is available as full on-screen text, and no audio plays anywhere on the site.",
-    tr: "MONA'nın seslendirmesi ve VTT altyazı dosyaları henüz üretilmedi. Her replik ekranda tam metin olarak okunuyor ve sitede hiçbir yerde ses çalmıyor.",
+    en: "MONA’s voice-over and VTT caption files have not been produced yet. Every line is available as full on-screen text, and no audio plays anywhere on the site.",
+    tr: "MONA’nın seslendirmesi ve VTT altyazı dosyaları henüz üretilmedi. Her replik ekranda tam metin olarak okunuyor ve sitede hiçbir yerde ses çalmıyor.",
   },
   {
     en: "In the homepage ecosystem scene the service links orbit a decorative crystal. Motion pauses on hover or keyboard focus, and with reduced motion enabled the scene is fully static; the rings, starfield and crystal are decorative and hidden from screen readers.",
@@ -45,7 +45,7 @@ export const knownLimitations: Array<{ tr: string; en: string }> = [
     tr: "Video varlıkları henüz yayında değil. Her video yayına girmeden önce TR ve EN VTT altyazılarıyla birlikte gelecek; o zamana kadar bu iddia sitede doğrulanamaz.",
   },
   {
-    en: "Largest Contentful Paint on the homepage measures slightly above our 2.5 second mobile target in testing; work on the font loading path is ongoing.",
+    en: "Largest Contentful Paint on the homepage measures slightly above our 2.5-second mobile target in testing; work on the font loading path is ongoing.",
     tr: "Ana sayfada Largest Contentful Paint testlerde 2,5 saniyelik mobil hedefimizin bir miktar üzerinde ölçülüyor; font yükleme yolu üzerindeki çalışma sürüyor.",
   },
 ];

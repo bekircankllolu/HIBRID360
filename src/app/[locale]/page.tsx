@@ -43,7 +43,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: { absolute: "Hibrid 360 | AI-Native Creative Production Studio" },
+    title: { absolute: "Hibrid 360 | AI-native Creative Production Studio" },
     description:
       locale === "en"
         ? "Films, campaigns, live broadcast and AI production for global brands. Istanbul-based, 20+ years, one crew end to end."

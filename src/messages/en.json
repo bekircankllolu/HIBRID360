@@ -42,7 +42,7 @@
     "social": {
       "label": "Social"
     },
-    "copyright": "© 2026 Hibrid 360. All Rights Reserved.",
+    "copyright": "© 2026 Hibrid 360. All rights reserved.",
     "carbonNeutral": "🌱 Carbon neutral",
     "backToTop": "Back to top"
   },
@@ -56,9 +56,9 @@
     "lessTalk": {
       "title": "Less Talk, More Work",
       "paragraphs": [
-        "Hibrid 360 believes in proactive collaboration.\nThat is our way for a solution.\nThere is a reason our name has “360” in it.",
+        "Hibrid 360 believes in proactive collaboration.\nThat is our way to a solution.\nThere is a reason our name has “360” in it.",
         "360 does not merely imply strategic positioning, branding and design. It expresses everything we deliver: development, sourcing, manufacturing and launching. It is a truly holistic approach to building companies.",
-        "We love diving deep into your brand, past the figures and bottom lines, to re-think and re-shape your in-store experience while rebranding “your brand”."
+        "We love diving deep into your brand, past the figures and bottom lines, to rethink and reshape your in-store experience while rebranding “your brand”."
       ]
     },
     "makeBrand": "MAKE YOUR BRAND “THE” BRAND",
@@ -74,16 +74,17 @@
       "title": "THE BEST WORK DOESN’T FEEL LIKE WORK",
       "subtitle": "Wanna Know What Keeps Us Busy?"
     },
-    "closingBody": "The future of creativity isn't artificial. It's hybrid."
+    "slogansLabel": "Slogans",
+    "closingBody": "The future of creativity isn’t artificial. It’s hybrid."
   },
   "insights": {
-    "heroEyebrow": "HIBRID 360 MAG",
+    "heroEyebrow": "Hibrid 360 Mag",
     "heroTitle": "THINK & THANK",
     "heroLead": "From idea to impact.",
     "heroSubtitle": "Editorial articles exploring the fields Hibrid 360 works in.",
     "categoryLabel": "Category",
     "categoryAll": "All",
-    "articleCount": "{count} articles",
+    "articleCount": "{count, plural, one {# article} other {# articles}}",
     "articleInfo": "Article information",
     "readTime": "{minutes} min read",
     "backToIndex": "Back to Think & Thank",
@@ -106,8 +107,7 @@
       "contentFormat": "Format",
       "all": "All"
     },
-    "ctaLead": "If our work aligns with your frequency, we would love to meet you; especially if you are on the SAME FREQUENCY and share our mindset.",
-    "seoHeading": "AT HIBRID 360, CREATIVE STORYTELLING AGENCY SERVICES FOR AMBITIOUS BRANDS",
+    "ctaLead": "If our work aligns with your frequency, we would love to meet you — especially if you are on the SAME FREQUENCY and share our mindset.",
     "confidentialClient": "Confidential client",
     "projectFallback": "Selected work",
     "case": {
@@ -171,15 +171,15 @@
     "teams": [
       {
         "title": "TEAM 1",
-        "body": "Based in our actual office and manages operations. This place is our think tank: design is created here, and application strategies are performed by this team."
+        "body": "This team is based in our actual office and manages operations. This place is our think tank: design is created here, and application strategies are performed by this team."
       },
       {
         "title": "TEAM 2",
-        "body": "Comes into play when it is needed. This team does not report to the office on a daily basis, but jumps into action depending on project requirements. We have a perfect working relationship going back ten years, and they are all professionals in their respective fields."
+        "body": "This team comes into play when it is needed. It does not report to the office on a daily basis, but jumps into action depending on project requirements. We have a perfect working relationship going back ten years, and they are all professionals in their respective fields."
       },
       {
         "title": "TEAM 3",
-        "body": "Called into action for long-term and complex projects, allowing us to readily fulfil whatever technology and advertising needs may arise. The products and services we provide in collaboration with Team 3 are generally more exclusive and “boutique” in nature."
+        "body": "This team is called into action for long-term and complex projects, allowing us to readily fulfil whatever technology and advertising needs may arise. The products and services we provide in collaboration with Team 3 are generally more exclusive and “boutique” in nature."
       }
     ],
     "directions": "Get directions",
@@ -241,7 +241,7 @@
           "RIGHT TEAM — EXPERIENCED TEAM",
           "RIGHT TIMING — RELIABLE TIMING",
           "RIGHT QUALITY — UNCOMPROMISING QUALITY",
-          "RIGHT PRICE — COMPETITIVE PRICES",
+          "RIGHT PRICE — COMPETITIVE PRICE",
           "RIGHT SOLUTIONS — ALWAYS THE RIGHT SOLUTIONS"
         ]
       },
@@ -284,13 +284,13 @@
         "We clear a creative path for your brand.",
         "We pave creative shortcuts for brands stuck in traffic jams."
       ],
-      "band": "Your Brand’s DNA is the Ultimate AI Differentiator.",
+      "band": "Your Brand’s DNA Is the Ultimate AI Differentiator.",
       "galleryEmpty": "The campaign gallery is on the way."
     },
     "production": {
       "body": [
         "Hibrid 360 is an experienced all-around production and post-production agency that offers new-generation solutions with in-house capabilities for a plethora of sound, light and stage productions for your events.",
-        "With more than 20 years of experience in production, we work with in-house assets such as directors and camera crews, photographers, fiction and screenwriters, lighting crews, and specialists working with video editing software such as After Effects and Illustrator for light and colour correction, green screen effects and dubbing."
+        "With more than 20 years of experience in production, we work with in-house assets such as directors and camera crews, photographers, copywriters and screenwriters, lighting crews and specialists working with video editing software such as After Effects and Illustrator for light and colour correction, green screen effects and dubbing."
       ],
       "evidenceEmpty": "Verified figures and the work they belong to are on the way."
     },
@@ -300,7 +300,7 @@
         "Hibrid 360 also works with young YouTube-generation artists who are experienced in 3D architectural rendering, kinetic typography, character creation and AutoCAD animation.",
         "Not only do we provide crews and equipment for all desktop films, social media videos, factory promotional films, product videos, product launch concept videos and company meetings, but we are also experienced in offering hands-on design and construction services."
       ],
-      "microHeadingNote": "The second-to-last shot. Here, the work doesn’t stop there."
+      "microHeadingNote": "The second-to-last shot. But here, the work doesn’t stop."
     },
     "digital": {
       "body": [
@@ -310,9 +310,9 @@
       "bandBody": [
         "We build digital worlds people can move through.",
         "At Hibrid 360, digital is where strategy, design, storytelling and technology become an experience. It gives your brand a place to be explored, understood, trusted and remembered.",
-        "We build digital experiences for brands that need more than a polished interface. They need structure, movement, clarity, and a system that can guide people from first impression to meaningful action."
+        "We build digital experiences for brands that need more than a polished interface. They need structure, movement, clarity and a system that can guide people from first impression to meaningful action."
       ],
-      "closingBody": "From one-off content to always-on content systems, we build digital production around the speed, scale and behavior of modern audiences.",
+      "closingBody": "From one-off content to always-on content systems, we build digital production around the speed, scale and behaviour of modern audiences.",
       "quad": [
         {
           "title": "INNOVATION",
@@ -336,7 +336,7 @@
       "body": [
         "We offer a multitude of online professional live broadcast services for your brand or your company. We can stream your events live on your website and simultaneously on your social media accounts (Facebook, X, YouTube, Instagram, LinkedIn) to reach a wider audience.",
         "We provide support for your live broadcast needs in the form of a proactive live stream enhanced with software featuring polling, data collection and interactive Q&A modules.",
-        "We offer state-of-the-art webcasting using advanced equipment and a professional crew, from a single-camera shoot to multi-camera set-ups connected to a director’s desk.",
+        "We offer state-of-the-art webcasting using advanced equipment and a professional crew, from a single-camera shoot to multi-camera setups connected to a director’s desk.",
         "We also offer robotic live broadcasting that requires no camera crew on site.",
         "In addition to live streaming events such as conventions and webinars, we can broadcast from operating theatres in Türkiye or abroad and connect them live to a convention hall. We can expertly set up two-way audio and video infrastructure for medical broadcasts. Live surgical procedures, including laparoscopy and integrated streaming, are among the services we offer."
       ],
@@ -352,21 +352,21 @@
         "and provide training for operating the system, delivering a turnkey solution to your management while working alongside you as an operating partner if you choose."
       ],
       "bandBody": [
-        "More and more companies reach their employees, their dealership network and their users directly through “Cloudtivi”, with on-premise and hybrid video content and live broadcasts featuring a dedicated professional directing crew.",
+        "More and more companies reach their employees, their dealership network and their users directly through “Cloudtivi”, with on-site and hybrid video content and live broadcasts featuring a dedicated professional directing crew.",
         "Hibrid 360 does everything a riveting TV channel does, and more, on behalf of your brand."
       ],
-      "solutionsTitle": "WHAT ARE HIBRID SOLUTIONS?"
+      "solutionsTitle": "What are <brand>Hibrid 360</brand> solutions?"
     },
     "eventManagement": {
       "body": [
-        "Here at Hibrid 360, we provide services with a creative outlook and innovative ideas for the events, meetings and launch organisations of national and international corporate clients.",
+        "Here at Hibrid 360, we provide services with a creative outlook and innovative ideas for the events, meetings and launch programmes of national and international corporate clients.",
         "We make a difference through unforgettable events.",
         "We provide a plethora of out-of-the-ordinary services ranging from concept projects, field activities and roadshows to test drives; from exhibitions, festivals, company parties and opening events to award ceremonies and social responsibility projects."
       ]
     },
     "photography": {
       "body": [
-        "Product, food, portrait and campaign photography is shot in our own studios, styled by our team and retouched in-house.",
+        "Product, food, portrait and campaign photography is produced in our own studios, styled by our team and retouched in-house.",
         "One shoot day, one set, and the full set of assets your campaign needs: key visuals, packshots, social crops and behind-the-scenes."
       ]
     }
@@ -386,22 +386,22 @@
   },
   "solutions": {
     "heroTitle": "SOLUTIONS",
-    "heroKicker": "More And More",
+    "heroKicker": "More and More",
     "listTitle": "What we deliver",
     "items": [
       "Brand Consultancy",
       "Advertising",
-      "Printed",
-      "Packing",
+      "Print",
+      "Packaging",
       "Outdoor",
       "Website",
       "Logo",
       "Digital",
       "TVC",
       "Event",
-      "Photo Shooting",
+      "Photography",
       "Live Broadcast",
-      "Shooting",
+      "Film Production",
       "Post Production",
       "Cloud TV"
     ]
@@ -410,7 +410,7 @@
     "heroTitle": "THANK YOU",
     "heroSupport": "We extend heartfelt thanks to everyone who has believed in and supported us since 2004.",
     "heroBody": "We build honest, long-term and ambitious partnerships with the brands we work with. Global icons. Shared creative energy.",
-    "friendsBody": "We love the people we work with. At our agency we call them our friends, not clients: the kind of honest, loyal chemistry you only get with your closest collaborators.",
+    "friendsBody": "We love the people we work with. At our agency we call them our friends, not clients — the kind of honest, loyal chemistry you only get with your closest collaborators.",
     "anniversaryAlt": "Hibrid 360 anniversary artwork celebrating more than twenty years",
     "index": {
       "label": "Client index",
@@ -447,7 +447,6 @@
     "headLabel": "MONA’s screen",
     "mediaPending": "Every MONA line remains readable as text when sound is off.",
     "pointerHint": "Move your pointer. MONA is watching.",
-    "eyebrow": "HIBRID 360 / MONA",
     "introTitle": "Let’s think together.",
     "startHint": "Wake MONA, guide her with your pointer and choose whatever you want to ask.",
     "start": "START MONA",
@@ -459,7 +458,7 @@
     "screenReady": "ASK ME ANYTHING",
     "questionsLabel": "ASK MONA",
     "questionCount": "28 QUESTIONS / 2 TOPICS",
-    "generalQuestions": "HIBRID 360",
+    "generalQuestions": "Hibrid 360",
     "aiQuestions": "AI & HYBRID PRODUCTION",
     "mute": "Mute",
     "unmute": "Unmute",
@@ -475,7 +474,7 @@
     ],
     "diffTitle": "Is Hibrid 360 just a video production company?",
     "diffBody": "No. While high-end production is in our DNA, Hibrid 360 operates as an AI-Native Creative & Production Studio. By unifying strategy, branding, design, digital content, photography, audio and analytics into an end-to-end AI Creative Operating System, we bridge the gap between imagination and execution. We don’t just use AI as a tool. We build scalable, tech-driven creative workflows that leave a lasting mark on culture.",
-    "proofTitle": "WHY HIBRID 360?",
+    "proofTitle": "Why <brand>Hibrid 360</brand>?",
     "proofLead": "From idea to impact: Faster · Smarter · More Flexible · More Sustainable · More Human",
     "proofList": [
       "10x Faster Production",
@@ -493,7 +492,7 @@
     "closingBody": "Technology alone doesn’t create emotion. Stories do. Ideas do. People do. Technology is our tool. Creativity is our language. Emotion is our outcome.",
     "closingQuestion": "Ready to Create What’s Next?",
     "manifestoText": "We don’t replace creativity. We expand it.",
-    "bandText": "AI is Changing Production. We are Redefining It.",
+    "bandText": "AI Is Changing Production. We Are Redefining It.",
     "buildTitle": "What We Build",
     "buildList": [
       "AI Films",
@@ -525,7 +524,7 @@
     "errors": {
       "consent": "You must tick the KVKK consent box to continue.",
       "email": "Enter a valid email address.",
-      "unconfigured": "The form backend is not connected yet. In the meantime you can write to us directly: contact@hibrid360.com",
+      "unconfigured": "The form backend is not connected yet. In the meantime you can write to us directly: contact@hibrid360.com.",
       "error": "Something went wrong while sending. Please try again."
     }
   },
@@ -546,7 +545,7 @@
     "reductionTitle": "Reduction",
     "offsetTitle": "Offset",
     "onSetTitle": "On set",
-    "pendingEvidence": "A carbon neutral claim is not published without measurement and certificate data. This page and the footer badge go live once the sections below are complete.",
+    "pendingEvidence": "A carbon-neutral claim is not published without measurement and certificate data. This page and the footer badge go live once the sections below are complete.",
     "measurement": "Measurement — this site emits approximately {grams} g CO₂ per page view, measured with {tool} on {date}.",
     "measurementPending": "Awaiting measurement: grams of CO₂ per page view, tool name and date.",
     "hostingPending": "Awaiting the name of the green hosting provider.",
@@ -576,7 +575,7 @@
     "soundOn": "Sound on",
     "soundOff": "Sound off",
     "subtitles": "Subtitles",
-    "playShowreel": "Play showreel",
+    "playShowreel": "Play the showreel",
     "watchFilm": "Watch the film",
     "aiGenerated": "AI-generated representative visual"
   },
@@ -589,7 +588,7 @@
     "consent": "I have read and accept the Privacy Policy and the KVKK notice.",
     "send": "Send",
     "sending": "Sending…",
-    "success": "Thank you, we’ve got it. We reply within one working day.",
+    "success": "Thank you — we’ve got it. We reply within one working day.",
     "error": "Something didn’t go through. Please try again or write to contact@hibrid360.com.",
     "errorConsent": "You must tick the consent box to continue."
   },
@@ -597,7 +596,7 @@
     "title": {
       "contact": "Contact",
       "clients": "Clients",
-      "work": "Work",
+      "work": "Works",
       "solutions": "Solutions",
       "partners": "Partners",
       "whoWeAre": "Who We Are",

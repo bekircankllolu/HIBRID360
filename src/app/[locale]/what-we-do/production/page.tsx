@@ -20,7 +20,7 @@ import styles from "@/styles/service-page.module.css";
 
 const SERVICES = [
   "LIVE BROADCAST / STAGE DIRECTION",
-  "FILM – VIDEO",
+  "FILM / VIDEO",
   "SOCIAL MEDIA VIDEOS",
   "VIRAL VIDEOS",
   "TV COMMERCIALS",
@@ -29,7 +29,7 @@ const SERVICES = [
   "INDUSTRIAL FILMS",
   "INTRODUCTORY / LAUNCH VIDEOS",
   "DRONE CAMERA SERVICES",
-  "PHOTO SHOOTING",
+  "PHOTOGRAPHY",
 ];
 
 export async function generateMetadata({
