@@ -52,7 +52,7 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
   ).toBeVisible();
 
   await navigation.getByRole("link", { name: "Partners", exact: true }).hover();
-  await expect(mega.getByRole("link", { name: "STUDIO ROOM" })).toBeVisible();
+  await expect(mega.getByRole("link", { name: "Studio Food Room" })).toBeVisible();
   await expect(
     mega.getByRole("link", { name: "MARRY ME KITCHEN" }),
   ).toBeVisible();
@@ -134,10 +134,11 @@ test("homepage revision order, copy and footer details stay intact", async ({
     page.getByRole("link", { name: "Birlikte sıra dışı bir şey üretelim." }),
   ).toHaveCount(0);
 
+  // Kaynak metin "Hibrid 360" (tek marka yazımı); caps görünüm CSS'ten gelir.
   const headerLogo = page.locator("header").getByRole("link", {
-    name: "HIBRID 360",
+    name: "Hibrid 360",
   });
-  const footerLogo = page.locator("footer").getByText("HIBRID 360", {
+  const footerLogo = page.locator("footer").getByText("Hibrid 360", {
     exact: true,
   });
   expect(await footerLogo.evaluate((element) => getComputedStyle(element).fontSize)).toBe(
