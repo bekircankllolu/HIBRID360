@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { ContactMap } from "@/components/contact/ContactMap";
+import { ContactMapLoader } from "@/components/contact/ContactMapLoader";
 import {
   CONTACT,
   CONTACT_IMAGES,
@@ -218,7 +218,7 @@ export default async function ContactPage({
           {t("mapTitle")}
         </h2>
         <div className={styles.mapFrame}>
-          <ContactMap center={CONTACT_LOCATION} />
+          <ContactMapLoader center={CONTACT_LOCATION} />
         </div>
         <p className={styles.mapFallback}>
           <span>{t("mapNote")}</span>{" "}
