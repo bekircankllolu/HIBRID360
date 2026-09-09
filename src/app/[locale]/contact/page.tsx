@@ -7,8 +7,8 @@ import { ContactMap } from "@/components/contact/ContactMap";
 import {
   CONTACT,
   CONTACT_IMAGES,
+  CONTACT_LOCATION,
   directionsUrl,
-  mapEmbedUrl,
   telUrl,
   whatsappUrl,
 } from "@/data/contact";
@@ -208,25 +208,15 @@ export default async function ContactPage({
         </div>
       </section>
 
-      {/* 5 — tam genişlik harita. Müşteri revizyonu gereği Google Maps
-          iframe'i Contact sayfasıyla birlikte doğrudan yüklenir. */}
+      {/* 5 — tam genişlik harita. 9 Eylül 2026: CARTO/MapLibre vektör
+          haritasına geçildi (bkz. src/data/contact.ts karar notu),
+          sayfayla birlikte doğrudan yüklenir. */}
       <section className={styles.mapSection} aria-labelledby="contact-map">
         <h2 id="contact-map" className={styles.visuallyHidden}>
           {t("mapTitle")}
         </h2>
         <div className={styles.mapFrame}>
-          <ContactMap
-            className={styles.map}
-            src={mapEmbedUrl()}
-            title={t("mapTitle")}
-          />
-          {/* Google'ın varsayılan gri/bej paletini marka renklerine
-              (siyah + sarı) çeken dekoratif katman. iframe içeriği
-              üçüncü taraf olduğu için CSS'ten yeniden boyanamıyor;
-              filter .map'te karartıyor, bu katman mix-blend-mode:
-              color ile yalnızca aydınlık alanları (yollar, etiketler)
-              sarıya çekiyor, gerçek siyah kalan bölgeler etkilenmiyor. */}
-          <div className={styles.mapTint} aria-hidden="true" />
+          <ContactMap center={CONTACT_LOCATION} />
         </div>
         <p className={styles.mapFallback}>
           <span>{t("mapNote")}</span>{" "}

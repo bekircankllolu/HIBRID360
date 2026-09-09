@@ -1,0 +1,19 @@
+.map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Harita (canvas) yüklenene kadar siyah zemin — beyaz bir
+     dikdörtgen parlamasın. */
+  background: var(--color-brand-black);
+}
+
+/* MapLibre'nin varsayılan damla-şeklindeki iğnesi yerine referans
+   tasarımdaki (21st.dev/@mapcn) sade daire işaretçi. */
+.pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-brand-fuchsia);
+  border: 3px solid var(--color-brand-black);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55);
+}

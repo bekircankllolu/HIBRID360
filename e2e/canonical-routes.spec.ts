@@ -206,14 +206,19 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
       const mapSection = page.locator(
         'section[aria-labelledby="contact-map"]',
       );
-      const map = mapSection.locator("iframe");
 
-      // Müşteri revizyonu: ara yükleme ekranı yok, iframe doğrudan görünür.
-      await expect(map).toHaveCount(1);
+      // 9 Eylul 2026: Google Maps iframe'i CARTO/MapLibre vektor
+      // haritasina cevrildi (bkz. src/data/contact.ts karar notu).
+      // Musteri revizyonu geregi ara yukleme ekrani yok, harita
+      // dogrudan gorunur -- artik bir <canvas>, iframe degil.
+      const canvas = mapSection.locator("canvas");
+      await expect(canvas).toBeVisible({ timeout: 15000 });
 
-      const title = await map.getAttribute("title");
-      expect(title?.trim().length ?? 0).toBeGreaterThan(10);
-      await expect(map).toHaveAttribute("loading", "eager");
+      // CARTO/OpenStreetMap atif metni -- haritanin gercekten
+      // yuklendigini (bos bir kabuk olmadigini) dogrular.
+      await expect(mapSection.getByText("CARTO", { exact: false })).toBeVisible({
+        timeout: 15000,
+      });
 
       // Harita yüklenmese/engellense de adrese ulaşılabilmeli.
       const fallback = page.locator('a[href*="google.com/maps/dir"]');
