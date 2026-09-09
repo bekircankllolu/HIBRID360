@@ -3,9 +3,13 @@
  *
  * `--progress` (0→1) bileşen tarafından yazılır; ölçüler yalnızca bu
  * değişkenden türetilir (BeliefFounderVideo.module.css ile aynı desen).
- * Daire her zaman aynı kutuda durur — büyüyen şey layout değil,
- * `clip-path` yarıçapı; bu yüzden kaydırma boyunca reflow yok, yalnızca
- * GPU dostu bir clip animasyonu var.
+ *
+ * Medya **baştan** sahnenin tamamını kaplar (`inset: 0`); büyüyen tek şey
+ * `clip-path` yarıçapı. Bu yüzden kaydırma boyunca reflow yok — yalnızca
+ * GPU dostu bir maske animasyonu var — ve final karede video viewport'un
+ * köşelerine kadar uzanır. Önceki sürümde daire `min(60vmin, 32rem)`
+ * genişliğinde bir kutuya ve `%50` yarıçapa sıkışmıştı; yani asla tam
+ * ekran olamıyordu.
  */
 .wrapper {
   height: 220svh;
@@ -18,6 +22,12 @@
 
 .stage {
   --progress: 0;
+  /* Başlangıç yarıçapı: `rem` tabanı mobilde de görünür bir daire
+     garantiler (saf `vmin` dar ekranda birkaç piksellik noktaya iner).
+     Bitiş yarıçapı viewport yarım köşegeninden fazla — daire ~0.63–0.74
+     ilerlemede köşeleri kapatır ve final karede tam ekran "durur". */
+  --reveal-start: max(2.25rem, 5vmin);
+  --reveal-end: 75vmax;
   position: sticky;
   top: var(--header-height);
   height: calc(100svh - var(--header-height));
@@ -39,7 +49,7 @@
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
   text-transform: uppercase;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   font-size: clamp(3rem, 14vw, 10rem);
   line-height: 1;
   white-space: nowrap;
@@ -51,33 +61,37 @@
   user-select: none;
 }
 
+/* Sarı dolgu ilerlemenin ilk yarısında tamamlanır: ikinci yarıda daire
+   wordmark'ı zaten örtüyor, o aralıkta hâlâ dolmakta olan bir başlık
+   izleyiciye ulaşmaz. */
 .wordmark::after {
   content: attr(data-text);
   position: absolute;
   inset: 0;
   -webkit-text-stroke: 0;
   color: var(--color-brand-yellow);
-  opacity: var(--progress);
+  opacity: clamp(0, calc(var(--progress) * 2), 1);
 }
 
+/* Figür ve maske sahnenin tamamına yayılır; ikisi de layout'ta yer
+   kaplamaz, bu yüzden `.stage` yüksekliğini kendisi belirler. */
 .circleFigure {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
 }
 
 .circle {
-  width: min(60vmin, 32rem);
-  aspect-ratio: 1 / 1;
-  clip-path: circle(calc(6% + var(--progress) * 44%) at 50% 50%);
+  position: absolute;
+  inset: 0;
+  clip-path: circle(
+    calc(var(--reveal-start) + var(--progress) * var(--reveal-end)) at 50% 50%
+  );
   will-change: clip-path;
 }
 
-.video {
+.media {
   display: block;
   width: 100%;
   height: 100%;
@@ -85,48 +99,142 @@
   background: var(--color-brand-black);
 }
 
+/* CTA video üzerinde bağımsız overlay: alt orta, native kontrol
+   çubuğunun üstünde kalacak kadar yukarıda. */
 .cta {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: clamp(4rem, 11vh, 6rem);
   margin: 0;
+  padding: 0.5rem 0.25rem;
+  border: 0;
+  background: none;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: 0.9375rem;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--color-brand-yellow);
   text-align: center;
-  /* 0.7'den itibaren belirir — daire tam açılmadan metin gelmesin. */
-  opacity: clamp(0, calc((var(--progress) - 0.7) * 3.334), 1);
+  /* Metin kareyi kaplayan bir görüntünün üzerinde duruyor ve o karenin
+     ne kadar aydınlık olacağını bilmiyoruz; gölge, sarının parlak bir
+     poster üzerinde okunmaz hale gelmesini engelliyor
+     (ClosingBody/MakeBrandBand ile aynı çözüm). */
+  text-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.85);
+  /* Reveal tamamlanana kadar görünmez VE odaklanılamaz: `visibility`
+     `opacity`'nin aksine öğeyi tab sırasından da çıkarır, yani
+     görünmeyen bir butona odak düşmez (WCAG "odak görünür"). */
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 0.75rem);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.ctaRevealed {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+/* Oynatma başladı: branded CTA görevini tamamladı, native kontroller
+   devraldı. Odak `startPlayback` sonrası video öğesine taşınıyor. */
+.ctaStarted {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 0.75rem);
+}
+
+button.cta {
+  cursor: pointer;
+}
+
+button.cta:hover {
+  color: var(--color-brand-fuchsia);
+}
+
+button.cta:focus-visible {
+  outline: 2px solid var(--color-brand-fuchsia);
+  outline-offset: 4px;
+}
+
+/* Poster modu: tıklanacak bir şey yok — imleç ve hover yanıltmasın.
+   Görünürlük yine `.ctaRevealed`'a bağlı, bu yüzden burada opacity/
+   visibility YOK: yazılsa aynı özgüllükte ve daha sonra geldiği için
+   `.ctaRevealed`'ı ezip açıklamayı kalıcı olarak görünmez yapardı. */
+.ctaPassive {
+  cursor: default;
 }
 
 @media (max-width: 767px) {
   .wrapper {
     height: 170svh;
   }
-
-  .circle {
-    width: min(78vmin, 22rem);
-  }
 }
 
 /* CLAUDE.md zorunlu kuralı — hareket azaltmada sticky, büyüme ve wordmark
-   morph'u yok: daire tam açık, statik durur. */
+   morph'u yok: medya baştan tam açık, statik durur.
+   `min-height` şart: `.circleFigure` artık `position: absolute`, yani
+   sahneye yükseklik veremez; olmasa bölüm sıfır yükseklikte çökerdi.
+   `position: relative` de şart — mutlak konumlu medya sahneye göre
+   yerleşmeye devam etsin (`static` olsa gövdeye kaçardı). */
 .wrapperStatic {
   height: auto;
 }
 
 .wrapperStatic .stage {
-  position: static;
+  --progress: 1;
+  position: relative;
+  top: auto;
   height: auto;
-  padding: var(--space-12) 0;
+  min-height: min(70svh, 34rem);
+}
+
+.wrapperStatic .circle {
+  clip-path: none;
+  /* Animasyon yokken tam ekran bir compositing katmanı ayırtmanın anlamı
+     yok — sadece bellek harcar. */
+  will-change: auto;
+}
+
+.wrapperStatic .cta {
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* JS'ten önce de (ve JS hiç çalışmazsa da) aynı statik durum. */
   .wrapper {
     height: auto;
   }
 
   .stage {
-    position: static;
+    --progress: 1;
+    position: relative;
+    top: auto;
     height: auto;
-    padding: var(--space-12) 0;
+    min-height: min(70svh, 34rem);
+  }
+
+  .circle {
+    clip-path: none;
+    will-change: auto;
+  }
+
+  .cta {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: none;
+  }
+
+  .ctaStarted {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .wordmark {
+    transform: none;
   }
 }
