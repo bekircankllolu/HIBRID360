@@ -15,8 +15,8 @@ import type { LegalDoc } from "@/types/legal";
 
 export const cookiePolicyTr: LegalDoc = {
   title: "ÇEREZ POLİTİKASI",
-  subtitle: "HIBRID360 Web Deneyimi ve Dijital Takip Şeffaflık Metni",
-  lastUpdated: "Tarih: Temmuz 2026",
+  subtitle: "Hibrid 360 Web Deneyimi ve Dijital Takip Şeffaflık Metni",
+  lastUpdated: "Son Güncelleme: Temmuz 2026",
   // LEG-02 — nihai copy deck, Ağustos 2026.
   intro:
     "Az sayıda çerez kullanıyoruz: sitenin çalışması için zorunlu olanlar ve hangi sayfaların işe yaradığını gösterenler. İkinci grubu istediğiniz zaman kabul edebilir veya reddedebilirsiniz.",
@@ -24,7 +24,7 @@ export const cookiePolicyTr: LegalDoc = {
     { kind: "heading", text: "1. Genel Bilgilendirme" },
     {
       kind: "paragraph",
-      text: "Bu Çerez Politikası, HIBRID360 web platformunda (www.hibrid360.com) kullanılan çerezler (cookies) ve benzeri teknolojiler hakkında kullanıcıları bilgilendirmek amacıyla hazırlanmıştır.",
+      text: "Bu Çerez Politikası, Hibrid 360 web platformunda (www.hibrid360.com) kullanılan çerezler (cookies) ve benzeri teknolojiler hakkında kullanıcıları bilgilendirmek amacıyla hazırlanmıştır.",
     },
     {
       kind: "paragraph",
@@ -42,33 +42,37 @@ export const cookiePolicyTr: LegalDoc = {
         [
           "Zorunlu Çerezler",
           "Güvenlik, WebGL başlatma ve temel oturum yönetimi",
-          "Oturum Süresince",
+          "oturum süresince",
           "Hayır (Zorunlu)",
         ],
         [
           "Performans & Analiz",
           "Anonim ziyaretçi istatistikleri ve render hızı ölçümü",
-          "12 Ay",
+          "12 ay",
           "Evet",
         ],
         [
           "İşlevsel Çerezler",
           "Dil tercihi, 3D sahne ayarları ve ses tercihlerinin hatırlanması",
-          "6 - 12 Ay",
+          "6–12 ay",
           "Evet",
         ],
         [
           "Pazarlama Çerezleri",
           "Kampanya ve marka deneyimi performans ölçümü",
-          "6 Ay",
+          "6 ay",
           "Evet",
         ],
       ],
     },
-    { kind: "heading", text: "3. Google Haritalar İçeriği" },
+    { kind: "heading", text: "3. Harita İçeriği" },
     {
       kind: "paragraph",
-      text: "İletişim sayfasındaki Google Haritalar içeriği sayfa açıldığında Google sunucularından otomatik olarak yüklenir. Bu işlem sırasında IP adresi, tarayıcı ve cihaz bilgileri Google tarafından işlenebilir; Google'ın kendi gizlilik ve çerez koşulları geçerlidir. Ofis adresi ve bağımsız yol tarifi bağlantısı da haritanın altında sunulur.",
+      // 9 Eylul 2026: harita saglayicisi Google Haritalar'dan CARTO'nun
+      // acik vektor harita karolarina (OpenStreetMap verisiyle) gecti --
+      // bkz. src/data/contact.ts "Gomulu harita" karar notu. Google'a
+      // hicbir veri gonderilmiyor artik.
+      text: "İletişim sayfasındaki harita, sayfa açıldığında CARTO’nun harita karo sunucularından (OpenStreetMap verisiyle) otomatik olarak yüklenir. Bu işlem sırasında IP adresi, tarayıcı ve cihaz bilgileri CARTO tarafından işlenebilir; CARTO’nun kendi gizlilik koşulları geçerlidir. Ofis adresi ve bağımsız yol tarifi bağlantısı da haritanın altında sunulur.",
     },
     { kind: "heading", text: "4. Çerez Yönetimi ve Tercihler" },
     {
@@ -78,9 +82,9 @@ export const cookiePolicyTr: LegalDoc = {
     {
       kind: "list",
       items: [
-        "Google Chrome: Ayarlar -> Gizlilik ve Güvenlik -> Çerezler.",
-        "Apple Safari: Tercihler -> Gizlilik -> Çerezleri Engelleyin.",
-        "Mozilla Firefox: Seçenekler -> Gizlilik ve Güvenlik.",
+        "Google Chrome: Ayarlar → Gizlilik ve Güvenlik → Çerezler.",
+        "Apple Safari: Tercihler → Gizlilik → Çerezleri Engelleyin.",
+        "Mozilla Firefox: Seçenekler → Gizlilik ve Güvenlik.",
       ],
     },
     {
@@ -94,7 +98,7 @@ export const cookiePolicyTr: LegalDoc = {
 
 export const cookiePolicyEn: LegalDoc = {
   title: "COOKIE POLICY",
-  subtitle: "HIBRID360 Web Experience & Digital Tracking Transparency Framework",
+  subtitle: "Hibrid 360 Web Experience & Digital Tracking Transparency Framework",
   lastUpdated: "Last Updated: July 2026",
   // LEG-02 — final copy deck, August 2026.
   intro:
@@ -103,7 +107,7 @@ export const cookiePolicyEn: LegalDoc = {
     { kind: "heading", text: "1. Overview of Cookie Usage" },
     {
       kind: "paragraph",
-      text: "This Cookie Policy details how HIBRID360 uses cookies, local browser storage, and web beacons across our Web Experience platform (www.hibrid360.com).",
+      text: "This Cookie Policy details how Hibrid 360 uses cookies, local browser storage, and web beacons across our Web Experience platform (www.hibrid360.com).",
     },
     {
       kind: "paragraph",
@@ -121,25 +125,25 @@ export const cookiePolicyEn: LegalDoc = {
         [
           "Essential / Necessary",
           "Session authentication, WebGL hardware initialization, security tokens",
-          "Session / 30 Days",
+          "Session / 30 days",
           "Exempt (Strictly Necessary)",
         ],
         [
           "Performance & Analytics",
           "Anonymized visitor traffic metrics, frame-rate rendering diagnostics",
-          "12 Months",
+          "12 months",
           "Consent Required",
         ],
         [
           "Functional",
           "User language choice, 3D scene lighting preference, spatial audio settings",
-          "6 to 12 Months",
+          "6–12 months",
           "Consent Required",
         ],
         [
           "Marketing & Experience",
           "Campaign attribution for brand experience and film launch events",
-          "6 Months",
+          "6 months",
           "Consent Required",
         ],
       ],
@@ -149,10 +153,10 @@ export const cookiePolicyEn: LegalDoc = {
       kind: "paragraph",
       text: "To deliver high-performance 3D Web Experience applications without lag, our site runs hardware capability checks (GPU tier detection). These checks utilize temporary local session storage and do not link hardware profiles to individual user identities.",
     },
-    { kind: "heading", text: "4. Google Maps Content" },
+    { kind: "heading", text: "4. Map Content" },
     {
       kind: "paragraph",
-      text: "Google Maps content on the Contact page loads automatically from Google's servers when the page opens. Google may process the visitor's IP address, browser and device information under Google's own privacy and cookie terms. The office address and an independent directions link are also provided below the map.",
+      text: "The map on the Contact page loads automatically from CARTO’s map tile servers (using OpenStreetMap data) when the page opens. CARTO may process the visitor’s IP address, browser and device information under its own privacy terms. The office address and an independent directions link are also provided below the map.",
     },
     { kind: "heading", text: "5. Managing Cookies via Browser Settings" },
     {
@@ -162,9 +166,9 @@ export const cookiePolicyEn: LegalDoc = {
     {
       kind: "list",
       items: [
-        "Apple Safari: Preferences -> Privacy -> Block all cookies.",
-        "Google Chrome: Settings -> Privacy and security -> Cookies and other site data.",
-        "Mozilla Firefox: Options -> Privacy & Security -> Cookies and Site Data.",
+        "Apple Safari: Preferences → Privacy → Block all cookies.",
+        "Google Chrome: Settings → Privacy and security → Cookies and other site data.",
+        "Mozilla Firefox: Options → Privacy & Security → Cookies and Site Data.",
       ],
     },
     {
@@ -173,12 +177,12 @@ export const cookiePolicyEn: LegalDoc = {
     },
     {
       kind: "callout",
-      text: 'Preference Control: You can modify or revoke your cookie preferences at any time by clicking the "Cookie Settings" link in our website footer.',
+      text: "Preference Control: You can modify or revoke your cookie preferences at any time by clicking the “Cookie Settings” link in our website footer.",
     },
     { kind: "heading", text: "6. Contact & Updates" },
     {
       kind: "paragraph",
-      text: "For questions regarding our cookie practices, please email privacy@hibrid360.com.",
+      text: "For questions regarding our cookie practices, please email contact@hibrid360.com.",
     },
   ],
 };

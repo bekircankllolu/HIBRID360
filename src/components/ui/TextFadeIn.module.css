@@ -1,0 +1,27 @@
+.root {
+  display: block;
+}
+
+.unit {
+  display: inline-block;
+  opacity: 1;
+}
+
+.root[data-motion="on"] .unit {
+  opacity: 0;
+}
+
+.root[data-motion="on"][data-revealed="true"] .unit {
+  opacity: 1;
+  transition-property: opacity;
+  transition-duration: var(--text-fade-duration);
+  transition-timing-function: ease-out;
+  transition-delay: var(--text-fade-unit-delay);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-motion="on"] .unit {
+    opacity: 1;
+    transition: none;
+  }
+}

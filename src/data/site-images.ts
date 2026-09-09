@@ -55,7 +55,7 @@ export const siteImages = {
     ai: {
       src: "/images/site/think-and-thank/ai.webp",
       alt: {
-        tr: "Saydam katmanlar ve hareket çizgilerinden oluşan yapay zeka başı",
+        tr: "Saydam katmanlar ve hareket çizgilerinden oluşan yapay zekâ başı",
         en: "Artificial intelligence head formed from clear layers and motion lines",
       },
     },
@@ -72,8 +72,8 @@ export const siteImages = {
     statementStory: {
       src: "/images/site/think-and-thank/statement-your-story.webp",
       alt: {
-        tr: "Pembe zemin üzerinde kırmızı, krem ve mavi renklerle 'IT'S YOUR STORY. MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.' yazan kalp biçimli mücevher illüstrasyonu",
-        en: "Heart-shaped faceted gem illustration on a pink background reading 'IT'S YOUR STORY. MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.' in red, cream and blue",
+        tr: "Pembe zemin üzerinde kırmızı, krem ve mavi renklerle “IT’S YOUR STORY. MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.” yazan kalp biçimli mücevher illüstrasyonu",
+        en: "Heart-shaped faceted gem illustration on a pink background reading “IT’S YOUR STORY. MAKE IT MATTER. HYPE THE VIBE. AMPLIFY THE IMPACT.” in red, cream and blue",
       },
     },
     statementPure: {
@@ -86,8 +86,8 @@ export const siteImages = {
     statementImpact: {
       src: "/images/site/think-and-thank/statement-idea-to-impact.webp",
       alt: {
-        tr: "Siyah zemin üzerinde beyaz ve fuşya harflerle 'FROM IDEA TO IMPACT WE MAKE BRANDS MOVE' yazısı, IMPACT kelimesi fuşya renkte",
-        en: "White and fuchsia type reading 'FROM IDEA TO IMPACT WE MAKE BRANDS MOVE' on a black background, with IMPACT highlighted in fuchsia",
+        tr: "Siyah zemin üzerinde beyaz ve fuşya harflerle “FROM IDEA TO IMPACT WE MAKE BRANDS MOVE” yazısı, IMPACT kelimesi fuşya renkte",
+        en: "White and fuchsia type reading “FROM IDEA TO IMPACT WE MAKE BRANDS MOVE” on a black background, with IMPACT highlighted in fuchsia",
       },
     },
   },

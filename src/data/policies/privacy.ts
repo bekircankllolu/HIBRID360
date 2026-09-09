@@ -20,7 +20,7 @@ import type { LegalDoc } from "@/types/legal";
 export const privacyPolicyTr: LegalDoc = {
   title: "GİZLİLİK POLİTİKASI",
   subtitle:
-    "HIBRID360 Kreatif Prodüksiyon, Yapay Zekâ, Marka & Web Deneyimi, Film Prodüksiyon Uyum Standardı",
+    "Hibrid 360 Kreatif Prodüksiyon, Yapay Zekâ, Marka & Web Deneyimi, Film Prodüksiyon Uyum Standardı",
   lastUpdated: "Son Güncelleme: Temmuz 2026",
   // LEG-01 — nihai copy deck, Ağustos 2026.
   intro:
@@ -29,7 +29,7 @@ export const privacyPolicyTr: LegalDoc = {
     { kind: "heading", text: "1. Giriş ve Kurumsal Kapsam" },
     {
       kind: "paragraph",
-      text: "HIBRID360 (\"Şirket\" veya \"Biz\") olarak; Üst Düzey Kreatif Prodüksiyon, Yapay Zekâ (AI) Çözümleri, Marka Deneyimi Tasarımı, Web Deneyimi Mühendisliği ve Film Prodüksiyonu alanlarında entegre stüdyo hizmetleri sunmaktayız.",
+      text: "Hibrid 360 (“Şirket” veya “Biz”) olarak; Üst Düzey Kreatif Prodüksiyon, Yapay Zekâ (AI) Çözümleri, Marka Deneyimi Tasarımı, Web Deneyimi Mühendisliği ve Film Prodüksiyonu alanlarında entegre stüdyo hizmetleri sunmaktayız.",
     },
     {
       kind: "paragraph",
@@ -38,13 +38,13 @@ export const privacyPolicyTr: LegalDoc = {
     { kind: "heading", text: "2. Toplanan Kişisel Veri Kategorileri" },
     {
       kind: "paragraph",
-      text: "HIBRID360 ile olan etkileşim türünüze bağlı olarak işlenen kişisel veri kategorileri aşağıdadır:",
+      text: "Hibrid 360 ile olan etkileşim türünüze bağlı olarak işlenen kişisel veri kategorileri aşağıdadır:",
     },
     {
       kind: "list",
       items: [
         "Kimlik ve İletişim Verileri: Ad, soyad, kurumsal e-posta adresi, telefon numarası, şirket unvanı, görev ve coğrafi konum bilgisi.",
-        "Proje ve Kreatif İçerik Verileri: Proje brief'leri, senaryolar, marka görselleri, ham medya dosyaları, yapay zekâ metin komutları (prompt) ve teknik parametreler.",
+        "Proje ve Kreatif İçerik Verileri: Proje briefleri, senaryolar, marka görselleri, ham medya dosyaları, yapay zekâ metin komutları (prompt) ve teknik parametreler.",
         "Teknik ve Bağlantı Verileri: IP adresi, tarayıcı türü, işletim sistemi, cihaz kimlikleri, ekran çözünürlüğü ve web sitesi gezinti kayıtları.",
         "Yapay Zekâ Etkileşim Kayıtları: Platformumuz üzerindeki yapay zekâ destekli araçlar kullanılırken girilen komutlar, önizleme render kayıtları ve sistem logları.",
         "Çerez ve Deneyim Verileri: Oturum güvenlik çerezleri, tercih çerezleri ve gizlilik odaklı web analitik verileri.",
@@ -52,12 +52,12 @@ export const privacyPolicyTr: LegalDoc = {
     },
     {
       kind: "callout",
-      text: "Veri Güvenliği Taahhüdü: HIBRID360, müşterilerine ait verileri, kreatif materyalleri ve yapay zekâ model verilerini hiçbir koşulda üçüncü taraflara satmaz, kiralamaz veya ticari amaçla devretmez.",
+      text: "Veri Güvenliği Taahhüdü: Hibrid 360, müşterilerine ait verileri, kreatif materyalleri ve yapay zekâ model verilerini hiçbir koşulda üçüncü taraflara satmaz, kiralamaz veya ticari amaçla devretmez.",
     },
     { kind: "heading", text: "3. Veri İşleme Amaçları ve Hukuki Sebepler" },
     {
       kind: "paragraph",
-      text: "Kişisel verileriniz, KVKK'nın 5. ve 6. maddeleri ile GDPR'ın 6. maddesinde belirtilen hukuki sebeplere uygun olarak işlenmektedir:",
+      text: "Kişisel verileriniz, KVKK’nın 5. ve 6. maddeleri ile GDPR’ın 6. maddesinde belirtilen hukuki sebeplere uygun olarak işlenmektedir:",
     },
     {
       kind: "table",
@@ -65,7 +65,7 @@ export const privacyPolicyTr: LegalDoc = {
       rows: [
         [
           "Teklif Hazırlama ve Sözleşme İfası",
-          "Kimlik, İletişim, Proje Brief'leri",
+          "Kimlik, İletişim, Proje Briefleri",
           "Sözleşmenin Kurulması/İfası (KVKK 5/2-c)",
         ],
         [
@@ -88,7 +88,7 @@ export const privacyPolicyTr: LegalDoc = {
     { kind: "heading", text: "4. Yapay Zekâ Üretim Süreçleri ve Veri İzolasyonu" },
     {
       kind: "paragraph",
-      text: "HIBRID360; Film Prodüksiyonu, 3D Render ve Marka Deneyimi süreçlerinde gelişmiş Yapay Zekâ teknolojilerinden yararlanmaktadır.",
+      text: "Hibrid 360; Film Prodüksiyonu, 3D Render ve Marka Deneyimi süreçlerinde gelişmiş Yapay Zekâ teknolojilerinden yararlanmaktadır.",
     },
     {
       kind: "paragraph",
@@ -105,7 +105,7 @@ export const privacyPolicyTr: LegalDoc = {
     },
     {
       kind: "paragraph",
-      text: "Veri aktarımları, KVKK'nın 8. ve 9. maddelerine uygun olarak akdedilen Veri İşleme Sözleşmeleri (DPA) kapsamında gerçekleştirilir.",
+      text: "Veri aktarımları, KVKK’nın 8. ve 9. maddelerine uygun olarak akdedilen Veri İşleme Sözleşmeleri (DPA) kapsamında gerçekleştirilir.",
     },
     { kind: "heading", text: "6. Veri Güvenliği ve Saklama Süreleri" },
     {
@@ -132,7 +132,7 @@ export const privacyPolicyTr: LegalDoc = {
       text: "Haklarınızı kullanmak için taleplerinizi contact@hibrid360.com adresine iletebilirsiniz.",
     },
     { kind: "heading", text: "8. İletişim" },
-    { kind: "paragraph", text: "HIBRID360 Veri Gizliliği Departmanı" },
+    { kind: "paragraph", text: "Hibrid 360 Veri Gizliliği Departmanı" },
     { kind: "paragraph", text: "E-posta: contact@hibrid360.com | zuhre@hibrid360.com" },
     { kind: "paragraph", text: "Web: www.hibrid360.com" },
   ],
@@ -141,8 +141,8 @@ export const privacyPolicyTr: LegalDoc = {
 export const privacyPolicyEn: LegalDoc = {
   title: "PRIVACY POLICY",
   subtitle:
-    "HIBRID360 Creative Production, AI, Brand & Web Experience, Film Production — Governance Standard",
-  lastUpdated: "Effective Date: July 2026",
+    "Hibrid 360 Creative Production, AI, Brand & Web Experience, Film Production — Governance Standard",
+  lastUpdated: "Last Updated: July 2026",
   // LEG-01 — final copy deck, August 2026.
   intro:
     "This page explains what data we collect on hibrid360.com, why we collect it, how long we keep it, who we share it with, and how you can exercise your rights.",
@@ -150,16 +150,16 @@ export const privacyPolicyEn: LegalDoc = {
     { kind: "heading", text: "1. Introduction & Organizational Context" },
     {
       kind: "paragraph",
-      text: 'At HIBRID360 ("we", "our", or "us"), we operate at the cutting edge of Creative Production, Artificial Intelligence (AI) Solutions, Brand Experience Design, Web Experience Engineering, and Film Production.',
+      text: "At Hibrid 360 (“we”, “our”, or “us”), we operate at the cutting edge of Creative Production, Artificial Intelligence (AI) Solutions, Brand Experience Design, Web Experience Engineering, and Film Production.",
     },
     {
       kind: "paragraph",
-      text: "This Privacy Policy sets forth how HIBRID360 collects, processes, protects, and governs personal information across our website (www.hibrid360.com), interactive client portals, and creative production pipelines. Designed in accordance with global regulatory frameworks including the General Data Protection Regulation (GDPR - EU 2016/679) and Turkish Law No. 6698 on the Protection of Personal Data (KVKK), this document reflects our commitment to enterprise-grade governance, data minimization, and user autonomy.",
+      text: "This Privacy Policy sets forth how Hibrid 360 collects, processes, protects, and governs personal information across our website (www.hibrid360.com), interactive client portals, and creative production pipelines. Designed in accordance with global regulatory frameworks including the General Data Protection Regulation (GDPR — EU 2016/679) and Turkish Law No. 6698 on the Protection of Personal Data (KVKK), this document reflects our commitment to enterprise-grade governance, data minimization, and user autonomy.",
     },
     { kind: "heading", text: "2. Categories of Personal Data Collected" },
     {
       kind: "paragraph",
-      text: "Depending on your interaction with our platforms and creative workflows, HIBRID360 may process the following data categories:",
+      text: "Depending on your interaction with our platforms and creative workflows, Hibrid 360 may process the following data categories:",
     },
     {
       kind: "list",
@@ -173,12 +173,12 @@ export const privacyPolicyEn: LegalDoc = {
     },
     {
       kind: "callout",
-      text: "Data Integrity Guarantee: HIBRID360 will never sell, lease, or monetize client data, creative assets, or proprietary AI prompt structures to third parties under any circumstances.",
+      text: "Data Integrity Guarantee: Hibrid 360 will never sell, lease, or monetize client data, creative assets, or proprietary AI prompt structures to third parties under any circumstances.",
     },
     { kind: "heading", text: "3. Legal Grounds & Operational Processing Purposes" },
     {
       kind: "paragraph",
-      text: "HIBRID360 processes personal data strictly pursuant to recognized lawful processing grounds:",
+      text: "Hibrid 360 processes personal data strictly pursuant to recognized lawful processing grounds:",
     },
     {
       kind: "table",
@@ -209,7 +209,7 @@ export const privacyPolicyEn: LegalDoc = {
     { kind: "heading", text: "4. AI Pipeline Data Security & Model Isolation" },
     {
       kind: "paragraph",
-      text: "As a technology-integrated creative production studio, HIBRID360 utilizes state-of-the-art Generative AI, Computer Vision, and Synthetic Media workflows across Film, Brand, and Web Experience projects.",
+      text: "As a technology-integrated creative production studio, Hibrid 360 utilizes state-of-the-art Generative AI, Computer Vision, and Synthetic Media workflows across Film, Brand, and Web Experience projects.",
     },
     {
       kind: "paragraph",
@@ -222,7 +222,7 @@ export const privacyPolicyEn: LegalDoc = {
     { kind: "heading", text: "5. Sub-processors & Infrastructure Partners" },
     {
       kind: "paragraph",
-      text: "To maintain world-class web rendering performance, secure cloud rendering, and global service availability, HIBRID360 collaborates with vetted sub-processors:",
+      text: "To maintain world-class web rendering performance, secure cloud rendering, and global service availability, Hibrid 360 collaborates with vetted sub-processors:",
     },
     {
       kind: "paragraph",
@@ -231,7 +231,7 @@ export const privacyPolicyEn: LegalDoc = {
     { kind: "heading", text: "6. Security Safeguards & Retention Policies" },
     {
       kind: "paragraph",
-      text: "HIBRID360 employs technical and organizational security measures, including end-to-end TLS 1.3 encryption in transit, AES-256 encryption at rest, role-based access controls (RBAC), and continuous vulnerability scanning.",
+      text: "Hibrid 360 employs technical and organizational security measures, including end-to-end TLS 1.3 encryption in transit, AES-256 encryption at rest, role-based access controls (RBAC), and continuous vulnerability scanning.",
     },
     {
       kind: "paragraph",
@@ -253,10 +253,10 @@ export const privacyPolicyEn: LegalDoc = {
     },
     {
       kind: "paragraph",
-      text: "To exercise any of these rights, contact our Data Protection Officer at privacy@hibrid360.com.",
+      text: "To exercise any of these rights, contact our Data Protection Officer at contact@hibrid360.com.",
     },
     { kind: "heading", text: "8. Contact Information" },
-    { kind: "paragraph", text: "HIBRID360 Data Governance Office" },
+    { kind: "paragraph", text: "Hibrid 360 Data Governance Office" },
     { kind: "paragraph", text: "Email: contact@hibrid360.com | zuhre@hibrid360.com" },
     { kind: "paragraph", text: "Website: www.hibrid360.com" },
   ],

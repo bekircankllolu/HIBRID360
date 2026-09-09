@@ -1,7 +1,7 @@
 .stage { background: #000; color: #fff; letter-spacing: 0; }
 .experience { height: calc(100svh - 72px); min-height: 560px; max-height: 1100px; position: relative; overflow: hidden; scroll-margin-top: 72px; }
 .intro { position: absolute; top: 42px; left: 3%; z-index: 2; pointer-events: none; }
-.eyebrow { font-size: 11px; font-weight: 600; margin: 0 0 14px; }
+.eyebrow { font-size: 11px; font-weight: 600; margin: 0 0 14px; text-transform: uppercase; }
 .intro h1, .intro h2 { font-size: 58px; line-height: 1; color: #fff; margin: 0; font-weight: 800; letter-spacing: 0; }
 .intro h1 span, .intro h2 span { color: #fffc00; }
 .signature { margin-top: 22px; font-size: 12px; line-height: 1.5; color: #b7abbf; }
@@ -37,7 +37,7 @@
 .questionHeader h2 { font-size: 42px; line-height: 1.15; color: #151218; margin: 0; }
 .questionHeader p { font-size: 11px; font-weight: 600; margin: 0; }
 .questionGroups { display: grid; grid-template-columns: 1fr 1fr; gap: 7%; margin-top: 40px; }
-.questionGroups h3 { color: #151218; font-size: 13px; margin: 0 0 24px; }
+.questionGroups h3 { color: #151218; font-size: 13px; margin: 0 0 24px; text-transform: uppercase; }
 .questionGroups ul { list-style: none; padding: 0; margin: 0; }
 .questionGroups li { border-top: 1px solid #b9acc3; }
 .questionGroups li:last-child { border-bottom: 1px solid #b9acc3; }

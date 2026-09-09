@@ -790,8 +790,8 @@ export function SolarSystem() {
             interaction.current.crystalHover = false;
           }}
         />
-        <span className={styles.coreLabel} aria-hidden="true">
-          HIBRID 360
+        <span className={styles.coreLabel} aria-hidden="true" lang="en">
+          Hibrid 360
         </span>
         {orbitStones.map((stone, index) => (
           <div

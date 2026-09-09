@@ -66,15 +66,15 @@ export function isSustainabilityPublishable(
 export const reductionMeasures: Array<{ tr: string; en: string }> = [
   {
     en: "AVIF/WebP images with responsive srcset and lazy loading.",
-    tr: "AVIF/WebP görseller, responsive srcset ve lazy loading ile.",
+    tr: "AVIF/WebP görseller; responsive srcset ve lazy loading ile sunuluyor.",
   },
   {
     en: "Video on demand rather than autoplay: poster frame, preload=\"none\", loaded only when it enters the viewport.",
     tr: "Otomatik oynatma yerine talebe bağlı video: poster kare, preload=\"none\", yalnızca görünür alana girince yükleme.",
   },
   {
-    en: "No unused fonts or scripts; one variable font file per family, and the hero wordmark ships as a 17KB alpha mask instead of a font download.",
-    tr: "Kullanılmayan font ve script yok; aile başına tek değişken font dosyası, hero yazısı font indirmesi yerine 17KB'lık alfa maskesi olarak geliyor.",
+    en: "No unused fonts or scripts; one variable font file per family, and the hero wordmark ships as a 17 KB alpha mask instead of a font download.",
+    tr: "Kullanılmayan font ve script yok; aile başına tek değişken font dosyası, hero yazısı font indirmesi yerine 17 KB’lık alfa maskesi olarak geliyor.",
   },
   {
     en: "At most one WebGL scene runs at a time, and it stops as soon as it leaves the viewport.",

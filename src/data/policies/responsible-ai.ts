@@ -22,13 +22,13 @@ import type { LegalDoc } from "@/types/legal";
 
 export const responsibleAiPolicyTr: LegalDoc = {
   title: "SORUMLU YAPAY ZEKÂ POLİTİKASI",
-  subtitle: "HIBRID360 Etik Yapay Zekâ Üretim ve Yönetişim Çerçevesi",
-  lastUpdated: "Tarih: Temmuz 2026",
+  subtitle: "Hibrid 360 Etik Yapay Zekâ Üretim ve Yönetişim Çerçevesi",
+  lastUpdated: "Son Güncelleme: Temmuz 2026",
   blocks: [
     { kind: "heading", text: "1. Etik Vizyon ve Yönetişim" },
     {
       kind: "paragraph",
-      text: "HIBRID360, insan yaratıcılığı ile ileri yapay zekâ teknolojilerini birleştiren bir inovasyon stüdyosudur. Yapay zekâyı, insan sanatçıların yeteneklerini çoğaltan ve üretim standartlarını yükselten bir araç olarak kabul ediyoruz.",
+      text: "Hibrid 360, insan yaratıcılığı ile ileri yapay zekâ teknolojilerini birleştiren bir inovasyon stüdyosudur. Yapay zekâyı, insan sanatçıların yeteneklerini çoğaltan ve üretim standartlarını yükselten bir araç olarak kabul ediyoruz.",
     },
     {
       kind: "paragraph",
@@ -85,7 +85,7 @@ export const responsibleAiPolicyTr: LegalDoc = {
     },
     {
       kind: "paragraph",
-      text: "Dezenformasyon Yasağı: HIBRID360, kamuoyunu yanıltma, itibar zedeleme veya siyasi manipülasyon amaçlı deepfake üretimi kesinlikle yapmaz.",
+      text: "Dezenformasyon Yasağı: Hibrid 360, kamuoyunu yanıltma, itibar zedeleme veya siyasi manipülasyon amaçlı deepfake üretimi kesinlikle yapmaz.",
     },
     { kind: "heading", text: "5. Çevreye Duyarlı Yapay Zekâ" },
     {
@@ -106,13 +106,13 @@ export const responsibleAiPolicyTr: LegalDoc = {
 
 export const responsibleAiPolicyEn: LegalDoc = {
   title: "RESPONSIBLE AI POLICY",
-  subtitle: "HIBRID360 Ethical Artificial Intelligence Framework for Creative Production & Film",
-  lastUpdated: "Effective Date: July 2026",
+  subtitle: "Hibrid 360 Ethical Artificial Intelligence Framework for Creative Production & Film",
+  lastUpdated: "Last Updated: July 2026",
   blocks: [
     { kind: "heading", text: "1. Vision & Ethical Governance" },
     {
       kind: "paragraph",
-      text: "At HIBRID360, we pioneer the integration of human creative brilliance with advanced Artificial Intelligence. We believe AI should serve as an multiplier for human artistic vision, accelerating workflows while safeguarding intellectual property, human dignity, and ethical standards.",
+      text: "At Hibrid 360, we pioneer the integration of human creative brilliance with advanced Artificial Intelligence. We believe AI should serve as a multiplier for human artistic vision, accelerating workflows while safeguarding intellectual property, human dignity, and ethical standards.",
     },
     {
       kind: "paragraph",
@@ -155,7 +155,7 @@ export const responsibleAiPolicyEn: LegalDoc = {
       items: [
         "Ethical Model Selection: We utilize commercial foundation models trained on licensed, public domain, or ethically sourced training datasets.",
         "Client Asset Protection: Custom fine-tuned weights (LoRAs, ControlNets) created for specific brand campaigns are kept strictly isolated and remain exclusive to that client.",
-        "Anti-Scraping Stance: HIBRID360 does not engage in scraping living independent artists' works without consent.",
+        "Anti-Scraping Stance: Hibrid 360 does not engage in scraping living independent artists’ works without consent.",
       ],
     },
     {
@@ -169,17 +169,17 @@ export const responsibleAiPolicyEn: LegalDoc = {
     },
     {
       kind: "paragraph",
-      text: "Prohibition of Malicious Media: HIBRID360 strictly prohibits generating synthetic media intended for political manipulation, disinformation, defamation, or fraud.",
+      text: "Prohibition of Malicious Media: Hibrid 360 strictly prohibits generating synthetic media intended for political manipulation, disinformation, defamation, or fraud.",
     },
     { kind: "heading", text: "5. Environmental Sustainability in AI Computing" },
     {
       kind: "paragraph",
-      text: "Recognizing the energy intensity of high-resolution AI rendering and 3D generation, HIBRID360 partners with green cloud data centers powered by renewable energy and optimizes prompt engineering to reduce compute overhead.",
+      text: "Recognizing the energy intensity of high-resolution AI rendering and 3D generation, Hibrid 360 partners with green cloud data centers powered by renewable energy and optimizes prompt engineering to reduce compute overhead.",
     },
     { kind: "heading", text: "6. Governance & Ethics Oversight" },
     {
       kind: "paragraph",
-      text: "HIBRID360 maintains an internal AI Ethics Oversight Committee comprising Creative Directors, Lead Engineers, and Legal Counsel. For inquiries, contact ai-ethics@hibrid360.com.",
+      text: "Hibrid 360 maintains an internal AI Ethics Oversight Committee comprising Creative Directors, Lead Engineers, and Legal Counsel. For inquiries, contact contact@hibrid360.com.",
     },
   ],
 };

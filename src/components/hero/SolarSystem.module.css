@@ -129,6 +129,7 @@
   letter-spacing: 0;
   color: var(--color-brand-yellow);
   pointer-events: none;
+  text-transform: uppercase;
 }
 .point {
   position: absolute;

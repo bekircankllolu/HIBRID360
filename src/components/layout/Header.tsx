@@ -87,8 +87,8 @@ export function Header() {
       onBlur={closeDesktopMenuWhenFocusLeaves}
     >
       <div className={styles.inner}>
-        <Link href="/" className={styles.logo}>
-          HIBRID 360
+        <Link href="/" className={styles.logo} lang="en">
+          Hibrid 360
         </Link>
 
         <nav
@@ -175,7 +175,7 @@ export function Header() {
         onMouseEnter={() => activeMenu && setActiveMenuHref(activeMenu.href)}
       >
         <div className={styles.megaInner}>
-          <p className={styles.megaBrand}>HIBRID 360</p>
+          <p className={styles.megaBrand} lang="en">Hibrid 360</p>
           {activeMenu && (
             <div className={styles.megaColumnWide}>
               <Link href={activeMenu.href} className={styles.megaHeading}>

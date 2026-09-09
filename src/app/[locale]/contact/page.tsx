@@ -7,8 +7,8 @@ import { ContactMap } from "@/components/contact/ContactMap";
 import {
   CONTACT,
   CONTACT_IMAGES,
+  CONTACT_LOCATION,
   directionsUrl,
-  mapEmbedUrl,
   telUrl,
   whatsappUrl,
 } from "@/data/contact";
@@ -62,7 +62,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Tell us what you are making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
-        : "Ne üretmek istediğinizi ve zamanlamanızı anlatın. İstanbul, Kadıköy'de ya da 30 dakikalık çevrim içi görüşmede buluşalım.",
+        : "Ne üretmek istediğinizi ve zamanlamanızı anlatın. İstanbul, Kadıköy’de ya da 30 dakikalık çevrim içi görüşmede buluşalım.",
     alternates: localizedAlternates(locale, "/contact"),
   };
 }
@@ -147,7 +147,7 @@ export default async function ContactPage({
           (CLAUDE.md kontrast kuralı; beyaz metin AA geçmiyor). */}
       <section className={styles.yellowBand}>
         <p className={styles.yellowBandLead}>{t("heroLead2")}</p>
-        <p className={styles.yellowBandLabel}>E-MAIL US</p>
+        <p className={styles.yellowBandLabel}>EMAIL US</p>
         <a className={styles.yellowBandEmail} href={`mailto:${CONTACT.email}`}>
           {CONTACT.email}
         </a>
@@ -208,25 +208,15 @@ export default async function ContactPage({
         </div>
       </section>
 
-      {/* 5 — tam genişlik harita. Müşteri revizyonu gereği Google Maps
-          iframe'i Contact sayfasıyla birlikte doğrudan yüklenir. */}
+      {/* 5 — tam genişlik harita. 9 Eylül 2026: CARTO/MapLibre vektör
+          haritasına geçildi (bkz. src/data/contact.ts karar notu),
+          sayfayla birlikte doğrudan yüklenir. */}
       <section className={styles.mapSection} aria-labelledby="contact-map">
         <h2 id="contact-map" className={styles.visuallyHidden}>
           {t("mapTitle")}
         </h2>
         <div className={styles.mapFrame}>
-          <ContactMap
-            className={styles.map}
-            src={mapEmbedUrl()}
-            title={t("mapTitle")}
-          />
-          {/* Google'ın varsayılan gri/bej paletini marka renklerine
-              (siyah + sarı) çeken dekoratif katman. iframe içeriği
-              üçüncü taraf olduğu için CSS'ten yeniden boyanamıyor;
-              filter .map'te karartıyor, bu katman mix-blend-mode:
-              color ile yalnızca aydınlık alanları (yollar, etiketler)
-              sarıya çekiyor, gerçek siyah kalan bölgeler etkilenmiyor. */}
-          <div className={styles.mapTint} aria-hidden="true" />
+          <ContactMap center={CONTACT_LOCATION} />
         </div>
         <p className={styles.mapFallback}>
           <span>{t("mapNote")}</span>{" "}

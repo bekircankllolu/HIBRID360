@@ -9,6 +9,8 @@ import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import { EditorialImage } from "@/components/insights/EditorialImage";
 import { YouTubeLite } from "@/components/insights/YouTubeLite";
+import { KineticStatement } from "@/components/insights/KineticStatement";
+import { MorphingHeroTitle } from "@/components/insights/MorphingHeroTitle";
 import { siteImages } from "@/data/site-images";
 import styles from "./page.module.css";
 
@@ -57,31 +59,15 @@ export default async function ThinkAndThankPage({
           <span />
         </div>
         <div className={styles.heroInner}>
-          <p className={styles.heroEyebrow}>{t("heroEyebrow")} / 01</p>
-          <h1 className={styles.heroTitle}>
-            <span>THINK</span>
-            {" "}
-            <span>&amp; THANK</span>
-          </h1>
+          <p className={styles.heroEyebrow} lang="en">{t("heroEyebrow")} / 01</p>
+          <MorphingHeroTitle className={styles.heroTitle} />
           <div className={styles.heroCopy}>
             <p className={styles.heroLead}>{t("heroLead")}</p>
             <p className={styles.heroSubtitle}>{t("heroSubtitle")}</p>
           </div>
         </div>
       </header>
-      <section
-        className={styles.statementPure}
-        aria-label={locale === "tr" ? "Marka ifadesi" : "Brand statement"}
-      >
-        <div className={styles.statementVisualPure}>
-          <EditorialImage
-            src={siteImages.thinkAndThank.statementPure.src}
-            alt={siteImages.thinkAndThank.statementPure.alt[locale]}
-            sizes="(max-width: 760px) 74vw, 40vw"
-            ambient
-          />
-        </div>
-      </section>
+      <KineticStatement />
       <section className={styles.featuredVideo} aria-labelledby="featured-thinking-film">
         <div className={styles.featuredVideoCopy}>
           <p>WATCH / THINK / THANK</p>
@@ -118,7 +104,7 @@ export default async function ThinkAndThankPage({
         </div>
       </section>
       <div className={styles.content}>
-        <InsightsList posts={publishedPosts} locale={locale} />
+        <InsightsList posts={publishedPosts} locale={locale} animateTitles />
       </div>
     </div>
   );

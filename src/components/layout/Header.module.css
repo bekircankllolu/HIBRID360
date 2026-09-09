@@ -23,6 +23,8 @@
   line-height: 1;
   color: var(--color-brand-white);
   white-space: nowrap;
+  /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
+  text-transform: uppercase;
 }
 
 .nav {
@@ -162,6 +164,7 @@
   font-weight: var(--font-weight-brand);
   font-size: clamp(1.25rem, 1.8vw, 2rem);
   line-height: 1;
+  text-transform: uppercase;
 }
 
 .megaColumn,

@@ -138,7 +138,7 @@ export function ReachOut() {
             >
               <span aria-hidden="true" />
             </button>
-            <p className={styles.popupEyebrow}>HIBRID 360 / CONTACT</p>
+            <p className={styles.popupEyebrow} lang="en">Hibrid 360 / Contact</p>
             <div className={styles.popupVisual} aria-hidden="true">
               <Image
                 className={styles.illustration}

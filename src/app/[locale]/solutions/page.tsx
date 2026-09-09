@@ -43,7 +43,7 @@ export async function generateMetadata({
     title: t("title.solutions"),
     description:
       locale === "en"
-        ? "Brand consultancy, advertising, print, packaging, outdoor, web, digital, TVC, events, live broadcast, shooting, post production and Cloud TV."
+        ? "Brand consultancy, advertising, print, packaging, outdoor, web, digital, TVC, events, live broadcast, shooting, post-production and Cloud TV."
         : "Marka danışmanlığı, reklam, basılı işler, ambalaj, açık hava, web, dijital, TVC, etkinlik, canlı yayın, çekim, post prodüksiyon ve Cloud TV.",
     alternates: localizedAlternates(locale, "/solutions"),
   };

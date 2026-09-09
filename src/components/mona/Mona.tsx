@@ -87,7 +87,7 @@ export function Mona({ locale, lines, variant = "full" }: {
       data-started={started} data-state={machine.state} data-speaking={voice.speaking}>
       <div ref={trackingRef} className={styles.experience} data-testid="mona-experience">
         <header className={styles.intro}>
-          <p className={styles.eyebrow}>HIBRID 360 / AI</p>
+          <p className={styles.eyebrow} lang="en">Hibrid 360 / AI</p>
           <Heading id={titleId}>MONA<span>.</span></Heading>
           <p className={styles.signature}>HUMAN INSTINCT.<br />DIGITAL MIND.</p>
         </header>
@@ -139,7 +139,7 @@ export function Mona({ locale, lines, variant = "full" }: {
         <header className={styles.questionHeader}><h2>{t("questionsLabel")}</h2><p>{t("questionCount")}</p></header>
         <div className={styles.questionGroups}>
           {[monaQuestions.slice(0, 18), monaQuestions.slice(18)].map((group, groupIndex) => <section key={groupIndex}>
-            <h3>{t(groupIndex ? "aiQuestions" : "generalQuestions")}</h3>
+            <h3 lang="en">{t(groupIndex ? "aiQuestions" : "generalQuestions")}</h3>
             <ul>{group.map((item, index) => <li key={item.id}>
               <button type="button" aria-pressed={item.id === activeQuestionId} aria-controls={started ? answerId : undefined} onClick={() => selectQuestion(item)}>
                 <span className={styles.questionNumber}>{String(index + (groupIndex ? 19 : 1)).padStart(2, "0")}</span>

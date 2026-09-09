@@ -84,7 +84,7 @@ export default async function ThinkAndThankPostPage({
       <header className={styles.articleHeader}>
         <div className={styles.headerCopy}>
           <div className={styles.headerTopline}>
-            <span>HIBRID 360 MAG</span>
+            <span lang="en">Hibrid 360 Mag</span>
             {category && <span className={styles.category}>{category}</span>}
           </div>
           <h1>{title}</h1>

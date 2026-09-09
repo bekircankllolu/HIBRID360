@@ -68,8 +68,9 @@ describe("organizationJsonLd", () => {
   });
 
   it("organization açıklamasını locale'e göre üretir", () => {
-    expect(organizationJsonLd("tr").description).toContain("Türkiye'nin");
-    expect(organizationJsonLd("en").description).toContain("Türkiye's");
+    // Tipografik kesme (U+2019) — site geneli house style.
+    expect(organizationJsonLd("tr").description).toContain("Türkiye’nin");
+    expect(organizationJsonLd("en").description).toContain("Türkiye’s");
   });
 });
 
