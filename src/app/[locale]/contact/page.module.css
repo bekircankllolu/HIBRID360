@@ -329,43 +329,17 @@
 
 .mapFrame {
   position: relative;
-  /* Yukseklik burada tanimlanmiyor -- .map'in (iframe, normal akista
-     block) yuksekligine gore otomatik buyur. .mapTint bu wrapper'i
-     inset:0 ile doldurur, boylece asagidaki media query'deki masaustu
-     yukseklik degisimini ayrica tekrarlamaya gerek kalmaz. */
-}
-
-.map {
-  display: block;
   width: 100%;
   /* Şart: en az 70svh. Masaüstünde başlık yüksekliği düşülmüş tam
-     görüntü alanı. */
+     görüntü alanı. ContactMap (MapLibre canvas) bu kutuyu height:100%
+     ile dolduruyor -- <iframe> gibi kendi icerigine gore otomatik
+     boyutlanmiyor, o yuzden yukseklik burada, gercek bir kutuda
+     tanimlanmali. */
   height: 70svh;
-  border: 0;
-  /* Harita yüklenene kadar (lazy) siyah zemin — beyaz bir dikdörtgen
-     parlamasın. */
-  background: var(--color-brand-black);
-  /* Google'in varsayilan acik gri/bej paletini koyulastirir; tam
-     marka sarisi .mapTint katmanindan gelir (asagida). Degerler
-     gercek harita uzerinde gorsel olarak olculdu -- arka plan siyaha
-     yakin kalirken sokak etiketleri okunur kaliyor. */
-  filter: invert(90%) hue-rotate(180deg) brightness(0.78) contrast(1.15) saturate(0.55);
-}
-
-.mapTint {
-  position: absolute;
-  inset: 0;
-  background: var(--color-brand-yellow);
-  /* color: temel katmanin parlakligini korur, yalnizca ton/doygunlugu
-     sarıya cevirir -- gercek siyah kalan bolgeler (dusuk parlaklik)
-     siyah kalir, yollar/etiketler gibi acik alanlar sariya boyanir. */
-  mix-blend-mode: color;
-  opacity: 0.9;
-  pointer-events: none;
 }
 
 @media (min-width: 900px) {
-  .map {
+  .mapFrame {
     height: calc(100svh - var(--header-height));
   }
 }

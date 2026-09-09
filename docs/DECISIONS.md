@@ -228,39 +228,92 @@ zemin, `--color-text-on-yellow`); "IT'S YOUR STORY..." kaldırıldı.
 Üçü de (story, pure, impact) `site-images.ts`'te ve diskte duruyor,
 hiçbiri silinmedi.
 
-## 9 Eylül 2026 — Contact haritası marka renklerine boyandı
+## 9 Eylül 2026 — Contact haritası: CSS boyamadan gerçek vektör haritaya
 
-Kullanıcı isteği: Google Maps'in varsayılan açık gri/bej paletini
-"sarı-siyah-koyu gri, cool" bir temaya çekmek, site renkleriyle uyumlu
-olacak şekilde.
+**1. tur (aynı gün, geçersiz):** Kullanıcı isteği Google Maps'in
+varsayılan açık gri/bej paletini "sarı-siyah-koyu gri, cool" bir
+temaya çekmekti. CSS `filter` + `mix-blend-mode: color` katmanıyla
+Google iframe'i koyulaştırıp sarıya boyayan bir çözüm uygulandı
+(bkz. git geçmişi, commit b9f008b) — anahtar/bağımlılık gerektirmediği
+için o an için doğru varsayılan seçildi.
+
+**2. tur (aynı gün, kalıcı):** Kullanıcı gerçek bir referans verdi
+(21st.dev/@mapcn/components/mapcn-marker-tooltip — MapLibre GL +
+CARTO'nun ücretsiz "dark-matter" vektör stili) ve "yollar sarı olacak"
+dedi. CSS filtre/blend yaklaşımı bunu **gerçekten** karşılayamıyordu:
+Google'ın iframe içeriği üçüncü taraf, gerçek yol RENGİ (yalnızca
+parlaklık/ton değil) CSS'ten kontrol edilemiyor — üstelik o zeminde
+yollar zaten mavi-gri tondaydı, filtre onları sarıya çeviremiyordu,
+sadece koyulaştırabiliyordu. Gerçek renk kontrolü ancak vektör-karo
+render motoruyla mümkün.
 
 | # | Konu | Karar | Durum | Etki |
 |---|---|---|---|---|
-| 29 | Contact haritası koyu tema | CSS `filter` + `mix-blend-mode: color` katmanıyla harita marka renklerine (siyah zemin, sarı yollar/etiketler) boyandı | KAPANDI | `ContactMap.tsx` (wrapper eklendi) · `contact/page.module.css` (`.mapFrame`, `.map` filter, `.mapTint`) |
+| 29 | Contact haritası sağlayıcısı | Google Maps sorgu gömmesi → **MapLibre GL JS + CARTO'nun anahtarsız "dark-matter" vektör karoları**. Madde 168'deki "Harita sağlayıcısı" kararı bu maddeyle **AÇILDI ve GÜNCELLENDİ** | KAPANDI | Yeni bağımlılık: `maplibre-gl` (~270KB, ölçüldü — bkz. not). `ContactMap.tsx` tamamen yeniden yazıldı (iframe → MapLibre `Map` + `Marker`). `contact.ts`: `mapEmbedUrl()` kaldırıldı, `CONTACT_LOCATION` (lat/lng) eklendi |
 
-**Neden JS Maps API / Mapbox değil:** Madde 168'deki "Harita sağlayıcısı"
-kararı hâlâ geçerli — anahtarsız Google sorgu gömmesi korunuyor.
-Google'ın gerçek `styles` JSON'uyla (JS Maps API) boyama, anahtar +
-faturalandırma hesabı gerektirir; Mapbox GL ek JS ağırlığıyla
-performans bütçesini zorlar (ikisi de o kararda zaten elenmişti).
-Bu yüzden CSS-only bir çözüm seçildi: iframe'e karartan bir `filter`
-uygulanıyor, üstüne `mix-blend-mode: color` ile saf marka sarısı
-(`--color-brand-yellow`) bindiriliyor — bu blend modu yalnızca temel
-katmanın PARLAKLIĞINI koruyup tonunu değiştirdiği için gerçek siyaha
-yakın bölgeler siyah kalıyor, yollar/etiketler gibi açık alanlar
-sarıya boyanıyor. Ek bağımlılık yok, anahtar yok, koordinat
-uydurulmadı — madde 168'in üç şartı da korundu.
+**Neden bu, madde 168'in itirazlarını ihlal etmiyor:**
+- **Anahtar yok:** CARTO'nun temel haritası (`tiles.basemaps.cartocdn.com`)
+  anahtarsız, atıflı kullanım için herkese açık. Google Maps JS API'nin
+  `styles` ile boyama seçeneği anahtar+faturalandırma isterdi — o hâlâ
+  elenmiş durumda.
+- **Mapbox'a bağımlılık yok:** MapLibre GL JS, Mapbox GL'in anahtar/lisans
+  gerektirmeyen açık kaynak çatalı. "Mapbox GL" adıyla madde 168'de
+  elenen proprietary kütüphaneye hiç dokunulmadı.
+- **Performans bütçesi itirazı GEÇERSİZ KILINMADI, ödendi:** Madde
+  168'in "ek JS ağırlığı performans bütçesini zorlar" tespiti hâlâ
+  doğru — MapLibre gerçek bir bağımlılık. Bu artık kabul edilen bir
+  bedel, yok sayılan bir risk değil. Ölçüldü: `/contact` sayfası
+  269KB kendi + 383KB toplam First Load JS (önceki: yalnızca paylaşılan
+  ~103KB). Sitenin "ilk yükleme < 2MB" bütçesinin çok altında kalıyor
+  ama en ağır sayfa bu oldu.
+- **Koordinat uydurulmadı:** Adresteki "Ebru Sokak" ifadesi Photon
+  (OSM tabanlı, anahtarsız geocoder) ile gerçek bir OSM sokak
+  geometrisi olarak bulundu, Nominatim ile bağımsız ters-geocode
+  edilerek doğrulandı (aynı adres, posta kodu dahil geri döndü).
+  Bina numarası OSM'de etiketli değil — nokta sokağın ortasında,
+  tam kapı numarasında değil. Yayın öncesi müşteriden gözle onay
+  istenmeli.
 
-**Değerler nasıl bulundu:** Gözle tahmin edilmedi — gerçek harita
-üzerinde 10+ filtre/blend kombinasyonu bağımsız bir test sayfasında
-karşılaştırıldı (arka plan siyaha yakın kalsın, sokak etiketleri
-okunur kalsın dengesi arandı), sonra üretim sayfasında aynı sonucun
-tekrarlandığı ekran görüntüsüyle doğrulandı (masaüstü + mobil).
+**Sarı yol boyama nasıl yapıldı:** CARTO'nun `dark-matter-gl-style`
+JSON'u indirilip gerçek katman kimlikleri okundu (uydurulmadı).
+Ana yol katmanları (`road_mot_fill_noramp`, `road_trunk_fill_noramp`,
+`road_pri_fill_noramp`, `bridge_mot_fill`, `bridge_trunk_fill`) tam
+marka sarısına (`#fffc00`), ikincil yollar aynı sarının düşük
+opaklıklı hâline boyanıyor — tek renk ailesinde hiyerarşi. Yol
+kenarlıkları, bağlantı yolları ve tünel katmanları bilerek
+dokunulmadı (derinlik/okunabilirlik için).
 
-**Bilinen sınır:** İframe üçüncü taraf içerik olduğu için harita
-ETKİLEŞİMDEYKEN (sürükleme, zoom) Google'ın kendi UI'ı (± butonları,
-Street View adamı vb.) filtre/tint'ten aynı şekilde etkileniyor —
-bunlar da koyu/sarı görünüyor, ayrı stillendirilemiyor.
+**Kök neden bulunan gerçek bug — worker URL:** MapLibre karo
+ayrıştırmasını kendi Web Worker'ında yapar ve varsayılan olarak
+worker script'inin konumunu `import.meta.url`'den türetir. Next.js'in
+webpack paketleyicisi kütüphaneyi kendi hash'li chunk'ına gömdüğü
+için bu türetme kırılıyordu: worker hiç başlamıyordu, HİÇBİR HATA
+FIRLATMADAN sessizce takılıyordu — style/sprite/tiles.json normal
+yükleniyordu ama tek bir `.mvt` karo isteği bile çıkmıyordu, harita
+saf siyah kalıyordu. İzole bir HTTP test sayfasıyla (gerçek bir statik
+sunucu, `file://` değil) doğrulandı, sonra Next.js'e özgü olduğu
+kanıtlandı. Çözüm: `node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs`
+(+ bağımlı olduğu `maplibre-gl-shared.mjs`) `public/`'e kopyalanıp
+`maplibregl.setWorkerUrl()` ile sabit bir URL'e bağlandı.
 
-Doğrulama: tsc temiz, 154 unit, 168/168 e2e (a11y dahil), masaüstü +
-mobil ekran görüntüsü.
+**Bilinen sınır:** CARTO'nun temel haritası anahtarsız/ücretsiz
+kullanım için sunuluyor; yoğun trafik CARTO'nun kendi kullanım
+koşullarına tabi. Attribution ("© CARTO, © OpenStreetMap
+contributors") kaldırılamaz, ToS gereği.
+
+Doğrulama: tsc temiz, 154 unit, 165/168 e2e (a11y dahil — 3 kalan
+başarısızlık bu değişiklikten bağımsız, aşağıda not düşüldü),
+masaüstü + mobil ekran görüntüsü, gerçek üretim build'inde sıfır
+konsol/sayfa hatası.
+
+**Not — e2e'deki 3 ilgisiz başarısızlık:** Bu değişiklikle aynı anda
+çalışan başka bir oturum (Codex) kod tabanında geniş kapsamlı bir
+"Hibrid 360" marka yazımı + tipografik tırnak düzeltmesi yapıyordu.
+İki test bundan önce de (bu değişiklikten habersiz, git HEAD'inde
+doğrulandı) bozuktu: `mobile-menu.spec.ts` büyük harfli "THINK & THANK"
+bekliyor ama `messages/en.json`'daki değer zaten küçük/büyük karışık
+"Think & Thank"; `brief-builder.spec.ts` düz tırnaklı bir regex
+bekliyor ama gerçek KVKK onay metni büyük harfli ve kesme işaretli.
+Üçüncüsü (`revision-layout.spec.ts` ana sayfa metni) o oturumun düz
+tırnak → tipografik tırnak geçişinden kaynaklanıyor, henüz
+commit'lenmemişti. Üçü de bu PR'ın kapsamı dışında bırakıldı.

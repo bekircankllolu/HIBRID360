@@ -65,10 +65,14 @@ export const cookiePolicyTr: LegalDoc = {
         ],
       ],
     },
-    { kind: "heading", text: "3. Google Haritalar İçeriği" },
+    { kind: "heading", text: "3. Harita İçeriği" },
     {
       kind: "paragraph",
-      text: "İletişim sayfasındaki Google Haritalar içeriği sayfa açıldığında Google sunucularından otomatik olarak yüklenir. Bu işlem sırasında IP adresi, tarayıcı ve cihaz bilgileri Google tarafından işlenebilir; Google'ın kendi gizlilik ve çerez koşulları geçerlidir. Ofis adresi ve bağımsız yol tarifi bağlantısı da haritanın altında sunulur.",
+      // 9 Eylul 2026: harita saglayicisi Google Haritalar'dan CARTO'nun
+      // acik vektor harita karolarina (OpenStreetMap verisiyle) gecti --
+      // bkz. src/data/contact.ts "Gomulu harita" karar notu. Google'a
+      // hicbir veri gonderilmiyor artik.
+      text: "İletişim sayfasındaki harita, sayfa açıldığında CARTO'nun harita karo sunucularından (OpenStreetMap verisiyle) otomatik olarak yüklenir. Bu işlem sırasında IP adresi, tarayıcı ve cihaz bilgileri CARTO tarafından işlenebilir; CARTO'nun kendi gizlilik koşulları geçerlidir. Ofis adresi ve bağımsız yol tarifi bağlantısı da haritanın altında sunulur.",
     },
     { kind: "heading", text: "4. Çerez Yönetimi ve Tercihler" },
     {
@@ -149,10 +153,10 @@ export const cookiePolicyEn: LegalDoc = {
       kind: "paragraph",
       text: "To deliver high-performance 3D Web Experience applications without lag, our site runs hardware capability checks (GPU tier detection). These checks utilize temporary local session storage and do not link hardware profiles to individual user identities.",
     },
-    { kind: "heading", text: "4. Google Maps Content" },
+    { kind: "heading", text: "4. Map Content" },
     {
       kind: "paragraph",
-      text: "Google Maps content on the Contact page loads automatically from Google's servers when the page opens. Google may process the visitor's IP address, browser and device information under Google's own privacy and cookie terms. The office address and an independent directions link are also provided below the map.",
+      text: "The map on the Contact page loads automatically from CARTO's map tile servers (using OpenStreetMap data) when the page opens. CARTO may process the visitor's IP address, browser and device information under its own privacy terms. The office address and an independent directions link are also provided below the map.",
     },
     { kind: "heading", text: "5. Managing Cookies via Browser Settings" },
     {
