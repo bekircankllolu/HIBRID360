@@ -59,7 +59,7 @@ export default async function ThinkAndThankPage({
           <span />
         </div>
         <div className={styles.heroInner}>
-          <p className={styles.heroEyebrow}>{t("heroEyebrow")} / 01</p>
+          <p className={styles.heroEyebrow} lang="en">{t("heroEyebrow")} / 01</p>
           <MorphingHeroTitle className={styles.heroTitle} />
           <div className={styles.heroCopy}>
             <p className={styles.heroLead}>{t("heroLead")}</p>
