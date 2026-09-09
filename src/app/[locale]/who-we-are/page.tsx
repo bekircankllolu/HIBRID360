@@ -3,9 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
+import { MeetTheCrewReveal } from "@/components/culture/MeetTheCrewReveal";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
-import { FOUNDER } from "@/data/who-we-are";
+import { FOUNDER, CULTURE_FILM } from "@/data/who-we-are";
 import styles from "@/styles/culture-page.module.css";
 import founderStyles from "./page.module.css";
 
@@ -135,9 +136,15 @@ export default async function WhoWeArePage({
         </div>
       </section>
 
-      {/* CUL-06 — kültür filmi */}
+      {/* CUL-06 — kültür filmi. Gerçek film gelene kadar EmptyState;
+          CULTURE_FILM doldurulduğu an dairesel reveal devreye girer
+          (FOUNDER.portrait ile aynı gate deseni). */}
       <section className={styles.section}>
-        <EmptyState message={t("filmNote")} />
+        {CULTURE_FILM ? (
+          <MeetTheCrewReveal film={CULTURE_FILM} label={t("filmCta")} />
+        ) : (
+          <EmptyState message={t("filmNote")} />
+        )}
       </section>
     </div>
   );

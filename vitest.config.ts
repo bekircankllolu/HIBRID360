@@ -13,8 +13,20 @@ import tsconfigPaths from "vite-tsconfig-paths";
  */
 export default defineConfig({
   plugins: [tsconfigPaths()],
+  /**
+   * `tsconfig.json` `jsx: "preserve"` diyor (dönüşümü Next.js yapıyor).
+   * Vitest'in esbuild'i o ayarı görünce klasik `React.createElement`
+   * üretir ve React'i açıkça import etmeyen bileşenler test içinde
+   * "React is not defined" ile patlar. Next.js runtime'ıyla aynı otomatik
+   * dönüşüme sabitliyoruz — böylece bir `.test.ts` dosyası bir `.tsx`
+   * bileşenini (ör. MeetTheCrewReveal) import edip render edebilir.
+   */
+  esbuild: { jsx: "automatic" },
   test: {
-    include: ["src/**/*.test.ts"],
+    // `.tsx` de toplanıyor: bileşen testleri JSX ile yazılınca hem
+    // okunabilir hem de `children`'ı prop olarak geçmek zorunda kalmadan
+    // tip/lint uyumlu oluyor (bkz. meet-the-crew-reveal.test.tsx).
+    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
     exclude: ["e2e/**", "node_modules/**"],
     environment: "node",
   },
