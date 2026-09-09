@@ -32,9 +32,11 @@ import styles from "./page.module.css";
  *   6. iletişim formu
  *   7. footer (layout'tan gelir)
  *
- * Harita: anahtar gerektirmeyen Google Maps **sorgu gömmesi**. Koordinat
- * değil doğrulanmış adres metni kullanır — uydurulan hiçbir veri yok.
- * Sağlayıcı karşılaştırması ve KVKK notu src/data/contact.ts içinde.
+ * Harita: anahtar gerektirmeyen MapLibre GL JS + CARTO vektör karoları
+ * (9 Eylül 2026'da Google Maps'in yerini aldı — bkz. karar #29,
+ * docs/DECISIONS.md). `CONTACT_LOCATION` (lat/lng) kullanır — uydurulan
+ * hiçbir veri yok. Sağlayıcı karşılaştırması ve KVKK notu
+ * src/data/contact.ts içinde.
  *
  * CON-03 [KARAR]: "Yayına girecek e-posta adresi teyit edilmeli." Deck
  * kendi içinde contact@hibrid360.com veriyor (GEN-05'te de aynı adres) —
