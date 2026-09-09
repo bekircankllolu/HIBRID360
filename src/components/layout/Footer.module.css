@@ -25,6 +25,8 @@
   font-family: var(--font-brand);
   font-size: clamp(1rem, 1.25vw, 1.35rem);
   font-weight: var(--font-weight-brand);
+  /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
+  text-transform: uppercase;
 }
 
 .statement {

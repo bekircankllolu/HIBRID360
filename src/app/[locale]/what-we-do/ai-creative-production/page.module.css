@@ -118,6 +118,14 @@
   margin: 0 0 var(--space-4);
 }
 
+/* Yalnızca AI-04 kanıt başlığı caps. Kaynak metin cümle düzeninde tutulur
+   ("Neden Hibrid 360?") ki marka yazımı tek biçim kalsın; caps görünüm
+   buradan gelir. Marka <span lang="en"> ile sarılı olduğu için TR sayfada
+   "HİBRİD" değil "HIBRID" render edilir. */
+.blockTitleCaps {
+  text-transform: uppercase;
+}
+
 .blockBody {
   max-width: 46rem;
   margin: 0;

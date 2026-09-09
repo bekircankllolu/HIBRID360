@@ -57,7 +57,7 @@ export default async function ThinkAndThankPage({
           <span />
         </div>
         <div className={styles.heroInner}>
-          <p className={styles.heroEyebrow}>{t("heroEyebrow")} / 01</p>
+          <p className={styles.heroEyebrow} lang="en">{t("heroEyebrow")} / 01</p>
           <h1 className={styles.heroTitle}>
             <span>THINK</span>
             {" "}

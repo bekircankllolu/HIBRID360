@@ -30,6 +30,8 @@
   margin: 0;
   font-size: 0.75rem;
   font-weight: var(--font-weight-body-medium);
+  /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
+  text-transform: uppercase;
 }
 
 .heroTitle {

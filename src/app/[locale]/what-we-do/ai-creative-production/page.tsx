@@ -94,7 +94,14 @@ export default async function AiCreativeProductionPage({
 
       {/* AI-04 — kanıt */}
       <section className={`${styles.block} ${styles.proof}`}>
-        <h2 className={styles.blockTitle}>{t("proofTitle")}</h2>
+        {/* Marka adı Latin logotype olarak kalmalı: lang="en" olmadan tarayıcı
+            TR sayfada text-transform: uppercase'i Türkçe kurallarıyla uygular
+            ve "Hibrid" -> "HİBRİD" olur. */}
+        <h2 className={`${styles.blockTitle} ${styles.blockTitleCaps}`}>
+          {t.rich("proofTitle", {
+            brand: (chunks) => <span lang="en">{chunks}</span>,
+          })}
+        </h2>
         <p className={styles.blockBody}>{t("proofLead")}</p>
         <ul className={styles.proofList}>
           {proofList.map((item) => (
