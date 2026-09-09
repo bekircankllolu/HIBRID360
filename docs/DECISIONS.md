@@ -250,6 +250,7 @@ render motoruyla mümkün.
 | # | Konu | Karar | Durum | Etki |
 |---|---|---|---|---|
 | 29 | Contact haritası sağlayıcısı | Google Maps sorgu gömmesi → **MapLibre GL JS + CARTO'nun anahtarsız "dark-matter" vektör karoları**. Madde 168'deki "Harita sağlayıcısı" kararı bu maddeyle **AÇILDI ve GÜNCELLENDİ** | KAPANDI | Yeni bağımlılık: `maplibre-gl` (~270KB, ölçüldü — bkz. not). `ContactMap.tsx` tamamen yeniden yazıldı (iframe → MapLibre `Map` + `Marker`). `contact.ts`: `mapEmbedUrl()` kaldırıldı, `CONTACT_LOCATION` (lat/lng) eklendi |
+| 30 | Yeni müşteri grubu (FRD-03) yayın izni | Deck'in kendi notu *"[KARAR] Bu markaların adlarının ve logolarının referans olarak yayınlanması için sözleşmelerde izin olup olmadığı kontrol edilmeli"* → **izin doğrulandı**, `newClients` grubu (Koç Finans, Altus, Grundig, Oliz, Whirlpool, Hotpoint, Ariston, Leisure, Hitachi, Ödero, Tokenflex, WAT Motor, WAT Mobilite, Tatil Plus, Ticari Liderlik Programı) referans olarak yayınlanabilir | KAPANDI | `src/data/clients.ts`: `SHOW_NEW_CLIENTS` `false → true`. `docs/content/CURRENT_CONTENT_GAPS.md` #7 ve `docs/visual-audit/NEXT_UI_ART_DIRECTION_TASKS.md` (blocker listesi + F-3) bu kararla tutarlı hale getirildi |
 
 **Neden bu, madde 168'in itirazlarını ihlal etmiyor:**
 - **Anahtar yok:** CARTO'nun temel haritası (`tiles.basemaps.cartocdn.com`)

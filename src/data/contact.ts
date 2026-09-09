@@ -107,8 +107,8 @@ export function directionsUrl(): string {
  * öncesi müşteriden nokta üzerinde gözle onay istenmeli.
  *
  * KVKK notu: harita artık Google değil, CARTO/OpenStreetMap karo
- * sunucularından yükleniyor. Çerez Politikası'ndaki "Google Haritalar
- * İçeriği" bölümü bu değişikliği yansıtacak şekilde güncellenmeli.
+ * sunucularından yükleniyor. Çerez Politikası'ndaki "Harita İçeriği"
+ * bölümü (src/data/policies/cookie.ts) bunu zaten yansıtıyor.
  */
 export const CONTACT_LOCATION = {
   lat: 40.9837576,

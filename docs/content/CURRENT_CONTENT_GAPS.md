@@ -68,7 +68,7 @@ kapattı (6, 14).**
 | **Bugün ne var** | Adres deck'ten alındı ve kullanılıyor. Yol tarifi bağlantısı **uydurma bir place-id değil**, adresten türetilen resmi Google Maps `dir/?api=1` şeması |
 | **Kodda nerede** | `src/lib/site.ts` → `CONTACT.addressLines` · `src/app/[locale]/contact/page.tsx` |
 | **⚠️ 29 Ağu 2026 bulgusu** | Eski site (© 2020) **farklı** bir adres gösteriyor: *Cemil Topuzlu Caddesi Çiftehavuzlar, 18 Mart Sokak Yapı Kredi Evleri B Blok 9/20, Kadıköy / İstanbul*. İkisi de Kadıköy — muhtemelen taşınma olmuş. Kodda deck adresi duruyor (daha yeni ve onaylı); eski adres koda **girmedi** |
-| **Harita durumu** | Anahtarsız Google Maps sorgu gömmesi kullanılıyor. 30 Ağustos müşteri revizyonuyla üçüncü taraf iframe Contact sayfasıyla birlikte doğrudan yükleniyor. Adres ve yol tarifi bağlantısı haritadan bağımsız çalışıyor |
+| **Harita durumu** | Anahtarsız MapLibre GL JS + CARTO vektör harita kullanılıyor (9 Eylül 2026'da Google Maps'in yerini aldı — bkz. `docs/DECISIONS.md` #29), Contact sayfasıyla birlikte doğrudan yükleniyor. Adres ve yol tarifi bağlantısı (hâlâ gerçek Google Maps `dir/?api=1` şeması) haritadan bağımsız çalışıyor |
 
 ## 5. 🔴 Müşteri listesi — 5 isim doğrulama bekliyor
 
@@ -101,15 +101,15 @@ kapattı (6, 14).**
 | **Kodda nerede** | `src/components/friends/ClientNameIndex.tsx` |
 | **Dikkat** | Logo kullanım izni, işin yayın izninden **ayrı** bir izindir. Bir markayla çalışmış olmak, logosunu sitede kullanma hakkı vermez |
 
-## 7. 🟠 Yeni müşteri grubu — sözleşme izni kontrolü
+## 7. ~~Yeni müşteri grubu — sözleşme izni kontrolü~~ · **KAPANDI**
 
 | | |
 |---|---|
 | **Soru** | Deck'in "yeni müşteriler" (FRD-03) olarak eklediği markaların **sözleşmelerinde referans olarak yayınlanma izni** var mı? |
 | **Neden gerekli** | Deck'in kendi notu: *"[KARAR] Bu markaların adlarının ve logolarının referans olarak yayınlanması için sözleşmelerde izin olup olmadığı kontrol edilmeli"* |
-| **Bugün ne var** | Kod bu grubu hazır tutuyor ama `SHOW_NEW_CLIENTS` bayrağı `false` — **sayfada görünmüyorlar** |
-| **Kodda nerede** | `src/data/clients.ts` → `newClients` |
-| **Not** | Bu madde `docs/DECISIONS.md`'ye henüz eklenmemiş; kod yorumu ekleme gereğini not düşüyor |
+| **Karar** | İzin doğrulandı — bkz. `docs/DECISIONS.md` FRD-03 maddesi |
+| **Bugün ne var** | `SHOW_NEW_CLIENTS` bayrağı `true` — grup Friends sayfasında görünüyor |
+| **Kodda nerede** | `src/data/clients.ts` → `newClients`, `SHOW_NEW_CLIENTS` |
 
 ## 8. 🟠 Directors & Crew — kadro listesi yok
 
@@ -228,8 +228,8 @@ kapattı (6, 14).**
 |---|---|
 | **Karar** | Google Haritalar açıklaması TR/EN Çerez Politikası'na eklendi |
 | **Neden gerekli** | Google iframe'i IP adresi ve tarayıcı bilgisini üçüncü tarafa aktarabilir; bu nedenle otomatik yüklenmemeli ve politika metninde açıklanmalı |
-| **Bugün ne var** | Harita **anahtarsız Google Maps sorgu gömmesi** ile çalışıyor ve iframe Contact sayfasıyla birlikte doğrudan yükleniyor. Politika metni sağlayıcıyı ve veri aktarımını açıklıyor; yol tarifi bağlantısı haritadan bağımsız çalışıyor |
-| **Kodda nerede** | `src/data/contact.ts` → `mapEmbedUrl()` · `src/app/[locale]/contact/page.tsx` · `src/data/policies/cookie.ts` |
+| **Bugün ne var** | Harita **anahtarsız MapLibre GL JS + CARTO vektör karoları** ile çalışıyor (9 Eylül 2026'da Google Maps sorgu gömmesinin yerini aldı — bkz. `docs/DECISIONS.md` #29) ve Contact sayfasıyla birlikte doğrudan yükleniyor. Politika metni (`cookie.ts`) sağlayıcıyı (CARTO) ve veri aktarımını açıklıyor; yol tarifi bağlantısı haritadan bağımsız çalışıyor |
+| **Kodda nerede** | `src/data/contact.ts` → `CONTACT_LOCATION` · `src/components/contact/ContactMap.tsx` · `src/app/[locale]/contact/page.tsx` · `src/data/policies/cookie.ts` |
 | **Doğrulama** | `e2e/canonical-routes.spec.ts` haritanın sayfa açılışında erişilebilir adla yüklendiğini kontrol ediyor |
 
 ## 19. 🟠 Solutions sayfası giriş paragrafı yok

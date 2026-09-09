@@ -313,7 +313,7 @@ algısını aşağı çekiyor.
 - `verified: false` beş isim (Sirmasion · Meribell Cafe · Bonakare ·
   Kerschkaret · Pleaon Sportivo) **kesikli sarı kenarlık + %75 opaklık**
   ile işaretli ✅ (kodda doğru uygulanmış)
-- `newClients` grubu `SHOW_NEW_CLIENTS=false` ile gizli ✅
+- `newClients` grubu — sözleşme izni doğrulandı, `SHOW_NEW_CLIENTS=true` ile görünür ✅
 - "Ne diyorlar" → dürüst boş durum: "Müşteri sözleri hazırlanıyor."
 - Kapanış: "Birlikte ne ürettiğimizi görmek ister misiniz? → WORK"
 
@@ -426,7 +426,7 @@ Bu bölüm mevcut kayıtlardan **derlemedir**, yeni iddia içermez.
 | 1 | **Kristal sistemi kararı:** 2 renk varyantı mı kalacak, yoksa 8 servise ayrı taş mı üretilecek? | §2.7 yörünge taşları — hangi varyant seti üretileceği | `BLOCKERS.md` #6 |
 | 2 | **Work içerik envanteri** (iş adı · müşteri · yıl · format · yayın izni · dosya konumu · vaka sayfası) | `/work` sayfası · Creative galerisi · MONA ekran döngüsü | `DECISIONS.md` #16 · `WORK_INVENTORY_REQUEST.md` |
 | 3 | **Müşteri logoları** + logo kullanım izinleri | Friends logo ızgarası (brief 8.1 [KARAR]) | `CURRENT_CONTENT_GAPS.md` #6 |
-| 4 | **`newClients` sözleşme izni** (Grundig, Whirlpool, Hotpoint, Ariston, Hitachi, WAT…) | Bu grup `SHOW_NEW_CLIENTS=false` ile gizli duruyor | `CURRENT_CONTENT_GAPS.md` #7 |
+| ~~4~~ | ~~**`newClients` sözleşme izni** (Grundig, Whirlpool, Hotpoint, Ariston, Hitachi, WAT…)~~ **KAPANDI** | İzin doğrulandı, `SHOW_NEW_CLIENTS=true` ile görünür | `CURRENT_CONTENT_GAPS.md` #7 |
 | 5 | **5 marka adı doğrulaması** (Sirmasion · Meribell Cafe · Bonakare · Kerschkaret · Pleaon Sportivo) | Bugün kesikli kenarlıkla yayında — teyit gelene kadar riskli | `CURRENT_CONTENT_GAPS.md` #5 |
 | 6 | **Müşteri sözleri** + yazılı yayın onayı | Friends "Ne diyorlar" bölümü (§4.5) | `CURRENT_CONTENT_GAPS.md` #11 |
 | 7 | **Creative referans dosyası** (pullu/parıltılı doku, disko topu kafalı figür) | Creative sayfası hero + MONA kostümü | `CREATIVE_PAGE_DIRECTION.md` §3.2 |
@@ -669,7 +669,7 @@ Her madde **ölçülebilir**; "iyi görünüyor" kabul kriteri değildir.
 | W-4 | Lazy yükleme | İlk viewport dışındaki tüm kart görselleri `loading="lazy"` |
 | F-1 | Friends hiyerarşi | 70 kutu tek tip değil; amiral markalar ayrışıyor |
 | F-2 | `verified: false` | Kesikli sarı kenarlık korunuyor |
-| F-3 | `newClients` | `SHOW_NEW_CLIENTS=false` olduğu sürece render edilmiyor |
+| F-3 | `newClients` | İzin doğrulandı, `SHOW_NEW_CLIENTS=true` ile render ediliyor |
 | F-4 | Testimonial | `written_consent_confirmed` olmayan hiçbir söz render edilmiyor |
 
 ### 11.5 Performans bütçesi (sözleşme maddesi — her PR'da)

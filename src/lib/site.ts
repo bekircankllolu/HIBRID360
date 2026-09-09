@@ -89,4 +89,7 @@ export const SOCIAL_LINKS = [
 // teslim edilince değiştirilecek. create-next-app'in 26KB'lık varsayılan
 // favicon'u kaldırılmıştı (CLAUDE.md: placeholder varlık production'a
 // gitmez); bu SVG uydurma değil, marka renkleriyle kurulmuş minimal bir
-// yer tutucu. TODO: brief 16 — og:image görseli hâlâ eksik.
+// yer tutucu. src/app/favicon.ico (16/32/48 PNG-in-ICO) ve
+// src/app/apple-icon.png (180×180) bu SVG'den mekanik olarak türetildi
+// (9 Eylül 2026) — geniş tarayıcı/iOS ana ekran desteği için, yeni bir
+// tasarım kararı değil. TODO: brief 16 — og:image görseli hâlâ eksik.
