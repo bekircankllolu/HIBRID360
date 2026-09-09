@@ -34,9 +34,11 @@ import styles from "./page.module.css";
  * verisi doğrulanmadığı için sol ray gerçek veriden türeyen alfabetik
  * aralıklar kullanır; uydurma kategori eklenmez.
  *
- * FRD-03 [KARAR] kapanmadan `newClients` (src/data/clients.ts) render
- * edilmiyor — sözleşme izni teyit edilmeden marka adı referans olarak
- * yayınlanmaz. Aynı şekilde `verified: false` isimler de listelenmez.
+ * FRD-03 [KARAR] kapatıldı — sözleşme izni doğrulandı (bkz.
+ * docs/DECISIONS.md #30), `newClients` (src/data/clients.ts)
+ * `SHOW_NEW_CLIENTS` true iken render ediliyor. `verified: false`
+ * isimler bu sayfada hâlâ listelenmez (ayrı, çözülmemiş bir izin
+ * sorunu — bkz. CURRENT_CONTENT_GAPS.md #5).
  */
 
 export async function generateMetadata({
