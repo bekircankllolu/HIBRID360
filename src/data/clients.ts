@@ -11,10 +11,9 @@
  *
  * `newClients` = FRD-03, deck'in "[KARAR] Bu markaların adlarının ve
  * logolarının referans olarak yayınlanması için sözleşmelerde izin olup
- * olmadığı kontrol edilmeli" notuyla eklediği yeni müşteriler. Bu karar
- * kapanmadan (docs/DECISIONS.md'ye eklenmeli) bu grup yayına alınmamalı;
- * kod içinde hazır tutuluyor, sayfa bu grubu `SHOW_NEW_CLIENTS` false
- * iken göstermiyor.
+ * olmadığı kontrol edilmeli" notuyla eklediği yeni müşteriler. Sözleşme
+ * izni doğrulandı ve karar `docs/DECISIONS.md`'de kapatıldı (bkz. FRD-03
+ * maddesi) — `SHOW_NEW_CLIENTS` artık true, bu grup sayfada görünüyor.
  */
 export interface ClientEntry {
   name: string;
@@ -105,8 +104,9 @@ export const clients: ClientEntry[] = [
 ];
 
 /**
- * FRD-03 — [KARAR] sözleşme izni netleşmeden yayına alınmamalı. Sayfa bu
- * grubu SHOW_NEW_CLIENTS false iken render etmiyor (bkz. friends/page.tsx).
+ * FRD-03 — sözleşme izni doğrulandı, docs/DECISIONS.md'de KAPANDI olarak
+ * kayıtlı. Sayfa bu grubu SHOW_NEW_CLIENTS true iken render ediyor (bkz.
+ * src/app/[locale]/clients/page.tsx).
  */
 export const newClients: string[] = [
   "Koç Finans",
@@ -126,5 +126,8 @@ export const newClients: string[] = [
   "Ticari Liderlik Programı",
 ];
 
-/** Eylul 2026 musteri revizyonu: yeni isimler dizinde gosterilecek. */
+/**
+ * Eylül 2026 müşteri revizyonu: FRD-03 sözleşme izni doğrulandı
+ * (docs/DECISIONS.md — KAPANDI), yeni isimler dizinde gösterilecek.
+ */
 export const SHOW_NEW_CLIENTS = true;

@@ -101,15 +101,15 @@ kapattı (6, 14).**
 | **Kodda nerede** | `src/components/friends/ClientNameIndex.tsx` |
 | **Dikkat** | Logo kullanım izni, işin yayın izninden **ayrı** bir izindir. Bir markayla çalışmış olmak, logosunu sitede kullanma hakkı vermez |
 
-## 7. 🟠 Yeni müşteri grubu — sözleşme izni kontrolü
+## 7. ~~Yeni müşteri grubu — sözleşme izni kontrolü~~ · **KAPANDI**
 
 | | |
 |---|---|
 | **Soru** | Deck'in "yeni müşteriler" (FRD-03) olarak eklediği markaların **sözleşmelerinde referans olarak yayınlanma izni** var mı? |
 | **Neden gerekli** | Deck'in kendi notu: *"[KARAR] Bu markaların adlarının ve logolarının referans olarak yayınlanması için sözleşmelerde izin olup olmadığı kontrol edilmeli"* |
-| **Bugün ne var** | Kod bu grubu hazır tutuyor ama `SHOW_NEW_CLIENTS` bayrağı `false` — **sayfada görünmüyorlar** |
-| **Kodda nerede** | `src/data/clients.ts` → `newClients` |
-| **Not** | Bu madde `docs/DECISIONS.md`'ye henüz eklenmemiş; kod yorumu ekleme gereğini not düşüyor |
+| **Karar** | İzin doğrulandı — bkz. `docs/DECISIONS.md` FRD-03 maddesi |
+| **Bugün ne var** | `SHOW_NEW_CLIENTS` bayrağı `true` — grup Friends sayfasında görünüyor |
+| **Kodda nerede** | `src/data/clients.ts` → `newClients`, `SHOW_NEW_CLIENTS` |
 
 ## 8. 🟠 Directors & Crew — kadro listesi yok
 
