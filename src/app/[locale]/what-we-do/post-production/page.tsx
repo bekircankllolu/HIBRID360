@@ -17,7 +17,7 @@ import styles from "@/styles/service-page.module.css";
 
 const SERVICES = [
   "EDITING",
-  "COLOURING",
+  "COLOUR GRADING",
   "DUBBING",
   "AFTER EFFECTS",
   "JINGLE",
@@ -26,7 +26,7 @@ const SERVICES = [
   "STORYBOARD",
   "3D ANIMATION",
   "STYLING",
-  "PHOTO SHOOTING",
+  "PHOTOGRAPHY",
   "MOTION GRAPHICS",
   "TRACK MOTION",
 ];

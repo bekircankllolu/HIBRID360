@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -23,7 +24,20 @@ import styles from "./page.module.css";
 //
 // Kartlara açıklama YAZILMADI — deck bu hub için tanım cümlesi vermedi ve
 // uydurma metin commit edilmiyor.
-export const metadata = { title: "Culture" };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: "Our Culture",
+    description:
+      locale === "en"
+        ? "The ideas, people and values that define us."
+        : "Bizi tanımlayan fikirler, insanlar ve değerler.",
+  };
+}
 
 const SECTIONS = [
   { href: "/who-we-are", key: "whoWeAre" },
@@ -37,7 +51,7 @@ const STAND_FOR_COPY = {
   tr: {
     lead: [
       "Şundan eminiz: En iyi işleri mutlu insanlar üretir.",
-      "Bu yüzden herkesin gelişebildiği, desteklendiğini hissettiği ve her gün en iyi halini ortaya koyabildiği bir kültür kurduk.",
+      "Bu yüzden herkesin gelişebildiği, desteklendiğini hissettiği ve her gün en iyi hâlini ortaya koyabildiği bir kültür kurduk.",
     ],
     values: [
       {
@@ -62,15 +76,15 @@ const STAND_FOR_COPY = {
     values: [
       {
         title: "BETTER TOGETHER",
-        body: "Nothing great is made alone. By leaving egos, politics, and negativity at the door and bringing our specialisms and collaborative energy to everything we do, we’ll always make better work together.",
+        body: "Nothing great is made alone. By leaving egos, politics and negativity at the door and bringing our specialisms and collaborative energy to everything we do, we’ll always make better work together.",
       },
       {
         title: "RELENTLESSLY CURIOUS",
-        body: "Curiosity didn’t kill the cat. But sticking to the status quo will. We’ll always ask questions, kick the tires of existing solutions, and never settle for the expected in the pursuit of tomorrow’s most pioneering work, today.",
+        body: "Curiosity didn’t kill the cat. But sticking to the status quo will. We’ll always ask questions, kick the tyres of existing solutions, and never settle for the expected in the pursuit of tomorrow’s most pioneering work, today.",
       },
       {
         title: "GET SH*T DONE",
-        body: "Coasters are for mugs. We are only as good as the work we do and the results we deliver for our clients. We don’t wait for tomorrow. We take ownership, work hard, and drive things forward, today.",
+        body: "Coasters are for mugs. We are only as good as the work we do and the results we deliver for our clients. We don’t wait for tomorrow. We take ownership, work hard and drive things forward, today.",
       },
     ],
   },
@@ -127,7 +141,7 @@ export default async function CulturePage({
       <section className={styles.standFor} aria-labelledby="stand-for-title">
         <div className={styles.standForIntro}>
           <span className={styles.standForMarker} aria-hidden="true" />
-          <p className={styles.standForEyebrow}>HIBRID 360 / CULTURE</p>
+          <p className={styles.standForEyebrow} lang="en">Hibrid 360 / Culture</p>
           <h2 id="stand-for-title" className={styles.standForTitle}>
             WHAT WE
             <br />

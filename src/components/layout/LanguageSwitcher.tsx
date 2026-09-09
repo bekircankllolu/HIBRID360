@@ -106,7 +106,7 @@ export function LanguageSwitcher({
           </button>
 
           <div className={styles.panelInner}>
-            <p className={styles.eyebrow}>HIBRID 360</p>
+            <p className={styles.eyebrow} lang="en">Hibrid 360</p>
             <h2 id="language-panel-title" className={styles.title}>
               {locale === "tr" ? "Dil seçin" : "Select language"}
             </h2>

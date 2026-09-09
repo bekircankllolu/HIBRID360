@@ -36,8 +36,8 @@ function mediaFor(id: string) {
 export const openingLine: MonaLine = {
   id: "opening",
   text: {
-    en: "Hello. I'm MONA. My head is a little retro. My taste is entirely up to date. Ask me anything about how this place works.",
-    tr: "Merhaba. Ben MONA. Kafam biraz retro. Zevkim tamamen güncel. Burada işlerin nasıl yürüdüğünü sorabilirsin.",
+    en: "Hello. I’m MONA. My head is a little retro. My taste is entirely up to date. Ask me anything about how this place works.",
+    tr: "Merhaba. Ben MONA. Kafam biraz retro. Zevkim tamamen güncel. Burada işlerin nasıl yürüdüğünü sorabilirsiniz.",
   },
   ...mediaFor("opening"),
 };
@@ -55,8 +55,8 @@ export const idleLines: MonaLine[] = [
   {
     id: "idle-2",
     text: {
-      en: "You can scroll. I don't take it personally.",
-      tr: "Aşağı kaydırabilirsin. Alınmam.",
+      en: "You can scroll. I don’t take it personally.",
+      tr: "Aşağı kaydırabilirsiniz. Alınmam.",
     },
     ...noMedia,
   },
@@ -75,7 +75,7 @@ export const returnLine: MonaLine = {
   id: "return",
   text: {
     en: "You came back. Good. Where were we?",
-    tr: "Geri geldin. Güzel. Nerede kalmıştık?",
+    tr: "Geri geldiniz. Güzel. Nerede kalmıştık?",
   },
   ...noMedia,
 };
@@ -84,10 +84,10 @@ export const returnLine: MonaLine = {
 export const legacyMonaQuestions: MonaQuestion[] = [
   {
     id: "q1",
-    question: { en: "Who are you?", tr: "Sen kimsin?" },
+    question: { en: "Who are you?", tr: "Kimsiniz?" },
     text: {
-      en: "I'm MONA. I'm the part of Hibrid 360 that never sleeps. The ideas belong to the people here. I make them faster, and I make them in nine formats before lunch.",
-      tr: "Ben MONA. Hibrid 360'ın hiç uyumayan tarafıyım. Fikirler buradaki insanlara ait. Ben onları hızlandırıyorum ve öğlene kadar dokuz ayrı formatta çıkarıyorum.",
+      en: "I’m MONA. I’m the part of Hibrid 360 that never sleeps. The ideas belong to the people here. I make them faster, and I make them in nine formats before lunch.",
+      tr: "Ben MONA. Hibrid 360’ın hiç uyumayan tarafıyım. Fikirler buradaki insanlara ait. Ben onları hızlandırıyorum ve öğlene kadar dokuz ayrı formatta çıkarıyorum.",
     },
     ...noMedia,
   },
@@ -101,7 +101,7 @@ export const legacyMonaQuestions: MonaQuestion[] = [
       tr: "Burası sadece prodüksiyon şirketi mi?",
     },
     text: {
-      en: "No. High-end production is in our DNA, but Hibrid 360 runs as an AI-Native Creative & Production Studio. Strategy, branding, design, digital content, photography, audio and analytics sit in one AI Creative Operating System. We don't just use AI as a tool. We build the workflow around it.",
+      en: "No. High-end production is in our DNA, but Hibrid 360 runs as an AI-Native Creative & Production Studio. Strategy, branding, design, digital content, photography, audio and analytics sit in one AI Creative Operating System. We don’t just use AI as a tool. We build the workflow around it.",
       tr: "Hayır. Yüksek kaliteli prodüksiyon genlerimizde var, ama Hibrid 360 bir AI-Native Kreatif ve Prodüksiyon Stüdyosu olarak çalışıyor. Strateji, marka, tasarım, dijital içerik, fotoğraf, ses ve analitik tek bir sistemin içinde. Biz yapay zekâyı sadece kullanmıyoruz; iş akışını onun etrafına kuruyoruz.",
     },
     ...noMedia,
@@ -121,7 +121,7 @@ export const legacyMonaQuestions: MonaQuestion[] = [
     question: { en: "Why Hibrid 360?", tr: "Neden Hibrid 360?" },
     text: {
       en: "From idea to impact: faster, smarter, more flexible, more sustainable, more human. Ten times faster production. More creative options on the table. Premium visual quality. Built for global brands. AI shortens the cycle, adapts content across platforms and optimizes cost, so the team can spend its time on ideas.",
-      tr: "Fikirden etkiye: daha hızlı, daha akıllı, daha esnek, daha sürdürülebilir, daha insan. On kat hızlı prodüksiyon. Masada daha çok yaratıcı seçenek. Premium görsel kalite. Global markalar için kurulmuş bir yapı. Yapay zekâ süreyi kısaltıyor, içeriği platformlara uyarlıyor ve maliyeti optimize ediyor. Ekip de zamanını fikre ayırıyor.",
+      tr: "Fikirden etkiye: daha hızlı, daha akıllı, daha esnek, daha sürdürülebilir, daha insan. On kat daha hızlı prodüksiyon. Masada daha çok yaratıcı seçenek. Premium görsel kalite. Global markalar için kurulmuş bir yapı. Yapay zekâ süreyi kısaltıyor, içeriği platformlara uyarlıyor ve maliyeti optimize ediyor. Ekip de zamanını fikre ayırıyor.",
     },
     ...noMedia,
   },
@@ -133,7 +133,7 @@ export const legacyMonaQuestions: MonaQuestion[] = [
       tr: "Yapay zekâ yaratıcıların yerini alacak mı?",
     },
     text: {
-      en: "No, and I'd know. Technology alone doesn't create emotion. Stories do. Ideas do. People do. Technology is the tool. Creativity is the language. Emotion is the outcome. We don't replace creativity. We expand it.",
+      en: "No, and I’d know. Technology alone doesn’t create emotion. Stories do. Ideas do. People do. Technology is the tool. Creativity is the language. Emotion is the outcome. We don’t replace creativity. We expand it.",
       tr: "Hayır, üstelik bunu ben söylüyorum. Teknoloji tek başına duygu üretmez. Hikâyeler üretir. Fikirler üretir. İnsanlar üretir. Teknoloji aracımız. Yaratıcılık dilimiz. Duygu ise sonucumuz. Yaratıcılığın yerini almıyoruz; alanını genişletiyoruz.",
     },
     ...noMedia,
@@ -147,8 +147,8 @@ export const legacyMonaQuestions: MonaQuestion[] = [
       tr: "Marka sesimizi nasıl koruruz?",
     },
     text: {
-      en: "Your brand's DNA is the differentiator, not the model you use. Every project starts with strategy, grows through creativity, and only then gets amplified by AI. If you start with the tool, everything comes out looking like everyone else.",
-      tr: "Ayrıştırıcı olan kullandığın model değil, markanın DNA'sı. Her proje stratejiyle başlar, yaratıcılıkla büyür, en sonda yapay zekâyla çoğaltılır. Araçla başlarsan çıkan iş herkesinkine benzer.",
+      en: "Your brand’s DNA is the differentiator, not the model you use. Every project starts with strategy, grows through creativity, and only then gets amplified by AI. If you start with the tool, everything comes out looking like everyone else.",
+      tr: "Ayrıştırıcı olan kullandığın model değil, markanın DNA’sı. Her proje stratejiyle başlar, yaratıcılıkla büyür, en sonda yapay zekâyla çoğaltılır. Araçla başlarsan çıkan iş herkesinkine benzer.",
     },
     ...noMedia,
   },
@@ -156,7 +156,7 @@ export const legacyMonaQuestions: MonaQuestion[] = [
     id: "q7",
     question: { en: "How does the process work?", tr: "Süreç nasıl işliyor?" },
     text: {
-      en: "Five steps. Creative strategy. Creative direction. AI production. Human refinement. Final delivery. The fourth one is where most people cut corners. We don't.",
+      en: "Five steps. Creative strategy. Creative direction. AI production. Human refinement. Final delivery. The fourth one is where most people cut corners. We don’t.",
       tr: "Beş adım. Kreatif strateji. Kreatif direksiyon. AI prodüksiyon. İnsan rötuşu. Nihai teslim. Çoğu kişi dördüncüde kestirmeden gidiyor. Biz gitmiyoruz.",
     },
     ...noMedia,
@@ -165,7 +165,7 @@ export const legacyMonaQuestions: MonaQuestion[] = [
     id: "q8",
     question: { en: "How fast is fast?", tr: "Ne kadar hızlı?" },
     text: {
-      en: "A campaign that used to take months takes weeks. A set of platform versions that used to take days takes hours. One idea becomes multiple formats at scale: channel versions, cutdowns, ratios and languages. The schedule gets shorter. The thinking doesn't.",
+      en: "A campaign that used to take months takes weeks. A set of platform versions that used to take days takes hours. One idea becomes multiple formats at scale: channel versions, cutdowns, ratios and languages. The schedule gets shorter. The thinking doesn’t.",
       tr: "Aylar süren bir kampanya haftalara iniyor. Günler süren platform versiyonları saatlere. Tek fikir; kanal versiyonları, kısa kurgular, oranlar ve dillerle ölçekli biçimde çok sayıda formata dönüşüyor. Takvim kısalıyor; düşünme süresi kısalmıyor.",
     },
     ...noMedia,
@@ -174,8 +174,8 @@ export const legacyMonaQuestions: MonaQuestion[] = [
     id: "q9",
     question: { en: "Can I see the work?", tr: "İşleri görebilir miyim?" },
     text: {
-      en: "That's the best question you can ask here. We let the work speak for itself. It's all in one place.",
-      tr: "Burada sorabileceğin en iyi soru bu. İşler kendini anlatsın. Hepsi tek yerde.",
+      en: "That’s the best question you can ask here. We let the work speak for itself. It’s all in one place.",
+      tr: "Burada sorabileceğiniz en iyi soru bu. İşler kendini anlatsın. Hepsi tek yerde.",
     },
     action: { href: "/work", label: { en: "WORKS →", tr: "WORKS →" } },
     ...noMedia,
@@ -184,14 +184,14 @@ export const legacyMonaQuestions: MonaQuestion[] = [
     id: "q10",
     question: { en: "How do we start?", tr: "Nasıl başlıyoruz?" },
     text: {
-      en: "One conversation. Tell us what you're launching and when. If our work aligns with your frequency, we'd love to meet you. Ready to create what's next?",
-      tr: "Tek bir konuşmayla. Neyi, ne zaman lanse edeceğini anlat. İşimiz seninle aynı frekanstaysa tanışmayı çok isteriz. Sıradakini yaratmaya hazır mısın?",
+      en: "One conversation. Tell us what you’re launching and when. If our work aligns with your frequency, we’d love to meet you. Ready to create what’s next?",
+      tr: "Tek bir konuşmayla. Neyi, ne zaman lanse edeceğinizi anlatın. İşimiz sizinle aynı frekanstaysa tanışmayı çok isteriz. Sıradakini yaratmaya hazır mısınız?",
     },
     action: {
       href: "/contact",
       label: {
-        en: "Let's Build Something Extraordinary.",
-        tr: "Let's Build Something Extraordinary.",
+        en: "Let’s Build Something Extraordinary.",
+        tr: "Let’s Build Something Extraordinary.",
       },
     },
     ...noMedia,
@@ -213,8 +213,8 @@ export const monaQuestions: MonaQuestion[] = monaFaq.map((item) => ({
           action: {
             href: "/contact",
             label: {
-              en: "Let's Build Something Extraordinary.",
-              tr: "Let's Build Something Extraordinary.",
+              en: "Let’s Build Something Extraordinary.",
+              tr: "Let’s Build Something Extraordinary.",
             },
           },
         }
@@ -228,8 +228,8 @@ export const monaQuestions: MonaQuestion[] = monaFaq.map((item) => ({
 export const easterEggLine: MonaLine = {
   id: "easter-egg",
   text: {
-    en: "I'm as real as the last thing you liked on the internet. The difference is, I tell you.",
-    tr: "İnternette en son beğendiğin şey kadar gerçeğim. Farkım, bunu sana söylüyor olmam.",
+    en: "I’m as real as the last thing you liked on the internet. The difference is, I tell you.",
+    tr: "İnternette en son beğendiğiniz şey kadar gerçeğim. Farkım, bunu size söylüyor olmam.",
   },
   ...noMedia,
 };
@@ -239,7 +239,7 @@ export const homepageLines: MonaLine[] = [
   {
     id: "home-1",
     text: {
-      en: "Hello. I'm MONA. I run the AI side of this place.",
+      en: "Hello. I’m MONA. I run the AI side of this place.",
       tr: "Merhaba. Ben MONA. Buranın yapay zekâ tarafını ben yürütüyorum.",
     },
     ...noMedia,
@@ -248,7 +248,7 @@ export const homepageLines: MonaLine[] = [
     id: "home-2",
     text: {
       en: "Curious how a film gets made here in a fraction of the time? Ask me upstairs.",
-      tr: "Bir filmin burada nasıl bu kadar kısa sürede çıktığını merak ediyorsan, bana yukarıda sor.",
+      tr: "Bir filmin burada nasıl bu kadar kısa sürede çıktığını merak ediyorsanız, bana yukarıda sorun.",
     },
     ...noMedia,
   },

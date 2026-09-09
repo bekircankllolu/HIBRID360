@@ -24,7 +24,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Selected films, campaigns and live productions by Hibrid 360."
-        : "Hibrid 360'ın seçili film, kampanya ve canlı prodüksiyon işleri.",
+        : "Hibrid 360’ın seçili film, kampanya ve canlı prodüksiyon işleri.",
     robots: works.length > 0 ? undefined : { index: false, follow: true },
     alternates: localizedAlternates(locale, "/work"),
   };
@@ -64,7 +64,7 @@ export default async function WorkPage({
           aria-hidden="true"
         />
         <div className={styles.heroCopy}>
-          <h1 className={styles.heroTitle}>THE ART OF TEAM WORK</h1>
+          <h1 className={styles.heroTitle}>THE ART OF TEAMWORK</h1>
           <p className={styles.heroLead}>{t("showreelBody")}</p>
         </div>
       </header>

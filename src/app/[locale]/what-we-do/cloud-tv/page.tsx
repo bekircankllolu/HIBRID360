@@ -82,7 +82,12 @@ export default async function CloudTvPage({
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("solutionsTitle")}</h2>
+        {/* bkz. ai-creative-production/page.tsx — marka adı lang="en" ile sarılır. */}
+        <h2 className={styles.sectionTitle}>
+          {t.rich("solutionsTitle", {
+            brand: (chunks) => <span lang="en">{chunks}</span>,
+          })}
+        </h2>
         <ul className={styles.list}>
           {hibridSolutions.slice(0, 3).map((line, index) => (
             <li key={index} className={styles.listItem}>

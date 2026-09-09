@@ -80,6 +80,7 @@
   font-family: var(--font-brand);
   font-size: 0.875rem;
   font-weight: var(--font-weight-brand);
+  text-transform: uppercase;
 }
 
 .title {

@@ -34,7 +34,7 @@ export function Footer() {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.topRow}>
-          <p className={styles.wordmark}>HIBRID 360</p>
+          <p className={styles.wordmark} lang="en">Hibrid 360</p>
           <p className={styles.statement}>
             {BRAND_SIGNATURE_LINES.map((line) => (
               <span key={line}>{line}</span>
@@ -59,7 +59,7 @@ export function Footer() {
             </address>
           </section>
 
-          <nav className={styles.column} aria-label="Footer">
+          <nav className={styles.column} aria-label={tNav("explore")}>
             <h2>{tNav("explore")}</h2>
             <ul>
               {FOOTER_NAV.map((item) => (
@@ -70,7 +70,7 @@ export function Footer() {
             </ul>
           </nav>
 
-          <nav className={styles.column} aria-label="Legal">
+          <nav className={styles.column} aria-label={tNav("legal")}>
             <h2>{tNav("legal")}</h2>
             <ul>
               {legalItems.map((item) => (

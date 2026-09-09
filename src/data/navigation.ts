@@ -58,9 +58,9 @@ export const MAIN_NAV: NavItem[] = [
     href: "/culture",
     order: 1,
     children: [
-      { href: "/who-we-are", label: "WHO WE ARE" },
-      { href: "/what-we-believe", label: "WHAT WE BELIEVE" },
-      { href: "/think-and-thank", label: "THINK & THANK" },
+      { href: "/who-we-are", label: "Who We Are" },
+      { href: "/what-we-believe", label: "What We Believe" },
+      { href: "/think-and-thank", label: "Think & Thank" },
     ],
   },
   {
@@ -79,8 +79,8 @@ export const MAIN_NAV: NavItem[] = [
     href: "/partners",
     order: 5,
     children: [
-      { href: "/partners#studio-room", label: "STUDIO ROOM" },
-      { href: "/partners#marry-me-kitchen", label: "MARRY ME KITCHEN" },
+      { href: "/partners#studio-room", label: "Studio Food Room" },
+      { href: "/partners#marry-me-kitchen", label: "Marry Me Kitchen" },
     ],
   },
   { labelKey: "insights", href: "/think-and-thank", order: 6 },

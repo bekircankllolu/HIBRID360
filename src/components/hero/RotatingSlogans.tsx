@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import styles from "./RotatingSlogans.module.css";
 
@@ -30,12 +30,12 @@ const SLOGANS = [
   {
     lead: "PURE. SIMPLE. POWERFUL.",
     body: {
-      en: "AI-native creative production for brands that shape what's next.",
+      en: "AI-native creative production for brands that shape what’s next.",
       tr: "Sıradakini belirleyen markalar için AI-native kreatif prodüksiyon.",
     },
   },
   {
-    lead: "Human creativity. AI precision. Real impact.",
+    lead: "HUMAN CREATIVITY. AI PRECISION. REAL IMPACT.",
     body: null,
   },
 ];
@@ -45,6 +45,7 @@ const EXIT_MS = 400;
 
 export function RotatingSlogans() {
   const locale = useLocale() as "tr" | "en";
+  const t = useTranslations("home");
   const reducedMotion = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   const [exiting, setExiting] = useState(false);
@@ -76,7 +77,7 @@ export function RotatingSlogans() {
   // Hareket kapalıysa (veya döngü durduysa) üç slogan birden okunur.
   if (reducedMotion) {
     return (
-      <section className={styles.block} aria-label="Slogans">
+      <section className={styles.block} aria-label={t("slogansLabel")}>
         <ul className={styles.staticList}>
           {SLOGANS.map((slogan) => (
             <li key={slogan.lead}>
@@ -92,7 +93,7 @@ export function RotatingSlogans() {
   const slogan = SLOGANS[index];
 
   return (
-    <section className={styles.block} aria-label="Slogans">
+    <section className={styles.block} aria-label={t("slogansLabel")}>
       {/* brief 4.4: bir ekranda aynı anda en fazla bir slogan görünür. */}
       <div
         className={`${styles.slot} ${exiting ? styles.exiting : styles.entering}`}

@@ -145,13 +145,13 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
       await seedConsent(page);
       await page.goto(`/${locale}/work`, { waitUntil: "networkidle" });
 
-      // Musteri revizyonu: hero basligi "RECENT" iken "THE ART OF TEAM WORK"
+      // Musteri revizyonu: hero basligi "RECENT" iken "THE ART OF TEAMWORK"
       // oldu. Marka slogani oldugu icin TR sayfada da Ingilizce kalir
       // (CLAUDE.md i18n kurali: sloganlar marka dilidir). Kaynagi
       // DECISIONS.md madde 25'te. Son isler listesi artik ayri bir h2
       // altinda -- asagida onu da dogruluyoruz.
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-        "THE ART OF TEAM WORK",
+        "THE ART OF TEAMWORK",
       );
       await expect(
         page.getByRole("heading", {

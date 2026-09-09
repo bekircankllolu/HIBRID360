@@ -62,7 +62,7 @@ export async function generateMetadata({
     description:
       locale === "en"
         ? "Tell us what you are making and when. Istanbul, Kadıköy — or a 30-minute intro call, wherever you are."
-        : "Ne üretmek istediğinizi ve zamanlamanızı anlatın. İstanbul, Kadıköy'de ya da 30 dakikalık çevrim içi görüşmede buluşalım.",
+        : "Ne üretmek istediğinizi ve zamanlamanızı anlatın. İstanbul, Kadıköy’de ya da 30 dakikalık çevrim içi görüşmede buluşalım.",
     alternates: localizedAlternates(locale, "/contact"),
   };
 }
@@ -147,7 +147,7 @@ export default async function ContactPage({
           (CLAUDE.md kontrast kuralı; beyaz metin AA geçmiyor). */}
       <section className={styles.yellowBand}>
         <p className={styles.yellowBandLead}>{t("heroLead2")}</p>
-        <p className={styles.yellowBandLabel}>E-MAIL US</p>
+        <p className={styles.yellowBandLabel}>EMAIL US</p>
         <a className={styles.yellowBandEmail} href={`mailto:${CONTACT.email}`}>
           {CONTACT.email}
         </a>

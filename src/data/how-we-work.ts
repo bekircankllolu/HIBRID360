@@ -15,7 +15,7 @@ export const processSteps = [
   {
     step: 1,
     title: "Brief & fit",
-    body: "a 30-minute call. What you're launching, when, and for which platforms.",
+    body: "a 30-minute call. What you’re launching, when, and for which platforms.",
     pendingDecision: false,
   },
   {

@@ -45,7 +45,7 @@ export async function generateMetadata({
     title: t("title.whatWeDo"),
     description:
       locale === "en"
-        ? "Creative, production, post production, digital, live broadcast, Cloud TV, events and AI creative production."
+        ? "Creative, production, post-production, digital, live broadcast, Cloud TV, events and AI creative production."
         : "Creative, prodüksiyon, post prodüksiyon, dijital, canlı yayın, Cloud TV, etkinlik ve AI kreatif prodüksiyon hizmetleri.",
     alternates: localizedAlternates(locale, "/what-we-do"),
   };
