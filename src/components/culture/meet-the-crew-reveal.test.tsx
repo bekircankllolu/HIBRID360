@@ -152,10 +152,12 @@ describe("revealProgress", () => {
     }
   });
 
-  it("reveals the CTA only once the circle has covered the viewport", () => {
+  it("reveals the CTA only once the mask has covered the corners on common aspect ratios", () => {
+    expect(CTA_REVEAL_THRESHOLD).toBe(0.9);
     expect(isCtaRevealed(0)).toBe(false);
-    expect(isCtaRevealed(CTA_REVEAL_THRESHOLD - 0.01)).toBe(false);
-    expect(isCtaRevealed(CTA_REVEAL_THRESHOLD)).toBe(true);
+    expect(isCtaRevealed(0.75)).toBe(false);
+    expect(isCtaRevealed(0.89)).toBe(false);
+    expect(isCtaRevealed(0.9)).toBe(true);
     expect(isCtaRevealed(1)).toBe(true);
   });
 });

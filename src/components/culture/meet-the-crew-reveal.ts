@@ -72,12 +72,12 @@ export function revealProgress(
 }
 
 /**
- * Reveal'ın kapanması tamamlandığı ve CTA'nın belirdiği eşik. Daire
- * `75vmax` yarıçapla viewport'u ~0.63–0.74 arasında kapatıyor; CTA bu
+ * Reveal'ın kapanması tamamlandığı ve CTA'nın belirdiği eşik. CTA, maske
+ * tüm yaygın ekran oranlarında köşeleri kapattıktan sonra görünür; bu
  * eşikten önce görünmez ve **odaklanılamaz** olmalı — görünmeyen bir
  * butona tab ile gitmek WCAG "odak görünür" kuralını ihlal eder.
  */
-export const CTA_REVEAL_THRESHOLD = 0.62;
+export const CTA_REVEAL_THRESHOLD = 0.9;
 
 export function isCtaRevealed(progress: number): boolean {
   return progress >= CTA_REVEAL_THRESHOLD;
