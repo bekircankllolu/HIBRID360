@@ -108,6 +108,7 @@ export function MorphingHeroTitle({ className }: { className?: string }) {
         <span ref={text1Ref} className={styles.text}>
           THINK
         </span>
+        {" "}
         <span ref={text2Ref} className={styles.text} />
       </span>
       <svg className={styles.filterDefinitions} aria-hidden="true">
