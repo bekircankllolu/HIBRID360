@@ -8,7 +8,8 @@
   margin: 0 0 var(--space-2);
   color: var(--color-brand-yellow);
   font-family: var(--font-brand);
-  font-size: 0.875rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-semibold);
   text-transform: uppercase;
 }
@@ -21,20 +22,22 @@
 }
 
 .meta {
-  opacity: 0.7;
-  font-size: 0.875rem;
+  font-size: var(--font-size-label);
+
   margin: var(--space-2) 0 var(--space-16);
 }
 
 .section {
-  max-width: 44rem;
+  max-width: var(--measure-prose);
+
   margin-bottom: var(--space-12);
 }
 
 .sectionTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);

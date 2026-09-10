@@ -50,7 +50,8 @@
 }
 
 .heroLead {
-  max-width: 48rem;
+  max-width: var(--measure-prose);
+
   margin: var(--space-6) 0 0 auto;
   font-family: var(--font-brand);
   font-size: clamp(1rem, 2vw, 1.5rem);
@@ -83,7 +84,8 @@
 .seoHeading {
   max-width: 36rem;
   font-family: var(--font-brand);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-semibold);
   text-transform: uppercase;
   color: var(--color-brand-yellow);

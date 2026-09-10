@@ -88,7 +88,8 @@
 .index {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.18em;
   color: var(--color-brand-yellow);
 }
@@ -173,7 +174,8 @@
   grid-column: 1 / 4;
   margin: 0;
   font-family: var(--font-brand);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-bold);
   text-transform: uppercase;
 }
@@ -247,7 +249,8 @@
   display: block;
   margin-bottom: clamp(4rem, 8vw, 8rem);
   font-family: var(--font-brand);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-bold);
 }
 

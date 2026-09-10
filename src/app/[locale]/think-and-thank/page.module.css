@@ -28,8 +28,9 @@
 
 .heroEyebrow {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0.08em;
   /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
   text-transform: uppercase;
 }
@@ -118,8 +119,9 @@
 .featuredVideoCopy p,
 .objectCopy p {
   margin: 0 0 var(--space-4);
-  font-size: 0.72rem;
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0.06em;
 }
 
 .featuredVideoCopy h2,

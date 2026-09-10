@@ -7,7 +7,9 @@ import { digitalServices } from "@/data/digital-services";
 import { siteImages } from "@/data/site-images";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
-import styles from "@/styles/service-page.module.css";
+import serviceStyles from "@/styles/service-page.module.css";
+import styles from "./page.module.css";
+import { splitStatementLead } from "./statement";
 
 /**
  * DIG-01..06 (nihai copy deck, Ağustos 2026) — Digital alt sayfası.
@@ -21,6 +23,15 @@ import styles from "@/styles/service-page.module.css";
  * de aynı — marka terminolojisi, bilerek çevrilmedi. Aynı gerekçeyle hero
  * sloganı ve CTA mikro başlığı da İngilizce; CTA'nın gövde cümlesi
  * (`closingBody`) zaten Türkçe.
+ *
+ * feature/typography-pilot: hero H1'e ağırlık karşıtlığı (300/800) ve
+ * bandBody'nin ilk cümlesine iki tonlu statement eklendi — metin
+ * DEĞİŞMEDİ, yalnızca sunumu değişti. Yerel sınıflar tek kök (`.page`)
+ * altında iç içe tanımlı (bkz. ./page.module.css). Rev 4'te paylaşılan
+ * service-page.module.css de site geneli Dalga A kapsamında düzeltildi
+ * (7 hizmet sayfasının tamamını etkiler); bu sayfadaki yerel dosya artık
+ * yalnızca Digital'e özgü EK jestleri taşıyor. Detay: ./page.module.css
+ * ve ./statement.ts.
  */
 
 const SHORT_SERVICES = [
@@ -66,8 +77,14 @@ export default async function DigitalPage({
   const bandBody = t.raw("bandBody") as string[];
   const quad = t.raw("quad") as Array<{ title: string; body: string }>;
 
+  // bandBody[0] sönük-baş/tam-kontrast statement olarak render edilir;
+  // diğer paragraflar (restBand) hiç dokunulmadan mevcut .bandBody
+  // stiliyle devam eder — üç paragrafın tamamı korunuyor.
+  const [statementText, ...restBand] = bandBody;
+  const statementSplit = splitStatementLead(statementText, locale);
+
   return (
-    <div className={styles.page}>
+    <div className={`${serviceStyles.page} ${styles.page}`}>
       <JsonLd
         data={breadcrumbListJsonLd(locale, [
           { name: "Home", path: "" },
@@ -76,61 +93,77 @@ export default async function DigitalPage({
         ])}
       />
 
-      <h1 className={styles.heroTitle}>BUILT FOR THE FEED. MADE TO MOVE.</h1>
+      <h1 className={serviceStyles.heroTitle}>
+        <span className={styles.weightLight}>BUILT FOR THE FEED.</span>{" "}
+        <span className={styles.weightBold}>MADE TO MOVE.</span>
+      </h1>
       <ServiceVisual
         src={siteImages.services.digital.src}
         alt={siteImages.services.digital.alt[locale]}
         priority
       />
-      <div className={styles.body}>
+      <div className={serviceStyles.body}>
         {body.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}
       </div>
 
-      <section className={styles.band}>
-        <div className={styles.bandBody}>
-          {bandBody.map((paragraph, index) => (
+      <section className={serviceStyles.band}>
+        <p className={styles.statement}>
+          {statementSplit ? (
+            <>
+              <span className={styles.statementMuted}>{statementSplit.lead}</span>
+              {statementSplit.rest}
+            </>
+          ) : (
+            statementText
+          )}
+        </p>
+        <div className={serviceStyles.bandBody}>
+          {restBand.map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
         </div>
       </section>
 
-      <section className={styles.section}>
-        <ul className={styles.list}>
+      <section className={serviceStyles.section}>
+        <ul className={serviceStyles.list}>
           {digitalServices.map((service) => (
-            <li key={service.title} className={styles.listItem}>
+            <li key={service.title} className={serviceStyles.listItem}>
               <div>
-                <p className={styles.quadTitle}>{service.title}</p>
-                <p className={styles.quadBody}>{isTr ? service.tr : service.en}</p>
+                <p className={serviceStyles.quadTitle}>{service.title}</p>
+                <p className={serviceStyles.quadBody}>{isTr ? service.tr : service.en}</p>
               </div>
             </li>
           ))}
         </ul>
       </section>
 
-      <section className={styles.section}>
-        <div className={styles.quad}>
-          {quad.map((item) => (
-            <div key={item.title}>
-              <p className={styles.quadTitle}>{item.title}</p>
-              <p className={styles.quadBody}>{item.body}</p>
+      <section className={serviceStyles.section}>
+        <div className={serviceStyles.quad}>
+          {quad.map((item, index) => (
+            <div key={item.title} className={styles.quadItem}>
+              <div className={styles.quadHeading}>
+                <span className={styles.quadNumber}>{String(index + 1).padStart(2, "0")}</span>
+                <p className={`${serviceStyles.quadTitle} ${styles.quadTitle}`}>{item.title}</p>
+              </div>
+              <p className={serviceStyles.quadBody}>{item.body}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <ul className={styles.tagList}>
+      <ul className={serviceStyles.tagList}>
         {SHORT_SERVICES.map((service) => (
-          <li key={service} className={styles.tag}>
+          <li key={service} className={serviceStyles.tag}>
             {service}
           </li>
         ))}
       </ul>
 
-      <section className={styles.cta}>
-        <p className={styles.ctaLead}>{t("closingBody")}</p>
-        <p className={styles.microHeading}>
+      <section className={serviceStyles.cta}>
+        <p className={serviceStyles.ctaLead}>{t("closingBody")}</p>
+        <p className={serviceStyles.microHeading}>
           LET&rsquo;S BUILD YOUR OWN DIGITAL EXPERIENCE. MAKE IT FEEL ALIVE.
         </p>
       </section>

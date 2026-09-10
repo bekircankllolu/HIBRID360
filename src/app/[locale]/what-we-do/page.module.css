@@ -20,11 +20,11 @@
 }
 
 .heroBody {
-  max-width: 44rem;
+  max-width: var(--measure-prose);
+
   margin: var(--space-6) 0 var(--space-16);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
 }
 
 /**
@@ -141,9 +141,10 @@
 
 .cardText {
   /* 15px, satır yüksekliği 1.55 */
-  font-size: 0.9375rem;
+  font-size: var(--font-size-body);
+
   line-height: 1.55;
-  opacity: 0.72;
+
   /* Okunabilir satır uzunluğu — geniş sütunda satır uzayıp gitmesin. */
   max-width: 34ch;
   margin: 0;
@@ -218,7 +219,6 @@
 /* Kapakta ad zaten büyük punto duruyor; gövdede tekrar edilmiyor. */
 .cardFeatured .cardText {
   max-width: 38ch;
-  opacity: 0.85;
 }
 
 /**

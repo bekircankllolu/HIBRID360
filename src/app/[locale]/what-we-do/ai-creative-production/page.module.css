@@ -15,7 +15,8 @@
 }
 
 .heroLead {
-  max-width: 46rem;
+  max-width: var(--measure-prose);
+
   margin: 0;
 }
 
@@ -36,7 +37,6 @@
   font-weight: var(--font-weight-heading-semibold);
   font-size: clamp(1rem, 2.2vw, 1.375rem);
   margin: 0;
-  opacity: 0.9;
 }
 
 .block {
@@ -57,7 +57,8 @@
 .flowStep {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.9375rem;
+  font-size: var(--font-size-body);
+
   border: 1px solid rgba(255, 255, 255, 0.3);
   padding: var(--space-2) var(--space-4);
 }
@@ -127,7 +128,8 @@
 }
 
 .blockBody {
-  max-width: 46rem;
+  max-width: var(--measure-prose);
+
   margin: 0;
 }
 
@@ -181,7 +183,8 @@
   cursor: pointer;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
@@ -189,7 +192,7 @@
 
 .transcriptList {
   margin: var(--space-6) 0 0;
-  max-width: 46rem;
+  max-width: var(--measure-prose);
 }
 
 .transcriptList dt {
@@ -200,5 +203,4 @@
 
 .transcriptList dd {
   margin: var(--space-2) 0 0;
-  opacity: 0.85;
 }

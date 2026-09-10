@@ -8,7 +8,8 @@
 .kicker {
   margin: 0 0 var(--space-8);
   font-family: var(--font-brand);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-bold);
   letter-spacing: 0.12em;
 }

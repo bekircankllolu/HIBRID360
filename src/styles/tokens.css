@@ -108,4 +108,54 @@
   --media-zoom-scale: 1.035;
   --media-zoom-duration: 560ms;
   --media-zoom-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /**
+   * Pilot ölçek — feature/typography-pilot (Digital + Think & Thank makale
+   * detayı). Yalnızca EKLENDİ: mevcut --font-size-* / --line-height-* /
+   * --tracking-* değerlerinin hiçbiri değişmedi, hiçbir mevcut tüketici
+   * etkilenmiyor. Ana sayfa bu token’ları hiç okumuyor.
+   *
+   * Clamp değil, breakpoint bazlı sabit rem: bu token’ların korunacak bir
+   * eğrisi yok (yeni), bu yüzden her genişlikte değer önceden bilinsin diye
+   * üç sabit basamak kullanıldı (bkz. plan Rev 3 §4). Kademeler mevcut kod
+   * tabanının medya sorgusu eşikleriyle hizalı (640px / 1024px).
+   */
+  --font-size-micro: 0.8125rem; /* 13px, tüm genişliklerde sabit */
+  --font-size-label: 0.875rem; /* 14px taban -> 640px’te 15px -> 1024px’te 16px */
+  --font-size-lead: 1.125rem; /* 18px taban -> 640px’te 20px -> 1024px’te 22px */
+  --font-size-statement: 1.375rem; /* 22px taban -> 640px’te 30px -> 1024px’te 44px */
+
+  /* Söndürülmüş metin — yalnızca meta/etiket ve iki tonlu statement’in
+     bilerek geri çekilen yarısı için. Gövde/proz metni HİÇBİR YERDE bu
+     token’la söndürülmez. Siyah zeminde beyaz @ .55 → ~6.3:1 (WCAG AA
+     sınırı 4.5:1’in üstünde). Açık zeminler (Think & Thank paper/mint/
+     pink/lilac) bu pilotta bu token’ı kullanmıyor — o sayfalarda metin
+     zaten tam kontrastlı siyah. */
+  --text-muted: rgba(255, 255, 255, 0.55);
+
+  /* Uzun metin ölçüsü — hedef 60-72 GERÇEK karakter. `ch` "0" rakamının
+     genişliği (Inter'de ~0.63em), ortalama harf ~0.49em: 66ch ölçülmüş
+     olarak ~85 karakter ediyordu. 54ch ≈ 70 karakter. */
+  --measure-prose: 54ch;
+}
+
+/**
+ * Pilot ölçek — breakpoint kademeleri. Yalnızca yukarıda EKLENEN 3
+ * token’ı büyütür (label/lead/statement); micro sabit kalır. Mevcut
+ * hiçbir seçiciyi veya token’ı etkilemez.
+ */
+@media (min-width: 640px) {
+  :root {
+    --font-size-label: 0.9375rem;
+    --font-size-lead: 1.25rem;
+    --font-size-statement: 1.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --font-size-label: 1rem;
+    --font-size-lead: 1.375rem;
+    --font-size-statement: 2.75rem;
+  }
 }
