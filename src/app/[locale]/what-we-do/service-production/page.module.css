@@ -8,8 +8,7 @@
   border-left: 2px solid var(--color-brand-yellow);
   padding-left: var(--space-4);
   margin-bottom: var(--space-12);
-  font-size: 0.875rem;
-  opacity: 0.8;
+  font-size: var(--font-size-label);
 }
 
 .heroTitle {
@@ -21,7 +20,8 @@
 }
 
 .heroLead {
-  max-width: 46rem;
+  max-width: var(--measure-prose);
+
   margin: 0;
 }
 
@@ -46,8 +46,7 @@
 
 .offerBody {
   margin: 0;
-  font-size: 0.9375rem;
-  opacity: 0.85;
+  font-size: var(--font-size-body);
 }
 
 .section {
@@ -57,7 +56,8 @@
 .sectionTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
@@ -71,7 +71,8 @@
 }
 
 .ctaLead {
-  max-width: 44rem;
+  max-width: var(--measure-prose);
+
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: clamp(1.125rem, 2.5vw, 1.75rem);

@@ -1,11 +1,11 @@
 .stage { background: #000; color: #fff; letter-spacing: 0; }
 .experience { height: calc(100svh - 72px); min-height: 560px; max-height: 1100px; position: relative; overflow: hidden; scroll-margin-top: 72px; }
 .intro { position: absolute; top: 42px; left: 3%; z-index: 2; pointer-events: none; }
-.eyebrow { font-size: 11px; font-weight: 600; margin: 0 0 14px; text-transform: uppercase; }
+.eyebrow { font-size: var(--font-size-micro); font-weight: 600; margin: 0 0 14px; letter-spacing: 0.06em; text-transform: uppercase; }
 .intro h1, .intro h2 { font-size: 58px; line-height: 1; color: #fff; margin: 0; font-weight: 800; letter-spacing: 0; }
 .intro h1 span, .intro h2 span { color: #fffc00; }
-.signature { margin-top: 22px; font-size: 12px; line-height: 1.5; color: #b7abbf; }
-.status { position: absolute; right: 3%; top: 46px; display: flex; gap: 8px; align-items: center; font-size: 11px; color: #b7abbf; z-index: 2; }
+.signature { margin-top: 22px; font-size: var(--font-size-micro); line-height: 1.5; color: #b7abbf; }
+.status { position: absolute; right: 3%; top: 46px; display: flex; gap: 8px; align-items: center; font-size: var(--font-size-micro); color: #b7abbf; z-index: 2; }
 .statusDot { width: 6px; height: 6px; border-radius: 50%; background: #fffc00; }
 .portrait { position: absolute; inset: 0; width: 100%; }
 .videoSurface { position: relative; width: 100%; height: 100%; }
@@ -17,16 +17,16 @@
 .caption { position: absolute; bottom: 86px; left: 50%; transform: translateX(-50%); width: min(760px, 70%); min-height: 68px; padding: 12px 20px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 17px; line-height: 1.5; color: #ede6f2; background: rgb(0 0 0 / 88%); pointer-events: none; }
 .caption:empty { visibility: hidden; }
 .toolbar { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2; }
-.startButton { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 24px; background: #fffc00; color: #000; border: 1px solid #fffc00; border-radius: 0; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .2s; }
+.startButton { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 24px; background: #fffc00; color: #000; border: 1px solid #fffc00; border-radius: 0; font-size: var(--font-size-label); font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .2s; }
 .startButton:hover { background: #fff; border-color: #fff; }
 .controls { display: flex; gap: 8px; }
 .controls button { width: 46px; height: 46px; display: grid; place-items: center; color: #fffc00; background: #141316; border: 1px solid #37303e; border-radius: 50%; cursor: pointer; transition: border-color .2s, background .2s; }
 .controls button:hover { background: #27232d; border-color: #fffc00; }
 .controls button:disabled { opacity: .4; cursor: default; }
 .stage button:focus-visible, .stage a:focus-visible { outline: 2px solid #fffc00; outline-offset: 5px; }
-.askLink { position: absolute; right: 3%; bottom: 34px; display: flex; align-items: center; gap: 14px; color: #fffc00; background: none; border: none; padding: 8px 0; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.askLink { position: absolute; right: 3%; bottom: 34px; display: flex; align-items: center; gap: 14px; color: #fffc00; background: none; border: none; padding: 8px 0; font-size: var(--font-size-label); font-weight: 600; cursor: pointer; text-decoration: none; }
 .askLink span { color: #9d90a6; }
-.disclaimer { position: absolute; left: 3%; bottom: 34px; color: #938a99; font-size: 11px; margin: 0; }
+.disclaimer { position: absolute; left: 3%; bottom: 34px; color: #938a99; font-size: var(--font-size-micro); margin: 0; }
 .audioNote { margin: 0; padding: 20px 4%; color: #fffc00; text-align: center; font-size: 14px; }
 .answer { border-top: 1px solid #29252d; display: grid; grid-template-columns: 1fr 2fr; gap: 48px; padding: 52px 6%; background: #111013; scroll-margin-top: 90px; }
 .answerLabel { font-size: 18px; font-weight: 600; color: #b49bd8; margin: 0; }
@@ -35,7 +35,7 @@
 .questionDeck { padding: 60px 4% 80px; background: #e8def2; color: #151218; scroll-margin-top: 72px; }
 .questionHeader { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 38px; border-bottom: 1px solid #aea1b7; }
 .questionHeader h2 { font-size: 42px; line-height: 1.15; color: #151218; margin: 0; }
-.questionHeader p { font-size: 11px; font-weight: 600; margin: 0; }
+.questionHeader p { font-size: var(--font-size-micro); font-weight: 600; margin: 0; }
 .questionGroups { display: grid; grid-template-columns: 1fr 1fr; gap: 7%; margin-top: 40px; }
 .questionGroups h3 { color: #151218; font-size: 13px; margin: 0 0 24px; text-transform: uppercase; }
 .questionGroups ul { list-style: none; padding: 0; margin: 0; }
@@ -44,22 +44,22 @@
 .questionGroups button { width: 100%; display: grid; grid-template-columns: 28px 1fr 20px; gap: 12px; align-items: start; text-align: left; padding: 20px 4px; border: 0; background: none; color: inherit; font-size: 16px; line-height: 1.45; cursor: pointer; transition: background .2s; }
 .questionGroups button:hover, .questionGroups button[aria-pressed="true"] { background: #fffc00; }
 .questionDeck button:focus-visible { outline-color: #151218; outline-offset: 2px; }
-.questionNumber { font-size: 11px; line-height: 24px; }
+.questionNumber { font-size: var(--font-size-micro); line-height: 24px; }
 @media (min-width: 1600px) { .intro h1, .intro h2 { font-size: 72px; } }
 @media (max-width: 1000px) {
   .experience { min-height: 600px; }
   .portrait { inset-block: 40px 0; }
   .intro h1, .intro h2 { font-size: 40px; }
-  .signature { font-size: 10px; margin-top: 15px; }
+  .signature { margin-top: 15px; }
   .caption { width: 78%; font-size: 16px; }
 }
 @media (max-width: 640px) {
   .experience { min-height: 610px; max-height: 880px; }
   .intro { top: 28px; left: 20px; }
   .intro h1, .intro h2 { font-size: 36px; }
-  .eyebrow { font-size: 9px; margin-bottom: 10px; }
+  .eyebrow { margin-bottom: 10px; }
   .signature { display: none; }
-  .status { top: 34px; right: 20px; font-size: 9px; }
+  .status { top: 34px; right: 20px; }
   .portrait { inset-block: 110px 132px; }
   .video { object-fit: cover; }
   .motionControl { right: 20px; top: 10px; }
@@ -68,8 +68,8 @@
   .toolbar { bottom: 53px; }
   .controls button { width: 40px; height: 40px; }
   .startButton { min-height: 40px; }
-  .askLink { bottom: 13px; right: 20px; font-size: 10px; gap: 8px; }
-  .disclaimer { left: 20px; bottom: 24px; font-size: 9px; }
+  .askLink { bottom: 13px; right: 20px; gap: 8px; }
+  .disclaimer { left: 20px; bottom: 24px; }
   .answer { grid-template-columns: 1fr; gap: 20px; padding: 32px 20px; }
   .answer > div > p { font-size: 17px; line-height: 1.65; }
   .answerLabel { font-size: 15px; }

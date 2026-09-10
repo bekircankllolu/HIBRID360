@@ -8,7 +8,8 @@
 .eyebrow {
   margin: 0 0 var(--space-4);
   font-family: var(--font-brand);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-bold);
   color: var(--color-brand-yellow);
   letter-spacing: 0.12em;
@@ -20,7 +21,8 @@
 }
 
 .heroSubtitle {
-  max-width: 44rem;
+  max-width: var(--measure-prose);
+
   color: var(--color-brand-white);
 }
 
@@ -60,7 +62,8 @@
 }
 
 .body {
-  max-width: 58rem;
+  max-width: var(--measure-prose);
+
   font-size: clamp(1.125rem, 2vw, 1.5rem);
 }
 

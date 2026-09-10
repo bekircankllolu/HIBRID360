@@ -70,7 +70,7 @@
   max-width: 52rem;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(0.75rem, 1.4vw, 0.9375rem);
+  font-size: var(--font-size-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);

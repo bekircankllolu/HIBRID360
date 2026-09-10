@@ -49,9 +49,18 @@
   padding-block: 1.7rem;
   font-family: var(--font-body);
   font-weight: var(--font-weight-body-medium);
-  font-size: clamp(0.68rem, 0.72vw, 0.82rem);
+  /* Eski clamp'in tabanı vw terimini hep yeniyordu: 1440px'te bile 10.88px
+     kalıyordu, sitedeki en küçük metindi. Sabit 14px; 1280px üstünde 15px
+     (aşağıdaki media query). Yedi bağlantı 1180px'te tek satıra sığıyor. */
+  font-size: 0.875rem;
   line-height: 1;
   color: var(--color-brand-white);
+}
+
+@media (min-width: 1280px) {
+  .navItem > a {
+    font-size: 0.9375rem;
+  }
 }
 
 .navItem > a::after {
@@ -176,17 +185,22 @@
 }
 
 .megaHeading {
-  margin: 0 0 0.6rem;
+  /* 16px başlık ile 14px link arasında 2px fark vardı — hiyerarşi yoktu.
+     Sütun başlığı artık gerçek bir başlık ölçeğinde. */
+  margin: 0 0 var(--space-4);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 1rem;
+  font-size: var(--font-size-subheading);
+  line-height: 1.15;
+  letter-spacing: 0;
   color: var(--color-brand-black);
 }
 
 .megaColumn > a,
 .serviceGrid a {
   color: var(--color-brand-black);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body);
   line-height: 1.35;
+  letter-spacing: 0;
 }
 
 .megaColumn > a:hover,
@@ -201,7 +215,8 @@
 .serviceGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.8rem 2rem;
+  /* Satır aralığı 12.8px'ti; 18px linklerle satırlar birbirine yapışıyordu. */
+  gap: var(--space-4) var(--space-8);
   width: 100%;
   margin: 0;
   padding: 0;
@@ -271,7 +286,8 @@
 
   .mobileServices a {
     color: rgba(255, 255, 255, 0.72);
-    font-size: clamp(0.76rem, 2.5vw, 0.95rem);
+    /* 375px'te 12.16px'e düşüyordu — mobil menüdeki en küçük metindi. */
+    font-size: var(--font-size-label);
   }
 
   .controls {

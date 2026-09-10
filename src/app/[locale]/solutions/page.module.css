@@ -64,7 +64,8 @@
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-lead);
+
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
@@ -120,7 +121,8 @@
   flex: 0 0 auto;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.08em;
   /* Numaralar aynı genişlikte hizalansın. */
   font-variant-numeric: tabular-nums;
