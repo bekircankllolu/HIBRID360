@@ -24,7 +24,7 @@ test.describe("Mobil menü (390px)", () => {
     await expect(nav).toBeVisible();
     await expect(nav.getByRole("link", { name: "Our Culture" })).toBeVisible();
     await expect(
-      nav.getByRole("link", { name: "THINK & THANK", exact: true }).first(),
+      nav.getByRole("link", { name: "Think & Thank", exact: true }).first(),
     ).toBeVisible();
     await expect(page.getByRole("button", { name: "Dil" })).toBeVisible();
 

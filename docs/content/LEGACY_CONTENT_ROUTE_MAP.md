@@ -165,7 +165,7 @@ Deck kararı: `MOTIWE` (deck'te "Motive") partner listesinden çıktı, yerine
 | Görseller | `/assets/img/contact/contact-bg.jpg` (2560×750, gri tonlama — İstanbul panoraması) · `/assets/img/contact/contact-screen01.jpg` (1273×807, gri tonlama — Motion Office) |
 | TR çeviri | Tamam |
 | Telif | Panorama **bağlandı** (`CONTACT_IMAGES`), telifi hâlâ doğrulanmadı — bkz. bölüm 4. `contact-screen01.jpg` istenmedi, alınmadı |
-| Blocker | **Adres çelişkisi** (aşağıda). Harita sağlayıcısı kararı KAPANDI: anahtarsız Google Maps sorgu gömmesi (`src/data/contact.ts` → `mapEmbedUrl`) |
+| Blocker | **Adres çelişkisi** (aşağıda). Harita sağlayıcısı kararı KAPANDI: anahtarsız Google Maps sorgu gömmesi (`src/data/contact.ts` → `mapEmbedUrl`) — bu karar 9 Eylül 2026'da tekrar AÇILDI ve MapLibre GL JS + CARTO'ya güncellendi (bkz. `docs/DECISIONS.md` #29; `mapEmbedUrl()` kaldırıldı, yerine `CONTACT_LOCATION` geldi) |
 
 **Adres çelişkisi — teyit gerekiyor:**
 

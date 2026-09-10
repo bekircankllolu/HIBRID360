@@ -1,0 +1,32 @@
+# `next lint` yerine doğrudan ESLint CLI kullanıldığı için (bkz. package.json
+# "lint" script'i) build çıktılarını Next.js adına ESLint'in ihmal etmesi artık
+# otomatik değil — `next lint` bu dizinleri kendisi filtreliyordu.
+#
+# ESLint 8 zaten `node_modules/` ve nokta ile başlayan dizinleri (`.next/`,
+# `.open-next/`, `.wrangler/`, `.lighthouseci/`) varsayılan olarak atlar;
+# aşağıdaki liste yalnızca nokta ile başlamayan üretilmiş çıktıları kapsar.
+
+# Statik olarak servis edilen varlıklar. Burada elle yazılmış kaynak kod yok;
+# `public/maplibre-gl-*.mjs` MapLibre GL JS v6.8.0'ın minify edilmiş vendor
+# bundle'ları (3-Clause BSD) ve tek satırda 1082 uyarı üretiyorlar.
+/public/
+
+# Build çıktıları
+/out/
+/build/
+
+# Otomatik üretilen tip tanımı (Next.js her build'de yeniden yazar)
+next-env.d.ts
+
+# Test / rapor çıktıları
+/coverage/
+/test-results/
+/playwright-report/
+/blob-report/
+
+# lhci filesystem hedefinin kök dizine bıraktığı raporlar
+/manifest.json
+/localhost-*.report.html
+/localhost-*.report.json
+/lhr-*.html
+/lhr-*.json

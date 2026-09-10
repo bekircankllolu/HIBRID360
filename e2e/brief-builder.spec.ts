@@ -40,7 +40,7 @@ test.describe("Brief Builder sihirbazı", () => {
     const send = page.getByRole("button", { name: "Gönder" });
     await expect(send).toBeDisabled();
 
-    await page.getByLabel(/KVKK aydınlatma metnini okudum/).check();
+    await page.getByLabel(/KVKK Aydınlatma Metni['’]ni okudum/i).check();
     await expect(send).toBeEnabled();
 
     await send.click();

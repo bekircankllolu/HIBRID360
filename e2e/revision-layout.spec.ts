@@ -120,7 +120,7 @@ test("homepage revision order, copy and footer details stay intact", async ({
   expect(positions[0]).toBeLessThan(positions[1]);
   expect(positions[1]).toBeLessThan(positions[2]);
   await expect(etScene).toContainText(
-    "The future of creativity isn't artificial.It's hybrid.",
+    "The future of creativity isn’t artificial.It’s hybrid.",
   );
   await expect(reachOut).toContainText(
     "Hibrid 360’ta işin son rötuşunu, o parlak bitişi ciddiye alıyoruz.",
