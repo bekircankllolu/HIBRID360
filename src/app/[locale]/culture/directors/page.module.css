@@ -24,8 +24,8 @@
 }
 
 .heroSubtitle {
-  max-width: 40rem;
-  opacity: 0.85;
+  max-width: var(--measure-prose);
+
   margin: 0 0 var(--space-16);
 }
 
@@ -54,13 +54,13 @@
 }
 
 .role {
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   color: var(--color-brand-yellow);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .oneLiner {
-  font-size: 0.875rem;
-  opacity: 0.8;
+  font-size: var(--font-size-body);
 }

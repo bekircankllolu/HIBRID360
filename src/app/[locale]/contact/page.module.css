@@ -41,10 +41,10 @@
 
 .heroBody {
   margin: 0;
-  max-width: 48rem;
+  max-width: var(--measure-prose);
+
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
 }
 
 /* 2 — İstanbul fotoğrafı + Motion Office */
@@ -126,11 +126,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  max-width: 46rem;
+  max-width: var(--measure-prose);
+
   margin-inline: var(--gutter);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
 }
 
 .motionBody p {
@@ -146,8 +146,7 @@
 
 .motionIntro {
   margin: 0 var(--gutter) var(--space-8);
-  max-width: 46rem;
-  opacity: 0.9;
+  max-width: var(--measure-prose);
 }
 
 .teams {
@@ -167,8 +166,7 @@
 
 .teamBody {
   margin: 0;
-  font-size: 0.9375rem;
-  opacity: 0.85;
+  font-size: var(--font-size-body);
 }
 
 /* 3 — sarı iletişim bandı.
@@ -195,7 +193,8 @@
 .yellowBandLabel {
   margin: 0 0 var(--space-2);
   font-family: var(--font-brand);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-bold);
   letter-spacing: 0.14em;
 }
@@ -240,7 +239,8 @@
   margin: 0;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
@@ -276,7 +276,8 @@
 .inlineLink {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.06em;
   padding-bottom: 2px;
   border-bottom: 1px solid var(--color-brand-yellow);
@@ -292,9 +293,9 @@
 
 .socialInvite {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--font-size-label);
+
   line-height: 1.7;
-  opacity: 0.7;
 }
 
 .socialLinks {
@@ -311,7 +312,8 @@
   border: 1px solid rgba(255, 255, 255, 0.55);
   color: var(--color-brand-white);
   font-family: var(--font-brand);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   font-weight: var(--font-weight-heading-bold);
 }
 
@@ -347,12 +349,9 @@
 .mapFallback {
   margin: 0;
   padding: var(--space-4) var(--gutter);
-  font-size: 0.875rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-}
+  font-size: var(--font-size-label);
 
-.mapFallback span {
-  opacity: 0.7;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .mapFallback a {
@@ -409,6 +408,18 @@
   max-width: 40rem;
 }
 
+/* Aynı gerekçe: etiketler 14px, onay metni 13px, alanlar 16px'te kalıyordu.
+   Punto burada, yalnızca Contact için büyütülüyor; ana sayfadaki ReachOut
+   formu değişmiyor. Seçiciler bileşenin tek sınıflı kurallarından özgül. */
+.formColumn label {
+  font-size: var(--font-size-label);
+}
+
+.formColumn label input,
+.formColumn label textarea {
+  font-size: var(--font-size-body);
+}
+
 .formAside {
   display: flex;
   flex-direction: column;
@@ -428,7 +439,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-3);
-  font-size: 0.9375rem;
+  font-size: var(--font-size-body);
 }
 
 .bookingLinks a {

@@ -31,8 +31,12 @@
   margin-bottom: auto;
   padding-bottom: var(--space-4);
   border-bottom: 1px solid rgba(0, 0, 0, 0.32);
-  font-size: 0.72rem;
+  /* feature/typography-pilot: 0.72rem (11.5px) -> --font-size-label
+     (14px taban -> 1024px'te 16px). Site genelinde en küçük metinlerden
+     biriydi; tarih/kategori artık okunur boyutta. */
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0;
 }
 
 .category { text-align: right; }
@@ -79,9 +83,13 @@
   gap: var(--space-3);
   padding-top: var(--space-4);
   border-top: 2px solid var(--color-brand-black);
-  font-size: 0.75rem;
+  /* feature/typography-pilot: 0.75rem (12px) -> --font-size-label
+     (14px taban -> 1024px'te 16px). Yazar/okuma süresi/tarih artık
+     gövde metninden küçük ama okunur bir etiket boyutunda. */
+  font-size: var(--font-size-label);
   line-height: 1.4;
   text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .body {

@@ -42,19 +42,17 @@
 }
 
 .heroLead {
-  max-width: 44rem;
+  max-width: var(--measure-prose);
   margin: 0;
-  opacity: 0.9;
 }
 
 .body {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  max-width: 46rem;
+  max-width: var(--measure-prose);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
   margin-top: var(--space-8);
 }
 
@@ -73,7 +71,7 @@
 .sectionTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
@@ -100,15 +98,14 @@
 .listTag {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.9375rem;
-  letter-spacing: 0.04em;
+  font-size: var(--font-size-label);
+  letter-spacing: 0;
 }
 
 .listSentence {
-  max-width: 44rem;
+  max-width: var(--measure-prose);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
 }
 
 /* Partners (PAR-02). What We Believe alıntı bandı kendi modülünde. */
@@ -122,8 +119,7 @@
 }
 
 .quoteAuthor {
-  font-size: 0.875rem;
-  opacity: 0.7;
+  font-size: var(--font-size-label);
 }
 
 /* Partners */
@@ -144,11 +140,10 @@
 
 .partnerBody {
   margin: 0 0 var(--space-2);
-  opacity: 0.85;
 }
 
 .partnerLink {
-  font-size: 0.875rem;
+  font-size: var(--font-size-label);
   color: var(--color-brand-fuchsia);
 }
 

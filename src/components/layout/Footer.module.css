@@ -63,8 +63,13 @@
   margin: 0 0 1.5rem;
   padding-left: 1rem;
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  /* 12px'ti; altındaki linklerden (14.4px) küçük olduğu için hiyerarşi ters
+     görünüyordu. Ayrım artık punto değil BİÇİM üzerinden: başlık büyük harf +
+     espasla etiket rolü alır, linkler içerik olur. Espas 0.12em kod tabanının
+     mevcut eyebrow standardı (service-page/culture-page .sectionTitle). */
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-black);
 }
@@ -88,9 +93,11 @@
 
 .column li,
 .social a {
-  margin-bottom: 0.45rem;
-  font-size: 0.9rem;
-  line-height: 1.25;
+  /* 14.4px + 1.25 satır yüksekliği sıkışıktı; gövde ölçeğine ve rahat
+     okuma ritmine çekildi. */
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-body);
+  line-height: 1.4;
 }
 
 .column a:hover,
@@ -105,7 +112,7 @@
   flex-direction: column;
   gap: 0.75rem;
   font-style: normal;
-  font-size: clamp(0.9rem, 1.05vw, 1.1rem);
+  font-size: var(--font-size-body);
   line-height: 1.45;
 }
 
@@ -137,21 +144,24 @@
   border-top: 1px solid rgba(0, 0, 0, 0.28);
 }
 
+/* Alt satır mikro metinleri 11.2-12px'ti — sitedeki en küçük üç değerden
+   ikisi buradaydı. Hepsi micro (13px) tabanına çekildi. */
 .copyright {
   margin: 0;
   color: rgba(0, 0, 0, 0.62);
-  font-size: 0.7rem;
+  font-size: var(--font-size-micro);
 }
 
 .carbonBadge {
   border: 1px solid var(--color-brand-black);
   color: var(--color-brand-black);
-  font-size: 0.7rem;
+  font-size: var(--font-size-micro);
   padding: 0.45rem 0.75rem;
 }
 
 .backToTop {
-  font-size: 0.75rem;
+  font-size: var(--font-size-micro);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 

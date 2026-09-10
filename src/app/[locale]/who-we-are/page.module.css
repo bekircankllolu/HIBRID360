@@ -57,7 +57,8 @@
   margin: var(--space-2) 0 0;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.75rem;
+  font-size: var(--font-size-label);
+
   letter-spacing: 0.14em;
   color: var(--color-brand-yellow);
 }
@@ -78,8 +79,8 @@
      okunabilirlik sınırının altındaydı. 0.8125rem (13px) gövde
      metninden hâlâ belirgin biçimde küçük, yani kompakt hiyerarşi
      korunuyor. */
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
+
   line-height: 1.4;
   letter-spacing: 0.04em;
-  opacity: 0.6;
 }

@@ -1,0 +1,87 @@
+/**
+ * Digital pilotu — feature/typography-pilot (bkz. plan §Pilot 1).
+ *
+ * NOT (Rev 4 güncellemesi): Bu dosya ilk yazıldığında paylaşılan
+ * @/styles/service-page.module.css'e dokunulmuyordu. Rev 4'te ortak dosya
+ * Dalga A kapsamında düzeltildi (7 hizmet sayfasının tamamını etkiliyor,
+ * bkz. o dosyanın kendi başlık yorumu) — bu yüzden aşağıdaki "yalnızca bu
+ * sayfaya özel" iddiası artık yalnızca ORTAK DOSYANIN ÜSTÜNE binen ek
+ * jestler (ağırlık çifti, statement, quad numaralandırma) için geçerli.
+ *
+ * Öncelik CSS import sırasına bırakılmıyor: her kural `.page` kök
+ * sınıfının altına iç içe yazılıyor (bkz. what-we-do/creative/page.tsx'in
+ * kurduğu iki-modül deseni — burada bir adım ileri götürülüyor). Sonuç
+ * iki sınıflı bir seçici (`.page .body` → özgüllük 0,0,2,0), paylaşılan
+ * modülün tek sınıflı seçicisini (0,0,1,0) bundle sırasından bağımsız
+ * olarak kazanır. Yalnızca hem `.page` içinde hem de ilgili yerel sınıfı
+ * TAŞIYAN öğeler etkilenir — ör. digitalServices listesi `quadTitle`/
+ * `quadBody` paylaşılan sınıflarını kullanır ama yerel karşılığını
+ * TAŞIMADIĞI için bu dosyadaki hiçbir kuraldan etkilenmez (paylaşılan
+ * dosyanın Dalga A değerlerini olduğu gibi alır).
+ */
+
+.page {
+  /* Yalnızca özgüllük çıpası — kendi kuralı yok. */
+}
+
+/* H1 — ağırlık karşıtlığı. Boyut/aile shared .heroTitle'dan geliyor,
+   yalnızca font-weight ve letter-spacing burada. Montserrat 300 zaten
+   yüklü (fonts.css: 300–800 değişken aralık), sitede tek kullanımı var. */
+.page .weightLight {
+  font-weight: 300;
+  letter-spacing: 0;
+}
+
+.page .weightBold {
+  font-weight: var(--font-weight-brand);
+  letter-spacing: 0;
+}
+
+/* İki tonlu statement — bandBody[0]. Normal .bandBody akışının DIŞINDA,
+   doğrudan .band içinde render ediliyor: kendi ölçüsü ve puntosu var. */
+.page .statement {
+  margin: 0 0 var(--space-6);
+  max-width: 32ch;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: var(--font-size-statement);
+  line-height: 1.15;
+  letter-spacing: 0;
+  color: var(--color-brand-white);
+}
+
+.page .statementMuted {
+  color: var(--text-muted);
+}
+
+/* Dörtlü blok (INNOVATION/CAPABILITY/VISIONARY/ENGAGING) — yalnızca BU
+   4 öğeyi hedefler. digitalServices'in ayrı .list bloğu bu sınıfları
+   TAŞIMADIĞI için etkilenmez (bkz. dosya başı not). */
+.page .quadItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.page .quadHeading {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.page .quadNumber {
+  flex-shrink: 0;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: var(--font-size-label);
+  letter-spacing: 0;
+  color: var(--color-brand-fuchsia);
+  font-variant-numeric: tabular-nums;
+}
+
+.page .quadTitle {
+  /* Punto/espas artık ortak modülden geliyor (Dalga A). Burada yalnızca
+     numarayla aynı satırda durduğu için alt boşluk sıfırlanıyor. */
+  margin: 0;
+}

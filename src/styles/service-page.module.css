@@ -94,14 +94,16 @@
   }
 }
 
+/* Ölçü 46rem'de ~82 karaktere çıkıyordu (ideal 60-72) ve üstüne opacity ile
+   söndürülüyordu; küçük punto + sönük + uzun satır birleşince metin fiziksel
+   olarak okunmuyordu. Söndürme kalktı, ölçü daraldı, paragraf aralığı açıldı. */
 .body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  max-width: 46rem;
+  gap: var(--space-6);
+  max-width: var(--measure-prose);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
   margin-top: var(--space-8);
 }
 
@@ -116,7 +118,7 @@
 .sectionTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
@@ -150,15 +152,15 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
-  font-size: 1rem;
-  letter-spacing: 0.04em;
+  font-size: var(--font-size-lead);
+  letter-spacing: 0;
 }
 
 .tag::before {
   content: counter(service-item, decimal-leading-zero);
   flex-shrink: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
+  font-size: var(--font-size-label);
+  letter-spacing: 0;
   color: var(--color-brand-fuchsia);
 }
 
@@ -172,19 +174,20 @@
 .bandText {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3.5vw, 2.25rem);
-  max-width: 44rem;
+  font-size: var(--font-size-statement);
+  line-height: 1.15;
+  letter-spacing: 0;
+  max-width: 34ch;
   margin: 0;
 }
 
 .bandBody {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  max-width: 46rem;
+  gap: var(--space-6);
+  max-width: var(--measure-prose);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-  opacity: 0.9;
 }
 
 .bandBody p {
@@ -198,24 +201,43 @@
   margin: var(--space-16) 0 0;
 }
 
+/* auto-fit 1440px'te 5 dar sütun açıyordu (~20 karakter/satır, bir kalem
+   10 satıra uzuyordu). Hizmet dizininin açık eşikleriyle aynı ritim. */
 .list {
   list-style: none;
   margin: var(--space-8) 0 0;
   padding: 0;
   display: grid;
-  gap: var(--space-6);
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-8) var(--space-12);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .listItem {
   display: flex;
+  align-items: baseline;
   gap: var(--space-3);
 }
 
+/* "01" ile "04" farklı genişlikte olduğu için metin sütunları aynı hizadan
+   başlamıyordu. Sabit genişlik (font alt kümesinde tnum özelliği yok, bu
+   yüzden tabular-nums burada işe yaramaz). */
 .listNumber {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
   font-size: 1.5rem;
+  min-width: 2.25ch;
   color: var(--color-brand-fuchsia);
   flex-shrink: 0;
 }
@@ -230,16 +252,16 @@
 .quadTitle {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 0.9375rem;
-  letter-spacing: 0.06em;
+  font-size: var(--font-size-lead);
+  letter-spacing: 0;
   color: var(--color-brand-yellow);
   margin: 0 0 var(--space-2);
 }
 
 .quadBody {
   margin: 0;
-  font-size: 0.9375rem;
-  opacity: 0.85;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
 }
 
 .inlineLink {
@@ -266,7 +288,7 @@
 }
 
 .ctaLead {
-  max-width: 46rem;
+  max-width: var(--measure-prose);
   margin: 0;
 }
 
