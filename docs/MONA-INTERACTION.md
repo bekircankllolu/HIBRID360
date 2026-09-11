@@ -3,14 +3,14 @@
 ## Experience
 
 - Route: `/[locale]/what-we-do/ai-creative-production` (TR and EN).
-- Approved yellow-jacket/lilac-monitor character is the first viewport.
-- The customer-supplied 15-second performance plays as native HTML video. Desktop pointer movement selects its original left/right poses, with eased seeking. Leaving the scene or moving onto a control resumes normal playback from that frame.
-- Horizontal touch dragging on the character also tracks; vertical scrolling remains native. ArrowLeft/ArrowRight and Home work when the character has keyboard focus; Escape resumes playback. Dragging does not trigger the character's tap action.
-- The character is one continuous video layer. There are no cropped body/head planes, projected textures or WebGL dependencies.
-- Captions remain below the character. The television's graphics are baked into the supplied clip, not replaced with a live texture.
-- All 28 customer questions are preserved in both languages. This is a curated FAQ experience, not an open-ended AI chat.
+- Decision 2026-09-12 (`docs/DECISIONS.md`): the video character was replaced by a conversational stage and a yellow dot sphere on black.
+- Layout: MONA's line types out in the left column with a fuchsia block cursor; the previous line (the visitor's question or MONA's last line) sits above it, shrunk and blurred. Pill choices appear once typing ends: start / stop / replay, the line's action link, three suggested questions (`src/lib/mona-suggestions.ts`) and "All questions". Back (bottom left), a vertical sound switch (bottom right) and an asked-questions / 28 progress bar complete the stage. On ≤1024px the sphere sits in the upper half and the conversation in a dark bottom panel.
+- The particle mass (`MonaDots.tsx`, `src/lib/mona-dots-scene.ts`, `src/lib/mona-dots-geometry.ts`) is raw WebGL with no library: a Fibonacci shell, a denser core, a sparse halo and faint dust, with mostly small and a few large dots. When the stage is first seen, every dot flies in from off-screen along a bowed path and assembles the shape (about 2.6 s; time only advances while the stage runs). The shell swells into slowly morphing lobes with a glowing wavy rim and holes drift across it. Dots flow in interlacing streams: an analytic, divergence-free curl field (computed on the GPU, no library) slides shell dots along the surface and swirls the halo and dust freely. Large, attracted and speaking dots get a soft bloom-like glow sprite (no extra render pass), and the whole cloud shifts with a depth-weighted parallax towards the pointer anywhere on the stage. A pointer within ~1.7× the radius pulls nearby dots towards it like a magnet, with a slight swirl.
+- It behaves like a living creature (`src/lib/mona-creature.ts`, a pure state machine with injected randomness): its organic form keeps drifting to new random targets; every tap on it makes it flinch (a damped spring shrinks it ~18% and it flashes); four quick taps (≤1.5 s apart) scatter the dots away from the tap and they gather again (~4 s) — the existing three-tap easter-egg line still plays on the third tap; after 20 s without pointer, tap, key or speech it shrinks, dims and breathes slowly (`data-mood="sleeping"`) until something wakes it; and while awake, calm and silent it occasionally morphs into an eye (its pupil follows the pointer and it blinks), a beating heart or a turning ring, then back (`data-shape`). The intro arrives in eight dense, brighter streams; fast motion leaves faint trails drawn from the last frames' uniforms (no framebuffer), and a faint haze layer adds an aura (skipped on narrow screens together with one of the two trail passes). While MONA speaks, the `useMonaVoice` level (or a synthetic pulse while text types with sound off) sends a wave across it. It holds the shared scene lock, stops offscreen and in hidden tabs, renders one settled still frame under reduced motion and falls back to an SVG sphere without WebGL. Test hooks: `data-dots` (webgl/static/fallback), `data-intro` (pending/playing/done), `data-running`, `data-reacting`.
+- Clicking the sphere starts MONA silently; later clicks count towards the easter egg.
+- All 28 customer questions are preserved in both languages and remain listed below the stage. This is a curated FAQ experience, not an open-ended AI chat.
 - Sound starts only after an explicit sound-enabled action. Mute, stop, replay, Escape, scrolling away and tab visibility are handled.
-- Motion can be paused separately from voice; manual pause also disables pointer seeking. Reduced-motion starts with the poster and disables tracking; explicit normal playback is still available. Offscreen and hidden-tab playback pauses. Video failure retains its poster and working text/audio controls.
+- The former video character (`MonaVideo.tsx`, `mona-video-look.ts`, the performance video and poster) stays in the repository but is not rendered.
 
 ## Assets and scope
 
@@ -24,6 +24,6 @@ To regenerate edited FAQ audio, install `edge-tts` in a Python environment and r
 
 ## Verification
 
-- `npm test`: look calibration, smoothing, all FAQ texts, audio files and caption integrity.
-- `PLAYWRIGHT_PORT=3211 npx playwright test e2e/mona.spec.ts --workers=1`: decoded left/right video pixels, pointer/keyboard/touch tracking, play/pause and visibility, audio opt-in/lifecycle, mobile, reduced motion, no-WebGL operation and video-error fallback.
+- `npm test`: dot-sphere geometry, question suggestions, all FAQ texts, audio files and caption integrity.
+- `PLAYWRIGHT_PORT=3211 npx playwright test e2e/mona.spec.ts --workers=1`: sphere rendering and offscreen pause, pointer and speech reaction, audio opt-in/lifecycle, mobile, reduced motion and no-WebGL fallback.
 - `NEXT_DIST_DIR=.next-mona-build npm run build`: isolated production build. The environment variable avoids disturbing another running local preview; it is optional in deployment.

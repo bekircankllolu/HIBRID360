@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { ArrowDown, ArrowUpRight, Play, RotateCcw, Square, Volume2, VolumeX } from "lucide-react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { ArrowDown, ArrowUpRight, CornerUpLeft, Play, RotateCcw, Square, Volume2, VolumeX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -9,8 +9,22 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useMonaMachine } from "@/hooks/useMonaMachine";
 import { useMonaVoice } from "@/hooks/useMonaVoice";
 import { monaQuestions, openingLine, AI_DISCLAIMER, type MonaLine, type MonaQuestion } from "@/data/mona";
+import { MONA_GENERAL_COUNT, suggestNext } from "@/lib/mona-suggestions";
 import styles from "./Mona.module.css";
-import { MonaVideo } from "./MonaVideo";
+import { MonaDots } from "./MonaDots";
+
+/** Konuşma geçmişinde bir tur: MONA'nın satırı ve varsa ziyaretçinin sorusu. */
+type Turn = { line: MonaLine; prompt?: string };
+type Phase = "idle" | "leave-forward" | "leave-backward";
+
+const TRANSITION_MS = 300;
+const questionIds = monaQuestions.map(item => item.id);
+
+function dialogSize(length: number) {
+  if (length > 280) return styles.dialogLong;
+  if (length > 140) return styles.dialogMedium;
+  return styles.dialogShort;
+}
 
 export function Mona({ locale, lines, variant = "full" }: {
   locale: Locale; lines?: MonaLine[]; variant?: "full" | "compact";
@@ -20,8 +34,12 @@ export function Mona({ locale, lines, variant = "full" }: {
   const machine = useMonaMachine({ locale, reducedMotion });
   const trackingRef = useRef<HTMLDivElement>(null);
   const questionsRef = useRef<HTMLDivElement>(null);
+  const transitionTimer = useRef<number | undefined>(undefined);
   const [started, setStarted] = useState(false);
-  const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
+  const [turns, setTurns] = useState<Turn[]>([]);
+  const [visited, setVisited] = useState<ReadonlySet<string>>(() => new Set());
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [compactIndex, setCompactIndex] = useState(0);
   const titleId = useId();
   const answerId = useId();
@@ -53,11 +71,25 @@ export function Mona({ locale, lines, variant = "full" }: {
     };
   }, [silence, setSectionVisible]);
 
+  useEffect(() => () => window.clearTimeout(transitionTimer.current), []);
+
+  /** Mevcut satır önce yukarı kayıp bulanıklaşır, sonra yeni satır başlar. */
+  const transition = (kind: Exclude<Phase, "idle">, commit: () => void) => {
+    if (phase !== "idle") return;
+    if (reducedMotion) { commit(); return; }
+    setPhase(kind);
+    transitionTimer.current = window.setTimeout(() => { commit(); setPhase("idle"); }, TRANSITION_MS);
+  };
+  const advance = (turn: Turn, reset = false) => {
+    setDirection("forward");
+    setTurns(previous => reset ? [turn] : [...previous, turn]);
+    machine.speak(turn.line);
+  };
+
   const start = (withSound = false) => {
     if (withSound) { voice.unlock(); machine.setMuted(false); }
     setStarted(true);
-    setActiveQuestionId(null);
-    machine.speak(lines?.[compactIndex] ?? openingLine);
+    transition("leave-forward", () => advance({ line: lines?.[compactIndex] ?? openingLine }, true));
   };
   const toggleSound = () => {
     if (machine.muted) {
@@ -65,27 +97,63 @@ export function Mona({ locale, lines, variant = "full" }: {
       machine.speak(machine.activeLine);
     } else machine.setMuted(true);
   };
-  const selectQuestion = (question: MonaQuestion) => {
-    setStarted(true); setActiveQuestionId(question.id);
+  const selectQuestion = (question: MonaQuestion, fromDeck = false) => {
+    setStarted(true);
     if (!machine.muted) voice.unlock();
-    machine.speak(question);
-    trackingRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    if (fromDeck) trackingRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    transition("leave-forward", () => {
+      setVisited(previous => new Set(previous).add(question.id));
+      advance({ line: question, prompt: question.question[locale] });
+    });
+  };
+  const goBack = () => {
+    const previous = turns[turns.length - 2];
+    if (!previous) return;
+    transition("leave-backward", () => {
+      setDirection("backward");
+      setTurns(history => history.slice(0, -1));
+      machine.speak(previous.line);
+    });
   };
   const next = () => {
     if (!lines?.length) return;
     const index = (compactIndex + 1) % lines.length;
-    setCompactIndex(index); setStarted(true); machine.speak(lines[index]);
+    setCompactIndex(index);
+    transition("leave-forward", () => advance({ line: lines[index] }));
   };
-  const question = monaQuestions.find(item => item.id === activeQuestionId);
+  const scrollToQuestions = () => questionsRef.current?.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
+
+  const current = turns[turns.length - 1];
+  const fullText = started && current ? machine.activeLine.text[locale] : t("startHint");
+  const shownText = started && current ? machine.visibleText : fullText;
+  const typing = started && machine.state === "speaking" && machine.visibleText.length < fullText.length;
+  const previousText = !started || !current ? null
+    : current.prompt ?? (turns.length > 1 ? turns[turns.length - 2].line.text[locale] : t("startHint"));
+  const activeQuestionId = current && questionIds.includes(current.line.id) ? current.line.id : null;
+  const suggestions = suggestNext(questionIds, activeQuestionId, visited)
+    .map(id => monaQuestions.find(item => item.id === id))
+    .filter((item): item is MonaQuestion => Boolean(item));
   const action = monaQuestions.find(item => item.id === machine.activeLine.id)?.action;
-  const caption = voice.speaking && voice.caption ? voice.caption : started ? machine.visibleText : "";
-  const shortCaption = caption.length > 200 ? caption.slice(0, 197).trimEnd() + "..." : caption;
   const Heading = variant === "full" ? "h1" : "h2";
+  const stepClass = [
+    styles.step,
+    !typing && styles.expanded,
+    phase === "leave-forward" && styles.leaveForward,
+    phase === "leave-backward" && styles.leaveBackward,
+    direction === "backward" && styles.enterBackward,
+  ].filter(Boolean).join(" ");
 
   return (
     <section className={styles.stage} aria-labelledby={titleId} data-testid="mona-stage"
       data-started={started} data-state={machine.state} data-speaking={voice.speaking}>
-      <div ref={trackingRef} className={styles.experience} data-testid="mona-experience">
+      <div ref={trackingRef} className={styles.experience} data-testid="mona-experience"
+        style={{ "--progress": visited.size / questionIds.length } as CSSProperties}>
+        <MonaDots hostRef={trackingRef} levelRef={voice.levelRef} typing={typing} reducedMotion={reducedMotion} />
+        <button className={styles.characterTarget} data-mona-character
+          type="button" aria-label={started ? t("headLabel") : t("start")}
+          onClick={() => started ? machine.registerHeadTap() : start()}>
+        </button>
+
         <header className={styles.intro}>
           <p className={styles.eyebrow} lang="en">Hibrid 360 / AI</p>
           <Heading id={titleId}>MONA<span>.</span></Heading>
@@ -95,54 +163,77 @@ export function Mona({ locale, lines, variant = "full" }: {
           <span className={styles.statusDot} />
           {voice.speaking ? t("speaking") : started ? t("online") : t("standby")}
         </div>
-        <div className={styles.portrait}>
-          <MonaVideo trackingRef={trackingRef} reducedMotion={reducedMotion}
-            pauseLabel={locale === "tr" ? "Hareketi duraklat" : "Pause motion"}
-            playLabel={locale === "tr" ? "Hareketi oynat" : "Play motion"} />
-          <button className={styles.characterTarget} data-mona-character
-            type="button" aria-label={started ? t("headLabel") : t("start")}
-            onClick={() => started ? machine.registerHeadTap() : start()}>
-          </button>
-        </div>
-        <div className={styles.caption} aria-hidden="true">{shortCaption}</div>
-        <div className={styles.toolbar}>
-          {!started ? (
-            <button type="button" className={styles.startButton} onClick={() => start(true)}>
-              <Play size={17} fill="currentColor" />{t("startAudio")}
-            </button>
-          ) : (
-            <div className={styles.controls}>
-              <button type="button" title={machine.muted ? t("unmute") : t("mute")}
-                aria-label={machine.muted ? t("unmute") : t("mute")} aria-pressed={!machine.muted} onClick={toggleSound}>
-                {machine.muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-              </button>
-              <button type="button" title={t("stop")} aria-label={t("stop")} onClick={silence} disabled={machine.state !== "speaking"}><Square size={16} fill="currentColor" /></button>
-              <button type="button" title={t("replay")} aria-label={t("replay")} onClick={() => { voice.unlock(); machine.speak(machine.activeLine); }}><RotateCcw size={19} /></button>
-              {variant === "compact" && lines && lines.length > 1 && <button type="button" title={t("next")} aria-label={t("next")} onClick={next}><ArrowUpRight size={20} /></button>}
+
+        <div className={styles.conversation}>
+          <div className={stepClass} key={`${turns.length}-${current?.line.id ?? "hint"}`}>
+            {previousText && <p className={styles.previous} aria-hidden="true">{previousText}</p>}
+            <p id={answerId} className={`${styles.dialog} ${dialogSize(fullText.length)}`}
+              aria-live="polite" aria-atomic="true" data-testid="mona-answer">
+              <span className={styles.typed} aria-hidden="true">{shownText}</span>
+              <span className={styles.srOnly}>{fullText}</span>
+            </p>
+            <div className={styles.content}>
+              {!started ? (
+                <>
+                  <button type="button" className={`${styles.pill} ${styles.pillPrimary}`} onClick={() => start(true)}>
+                    <Play fill="currentColor" />{t("startAudio")}
+                  </button>
+                  <button type="button" className={styles.pill} onClick={() => start()}>{t("start")}</button>
+                </>
+              ) : (
+                <>
+                  {/* Ses kapalıyken makine "speaking"de kalır; Sustur yalnızca gerçekten
+                      ses çalarken ya da metin hâlâ yazılırken anlamlı. */}
+                  {voice.speaking || typing
+                    ? <button type="button" className={styles.pill} onClick={silence}><Square fill="currentColor" />{t("stop")}</button>
+                    : <button type="button" className={styles.pill} onClick={() => { voice.unlock(); machine.speak(machine.activeLine); }}><RotateCcw />{t("replay")}</button>}
+                  {action && <Link className={styles.pill} href={action.href}>{action.label[locale]}<ArrowUpRight /></Link>}
+                  {variant === "compact" && lines && lines.length > 1 &&
+                    <button type="button" className={styles.pill} onClick={next}>{t("next")}<ArrowUpRight /></button>}
+                  {variant === "full" && suggestions.map(item => (
+                    <button key={item.id} type="button" className={styles.pill} onClick={() => selectQuestion(item)}>
+                      {item.question[locale]}
+                    </button>
+                  ))}
+                  {variant === "full"
+                    ? <button type="button" className={`${styles.pill} ${styles.pillGhost}`} onClick={scrollToQuestions}>{t("allQuestions")}<ArrowDown /></button>
+                    : <Link href="/what-we-do/ai-creative-production" className={`${styles.pill} ${styles.pillGhost}`}>{t("questionsLabel")}<ArrowUpRight /></Link>}
+                </>
+              )}
             </div>
-          )}
+          </div>
+          <p className={styles.disclaimer}>{AI_DISCLAIMER[locale]}</p>
         </div>
-        {variant === "full" ? <button type="button" className={styles.askLink} onClick={() => questionsRef.current?.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" })}>
-          {t("questionsLabel")} <span>28</span><ArrowDown size={18} />
-        </button> : <Link href="/what-we-do/ai-creative-production" className={styles.askLink}>{t("questionsLabel")}<ArrowUpRight size={18} /></Link>}
-        <p className={styles.disclaimer}>{AI_DISCLAIMER[locale]}</p>
+
+        {started && turns.length > 1 && (
+          <button type="button" className={styles.back} aria-label={t("back")} title={t("back")} onClick={goBack}>
+            <CornerUpLeft />
+          </button>
+        )}
+        {started && (
+          <button type="button" className={`${styles.sound} ${machine.muted ? styles.soundMuted : ""}`}
+            aria-label={machine.muted ? t("unmute") : t("mute")} title={machine.muted ? t("unmute") : t("mute")}
+            aria-pressed={!machine.muted} onClick={toggleSound}>
+            <span className={`${styles.soundIcon} ${styles.soundOn}`}><Volume2 /></span>
+            <span className={`${styles.soundIcon} ${styles.soundOff}`}><VolumeX /></span>
+          </button>
+        )}
+        {variant === "full" && (
+          <div className={styles.progress} role="progressbar" aria-label={t("progress", { count: visited.size })}
+            aria-valuemin={0} aria-valuemax={questionIds.length} aria-valuenow={visited.size} />
+        )}
       </div>
+
       {voice.unavailable && <p role="status" className={styles.audioNote}>{t("audioUnavailable")}</p>}
-      {started && <div className={styles.answer} id={answerId}>
-        <p className={styles.answerLabel}>{question?.question[locale] ?? t("sectionLabel")}</p>
-        <div>
-          <p aria-live="polite" aria-atomic="true" data-testid="mona-answer">{machine.activeLine.text[locale]}</p>
-          {action && <Link className={styles.action} href={action.href}>{action.label[locale]}<ArrowUpRight size={18} /></Link>}
-        </div>
-      </div>}
+
       {variant === "full" && <div ref={questionsRef} className={styles.questionDeck} data-testid="mona-questions">
         <header className={styles.questionHeader}><h2>{t("questionsLabel")}</h2><p>{t("questionCount")}</p></header>
         <div className={styles.questionGroups}>
-          {[monaQuestions.slice(0, 18), monaQuestions.slice(18)].map((group, groupIndex) => <section key={groupIndex}>
+          {[monaQuestions.slice(0, MONA_GENERAL_COUNT), monaQuestions.slice(MONA_GENERAL_COUNT)].map((group, groupIndex) => <section key={groupIndex}>
             <h3 lang="en">{t(groupIndex ? "aiQuestions" : "generalQuestions")}</h3>
             <ul>{group.map((item, index) => <li key={item.id}>
-              <button type="button" aria-pressed={item.id === activeQuestionId} aria-controls={started ? answerId : undefined} onClick={() => selectQuestion(item)}>
-                <span className={styles.questionNumber}>{String(index + (groupIndex ? 19 : 1)).padStart(2, "0")}</span>
+              <button type="button" aria-pressed={item.id === activeQuestionId} aria-controls={started ? answerId : undefined} onClick={() => selectQuestion(item, true)}>
+                <span className={styles.questionNumber}>{String(index + (groupIndex ? MONA_GENERAL_COUNT + 1 : 1)).padStart(2, "0")}</span>
                 <span>{item.question[locale]}</span><ArrowUpRight size={18} />
               </button>
             </li>)}</ul>

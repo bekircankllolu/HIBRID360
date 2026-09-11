@@ -463,7 +463,10 @@
     "mute": "Sesi kapat",
     "unmute": "Sesi aç",
     "stop": "Sustur",
-    "next": "Devam"
+    "next": "Devam",
+    "back": "Önceki satır",
+    "allQuestions": "Tüm sorular",
+    "progress": "28 sorudan {count} tanesi soruldu"
   },
   "aiCreativeProduction": {
     "transcriptTitle": "Tüm replikler (metin)",

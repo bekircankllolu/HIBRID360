@@ -318,3 +318,34 @@ bekliyor ama gerçek KVKK onay metni büyük harfli ve kesme işaretli.
 Üçüncüsü (`revision-layout.spec.ts` ana sayfa metni) o oturumun düz
 tırnak → tipografik tırnak geçişinden kaynaklanıyor, henüz
 commit'lenmemişti. Üçü de bu PR'ın kapsamı dışında bırakıldı.
+---
+
+## 12 Eylül 2026 — MONA: sohbet sahnesi + sarı nokta küresi
+
+Kullanıcı kararı. Bu giriş, ekosistem kararındaki "MONA tasarımı
+değiştirilmez" notunun **MONA için yerini alır**; HIBRID hero kararı
+aynen geçerlidir.
+
+- MONA video karakteri sayfadan kaldırıldı. Yerine siyah zemin üzerinde
+  sarı (`--color-brand-yellow`) noktalardan oluşan, delikli bir küre geldi.
+  Noktalar imlece ve MONA konuşurken ses seviyesine tepki verir; ses
+  kapalıyken daktilo sürdüğü sürece küre yine "konuşur".
+- Düzen: sol kolonda daktilo satırı + fuşya blok imleç, üstünde bulanık
+  önceki satır, altında pill seçenekler; sol altta geri, sağ altta dikey
+  ses anahtarı, en altta sorulan soru / 28 ilerleme çubuğu.
+- Sorular: her cevaptan sonra 3 önerilen soru + "Tüm sorular"; 28 soruluk
+  tam liste sahnenin altında kalır (SEO ve erişim için).
+- Mobil: küre üst yarıda, konuşma alttan açılan koyu panelde.
+- MONA'nın yeni WebGL sahnesi saf WebGL'dir (yeni kütüphane yok), ortak
+  sahne kilidini kullanır, ekrandan çıkınca durur; reduced-motion'da tek
+  statik kare, WebGL yoksa SVG yedeği gösterilir.
+- `MonaVideo` bileşeni, video ve poster varlıkları repoda kalır; sayfada
+  kullanılmaz. Silinmeleri ayrıca karara bağlanacak.
+- Aynı gün kullanıcı onaylı revizyonlar: noktalar açılışta ekran dışından
+  gelip şekli kurar; küre organik, akışkan (curl-noise), ışımalı bir kütleye
+  dönüştü ve %10 küçüldü; imleç noktaları mıknatıs gibi çeker. Kütle yaşayan
+  bir varlık gibi davranır: tıklanınca irkilir, 4 hızlı tıkta dağılıp
+  toplanır (3. tıktaki gizli replik korunur), 20 sn dokunulmazsa uyur, ara
+  sıra göz, kalp ve halka şekline girer. Ayrıntı: `docs/MONA-INTERACTION.md`.
+
+Durum: **KAPANDI — kullanıcı planı onayladı.**

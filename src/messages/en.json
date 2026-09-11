@@ -463,7 +463,10 @@
     "mute": "Mute",
     "unmute": "Unmute",
     "stop": "Stop",
-    "next": "Next"
+    "next": "Next",
+    "back": "Previous line",
+    "allQuestions": "All questions",
+    "progress": "{count} of 28 questions asked"
   },
   "aiCreativeProduction": {
     "transcriptTitle": "All lines (text)",

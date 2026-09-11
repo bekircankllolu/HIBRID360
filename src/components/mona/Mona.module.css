@@ -1,83 +1,649 @@
-.stage { background: #000; color: #fff; letter-spacing: 0; }
-.experience { height: calc(100svh - 72px); min-height: 560px; max-height: 1100px; position: relative; overflow: hidden; scroll-margin-top: 72px; }
-.intro { position: absolute; top: 42px; left: 3%; z-index: 2; pointer-events: none; }
-.eyebrow { font-size: var(--font-size-micro); font-weight: 600; margin: 0 0 14px; letter-spacing: 0.06em; text-transform: uppercase; }
-.intro h1, .intro h2 { font-size: 58px; line-height: 1; color: #fff; margin: 0; font-weight: 800; letter-spacing: 0; }
-.intro h1 span, .intro h2 span { color: #fffc00; }
-.signature { margin-top: 22px; font-size: var(--font-size-micro); line-height: 1.5; color: #b7abbf; }
-.status { position: absolute; right: 3%; top: 46px; display: flex; gap: 8px; align-items: center; font-size: var(--font-size-micro); color: #b7abbf; z-index: 2; }
-.statusDot { width: 6px; height: 6px; border-radius: 50%; background: #fffc00; }
-.portrait { position: absolute; inset: 0; width: 100%; }
-.videoSurface { position: relative; width: 100%; height: 100%; }
-.video { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
-.motionControl { position: absolute; right: 3%; top: 86px; z-index: 3; width: 38px; height: 38px; display: grid; place-items: center; color: #fffc00; background: #080808; border: 1px solid #524e55; border-radius: 50%; cursor: pointer; }
-.motionControl:hover { border-color: #fffc00; }
-.characterTarget { position: absolute; inset: 7% 32% 45%; background: transparent; border: 0; border-radius: 8px; cursor: pointer; touch-action: pan-y; }
-.characterTarget:focus-visible { outline: 2px solid #fffc00; outline-offset: 10px; }
-.caption { position: absolute; bottom: 86px; left: 50%; transform: translateX(-50%); width: min(760px, 70%); min-height: 68px; padding: 12px 20px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 17px; line-height: 1.5; color: #ede6f2; background: rgb(0 0 0 / 88%); pointer-events: none; }
-.caption:empty { visibility: hidden; }
-.toolbar { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2; }
-.startButton { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 24px; background: #fffc00; color: #000; border: 1px solid #fffc00; border-radius: 0; font-size: var(--font-size-label); font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .2s; }
-.startButton:hover { background: #fff; border-color: #fff; }
-.controls { display: flex; gap: 8px; }
-.controls button { width: 46px; height: 46px; display: grid; place-items: center; color: #fffc00; background: #141316; border: 1px solid #37303e; border-radius: 50%; cursor: pointer; transition: border-color .2s, background .2s; }
-.controls button:hover { background: #27232d; border-color: #fffc00; }
-.controls button:disabled { opacity: .4; cursor: default; }
-.stage button:focus-visible, .stage a:focus-visible { outline: 2px solid #fffc00; outline-offset: 5px; }
-.askLink { position: absolute; right: 3%; bottom: 34px; display: flex; align-items: center; gap: 14px; color: #fffc00; background: none; border: none; padding: 8px 0; font-size: var(--font-size-label); font-weight: 600; cursor: pointer; text-decoration: none; }
-.askLink span { color: #9d90a6; }
-.disclaimer { position: absolute; left: 3%; bottom: 34px; color: #938a99; font-size: var(--font-size-micro); margin: 0; }
-.audioNote { margin: 0; padding: 20px 4%; color: #fffc00; text-align: center; font-size: 14px; }
-.answer { border-top: 1px solid #29252d; display: grid; grid-template-columns: 1fr 2fr; gap: 48px; padding: 52px 6%; background: #111013; scroll-margin-top: 90px; }
-.answerLabel { font-size: 18px; font-weight: 600; color: #b49bd8; margin: 0; }
-.answer > div > p { font-size: 20px; line-height: 1.7; margin: 0; white-space: pre-line; max-width: 960px; }
-.action { margin-top: 24px; display: inline-flex; align-items: center; gap: 12px; color: #fffc00; font-size: 14px; }
-.questionDeck { padding: 60px 4% 80px; background: #e8def2; color: #151218; scroll-margin-top: 72px; }
-.questionHeader { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 38px; border-bottom: 1px solid #aea1b7; }
-.questionHeader h2 { font-size: 42px; line-height: 1.15; color: #151218; margin: 0; }
-.questionHeader p { font-size: var(--font-size-micro); font-weight: 600; margin: 0; }
-.questionGroups { display: grid; grid-template-columns: 1fr 1fr; gap: 7%; margin-top: 40px; }
-.questionGroups h3 { color: #151218; font-size: 13px; margin: 0 0 24px; text-transform: uppercase; }
-.questionGroups ul { list-style: none; padding: 0; margin: 0; }
-.questionGroups li { border-top: 1px solid #b9acc3; }
-.questionGroups li:last-child { border-bottom: 1px solid #b9acc3; }
-.questionGroups button { width: 100%; display: grid; grid-template-columns: 28px 1fr 20px; gap: 12px; align-items: start; text-align: left; padding: 20px 4px; border: 0; background: none; color: inherit; font-size: 16px; line-height: 1.45; cursor: pointer; transition: background .2s; }
-.questionGroups button:hover, .questionGroups button[aria-pressed="true"] { background: #fffc00; }
-.questionDeck button:focus-visible { outline-color: #151218; outline-offset: 2px; }
-.questionNumber { font-size: var(--font-size-micro); line-height: 24px; }
-@media (min-width: 1600px) { .intro h1, .intro h2 { font-size: 72px; } }
-@media (max-width: 1000px) {
-  .experience { min-height: 600px; }
-  .portrait { inset-block: 40px 0; }
-  .intro h1, .intro h2 { font-size: 40px; }
-  .signature { margin-top: 15px; }
-  .caption { width: 78%; font-size: 16px; }
+/*
+ * MONA — sohbet sahnesi + sarı nokta küresi.
+ * Renkler yalnızca tokens.css marka değişkenlerinden gelir (CLAUDE.md).
+ * Fuşya/sarı zemin üzerinde metin her zaman siyah (WCAG AA kontrast kuralı).
+ */
+
+.stage {
+  --mona-ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --mona-muted: color-mix(in srgb, var(--color-brand-white) 60%, transparent);
+  --mona-hairline: color-mix(in srgb, var(--color-brand-white) 18%, transparent);
+  --mona-dialog-top: max(44cqh, 16rem);
+  background: var(--color-brand-black);
+  color: var(--color-text-on-black);
+  letter-spacing: 0;
 }
+
+.experience {
+  position: relative;
+  height: calc(100svh - var(--header-height));
+  min-height: 36rem;
+  max-height: 68rem;
+  overflow: hidden;
+  container-type: size;
+  scroll-margin-top: var(--header-height);
+}
+
+/* ---------- nokta küresi ---------- */
+
+.dots {
+  position: absolute;
+  inset: 0;
+  background: var(--color-brand-black);
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dotsFallback,
+.characterTarget {
+  position: absolute;
+  left: 64%;
+  top: 50%;
+  /* Çap = mona-dots-scene.ts monaDotsLayout yarıçapının iki katı. */
+  width: min(64.8cqh, 43.2cqw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.dotsFallback {
+  fill: var(--color-brand-yellow);
+}
+
+.characterTarget {
+  z-index: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+/* ---------- başlık ve durum ---------- */
+
+.intro {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-8);
+  left: var(--page-gutter);
+  pointer-events: none;
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.intro h1,
+.intro h2 {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2.25rem, 3.4vw, 4rem);
+  line-height: 1;
+  color: var(--color-text-on-black);
+  letter-spacing: 0;
+}
+
+.intro h1 span,
+.intro h2 span {
+  color: var(--color-brand-yellow);
+}
+
+.signature {
+  margin: var(--space-4) 0 0;
+  font-size: var(--font-size-micro);
+  line-height: 1.5;
+  color: var(--mona-muted);
+}
+
+.status {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-8);
+  right: var(--page-gutter);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-micro);
+  color: var(--mona-muted);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-brand-yellow);
+}
+
+/* ---------- konuşma kolonu ---------- */
+
+.conversation {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(42rem, 44%);
+  overflow-y: auto;
+  padding: 0 var(--space-6) 0 var(--page-gutter);
+  scrollbar-width: none;
+}
+
+.step {
+  position: relative;
+  padding-top: var(--mona-dialog-top);
+  animation: monaStepIn 0.3s var(--mona-ease);
+}
+
+.previous,
+.dialog {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text-on-black);
+  transform-origin: top left;
+}
+
+.previous {
+  position: absolute;
+  top: var(--mona-dialog-top);
+  left: 0;
+  right: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  opacity: 0.75;
+  filter: blur(4px);
+  transform: translate3d(0, calc(-100% - var(--space-8)), 0) scale(0.8);
+  user-select: none;
+  transition:
+    transform 0.3s var(--mona-ease),
+    filter 0.3s var(--mona-ease),
+    opacity 0.3s var(--mona-ease);
+}
+
+.dialog {
+  line-height: 1.25;
+  transition: transform 0.3s var(--mona-ease);
+}
+
+.dialogShort {
+  font-size: clamp(1.4rem, 1.05rem + 0.9vw, 2rem);
+}
+
+.dialogMedium {
+  font-size: clamp(1.2rem, 0.98rem + 0.55vw, 1.6rem);
+}
+
+.dialogLong {
+  font-size: clamp(1.05rem, 0.92rem + 0.35vw, 1.3rem);
+  line-height: 1.4;
+}
+
+/* Blok imleç — marka kuralı: imleç fuşya. */
+.step:not(.leaveForward) .typed::after {
+  content: "";
+  display: inline-block;
+  width: 0.4em;
+  height: 0.5em;
+  margin-left: 0.25em;
+  background: var(--color-brand-fuchsia);
+  transform: scaleY(1.75) translateY(5%);
+  transform-origin: bottom center;
+  animation: monaCursor 1s steps(1, end) infinite;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* İleri: mevcut satır yukarı kayıp bulanıklaşır, önceki satır uçar. */
+.leaveForward .dialog {
+  filter: blur(4px);
+  transform: translate3d(0, calc(-100% - var(--space-8)), 0) scale(0.8);
+  transition:
+    transform 0.3s var(--mona-ease),
+    filter 0.3s var(--mona-ease);
+}
+
+.leaveForward .previous {
+  opacity: 0;
+  transform: translate3d(0, calc(-200% - var(--space-8)), 0) scale(0.5);
+}
+
+/* Geri: mevcut satır söner, önceki satır netleşip yerine iner. */
+.leaveBackward .dialog {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.15s var(--mona-ease),
+    transform 0.3s var(--mona-ease);
+}
+
+.leaveBackward .previous {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+.enterBackward .previous {
+  animation: monaPreviousIn 0.3s var(--mona-ease);
+}
+
+/* ---------- pill'ler ---------- */
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, var(--space-4), 0);
+  transition:
+    opacity 0.3s var(--mona-ease),
+    transform 0.3s var(--mona-ease);
+}
+
+.expanded:not(.leaveForward):not(.leaveBackward) .content {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition-delay: 0.1s;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.5rem;
+  padding: 0.5em 1.25em;
+  border: 1px solid var(--color-brand-white);
+  border-radius: 999px;
+  background: var(--color-brand-white);
+  color: var(--color-text-on-white);
+  font-family: var(--font-body);
+  font-size: var(--font-size-label);
+  line-height: 1.3;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--mona-ease),
+    border-color 0.2s var(--mona-ease),
+    color 0.2s var(--mona-ease);
+}
+
+.pill svg {
+  flex: none;
+  width: 1em;
+  height: 1em;
+}
+
+.pillPrimary {
+  border-color: var(--color-brand-yellow);
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+  font-weight: var(--font-weight-body-medium);
+}
+
+.pillGhost {
+  border-color: color-mix(in srgb, var(--color-brand-white) 30%, transparent);
+  background: transparent;
+  color: var(--color-text-on-black);
+}
+
+@media (hover: hover) {
+  .pill:hover {
+    border-color: var(--color-brand-fuchsia);
+    background: var(--color-brand-fuchsia);
+    color: var(--color-text-on-fuchsia);
+  }
+}
+
+.disclaimer {
+  margin: var(--space-8) 0 7rem;
+  max-width: 28rem;
+  font-size: var(--font-size-micro);
+  line-height: 1.5;
+  color: var(--mona-muted);
+}
+
+/* ---------- sabit kontroller ---------- */
+
+.back {
+  position: absolute;
+  z-index: 3;
+  left: var(--page-gutter);
+  bottom: var(--space-8);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-brand-white);
+  color: var(--color-text-on-white);
+  cursor: pointer;
+  animation: monaBackIn 0.3s var(--mona-ease);
+}
+
+.back svg {
+  width: 45%;
+  height: 45%;
+}
+
+.sound {
+  --knob: 2.75rem;
+  position: absolute;
+  z-index: 3;
+  right: var(--page-gutter);
+  bottom: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 0;
+  border-radius: var(--knob);
+  background: var(--color-brand-white);
+  cursor: pointer;
+}
+
+.sound::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--knob);
+  height: var(--knob);
+  border: 3px solid var(--color-brand-white);
+  border-radius: 50%;
+  background: var(--color-brand-black);
+  transition: transform 0.3s var(--mona-ease);
+}
+
+.soundMuted::before {
+  transform: translate3d(0, 100%, 0);
+}
+
+.soundIcon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--knob);
+  height: var(--knob);
+  transition: color 0.3s var(--mona-ease);
+}
+
+.soundIcon svg {
+  width: 40%;
+  height: 40%;
+}
+
+.soundOn,
+.soundMuted .soundOff {
+  color: var(--color-brand-white);
+}
+
+.soundOff,
+.soundMuted .soundOn {
+  color: var(--color-brand-black);
+}
+
+.progress {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--color-brand-yellow);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  transition: transform 0.3s var(--mona-ease);
+}
+
+.audioNote {
+  margin: 0;
+  padding: var(--space-6) var(--page-gutter);
+  color: var(--color-brand-yellow);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+/* ---------- soru listesi ---------- */
+
+.questionDeck {
+  padding: var(--space-16) var(--page-gutter) var(--space-24);
+  border-top: 1px solid var(--mona-hairline);
+  background: var(--color-brand-black);
+  color: var(--color-text-on-black);
+  scroll-margin-top: var(--header-height);
+}
+
+.questionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--mona-hairline);
+}
+
+.questionHeader h2 {
+  margin: 0;
+  font-size: var(--font-size-heading);
+  line-height: 1.15;
+}
+
+.questionHeader p {
+  margin: 0;
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-body-medium);
+  color: var(--mona-muted);
+}
+
+.questionGroups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7%;
+  margin-top: var(--space-12);
+}
+
+.questionGroups h3 {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-micro);
+  color: var(--color-text-on-black);
+  text-transform: uppercase;
+}
+
+.questionGroups ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.questionGroups li {
+  border-top: 1px solid var(--mona-hairline);
+}
+
+.questionGroups li:last-child {
+  border-bottom: 1px solid var(--mona-hairline);
+}
+
+.questionGroups button {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr 1.25rem;
+  align-items: start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-6) var(--space-1);
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--mona-ease),
+    color 0.2s var(--mona-ease);
+}
+
+.questionGroups button[aria-pressed="true"] {
+  background: var(--color-brand-yellow);
+  color: var(--color-text-on-yellow);
+}
+
+@media (hover: hover) {
+  .questionGroups button:hover {
+    background: var(--color-brand-fuchsia);
+    color: var(--color-text-on-fuchsia);
+  }
+}
+
+.questionNumber {
+  font-size: var(--font-size-micro);
+  line-height: 1.5rem;
+}
+
+/* ---------- dar ekran: küre üstte, konuşma alttaki koyu panelde ---------- */
+
+@media (max-width: 1024px) {
+  .experience {
+    min-height: 40rem;
+  }
+
+  .dotsFallback,
+  .characterTarget {
+    left: 50%;
+    top: 27%;
+    width: min(59.4cqw, 30.6cqh);
+  }
+
+  .intro,
+  .status {
+    top: var(--space-4);
+  }
+
+  .intro h1,
+  .intro h2 {
+    font-size: 2.25rem;
+  }
+
+  .conversation {
+    top: calc(46% - 8px);
+    width: 100%;
+    padding: 0 var(--page-gutter);
+    border-top: 1px solid var(--mona-hairline);
+    border-radius: 8px 8px 0 0;
+    background: color-mix(in srgb, var(--color-brand-white) 6%, var(--color-brand-black));
+  }
+
+  .step {
+    padding-top: var(--space-6);
+  }
+
+  .previous {
+    display: none;
+  }
+
+  .dialogShort {
+    font-size: 1.3rem;
+  }
+
+  .dialogMedium {
+    font-size: 1.12rem;
+  }
+
+  .dialogLong {
+    font-size: 1rem;
+  }
+
+  .disclaimer {
+    margin-bottom: 6rem;
+  }
+
+  .back {
+    bottom: var(--space-4);
+  }
+
+  .sound {
+    --knob: 2.25rem;
+    bottom: calc(54% + 8px + var(--space-3));
+  }
+}
+
 @media (max-width: 640px) {
-  .experience { min-height: 610px; max-height: 880px; }
-  .intro { top: 28px; left: 20px; }
-  .intro h1, .intro h2 { font-size: 36px; }
-  .eyebrow { margin-bottom: 10px; }
-  .signature { display: none; }
-  .status { top: 34px; right: 20px; }
-  .portrait { inset-block: 110px 132px; }
-  .video { object-fit: cover; }
-  .motionControl { right: 20px; top: 10px; }
-  .characterTarget { inset: 8% 17% 45%; }
-  .caption { width: calc(100% - 40px); bottom: 94px; min-height: 102px; font-size: 14px; line-height: 1.45; }
-  .toolbar { bottom: 53px; }
-  .controls button { width: 40px; height: 40px; }
-  .startButton { min-height: 40px; }
-  .askLink { bottom: 13px; right: 20px; gap: 8px; }
-  .disclaimer { left: 20px; bottom: 24px; }
-  .answer { grid-template-columns: 1fr; gap: 20px; padding: 32px 20px; }
-  .answer > div > p { font-size: 17px; line-height: 1.65; }
-  .answerLabel { font-size: 15px; }
-  .questionDeck { padding: 36px 20px 50px; }
-  .questionHeader { display: block; padding-bottom: 24px; }
-  .questionHeader h2 { font-size: 30px; }
-  .questionHeader p { margin-top: 12px; }
-  .questionGroups { grid-template-columns: 1fr; gap: 42px; margin-top: 30px; }
-  .questionGroups button { font-size: 15px; }
+  .signature {
+    display: none;
+  }
+
+  .questionHeader {
+    display: block;
+  }
+
+  .questionHeader p {
+    margin-top: var(--space-3);
+  }
+
+  .questionGroups {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .questionGroups button {
+    font-size: 0.9375rem;
+  }
 }
-@media (prefers-reduced-motion: reduce) { .stage *, .stage *::before, .stage *::after { transition: none !important; scroll-behavior: auto; } }
+
+@keyframes monaCursor {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes monaStepIn {
+  from { opacity: 0; }
+}
+
+@keyframes monaPreviousIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(-200% - var(--space-8)), 0) scale(0.5);
+  }
+}
+
+@keyframes monaBackIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage *,
+  .stage *::before,
+  .stage *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto;
+  }
+}
