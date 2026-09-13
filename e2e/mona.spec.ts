@@ -39,7 +39,7 @@ test("dot sphere renders yellow dots, pauses offscreen and loads no 3D asset", a
   let yellow = 0;
   for (let i = 0; i < pixels.length; i += 3) if (pixels[i] > 90 && pixels[i + 1] > 90 && pixels[i + 2] < 60) yellow++;
   expect(yellow / (pixels.length / 3)).toBeGreaterThan(0.01);
-  await page.getByTestId("mona-questions").scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await expect(dots(page)).toHaveAttribute("data-running", "false");
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(dots(page)).toHaveAttribute("data-running", "true");
@@ -71,13 +71,12 @@ test("local female voice, captions, stop, replay, mute and scroll cancellation",
   await expect(stage).toHaveAttribute("data-speaking", "true");
   await page.keyboard.press("Escape");
   await expect(stage).toHaveAttribute("data-speaking", "false");
-  const questions = page.getByTestId("mona-questions").getByRole("button");
-  await expect(questions).toHaveCount(28);
-  await questions.first().click();
+  const firstQuestion = page.getByTestId("mona-experience").getByRole("button", { name: "Hibrid 360 tam olarak ne ajansı?" });
+  await firstQuestion.click();
   await expect(stage).toHaveAttribute("data-speaking", "true", { timeout: 15000 });
   await expect(page.getByTestId("mona-answer")).not.toContainText("Kafam biraz retro");
   expect(audioRequests.some(url => url.endsWith("/tr/q1.mp3"))).toBe(true);
-  await page.getByTestId("mona-questions").scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await expect(stage).toHaveAttribute("data-speaking", "false");
 });
 
@@ -92,8 +91,6 @@ test("suggested questions, back and progress drive the conversation", async ({ p
   await expect(page.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "1");
   await page.getByRole("button", { name: "Önceki satır" }).click();
   await expect(page.getByTestId("mona-answer")).toContainText("Merhaba");
-  await page.getByTestId("mona-experience").getByRole("button", { name: "Tüm sorular" }).click();
-  await expect(page.getByTestId("mona-questions")).toBeInViewport();
 });
 
 test("approaching pointer pulls the dots like a magnet and leaving releases them", async ({ page }) => {
@@ -167,7 +164,7 @@ test("mobile framing, readable answers and English voice", async ({ page }, info
   await page.getByRole("button", { name: "MEET HER VOICE" }).click();
   await expect(page.getByTestId("mona-stage")).toHaveAttribute("data-speaking", "true", { timeout: 15000 });
   await expect(page.getByTestId("mona-answer")).toContainText("My head is a little retro");
-  await page.getByTestId("mona-questions").getByRole("button").last().click();
+  await page.getByTestId("mona-experience").getByRole("button", { name: "What kind of agency is Hibrid 360?" }).click();
   await expect(page.getByTestId("mona-answer")).toBeAttached();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
@@ -214,5 +211,8 @@ test("without WebGL an SVG sphere remains and all answers work", async ({ page }
   await expect(page.getByTestId("mona-dots-fallback")).toBeVisible();
   await page.locator("[data-mona-character]").click();
   await expect(page.getByTestId("mona-answer")).toContainText("Merhaba");
-  await expect(page.getByTestId("mona-questions").getByRole("button")).toHaveCount(28);
+  const suggestion = page.getByTestId("mona-experience").getByRole("button", { name: "Hibrid 360 tam olarak ne ajansı?" });
+  await expect(suggestion).toBeVisible();
+  await suggestion.click();
+  await expect(page.getByTestId("mona-answer")).not.toContainText("Merhaba");
 });

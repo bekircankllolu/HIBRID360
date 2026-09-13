@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
-import { ArrowDown, ArrowUpRight, CornerUpLeft, Play, RotateCcw, Square, Volume2, VolumeX } from "lucide-react";
+import { ArrowUpRight, CornerUpLeft, Play, RotateCcw, Square, Volume2, VolumeX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -9,7 +9,7 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useMonaMachine } from "@/hooks/useMonaMachine";
 import { useMonaVoice } from "@/hooks/useMonaVoice";
 import { monaQuestions, openingLine, AI_DISCLAIMER, type MonaLine, type MonaQuestion } from "@/data/mona";
-import { MONA_GENERAL_COUNT, suggestNext } from "@/lib/mona-suggestions";
+import { suggestNext } from "@/lib/mona-suggestions";
 import styles from "./Mona.module.css";
 import { MonaDots } from "./MonaDots";
 
@@ -33,7 +33,6 @@ export function Mona({ locale, lines, variant = "full" }: {
   const reducedMotion = usePrefersReducedMotion();
   const machine = useMonaMachine({ locale, reducedMotion });
   const trackingRef = useRef<HTMLDivElement>(null);
-  const questionsRef = useRef<HTMLDivElement>(null);
   const transitionTimer = useRef<number | undefined>(undefined);
   const [started, setStarted] = useState(false);
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -121,7 +120,6 @@ export function Mona({ locale, lines, variant = "full" }: {
     setCompactIndex(index);
     transition("leave-forward", () => advance({ line: lines[index] }));
   };
-  const scrollToQuestions = () => questionsRef.current?.scrollIntoView({ behavior: reducedMotion ? "instant" : "smooth" });
 
   const current = turns[turns.length - 1];
   const fullText = started && current ? machine.activeLine.text[locale] : t("startHint");
@@ -195,9 +193,8 @@ export function Mona({ locale, lines, variant = "full" }: {
                       {item.question[locale]}
                     </button>
                   ))}
-                  {variant === "full"
-                    ? <button type="button" className={`${styles.pill} ${styles.pillGhost}`} onClick={scrollToQuestions}>{t("allQuestions")}<ArrowDown /></button>
-                    : <Link href="/what-we-do/ai-creative-production" className={`${styles.pill} ${styles.pillGhost}`}>{t("questionsLabel")}<ArrowUpRight /></Link>}
+                  {variant === "compact" &&
+                    <Link href="/what-we-do/ai-creative-production" className={`${styles.pill} ${styles.pillGhost}`}>{t("questionsLabel")}<ArrowUpRight /></Link>}
                 </>
               )}
             </div>
@@ -225,21 +222,6 @@ export function Mona({ locale, lines, variant = "full" }: {
       </div>
 
       {voice.unavailable && <p role="status" className={styles.audioNote}>{t("audioUnavailable")}</p>}
-
-      {variant === "full" && <div ref={questionsRef} className={styles.questionDeck} data-testid="mona-questions">
-        <header className={styles.questionHeader}><h2>{t("questionsLabel")}</h2><p>{t("questionCount")}</p></header>
-        <div className={styles.questionGroups}>
-          {[monaQuestions.slice(0, MONA_GENERAL_COUNT), monaQuestions.slice(MONA_GENERAL_COUNT)].map((group, groupIndex) => <section key={groupIndex}>
-            <h3 lang="en">{t(groupIndex ? "aiQuestions" : "generalQuestions")}</h3>
-            <ul>{group.map((item, index) => <li key={item.id}>
-              <button type="button" aria-pressed={item.id === activeQuestionId} aria-controls={started ? answerId : undefined} onClick={() => selectQuestion(item, true)}>
-                <span className={styles.questionNumber}>{String(index + (groupIndex ? MONA_GENERAL_COUNT + 1 : 1)).padStart(2, "0")}</span>
-                <span>{item.question[locale]}</span><ArrowUpRight size={18} />
-              </button>
-            </li>)}</ul>
-          </section>)}
-        </div>
-      </div>}
     </section>
   );
 }
