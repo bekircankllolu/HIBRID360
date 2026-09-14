@@ -428,103 +428,6 @@
   font-size: 0.875rem;
 }
 
-/* ---------- soru listesi ---------- */
-
-.questionDeck {
-  padding: var(--space-16) var(--page-gutter) var(--space-24);
-  border-top: 1px solid var(--mona-hairline);
-  background: var(--color-brand-black);
-  color: var(--color-text-on-black);
-  scroll-margin-top: var(--header-height);
-}
-
-.questionHeader {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-6);
-  padding-bottom: var(--space-8);
-  border-bottom: 1px solid var(--mona-hairline);
-}
-
-.questionHeader h2 {
-  margin: 0;
-  font-size: var(--font-size-heading);
-  line-height: 1.15;
-}
-
-.questionHeader p {
-  margin: 0;
-  font-size: var(--font-size-micro);
-  font-weight: var(--font-weight-body-medium);
-  color: var(--mona-muted);
-}
-
-.questionGroups {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7%;
-  margin-top: var(--space-12);
-}
-
-.questionGroups h3 {
-  margin: 0 0 var(--space-6);
-  font-size: var(--font-size-micro);
-  color: var(--color-text-on-black);
-  text-transform: uppercase;
-}
-
-.questionGroups ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.questionGroups li {
-  border-top: 1px solid var(--mona-hairline);
-}
-
-.questionGroups li:last-child {
-  border-bottom: 1px solid var(--mona-hairline);
-}
-
-.questionGroups button {
-  display: grid;
-  grid-template-columns: 1.75rem 1fr 1.25rem;
-  align-items: start;
-  gap: var(--space-3);
-  width: 100%;
-  padding: var(--space-6) var(--space-1);
-  border: 0;
-  background: none;
-  color: inherit;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.45;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background-color 0.2s var(--mona-ease),
-    color 0.2s var(--mona-ease);
-}
-
-.questionGroups button[aria-pressed="true"] {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-}
-
-@media (hover: hover) {
-  .questionGroups button:hover {
-    background: var(--color-brand-fuchsia);
-    color: var(--color-text-on-fuchsia);
-  }
-}
-
-.questionNumber {
-  font-size: var(--font-size-micro);
-  line-height: 1.5rem;
-}
-
 /* ---------- dar ekran: küre üstte, konuşma alttaki koyu panelde ---------- */
 
 @media (max-width: 1024px) {
@@ -595,23 +498,6 @@
 @media (max-width: 640px) {
   .signature {
     display: none;
-  }
-
-  .questionHeader {
-    display: block;
-  }
-
-  .questionHeader p {
-    margin-top: var(--space-3);
-  }
-
-  .questionGroups {
-    grid-template-columns: 1fr;
-    gap: var(--space-12);
-  }
-
-  .questionGroups button {
-    font-size: 0.9375rem;
   }
 }
 
