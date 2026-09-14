@@ -2,8 +2,9 @@
  * MONA parçacık varlığı — saf WebGL sahnesi (Three.js yok).
  *
  * Her nokta tek bir GL_POINT. Organik biçim, akış, açılışta ekran dışından
- * gelme, göz/kalp/halka şekilleri, irkilme, uyku, kaçış, imleç mıknatısı ve
- * konuşma dalgası tamamen vertex shader'da uniform'lardan hesaplanır. Bu
+ * gelme, göz/kalp/halka (ve yalnız MonaShard'da nilüfer) şekilleri, irkilme,
+ * uyku, kaçış, imleç mıknatısı ve konuşma dalgası tamamen vertex shader'da
+ * uniform'lardan hesaplanır. Bu
  * sayede iz için FBO gerekmez: geçmiş karelerin uniform durumlarıyla aynı
  * bulut sönük "hayalet" olarak tekrar çizilir. Kurulum/temizlik kalıbı
  * hibrid-wordmark-scene.ts ile aynıdır: WebGL yoksa null döner.
@@ -18,6 +19,7 @@ attribute vec2 a_start;
 attribute vec4 a_eye;    // xyz + bakışı izler mi (iris, gözbebeği)
 attribute vec3 a_heart;
 attribute vec3 a_ring;
+attribute vec3 a_lotus;  // nilüfer (yalnız MonaShard verir; yoksa sabit 0)
 
 uniform float u_time;
 uniform float u_intro;
@@ -35,7 +37,8 @@ uniform float u_dim;
 uniform float u_flash;
 uniform float u_scatter;
 uniform vec2 u_scatterOrigin;
-uniform vec3 u_shape;    // göz, kalp, halka ağırlıkları
+uniform vec4 u_shape;    // göz, kalp, halka, nilüfer ağırlıkları
+uniform vec2 u_shift;    // bütün kütlenin kayması (model birimi, yarıçap = 1)
 uniform vec2 u_look;
 uniform float u_blink;
 uniform vec4 u_morph;
@@ -108,15 +111,27 @@ void main() {
   float ra = u_time * 0.4;
   vec3 ring = vec3(cos(ra) * a_ring.x - sin(ra) * a_ring.y, sin(ra) * a_ring.x + cos(ra) * a_ring.y, a_ring.z);
   ring = vec3(ring.x, 0.9 * ring.y - 0.435 * ring.z, 0.435 * ring.y + 0.9 * ring.z);
-  float shapeSum = u_shape.x + u_shape.y + u_shape.z;
+  // Nilüfer rüzgârdaki bir çiçek gibi durur: sapın dibinden yukarı doğru
+  // artan hafif bir salınım ve yaprakların yavaş nefesi.
+  vec3 lotus = a_lotus;
+  lotus.x += (0.03 * sin(u_time * 0.45) + 0.012 * sin(u_time * 1.13 + 1.3)) * (lotus.y + 1.0);
+  lotus.xy *= 1.0 + 0.012 * sin(u_time * 0.8 + 0.6);
+  float shapeSum = u_shape.x + u_shape.y + u_shape.z + u_shape.w;
   float shapeWeight = shapeSum * isBody;
-  vec3 shaped = (eye * u_shape.x + a_heart * u_shape.y + ring * u_shape.z) / max(shapeSum, 0.0001)
-              + flow * 0.006 + drift * 0.5;
+  // Akıntı titreşimi iri şekillerde canlılık, nilüferin ince yaprak
+  // kenarlarında bulanıklık demek (~15 px) — çiçekte dörtte birine iner.
+  float lotusShare = u_shape.w / max(shapeSum, 0.0001);
+  vec3 shaped = (eye * u_shape.x + a_heart * u_shape.y + ring * u_shape.z + lotus * u_shape.w)
+              / max(shapeSum, 0.0001)
+              + (flow * 0.006 + drift * 0.5) * (1.0 - 0.75 * lotusShare);
   vec3 p = mix(blob, shaped, shapeWeight) * u_scale;
   float depth = p.z / max(length(p), 0.0001);
 
+  // Kayma perspektiften sonra eklenir: bütün kütle tek parça kayar, yakın
+  // noktalar uzaktakilerden fazla kayıp küreyi çarpıtmaz.
   float perspective = 1.0 / (1.0 - p.z * 0.22);
-  vec2 target = u_center + vec2(p.x / u_aspect, p.y) * u_radius * perspective;
+  vec2 projected = p.xy * perspective + u_shift;
+  vec2 target = u_center + vec2(projected.x / u_aspect, projected.y) * u_radius;
   // Parallax: yakın noktalar imlecin tarafına daha çok kayar.
   target += u_parallax * vec2(1.0 / u_aspect, 1.0) * u_radius * (0.06 + 0.08 * p.z);
 
@@ -190,6 +205,19 @@ void main() {
 
 export type Rgb = [number, number, number];
 
+/**
+ * Marka rengini token'dan okur — sahne kodunda hex tutulmaz. `MonaDots`
+ * (sohbet sahnesi) ve `MonaShard` (sayfa köşesindeki parça) ikisi de
+ * bunu kullanır.
+ */
+export function tokenRgb(name: string): Rgb {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim().replace("#", "");
+  const hex = value.length === 3 ? value.split("").map((c) => c + c).join("") : value;
+  const int = Number.parseInt(hex, 16);
+  if (Number.isNaN(int) || hex.length !== 6) return [1, 1, 1];
+  return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
+}
+
 export interface MonaDotsLayout {
   /** Kütlenin merkezi, canvas genişliği/yüksekliğine oranla (0..1). */
   centerX: number;
@@ -223,6 +251,11 @@ export interface MonaDotsFrame {
   shapeEye: number;
   shapeHeart: number;
   shapeRing: number;
+  /** Nilüfer ağırlığı — bulutta `lotus` hedefi yoksa etkisiz; MONA sayfası hep 0. */
+  shapeLotus: number;
+  /** Bütün kütlenin kayması, model biriminde (küre yarıçapı = 1; +y yukarı). */
+  shiftX: number;
+  shiftY: number;
   /** Gözbebeğinin bakış yönü (-1..1). */
   lookX: number;
   lookY: number;
@@ -234,7 +267,7 @@ export const NEUTRAL_FRAME: MonaDotsFrame = {
   time: 0, intro: 1, yaw: 0.6, pitch: 0.28, pointerX: 0.5, pointerY: 0.5, pointerStrength: 0,
   level: 0, parallaxX: 0, parallaxY: 0, scale: 1, dim: 1, flash: 0, scatter: 0,
   scatterOriginX: 0.5, scatterOriginY: 0.5, shapeEye: 0, shapeHeart: 0, shapeRing: 0,
-  lookX: 0, lookY: 0, blink: 0, morph: [0, 0, 0, 0],
+  shapeLotus: 0, shiftX: 0, shiftY: 0, lookX: 0, lookY: 0, blink: 0, morph: [0, 0, 0, 0],
 };
 
 export interface MonaDotsGhost {
@@ -271,16 +304,51 @@ export function monaDotsLayout(width: number, height: number): MonaDotsLayout {
   return { centerX: 0.64, centerY: 0.5, radius: Math.min(height * 0.324, width * 0.216) };
 }
 
+/**
+ * `MonaShard`'ın canvas'ı hero'nun altına, hero yüksekliğinin bu oranı
+ * kadar uzar (13 Eylül 2026, altıncı geri bildirim turu — DECISIONS #48:
+ * "burada bir kesilme var, bu kesilme olmasın"). Küre hero'nun alt
+ * kenarından taşıyor; canvas hero'yla bitseydi taşan kısım sayfa kayınca
+ * düz bir çizgiyle kesilirdi. Uzantı kürenin gövdesini ve halesinin
+ * tamamına yakınını içine alır, küre kendi yuvarlaklığıyla biter.
+ */
+export const SHARD_BLEED = 0.7;
+
+/**
+ * `MonaShard` için. Beşinci tur (DECISIONS #47): "Mona'nın görüntüsü sağ
+ * altta olmalı, büyük bir şekilde" + "MONA'nın yarısını görücez" —
+ * kürenin merkezi hero'nun SAĞ kenarında ve alt kısmında durur, sol yarısı
+ * sayfanın içine bakıyor. Altıncı tur (#48): "bu sayfadaki mona %10 daha
+ * küçük olsun" (yarıçap 0,55 → 0,495) ve canvas hero'nun altına uzadı
+ * (`SHARD_BLEED`). Oranlar bu yüzden canvas'a değil HERO'ya göre:
+ * `height` canvas yüksekliği, hero onun `1 / (1 + SHARD_BLEED)`'i.
+ * `monaDotsLayout`'un `width<=1024` sezgisi (sohbet sahnesine özel)
+ * burada anlamsız.
+ */
+export function monaShardLayout(width: number, height: number): MonaDotsLayout {
+  const hero = height / (1 + SHARD_BLEED);
+  return { centerX: 1, centerY: (0.72 * hero) / height, radius: Math.min(width, hero) * 0.495 };
+}
+
 const UNIFORMS = [
   "u_time", "u_intro", "u_rotation", "u_center", "u_radius", "u_aspect", "u_pointer",
   "u_pointerStrength", "u_level", "u_pointSize", "u_parallax", "u_scale", "u_dim", "u_flash",
-  "u_scatter", "u_scatterOrigin", "u_shape", "u_look", "u_blink", "u_morph", "u_ghost", "u_color",
+  "u_scatter", "u_scatterOrigin", "u_shape", "u_shift", "u_look", "u_blink", "u_morph", "u_ghost",
+  "u_color",
 ] as const;
 
 export function createMonaDotsScene(
   canvas: HTMLCanvasElement,
   cloud: ParticleCloud,
   colors: { dot: Rgb; background: Rgb },
+  /**
+   * Varsayılan `monaDotsLayout` MONA'nın kendi sohbet sahnesine özel
+   * (canvas genişliğinin sayfanın tamamı olduğunu varsayar). Küçük, sabit
+   * boyutlu bir kapta (ör. bir sayfanın köşesindeki dekoratif parça)
+   * yeniden kullanılacaksa farklı bir yerleşim gerekir — bkz.
+   * `src/components/mona/MonaShard.tsx`.
+   */
+  computeLayout: (width: number, height: number) => MonaDotsLayout = monaDotsLayout,
 ): MonaDotsScene | null {
   const gl = canvas.getContext("webgl", {
     alpha: false,
@@ -297,6 +365,9 @@ export function createMonaDotsScene(
   if (!program) return null;
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
+  // 0 numaralı öznitelik her zaman dizi olarak açık olmalı: isteğe bağlı
+  // `a_lotus` kapalıyken 0'a düşerse tarayıcılar onu yavaş yoldan taklit eder.
+  gl.bindAttribLocation(program, 0, "a_position");
   gl.linkProgram(program);
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     console.error("MONA dots program link failed:", gl.getProgramInfoLog(program));
@@ -304,21 +375,30 @@ export function createMonaDotsScene(
   }
   gl.useProgram(program);
 
-  const buffers = ([
+  const attributes: readonly (readonly [string, Float32Array | undefined, number])[] = [
     ["a_position", cloud.positions, 3],
     ["a_meta", cloud.meta, 4],
     ["a_start", cloud.starts, 2],
     ["a_eye", cloud.eye, 4],
     ["a_heart", cloud.heart, 3],
     ["a_ring", cloud.ring, 3],
-  ] as const).map(([name, data, size]) => {
+    ["a_lotus", cloud.lotus, 3],
+  ];
+  const buffers = attributes.flatMap(([name, data, size]) => {
+    const location = gl.getAttribLocation(program, name);
+    if (location < 0) return [];
+    if (!data) {
+      // İsteğe bağlı hedef (nilüfer) verilmemiş: sabit değer, tampon yok.
+      gl.disableVertexAttribArray(location);
+      gl.vertexAttrib3f(location, 0, 0, 0);
+      return [];
+    }
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-    const location = gl.getAttribLocation(program, name);
     gl.enableVertexAttribArray(location);
     gl.vertexAttribPointer(location, size, gl.FLOAT, false, 0, 0);
-    return buffer;
+    return [buffer];
   });
 
   const u = Object.fromEntries(UNIFORMS.map(name => [name, gl.getUniformLocation(program, name)])) as
@@ -332,7 +412,7 @@ export function createMonaDotsScene(
 
   let dpr = 1;
   let narrow = false;
-  let layout = monaDotsLayout(1, 1);
+  let layout = computeLayout(1, 1);
   const bodyCount = cloud.count - cloud.hazeCount;
 
   const resize = () => {
@@ -344,7 +424,7 @@ export function createMonaDotsScene(
       canvas.width = width;
       canvas.height = height;
     }
-    layout = monaDotsLayout(canvas.clientWidth, canvas.clientHeight);
+    layout = computeLayout(canvas.clientWidth, canvas.clientHeight);
     gl.viewport(0, 0, canvas.width, canvas.height);
   };
   resize();
@@ -368,7 +448,8 @@ export function createMonaDotsScene(
     gl.uniform1f(u.u_flash, frame.flash);
     gl.uniform1f(u.u_scatter, frame.scatter);
     gl.uniform2f(u.u_scatterOrigin, frame.scatterOriginX * 2 - 1, 1 - frame.scatterOriginY * 2);
-    gl.uniform3f(u.u_shape, frame.shapeEye, frame.shapeHeart, frame.shapeRing);
+    gl.uniform4f(u.u_shape, frame.shapeEye, frame.shapeHeart, frame.shapeRing, frame.shapeLotus);
+    gl.uniform2f(u.u_shift, frame.shiftX, frame.shiftY);
     gl.uniform2f(u.u_look, frame.lookX, -frame.lookY);
     gl.uniform1f(u.u_blink, frame.blink);
     gl.uniform4f(u.u_morph, frame.morph[0], frame.morph[1], frame.morph[2], frame.morph[3]);

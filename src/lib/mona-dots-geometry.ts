@@ -29,6 +29,12 @@ export interface ParticleCloud {
   eye: Float32Array;
   heart: Float32Array;
   ring: Float32Array;
+  /**
+   * İsteğe bağlı nilüfer hedefi (xyz) — `createParticleCloud` üretmez;
+   * yalnız `MonaShard` `lotusTargets()` ile ekler (DECISIONS #48). Yoksa
+   * sahne bu şekli hiç kullanmaz; MONA sayfasının bulutu değişmez.
+   */
+  lotus?: Float32Array;
   count: number;
   /** Dizinin sonundaki aura noktası sayısı. */
   hazeCount: number;

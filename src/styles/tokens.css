@@ -36,6 +36,13 @@
   --font-brand: "Montserrat", "Montserrat Fallback", system-ui, sans-serif;
   --font-body: "Inter", "Inter Fallback", system-ui, sans-serif;
 
+  /* Service Chapter — büyük tipografik anlar (h1, hizmet dizini, manifesto,
+     DNA sloganı, "sıradaki servis"). DECISIONS #37, 13 Eylül 2026. Marka
+     fontu (--font-brand) küçük UI metninde aynen kalıyor; bu yalnızca "dev
+     tipografi" rolü. */
+  --font-chapter-display: "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
+  --font-weight-chapter-display: 700; /* Space Grotesk'in en kalın ağırlığı — 800/900 yok */
+
   --font-weight-brand: 800; /* Montserrat Extra Bold — hero/dev başlık */
   --font-weight-heading-bold: 700; /* Montserrat Bold — H1-H3 */
   --font-weight-heading-semibold: 600; /* Montserrat SemiBold — H1-H3 */
@@ -137,6 +144,35 @@
      genişliği (Inter'de ~0.63em), ortalama harf ~0.49em: 66ch ölçülmüş
      olarak ~85 karakter ediyordu. 54ch ≈ 70 karakter. */
   --measure-prose: 54ch;
+
+  /**
+   * Service Chapter sistemi — docs/design/SERVICE_CHAPTER_SYSTEM.md §4, §6.
+   * Yalnızca EKLENDİ; mevcut token'ların hiçbiri değişmedi.
+   *
+   * Display ölçüleri gerçek font dosyasıyla ölçülen genişliklerden seçildi
+   * (Montserrat 800, em): CREATIVITY 6.251 · WITHOUT LIMITS 9.012 ·
+   * PRODUCTION 7.272 · MANAGEMENT 7.831. Mobilde 13vw'de "WITHOUT LIMITS"
+   * iki satıra kırılır; 768px'ten itibaren 10vw'de tek satıra sığar.
+   * Taban 2rem: 320px'te en uzun tek kelime de sığsın (yatay taşma nöbetçisi
+   * e2e/canonical-routes.spec.ts).
+   */
+  --chapter-display: clamp(2rem, 13vw, 11rem);
+  --chapter-manifesto: clamp(1.75rem, 5vw, 5rem);
+  --chapter-index: clamp(2rem, 6.4vw, 6.5rem);
+
+  /* Bölüm ayraçları ve araç arayüzü dışındaki ince çizgiler. Mevcut
+     sayfalardaki elle yazılmış rgba(255,255,255,.12–.15) değerlerinin ortası. */
+  --color-hairline: rgba(255, 255, 255, 0.14);
+
+  /* Ev eğrisi — kod tabanında 11 yerde elle yazılmış olan
+     cubic-bezier(0.22, 1, 0.36, 1) için tek kaynak. */
+  --ease-house: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --chapter-display: clamp(2rem, 10vw, 11rem);
+  }
 }
 
 /**

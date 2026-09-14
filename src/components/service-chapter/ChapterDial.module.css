@@ -1,0 +1,55 @@
+.dial {
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.ring,
+.minor,
+.major {
+  fill: none;
+  stroke: var(--color-brand-white);
+  vector-effect: non-scaling-stroke;
+}
+
+.ring {
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+.minor {
+  stroke-width: 1;
+  opacity: 0.35;
+}
+
+.major {
+  stroke-width: 1;
+  opacity: 0.9;
+}
+
+/* İşaret fuşya = araç rengi. Dönüş yalnızca transform — layout yok.
+   `vector-effect` kalıtılmaz: çocuklara ayrıca yazılıyor, yoksa 28px'te
+   işaret çizgisi ~0,4px'e iniyordu. */
+.marker {
+  stroke: var(--color-brand-fuchsia);
+  fill: var(--color-brand-fuchsia);
+  stroke-width: 1.5;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transform: rotate(calc(var(--deg, 0deg) + var(--turn, 0deg)));
+  transition: transform 720ms var(--ease-house);
+}
+
+.marker > * {
+  vector-effect: non-scaling-stroke;
+}
+
+.hub {
+  fill: var(--color-brand-fuchsia);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker {
+    transition: none;
+  }
+}

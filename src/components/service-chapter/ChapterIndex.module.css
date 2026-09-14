@@ -1,0 +1,156 @@
+.section {
+  padding-block: var(--space-16) clamp(var(--space-16), 12vw, 10rem);
+  padding-inline: var(--page-gutter);
+}
+
+/*
+ * 13 Eylül 2026 kullanıcı geri bildirimi: "maddeler çok karışık duruyor" —
+ * akan satır içi düzende uzun bir kalem ("MARKETING PLAN AND STRATEGY")
+ * ikinci satıra taştığında bir sonraki kalemle görsel olarak birleşiyor,
+ * hangi kalemin nerede bittiği belirsizleşiyordu. Düzeltme: MAG'ın akan
+ * kelime düzeni yerine dikey, tek sütunlu bir dizin (STRV/portföy
+ * referansı) — her kalem kendi satırında, numara solda sabit bir sütunda.
+ * Bir satır kendi içinde ikinci satıra kırılabilir ama komşu kalemle asla
+ * karışmaz.
+ *
+ * Kasıtlı olarak hairline YOK satır başına (taste kuralı: "her satırda
+ * border-t + border-b" en tembel liste deseni) — ayrım yalnız boşluk ve
+ * parlaklık/opaklık kontrastından geliyor, referans görseldeki gibi.
+ */
+/* `aside` verilmişse (Creative: hizmetlerin yanındaki görsel alanı,
+   DECISIONS #48) ≥1024px'te listeyle yan yana, sayfanın sağ yarısında
+   durur — kullanıcının çizdiği kutu. Dar ekranda listenin altına iner.
+   Üstten hizalı: kalem hover'da büyüyüp liste uzadığında görsel
+   yerinden oynamaz. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-12);
+  margin-top: var(--space-10);
+}
+
+@media (min-width: 1024px) {
+  .layout:has(> .aside) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: clamp(3.75rem, 5.8vw, 5.25rem);
+  padding-block: var(--space-2);
+  color: var(--color-brand-white);
+  transition: color 240ms var(--ease-house), opacity 240ms var(--ease-house);
+}
+
+.word {
+  min-width: 0;
+  font-family: var(--font-chapter-display);
+  font-size: clamp(1.25rem, 3.4vw, 2.375rem);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  transform: scale(var(--grow, 1));
+  transform-origin: left center;
+  transition: transform 300ms var(--ease-house);
+}
+
+/* Sıra numarası: sabit genişlikli sol sütun, fuşya araç rengi, gövde
+   punto ölçeğinde. Kelimeyle birlikte büyür ama her zaman belirgin
+   şekilde küçük kalır (0,45 çarpanı — kelimenin büyüme payının azı). */
+.index {
+  flex-shrink: 0;
+  width: 2.25ch;
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.04em;
+  color: var(--color-brand-fuchsia);
+  transform: scale(calc(1 + 0.25 * (var(--grow, 1) - 1)));
+  transform-origin: center;
+  transition: transform 300ms var(--ease-house);
+}
+
+/*
+ * 13 Eylül 2026, ikinci geri bildirim turu: "üzerine geldiğimizde
+ * büyüyeceği bir yapı kuralım... büyüyünce diğer alttaki ve üsttekiler
+ * anlık olarak yer açacak." `.item` normal akışta olduğu için `.word`'ün
+ * boyu büyüyünce satırın kendi yüksekliği artıyor, altındaki kalemler
+ * doğal olarak aşağı kayıyor — ekstra bir yerleşim mantığı gerekmiyor.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .list:has(.item:hover) .item:not(:hover) {
+    opacity: 0.32;
+  }
+
+  .item:hover {
+    --grow: 1.25;
+    color: var(--color-brand-yellow);
+  }
+
+  .item:hover .word {
+    animation: glitch 360ms steps(3, end) 1;
+  }
+}
+
+/* Dokunmatik: kaydırmayla ilerleyen tek odak. Sönük kalemler --text-muted
+   (6,2:1) — okunur kalır. Aktif kalem hover'daki gibi büyür. */
+.section[data-mode="spotlight"] .item {
+  color: var(--text-muted);
+}
+
+.section[data-mode="spotlight"] .item[data-active] {
+  --grow: 1.12;
+  color: var(--color-brand-yellow);
+}
+
+/* RGB kayması: fuşya ve beyaz kanallar birkaç kare ayrışıp yerine oturur.
+   Sıfır ofsetli parlama (glow) değil, ofsetli gölge. */
+@keyframes glitch {
+  0% {
+    text-shadow:
+      0.03em 0 var(--color-brand-fuchsia),
+      -0.03em 0 var(--color-brand-white);
+  }
+
+  33% {
+    text-shadow:
+      -0.04em 0 var(--color-brand-fuchsia),
+      0.02em 0 var(--color-brand-white);
+  }
+
+  66% {
+    text-shadow:
+      0.02em 0 var(--color-brand-fuchsia),
+      -0.01em 0 var(--color-brand-white);
+  }
+
+  100% {
+    text-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list:has(.item:hover) .item:not(:hover) {
+    opacity: 1;
+  }
+
+  .item:hover .word {
+    animation: none;
+  }
+
+  .word,
+  .index {
+    transition: none;
+  }
+}

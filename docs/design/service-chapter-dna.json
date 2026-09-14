@@ -1,0 +1,384 @@
+{
+  "meta": {
+    "name": "Hibrid 360 — Service Chapter DNA",
+    "description": "Design DNA for the 7 What We Do service pages. Distilled from the client-approved references and adapted to the locked Hibrid 360 brand system (CLAUDE.md): black ground, white + yellow text balance, fuchsia as helper colour, Montserrat + Inter. Companion spec: docs/design/SERVICE_CHAPTER_SYSTEM.md.",
+    "source_references": [
+      "STRV — Branding and Website Redesign (image): hairline rule + label at rule end, vertical micro labels, short rule before the lede, tonal contrast inside a headline, giant glyph with bezier handles (design-tool annotation as graphic language)",
+      "Gareth Hughes — Creative Director (image): a single luminous form in a black void, label column + narrow text column, restraint",
+      "MAG Design (image): services set as flowing giant words with superscript indices; hover blurs the rest and glitches the focused word",
+      "ORION Digital Marketing Agency (image): coordinates micro text in the meta row, outline pill labels, split columns with vertical hairlines, line-art arrows",
+      "Black services list (image): big sentence opened by an inline micro label, /01 index rows with hairline dividers",
+      "MONOLOG — bymonolog.com (Awwwards SOTD 6 Jul 2026): two-colour restraint (#080807 / #DDDDD5), statement hero, cinematic CTA, GSAP split/reveal/sticky",
+      "Madrepunk Studio — madrepunk.com (Awwwards HM Jun 2026): near-black + one electric accent (#040014 / #D4FE00), WebGL slider, microinteractions",
+      "Cipher — cipher.tv (Awwwards SOTD 20 Aug 2026): monochrome #060403, video-led sections, page transitions"
+    ],
+    "created_at": "2026-09-13"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "monochromatic black ground with a dual accent (yellow voice + fuchsia tool)",
+      "primary": {
+        "hex": "#FFFFFF",
+        "role": "Narration — title carriers, body copy, service names. Token --color-brand-white."
+      },
+      "secondary": {
+        "hex": "#FFFC00",
+        "role": "Voice / focus — exactly one yellow focal per composition (slogan, key phrase, active or hovered state). Token --color-brand-yellow (Pantone 803 C)."
+      },
+      "accent": {
+        "hex": "#FF00FF",
+        "role": "Tool / helper — hairline graphics, selection frames and handles, bezier anchors, small indices (01, 000°), degree marker, hover glitch, focus ring, cursor. Never body or heading text. Token --color-brand-fuchsia (Pantone 806 C)."
+      },
+      "neutral": {
+        "scale": [
+          "#FFFFFF",
+          "rgba(255, 255, 255, 0.55)",
+          "rgba(255, 255, 255, 0.40)",
+          "rgba(255, 255, 255, 0.14)",
+          "#000000"
+        ],
+        "usage": "White = primary text (21:1). 55% = secondary text, token --text-muted (6.2:1, AA). 40% = display-size text only (3.7:1, AA-large). 14% = hairlines, new token --color-hairline. Black = the only ground."
+      },
+      "semantic": {
+        "success": "n/a on service chapters — no form states; site form tokens apply elsewhere",
+        "warning": "n/a on service chapters",
+        "error": "n/a on service chapters",
+        "info": "Pending/status rows use a fuchsia dot + --text-muted label (e.g. common.pendingLabel)"
+      },
+      "surface": {
+        "background": "#000000",
+        "card": "#000000 — no cards; sections are separated by hairlines, not containers",
+        "elevated": "#000000 — no raised surfaces; depth comes from pinned stages and clip-path windows"
+      },
+      "contrast_strategy": "Maximum contrast on pure black: white 21:1, yellow 19.2:1, fuchsia 6.7:1 (graphics and indices only). No full-screen colour fields (user decision 2026-09-13). White on fuchsia (3.1:1) is forbidden.",
+      "palette_ratio": "black ≥60% · white ~30% · yellow ~8% · fuchsia ~2% of each viewport's area"
+    },
+    "typography": {
+      "type_scale": {
+        "display": {
+          "size": "var(--chapter-display) — clamp(2rem, 13vw, 11rem) below 768px; clamp(2rem, 10vw, 11rem) from 768px",
+          "weight": "800",
+          "line_height": "0.86",
+          "tracking": "0 (house rule — negative tracking deliberately avoided)"
+        },
+        "heading_1": {
+          "size": "var(--chapter-display) (the hero h1 is the display line)",
+          "weight": "800",
+          "line_height": "0.86",
+          "tracking": "0"
+        },
+        "heading_2": {
+          "size": "var(--chapter-manifesto) — clamp(1.75rem, 5vw, 5rem)",
+          "weight": "800",
+          "line_height": "1.02",
+          "tracking": "0"
+        },
+        "heading_3": {
+          "size": "var(--font-size-statement) — 22 / 30 / 44px at 0 / 640 / 1024px",
+          "weight": "700",
+          "line_height": "1.15",
+          "tracking": "0"
+        },
+        "body": {
+          "size": "var(--font-size-body) — clamp(1rem, 0.95rem + 0.2vw, 1.125rem)",
+          "weight": "400",
+          "line_height": "1.5",
+          "tracking": "0"
+        },
+        "body_small": {
+          "size": "var(--font-size-lead) — 18 / 20 / 22px (used for ledes, set in Montserrat 600)",
+          "weight": "600",
+          "line_height": "1.35",
+          "tracking": "0"
+        },
+        "caption": {
+          "size": "var(--font-size-micro) — 13px",
+          "weight": "500",
+          "line_height": "1.4",
+          "tracking": "0.02em"
+        },
+        "overline": {
+          "size": "var(--font-size-label) — 14 / 15 / 16px",
+          "weight": "700",
+          "line_height": "1.2",
+          "tracking": "0.14em uppercase"
+        }
+      },
+      "font_families": {
+        "heading": "Montserrat (self-hosted variable 300–800, public/fonts/montserrat-latin-tr.woff2)",
+        "body": "Inter (self-hosted variable 400–500, public/fonts/inter-latin-tr.woff2)",
+        "mono": "none — numerals set in Montserrat; the subset has no tnum, so numeric columns use a fixed min-width"
+      },
+      "font_style_notes": "Geometric sans display in 800 uppercase at architectural scale. The references' condensed faces (STRV, ORION) and serifs (Gareth Hughes, the italic /01 index) are deliberately not adopted because the brand is locked to Montserrat + Inter; impact comes from scale and white/yellow tonal contrast instead. A 300↔800 weight contrast is available as an existing house device. Measured widths (Montserrat 800, em): CREATIVITY 6.251, WITHOUT LIMITS 9.012, WITHOUT 5.201, LIMITS 3.521, PRODUCTION 7.272, MANAGEMENT 7.831."
+    },
+    "spacing": {
+      "base_unit": "4px (0.25rem) — tokens --space-1 … --space-24",
+      "scale": ["0.25rem", "0.5rem", "0.75rem", "1rem", "1.5rem", "2rem", "3rem", "4rem", "6rem"],
+      "content_density": "spacious",
+      "section_rhythm": "Each chapter section is at least one viewport or a pinned scene (160–240svh). Sections open with a 1px hairline + label; interior gaps use --space-8 / --space-12 / --space-16."
+    },
+    "layout": {
+      "grid_system": "12-column editorial grid with a left rail",
+      "max_content_width": "none — full-bleed with --page-gutter; prose capped at --measure-prose (54ch)",
+      "columns": "12 from 768px (rail = columns 1–3, content = 4–12, lede = 7–12); 1 below 768px",
+      "gutter": "var(--page-gutter) = clamp(1rem, 2vw + 0.75rem, 3.5rem); column gap var(--space-6)",
+      "breakpoints": ["640px", "768px", "1024px", "1180px (header switches to mobile menu)", "1440px"],
+      "alignment_tendency": "asymmetric"
+    },
+    "shape": {
+      "border_radius": {
+        "small": "0",
+        "medium": "0",
+        "large": "0 (the film window starts at 4px and resolves to 0 at full bleed)",
+        "pill": "999px (site pill buttons elsewhere; not used inside chapters)"
+      },
+      "border_usage": "subtle 1px — hairlines in --color-hairline; fuchsia 1px only for tool UI",
+      "divider_style": "full-width 1px hairline with a left h2 label and a right count, e.g. SERVICES ……… (10)"
+    },
+    "elevation": {
+      "shadow_style": "none",
+      "levels": {
+        "low": "none",
+        "medium": "none",
+        "high": "none"
+      },
+      "depth_cues": "overlapping layers — pinned stages, clip-path windows, films behind type; plus scale contrast"
+    },
+    "iconography": {
+      "style": "hairline geometric",
+      "stroke_weight": "1–1.5px with vector-effect: non-scaling-stroke",
+      "size_scale": ["7px handle", "11px overset port", "16px control icon", "40–64px dial"],
+      "preferred_set": "lucide-react for controls (Pause/Play, arrows) + bespoke inline SVG instruments (selection frame, pen tool, 360° dial)"
+    },
+    "motion": {
+      "easing": "cubic-bezier(0.22, 1, 0.36, 1) — new token --ease-house (already hand-written 11× in the codebase)",
+      "duration_scale": {
+        "micro": "180ms",
+        "normal": "420ms",
+        "macro": "720ms (load sequences ≤ 1.4s total; scroll scenes are scrubbed, not timed)"
+      },
+      "entrance_pattern": "mask rise (translateY 100% → 0 inside an overflow clip), edge draw (scale 0 → 1), handle pop (scale), scroll-scrubbed reveals",
+      "exit_pattern": "none on scroll — scenes hold their final state; hover states reverse in 180ms",
+      "philosophy": "Cinematic but disciplined: one engineered peak per page, at least four motion families, never the same device twice in a row; reduced motion shows every final state."
+    },
+    "components": {
+      "button_style": "No in-page primary buttons — the global CtaBand owns the single CTA. Text links in Montserrat 700 uppercase with an arrow; hover turns yellow.",
+      "input_style": "n/a on service chapters",
+      "card_style": "No cards — hairline-separated editorial sections",
+      "navigation_pattern": "Degree meta row at the top (hub link / service / 000° + dial); a Next row at the bottom that rotates to the next service's degree; site header and footer unchanged",
+      "modal_style": "none",
+      "list_style": "Flowing inline giant words with superscript fuchsia indices (MAG reference), not bullets",
+      "component_notes": "Shared: ChapterHero, ChapterRule, ChapterDial, ChapterFilm, ChapterVideo, ScrollLitText, ChapterIndex, ChapterStrip, ChapterNext. Per page: one instrument SVG (Creative = selection frame + pen-tool DNA helix)."
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": ["confident", "cinematic", "precise", "nocturnal", "witty"],
+      "visual_metaphor": "The designer's workspace at night — selection frames, bezier handles and a 360° dial on a black artboard. Every service is one degree of the same circle.",
+      "era_influence": "Swiss editorial grid × contemporary Awwwards agency sites (2025–26) × print/DTP tool UI (Illustrator, InDesign)",
+      "genre": "luxury editorial agency / dark cinematic portfolio",
+      "personality_traits": ["assured", "crafty", "playful in detail, serious in structure", "restrained"],
+      "adjectives": ["bold", "black", "typographic", "cinematic", "exact"]
+    },
+    "visual_language": {
+      "complexity": "moderate — minimal surfaces, rich motion",
+      "ornamentation": "subtle accents — only functional tool-UI graphics",
+      "whitespace_usage": "Generous black negative space; at least 60% of every viewport is ground",
+      "visual_weight_distribution": "Left-weighted display type balanced by right-column ledes; full-bleed films carry mid-page weight",
+      "focal_strategy": "single hero element per screen (the one yellow focal)",
+      "contrast_level": "maximum",
+      "texture_usage": "None in the UI; texture lives inside the films (sequins, mirror facets, grain)"
+    },
+    "composition": {
+      "hierarchy_method": "scale contrast + colour weight (yellow marks focus)",
+      "balance_type": "asymmetric",
+      "flow_direction": "top-down with horizontal escapes (overset headline, helix drawing left to right)",
+      "grouping_strategy": "hairline-ruled sections with rail labels",
+      "negative_space_role": "Active — it frames the single idea on each screen and lets the films breathe"
+    },
+    "imagery": {
+      "photo_treatment": "No stock photography. AI-generated cinematic loops (Seedance 2.5) in a black void with magenta/yellow practical light, crushed blacks and fine grain, labelled with video.aiGenerated.",
+      "illustration_style": "Technical hairline vector (tool UI): anchors, handles, frames, ticks",
+      "graphic_elements": [
+        "selection frame with 8 handles + overset '+' port",
+        "bezier anchors and handles",
+        "360° dial with 72 ticks and a degree marker",
+        "hairline rules with labels",
+        "superscript indices",
+        "degree coordinates (000°, 045° …)"
+      ],
+      "pattern_usage": "none",
+      "image_shape": "full-bleed rectangles; a 16:9 window expanding to full bleed; 21:9 strips"
+    },
+    "interaction_feel": {
+      "feedback_style": "immediate colour shift to yellow with subtle motion",
+      "hover_behavior": "Index: siblings dim and blur, the hovered word turns yellow with a 360ms RGB-split glitch (fuchsia/white). Next row: the dial rotates 45°.",
+      "transition_personality": "smooth glide (house ease)",
+      "loading_style": "CSS-only hero sequence (≤ 1.4s); films lazy-load near the viewport with the poster first",
+      "microinteraction_density": "moderate"
+    },
+    "brand_voice_in_ui": {
+      "tone": "confident, brief, slogan-led (English slogans are brand language on TR pages too)",
+      "formality": "semi-formal",
+      "cta_style": "direct imperative — one site-wide CTA (cta.primary)",
+      "empty_state_approach": "Honest pending status with approved copy (e.g. services.creative.galleryEmpty) — never fake work",
+      "error_tone": "n/a on service chapters"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "moderate",
+      "performance_tier": "lightweight",
+      "fallback_strategy": "prefers-reduced-motion → static final states (CSS, before JS); no JS → readable final content via var(--progress, default); films → poster",
+      "primary_technology": "CSS custom properties driven by one rAF scroll hook (--progress) + inline SVG; no animation libraries, no WebGL"
+    },
+    "background_effects": {
+      "type": "video-bg",
+      "description": "Film sections only: a 16:9 loop inside a window that expands to full bleed, and a 21:9 strip. The page ground is always flat black.",
+      "technology": "HTML5 video — AV1 WebM (10-bit) + H.264 MP4 fallback, preload=none, play in view",
+      "params": {
+        "color_palette": ["#000000", "#FF00FF", "#FFFC00", "#FFFFFF"],
+        "speed": "slow — 8–10s seamless loops (identical start/end keyframe)",
+        "density": "n/a",
+        "opacity": "1",
+        "blend_mode": "normal"
+      }
+    },
+    "particle_systems": {
+      "enabled": false,
+      "type": "custom",
+      "description": "Any light-fleck or texture motion lives inside the page's single film asset; there is no runtime particle system",
+      "technology": "none (baked into video)",
+      "params": {
+        "count": "n/a",
+        "shape": "n/a",
+        "size_range": "n/a",
+        "movement_pattern": "n/a",
+        "color_behavior": "n/a",
+        "interaction": "none",
+        "spawn_area": "n/a"
+      }
+    },
+    "3d_elements": {
+      "enabled": false,
+      "type": "abstract-geometry",
+      "description": "No real-time 3D. The site's single-WebGL-scene quota belongs to the homepage hero.",
+      "technology": "none",
+      "params": {
+        "renderer": "n/a",
+        "lighting": "n/a",
+        "camera": "n/a",
+        "materials": "n/a",
+        "geometry": "n/a",
+        "post_processing": [],
+        "interaction_model": "n/a"
+      }
+    },
+    "shader_effects": {
+      "enabled": false,
+      "type": "custom-GLSL",
+      "description": "none on service chapters",
+      "technology": "none",
+      "params": {
+        "uniforms": "n/a",
+        "vertex_manipulation": "n/a",
+        "fragment_output": "n/a",
+        "noise_type": "n/a",
+        "distortion": "n/a"
+      }
+    },
+    "scroll_effects": {
+      "parallax": {
+        "enabled": false,
+        "layers": "0",
+        "depth_range": "n/a",
+        "speed_curve": "n/a"
+      },
+      "scroll_triggered_animations": {
+        "enabled": true,
+        "trigger_points": [
+          "film window — pinned 220svh (mobile 160svh), clip inset scrubbed 0 → 1",
+          "manifesto — pass progress 0.15–0.70 lights words in order",
+          "index — pass progress drives a spotlight on touch devices",
+          "DNA helix — pinned 240svh (mobile 170svh), draw 0.05–0.75, slogan 0.55–0.85"
+        ],
+        "animation_type": "clip-reveal + draw-SVG + word-light",
+        "scrub_behavior": "direct scrub via --progress (no inertia, no smoothing)"
+      },
+      "scroll_morphing": {
+        "enabled": true,
+        "description": "The 16:9 film window morphs to full bleed through clip-path inset — no DOM reflow"
+      }
+    },
+    "text_effects": {
+      "type": "glitch",
+      "description": "Hero lines rise from masks on load; manifesto words light up with scroll; index words glitch (RGB split) on hover",
+      "technology": "CSS keyframes + custom properties on server-rendered spans",
+      "params": {
+        "split_strategy": "by-line (hero), by-word (manifesto)",
+        "animation_per_unit": "opacity 0.4 → 1 per word; translateY 100% → 0 per line",
+        "stagger": "scroll-linked (word i lights at progress i/n); load stagger 30–90ms",
+        "effect_style": "editorial reading light; 360ms steps(3) glitch in fuchsia/white"
+      }
+    },
+    "cursor_effects": {
+      "enabled": true,
+      "type": "custom-cursor",
+      "description": "Existing site cursor: a fuchsia degree glyph ° following the pointer with a lerp — it is the origin of the 360° concept. The system cursor is never hidden.",
+      "params": {
+        "shape": "° glyph (Montserrat 800)",
+        "size": "2.5rem",
+        "blend_mode": "normal",
+        "trail": "none (lerp 0.2)",
+        "interaction_zone": "global; disabled for touch and reduced motion"
+      }
+    },
+    "image_effects": {
+      "type": "reveal-clip",
+      "description": "Films are revealed by clip-path window expansion; strips play only while in view",
+      "technology": "CSS clip-path + IntersectionObserver",
+      "params": {
+        "filter_pipeline": "none (the grade is baked into the film)",
+        "hover_transform": "none",
+        "reveal_animation": "clip-path inset expansion scrubbed by scroll",
+        "distortion_type": "none"
+      }
+    },
+    "glassmorphism_neumorphism": {
+      "enabled": false,
+      "style": "none",
+      "params": {
+        "blur_radius": "0",
+        "transparency": "n/a",
+        "border_treatment": "n/a",
+        "shadow_type": "none",
+        "light_source_angle": "n/a"
+      }
+    },
+    "canvas_drawings": {
+      "enabled": false,
+      "type": "none",
+      "description": "No canvas — vector instruments are inline SVG",
+      "technology": "none",
+      "params": {
+        "draw_method": "n/a",
+        "animation_loop": "n/a",
+        "color_scheme": "n/a",
+        "responsiveness": "n/a",
+        "interaction": "none"
+      }
+    },
+    "svg_animations": {
+      "enabled": true,
+      "type": "path-draw",
+      "description": "Creative DNA helix: two bezier strands draw via stroke-dashoffset (pathLength=1) while fuchsia anchors and handles appear at thresholds and a pen cursor rides the tip. The hero selection frame draws its edges on load, then its handles and edges breathe continuously (low-amplitude opacity loop) so the frame reads as an active tool, not a static, possibly-broken box. The 360° dial rotates on hover.",
+      "params": {
+        "animation_method": "CSS custom properties (--draw derived from --progress) + CSS keyframes on load",
+        "path_morphing": "none",
+        "stroke_animation": "stroke-dashoffset 1 → 0",
+        "filter_effects": "none"
+      }
+    },
+    "composite_notes": "Colour was not measured: the five reference images exist only in the conversation (not on disk) and the palette is brand-locked by CLAUDE.md, so the references contribute structure, typography behaviour, motion and composition — not colour. The references' own palettes (MONOLOG #080807/#DDDDD5, Madrepunk #040014/#D4FE00, Cipher #060403) confirm the two-colour-plus-one-accent discipline that the Hibrid palette already follows. Effects layer as: black ground → films (the only texture) → hairline tool UI in fuchsia → white/yellow type. Performance: a single passive scroll listener per in-view scene, compositor-only properties (clip-path, transform, opacity, stroke-dashoffset); films are the only heavy assets and load lazily."
+  }
+}

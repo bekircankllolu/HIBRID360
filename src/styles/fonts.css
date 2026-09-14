@@ -49,6 +49,26 @@
 }
 
 /**
+ * Service Chapter sistemi — büyük tipografik anlar (h1, hizmet dizini,
+ * manifesto, DNA sloganı, "sıradaki servis") için ikinci bir marka sesi
+ * (13 Eylül 2026 kullanıcı kararı, DECISIONS #37). Küçük UI metni
+ * (etiket, eyebrow, gövde, nav) Montserrat/Inter'de kalıyor — bu yalnız
+ * "dev tipografi" rolü, `--font-chapter-display` token'ı üzerinden.
+ *
+ * Tek ağırlık (700, ailenin en kalını — Space Grotesk'te 800/900 yok):
+ * variable kaynak fontTools.varLib.instancer ile 700'e sabitlenip aynı
+ * Latin+TR alt kümesiyle (yukarıdaki üretim komutuyla aynı unicode aralığı)
+ * kesildi. 275 glif, 10.7KB.
+ */
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-700-latin-tr.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
  * Metrik uyumlu yedek aileler — font inene kadar yazı sistem fontuyla
  * çizilir; ascent/descent override'ları gerçek fontun metrikleriyle
  * eşleştiği için yer değiştirme (CLS) oluşmaz.
@@ -69,4 +89,18 @@
   descent-override: 24.12%;
   line-gap-override: 0%;
   size-adjust: 107%;
+}
+
+/* Arial'ın xAvgCharWidth/unitsPerEm'ine göre hesaplandı (aynı yöntem,
+   Space Grotesk 700'ün gerçek OS/2 + hhea değerleriyle). Space Grotesk
+   Montserrat'tan belirgin ölçüde daha geniş harfler taşıyor (xAvgCharWidth
+   566/1000 vs Arial 904/2048) — bu yüzden size-adjust %128, diğer ikisinden
+   çok daha yüksek. */
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  ascent-override: 76.74%;
+  descent-override: 22.77%;
+  line-gap-override: 0%;
+  size-adjust: 128.23%;
 }

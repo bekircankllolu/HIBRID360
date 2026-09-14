@@ -278,13 +278,17 @@
   },
   "services": {
     "evidenceTitle": "Evidence",
+    "chapter": {
+      "servicesTitle": "Services",
+      "next": "Next"
+    },
     "creative": {
       "heroSubtitle": "Every idea begins with people. Every possibility expands with AI.",
       "body": [
         "We clear a creative path for your brand.",
         "We pave creative shortcuts for brands stuck in traffic jams."
       ],
-      "band": "Your Brand’s DNA Is the Ultimate AI Differentiator.",
+      "band": "Your Brand’s DNA is the Ultimate AI Differentiator.",
       "galleryEmpty": "The campaign gallery is on the way."
     },
     "production": {
@@ -580,7 +584,9 @@
     "subtitles": "Subtitles",
     "playShowreel": "Play the showreel",
     "watchFilm": "Watch the film",
-    "aiGenerated": "AI-generated representative visual"
+    "aiGenerated": "AI-generated representative visual",
+    "play": "Play film",
+    "pause": "Pause film"
   },
   "contactForm": {
     "name": "Your name",

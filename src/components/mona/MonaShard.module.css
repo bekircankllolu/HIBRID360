@@ -1,0 +1,33 @@
+/*
+ * MonaShard — MonaDots'un (Mona.module.css `.dots`/`.canvas`) sayfa-bağımsız
+ * karşılığı. Kap boyutunu çağıran sayfa belirler (bkz. ChapterHero.module.css
+ * `.mona`). Zemin rengi yok: altındaki `.chapter` siyahı görünür.
+ *
+ * Altıncı tur (DECISIONS #48): kök, kabın (hero) ALTINA, yüksekliğinin
+ * `--shard-bleed` katı kadar uzar — küre hero'nun alt kenarından taşıyor,
+ * canvas hero'yla bitseydi sayfa kayınca düz bir çizgiyle kesilirdi.
+ * Oran `SHARD_BLEED` sabitinden inline gelir; yerleşim de aynı sabiti
+ * kullanır (`monaShardLayout`). Kap `pointer-events:none` olduğu için
+ * uzantı alttaki bölümün tıklamalarını engellemez.
+ */
+.shard {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: calc(var(--shard-bleed, 0) * -100%);
+}
+
+/*
+ * Yalnız en alt şerit söner: burada kürenin gövdesi yok (gövdenin altı
+ * canvas'ın %80'inin üstünde kalıyor — bkz. mona-dots-scene.test.ts),
+ * yalnız halenin ve tozun seyrek uçları var. Onlar da düz bir çizgide
+ * bitmesin, sönerek bitsin.
+ */
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  mask-image: linear-gradient(to bottom, var(--color-brand-black) 80%, transparent);
+}

@@ -1,0 +1,83 @@
+.figure {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-8));
+  margin: 0;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-brand-black);
+  border: 1px solid color-mix(in srgb, var(--color-brand-white) 24%, transparent);
+}
+
+.reveal {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: image-in 520ms var(--ease-house) both;
+}
+
+.reticle {
+  position: absolute;
+  z-index: 2;
+  inset: var(--space-4);
+  border-top: 1px solid var(--color-brand-fuchsia);
+  border-left: 1px solid var(--color-brand-fuchsia);
+  width: 1.5rem;
+  height: 1.5rem;
+  pointer-events: none;
+}
+
+.counter {
+  position: absolute;
+  z-index: 2;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  padding: 0.25rem 0.4rem;
+  font-family: var(--font-brand);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-heading-bold);
+  color: var(--color-brand-black);
+  background: var(--color-brand-yellow);
+}
+
+.caption {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-micro);
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1023px) {
+  .figure {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    animation: none;
+  }
+}
+
+@keyframes image-in {
+  from {
+    opacity: 0.7;
+    transform: scale(1.12);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
