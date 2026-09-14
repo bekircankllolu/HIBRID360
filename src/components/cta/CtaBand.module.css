@@ -9,6 +9,12 @@
   text-align: center;
 }
 
+.band[data-compact] {
+  min-height: 34svh;
+  padding-block: clamp(3rem, 6vw, 6rem);
+  border-top: 1px solid color-mix(in srgb, var(--color-brand-black) 20%, transparent);
+}
+
 .secondary {
   display: flex;
   flex-wrap: wrap;

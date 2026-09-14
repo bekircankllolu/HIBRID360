@@ -7,10 +7,10 @@ import {
   createMonaDotsScene,
   monaDotsLayout,
   NEUTRAL_FRAME,
+  tokenRgb,
   type MonaDotsFrame,
   type MonaDotsGhost,
   type MonaDotsScene,
-  type Rgb,
 } from "@/lib/mona-dots-scene";
 import { acquireSceneLock, onSceneLockReleased, releaseSceneLock } from "@/lib/webgl-scene";
 import styles from "./Mona.module.css";
@@ -25,15 +25,6 @@ const MAGNET_REACH = 1.7;
 /** İzler: kaç kare önceki durumun, hangi alfa ile tekrar çizileceği. */
 const TRAILS: readonly [number, number][] = [[3, 0.28], [6, 0.12]];
 const HISTORY = 7;
-
-/** Marka rengini token'dan okur — sahne kodunda hex tutulmaz. */
-function tokenRgb(name: string): Rgb {
-  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim().replace("#", "");
-  const hex = value.length === 3 ? value.split("").map((c) => c + c).join("") : value;
-  const int = Number.parseInt(hex, 16);
-  if (Number.isNaN(int) || hex.length !== 6) return [1, 1, 1];
-  return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
-}
 
 /**
  * MONA'nın yerini alan sarı parçacık varlığı.
@@ -221,6 +212,10 @@ export function MonaDots({ hostRef, levelRef, typing, reducedMotion }: {
         shapeEye: mood.shapeWeights[0],
         shapeHeart: mood.shapeWeights[1],
         shapeRing: mood.shapeWeights[2],
+        // Nilüfer ve kayma yalnız Creative'in MonaShard'ına ait (DECISIONS #48).
+        shapeLotus: 0,
+        shiftX: 0,
+        shiftY: 0,
         lookX: look.x,
         lookY: look.y,
         blink: mood.blink,

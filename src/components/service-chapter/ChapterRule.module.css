@@ -1,0 +1,17 @@
+.rule {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* globals.css h2'yi sarı yapar; burada sarı değil anlatım rengi —
+   sarı bu ekranın odağına (bölümün kendisine) saklanıyor. */
+.title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}

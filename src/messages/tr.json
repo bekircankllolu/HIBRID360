@@ -278,13 +278,17 @@
   },
   "services": {
     "evidenceTitle": "Kanıt",
+    "chapter": {
+      "servicesTitle": "Hizmetler",
+      "next": "Sıradaki"
+    },
     "creative": {
       "heroSubtitle": "Her fikir insanla başlar. Her ihtimal yapay zekâyla büyür.",
       "body": [
         "Markanız için yaratıcı bir yol açıyoruz.",
         "Trafikte sıkışmış markalara yaratıcı kestirmeler kuruyoruz."
       ],
-      "band": "Markanızın DNA’sı, yapay zekâ çağının asıl ayrıştırıcısıdır.",
+      "band": "Your Brand’s DNA is the Ultimate AI Differentiator.",
       "galleryEmpty": "Kampanya galerisi hazırlanıyor."
     },
     "production": {
@@ -580,7 +584,9 @@
     "subtitles": "Altyazı",
     "playShowreel": "Showreeli oynat",
     "watchFilm": "Filmi izle",
-    "aiGenerated": "AI ile üretilmiş temsili görseldir"
+    "aiGenerated": "AI ile üretilmiş temsili görseldir",
+    "play": "Filmi oynat",
+    "pause": "Filmi duraklat"
   },
   "contactForm": {
     "name": "Adınız",

@@ -1,0 +1,26 @@
+/*
+ * MonaDrift yerleşimi — `MonaField`'in (SUPERSEDED, DECISIONS #40) sticky
+ * hilesiyle aynı: `<canvas>` her zaman görünür alanı dolduruyor. Canvas
+ * sticky noktanın altına ekran boyu taştığı için makale biterken sarı
+ * CtaBand/Footer'ın üstüne de çiziyordu — kullanan sayfanın kabı dikeyde
+ * kırpmalı (Creative: `page.module.css` `.chapter { overflow: clip }`,
+ * DECISIONS #48). Bu katman `MonaShard`'ın aksine TAMAMEN tıklama
+ * geçirgen — yalnız dekoratif doku, etkileşim yok.
+ */
+.field {
+  position: sticky;
+  top: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}

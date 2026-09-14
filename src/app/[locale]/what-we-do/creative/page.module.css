@@ -1,155 +1,17 @@
-.surface {
+/*
+ * Creative — Service Chapter kabuğu. Bölümlerin kendi yerleşimi kendi
+ * modüllerinde; burada yalnızca zemin ve taşma kilidi var.
+ *
+ * `overflow: clip` iki eksende:
+ * - yatay: taşan başlık ve kalem ucu gibi araç arayüzü öğeleri sayfaya
+ *   yatay kaydırma eklemesin (nöbetçi: e2e/canonical-routes.spec.ts);
+ * - dikey (DECISIONS #48): MonaDrift'in ekran boyu canvas'ı makale bitince
+ *   sarı CtaBand ve Footer'ın üstüne taşıyordu ("monanın partikülleri
+ *   footer alanında olmasın") — noktalar makalenin alt kenarında biter.
+ * `clip` sticky sahneleri bozmaz (`hidden` bozardı — kaydırma kabı oluşturur).
+ */
+.chapter {
+  overflow: clip;
   background: var(--color-brand-black);
   color: var(--color-brand-white);
-}
-
-.page { color: var(--color-brand-white); }
-
-.eyebrow {
-  margin: 0 0 var(--space-4);
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-
-  font-weight: var(--font-weight-heading-bold);
-  color: var(--color-brand-yellow);
-  letter-spacing: 0.12em;
-}
-
-.heroTitle {
-  max-width: 11ch;
-  color: var(--color-brand-yellow);
-}
-
-.heroSubtitle {
-  max-width: var(--measure-prose);
-
-  color: var(--color-brand-white);
-}
-
-.heroSubtitle::after { background: var(--color-brand-yellow); }
-
-.showreel {
-  position: relative;
-  width: calc(100% + (2 * var(--page-gutter)));
-  min-height: min(76svh, 52rem);
-  margin: clamp(3rem, 7vw, 7rem) calc(-1 * var(--page-gutter));
-  overflow: hidden;
-  background: #050505;
-}
-
-.showreelVideo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.82;
-  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
-}
-
-.showreelLabel {
-  position: absolute;
-  left: var(--page-gutter);
-  bottom: clamp(2rem, 6vw, 6rem);
-  z-index: 1;
-  max-width: 12ch;
-  margin: 0;
-  font-family: var(--font-brand);
-  font-size: clamp(2rem, 7vw, 7rem);
-  font-weight: var(--font-weight-brand);
-  line-height: 0.88;
-  color: var(--color-brand-yellow);
-}
-
-.body {
-  max-width: var(--measure-prose);
-
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-}
-
-.tagList { border-top-color: rgba(255, 252, 0, 0.45); }
-.tag { border-bottom-color: rgba(255, 255, 255, 0.18); }
-.tag::before,
-.bandText { color: var(--color-brand-yellow); }
-.band { border-top-color: rgba(255, 252, 0, 0.45); }
-
-.workPrompt {
-  position: relative;
-  min-height: min(70svh, 48rem);
-  margin: var(--space-16) calc(-1 * var(--page-gutter)) 0;
-  overflow: hidden;
-  background: #080808;
-}
-
-.workPromptImage {
-  object-fit: cover;
-  filter: brightness(0.55) contrast(1.12);
-  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
-}
-
-.workPromptLink {
-  position: absolute;
-  left: var(--page-gutter);
-  right: var(--page-gutter);
-  bottom: clamp(2rem, 6vw, 5rem);
-  z-index: 1;
-  display: block;
-  padding: clamp(1rem, 2vw, 1.5rem);
-  border: 1px solid var(--color-brand-yellow);
-  color: var(--color-brand-yellow);
-  font-family: var(--font-brand);
-  font-size: clamp(1rem, 2.5vw, 2rem);
-  font-weight: var(--font-weight-heading-bold);
-  text-align: center;
-}
-
-.workPromptLink:hover,
-.workPromptLink:focus-visible {
-  background: var(--color-brand-yellow);
-  color: var(--color-brand-black);
-}
-
-.closing {
-  padding: clamp(5rem, 12vw, 10rem) 0 0;
-  max-width: 64rem;
-}
-
-.closingKicker {
-  color: var(--color-brand-yellow);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-}
-
-.closing h2 {
-  margin: var(--space-4) 0;
-  font-family: var(--font-brand);
-  font-size: clamp(2rem, 6vw, 5.5rem);
-  line-height: 0.94;
-}
-
-.closingLink {
-  display: inline-block;
-  margin-top: var(--space-8);
-  padding: 1rem 1.5rem;
-  background: var(--color-brand-yellow);
-  color: var(--color-brand-black);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-}
-
-@media (hover: hover) {
-  .showreel:hover .showreelVideo,
-  .workPrompt:hover .workPromptImage {
-    transform: scale(var(--media-zoom-scale));
-  }
-}
-
-@media (max-width: 640px) {
-  .showreel,
-  .workPrompt { min-height: 60svh; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .showreelVideo,
-  .workPromptImage { transition: none; }
 }

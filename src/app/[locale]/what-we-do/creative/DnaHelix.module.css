@@ -1,0 +1,216 @@
+/*
+ * S5 — sticky sahne. Zirveden (S2, 260svh) belirgin biçimde kısa: 180svh
+ * (mobil 140svh). Kaydırma yolu: --draw .02 → .70, iplikler soldan sağa
+ * çizilir. Slogan baştan görünür — ilk turda slogan da kaydırmayla
+ * beliriyordu ve sahne sabitlendiği an ekranda yalnızca kalem ucu kalıyordu
+ * (ölü scroll). Sahnenin tek hareketi çizim.
+ * JS yoksa ve hareket azaltmada --progress 1: sarmal çizili.
+ */
+.wrapper {
+  position: relative;
+  height: 180svh;
+}
+
+.stage {
+  --draw: clamp(0, (var(--progress, 1) - 0.02) / 0.68, 1);
+  --copy: clamp(0, (var(--progress, 1) - 0.72) / 0.16, 1);
+  position: sticky;
+  top: var(--header-height);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-8);
+  height: calc(100svh - var(--header-height));
+  padding-block: var(--space-12);
+  padding-inline: var(--page-gutter);
+  overflow: hidden;
+}
+
+.helixWrap {
+  width: 100%;
+}
+
+.helix {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.mobile {
+  display: none;
+}
+
+/* Soldan sağa açılan kırpma — çizimin kendisi. */
+.reveal {
+  transform-box: fill-box;
+  transform-origin: 0 0;
+  transform: scaleX(var(--draw));
+}
+
+.front,
+.back,
+.rung,
+.handleLine {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Sanat eseri beyaz: öndeki iplik tam, arkadaki geri çekilmiş. */
+.front {
+  stroke: var(--color-brand-white);
+  stroke-width: 1.5;
+}
+
+.back {
+  stroke: var(--color-brand-white);
+  stroke-width: 1.5;
+  opacity: 0.45;
+}
+
+.rung {
+  stroke: var(--color-brand-white);
+  stroke-width: 1;
+  opacity: 0.22;
+}
+
+/* Araç arayüzü fuşya. Kalem ulaştığı anda tam görünür (+1: t = 1 olan son
+   anchor final durumda da görünsün), öncesinde 1/30'luk bir pop. */
+.anchor {
+  --on: clamp(0, (var(--draw) - var(--t)) * 30 + 1, 1);
+  opacity: calc(0.16 + 0.84 * var(--on));
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(calc(0.7 + 0.3 * var(--on)));
+  transition: transform 180ms var(--ease-house), opacity 180ms var(--ease-house);
+}
+
+.anchor[data-near] {
+  opacity: 1;
+  transform: scale(calc(0.88 + 0.3 * var(--on)));
+}
+
+.anchorFilled {
+  fill: var(--color-brand-fuchsia);
+}
+
+.anchorHollow {
+  fill: var(--color-brand-black);
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.handleLine {
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1;
+}
+
+.handleEnd {
+  fill: var(--color-brand-black);
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Kalem ucu ipliğin (A) üstünde: x = draw·w, y = mid − amp·cos(draw·turns).
+   Çizim bitince kaybolur. */
+.pen {
+  transform: translate(
+    calc(var(--draw) * var(--w)),
+    calc(var(--mid) - var(--amp) * cos(var(--draw) * var(--turns)))
+  );
+  opacity: calc(1 - clamp(0, (var(--draw) - 0.97) * 40, 1));
+}
+
+.nib {
+  fill: var(--color-brand-black);
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.nibSlit {
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.nibHole {
+  fill: var(--color-brand-fuchsia);
+}
+
+/* Slogan: sarı, sağa yaslı (hiza çeşitliliği), ekranın tek odağı. */
+.slogan {
+  justify-self: end;
+  max-width: 14em;
+  margin: 0;
+  font-family: var(--font-chapter-display);
+  font-size: var(--chapter-manifesto);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-align: right;
+  text-wrap: balance;
+  color: var(--color-brand-yellow);
+  opacity: var(--copy);
+  transform: translateY(calc((1 - var(--copy)) * 1.5rem));
+}
+
+.stage[data-complete] .helixWrap {
+  animation: dnaBreath 5.5s ease-in-out infinite;
+}
+
+@keyframes dnaBreath {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.008);
+  }
+}
+
+@media (max-width: 767px) {
+  .wrapper {
+    height: 140svh;
+  }
+
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+  }
+
+  .slogan {
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    height: auto;
+  }
+
+  .stage {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding-block: var(--space-16);
+  }
+
+  .pen {
+    display: none;
+  }
+
+  .stage[data-complete] .helixWrap {
+    animation: none;
+  }
+}

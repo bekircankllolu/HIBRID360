@@ -1,0 +1,69 @@
+/*
+ * --lit: okuma ilerlemesi. Blok ekranın altından girip üste yaklaşırken
+ * (pass progress .12 → .62) kelimeler sırayla yanar; kalan yolda metin
+ * tamamen yanık bekler.
+ */
+/*
+ * `position: relative`: hero'daki MONA canvas'ı (opak, mutlak konumlu) bu
+ * bölümün üst kısmına taşıyor (DECISIONS #48). Konumlanmamış metin boyama
+ * sırasında canvas'ın ALTINDA kalırdı — hatta yalnız tam yanmış kelimeler
+ * (opaklığı 1'e ulaşan) kaybolurdu, çünkü <1 opaklık kendi katmanını açıyor.
+ */
+.lit {
+  position: relative;
+}
+
+.scene {
+  --lit: clamp(0, (var(--progress, 1) - 0.14) / 0.5, 1);
+  display: flex;
+  align-items: center;
+  min-height: min(82svh, 56rem);
+  padding-inline: var(--page-gutter);
+}
+
+.scene p {
+  max-width: 15em;
+  margin: 0;
+  font-family: var(--font-chapter-display);
+  font-size: var(--chapter-manifesto);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.scene[data-align="end"] p {
+  margin-left: auto;
+  text-align: right;
+}
+
+.white {
+  color: var(--color-brand-white);
+}
+
+.yellow {
+  color: var(--color-brand-yellow);
+}
+
+/* Yanmamış kelime .4 opaklıkta: okunur kalır, sıra hissedilir. */
+.word {
+  opacity: calc(0.4 + 0.6 * clamp(0, var(--lit) * var(--n) - var(--i), 1));
+}
+
+@media (max-width: 767px) {
+  .scene {
+    min-height: 68svh;
+  }
+
+  .scene[data-align="end"] p {
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene {
+    min-height: auto;
+    padding-block: var(--space-16);
+  }
+}

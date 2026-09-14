@@ -20,12 +20,17 @@ import styles from "./CtaBand.module.css";
 export function CtaBand() {
   const t = useTranslations("cta");
   const pathname = usePathname();
+  const compact = pathname === "/what-we-do/creative";
   const whatsappHref = `https://wa.me/${CONTACT.phone.replace(/[^0-9]/g, "")}`;
 
   if (pathname === "/") return null;
 
   return (
-    <section className={styles.band} aria-label={t("primary")}>
+    <section
+      className={styles.band}
+      aria-label={t("primary")}
+      data-compact={compact ? "" : undefined}
+    >
       <PrimaryCta />
       <div className={styles.secondary}>
         <Link href="/contact" className={styles.secondaryLink}>

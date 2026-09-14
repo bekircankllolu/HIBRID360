@@ -1,0 +1,107 @@
+.next {
+  padding-block: var(--space-16) var(--space-12);
+  padding-inline: var(--page-gutter);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  gap: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.label,
+.degree {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.label {
+  color: var(--text-muted);
+}
+
+.degree {
+  color: var(--color-brand-fuchsia);
+  letter-spacing: 0.08em;
+}
+
+/* Hizmet adı: beyaz anlatım; hover'da sarı odak. Hero'dan küçük (en fazla
+   9rem) — sayfa son sözünü bağırmadan söylesin. 10.5vw: en uzun tek kelime
+   MANAGEMENT, Space Grotesk 700'de 6.72em (Montserrat 800'den daha dar,
+   7.83em'di) — 320px'te içerik genişliğine önceden de sığıyordu, şimdi
+   payı daha da geniş. */
+.link {
+  width: fit-content;
+  max-width: 100%;
+  font-family: var(--font-chapter-display);
+  font-size: clamp(2rem, 10.5vw, 9rem);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 0.86;
+  text-transform: uppercase;
+  color: var(--color-brand-white);
+  transition: color 180ms var(--ease-house);
+}
+
+/* Bütün satır tıklanabilir (stretched link). `.link` transform ALMAZ —
+   alırsa `::after`'ın konum kabı olur ve alan linkin kutusuna küçülür. */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.linkText {
+  display: inline-block;
+  transition: transform 420ms var(--ease-house);
+}
+
+.blurb {
+  max-width: var(--measure-prose);
+  margin: 0;
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .row:hover .link {
+    color: var(--color-brand-yellow);
+  }
+
+  .row:hover .linkText {
+    transform: translateX(0.06em);
+  }
+
+  /* Kadran bu sayfanın derecesinden sıradakine döner. */
+  .row:hover .dial {
+    --turn: 45deg;
+  }
+}
+
+.link:focus-visible {
+  color: var(--color-brand-yellow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linkText {
+    transition: none;
+  }
+
+  .row:hover .linkText {
+    transform: none;
+  }
+}

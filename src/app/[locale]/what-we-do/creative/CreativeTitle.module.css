@@ -1,0 +1,38 @@
+/*
+ * Creative S1 başlığı. Ölçü --chapter-display (mobil 13vw, ≥768px 10vw,
+ * en fazla 11rem). Font Space Grotesk 700 (DECISIONS #37). Harf aralığı 0
+ * (ev kuralı).
+ *
+ * 13 Eylül 2026, beşinci geri bildirim turu (DECISIONS #47): interaktif
+ * seçim çerçevesi (fuşya kenar+tutamaç, hover ile kelime takibi) kaldırıldı
+ * — kural çizgisi, tutamaç ve geçiş stilleri tamamen silindi.
+ *
+ * DECISIONS #49: giriş hareketi artık burada değil — karakter karıştırma/
+ * çözülme efekti JS'te (`useScrambleReveal`), metnin kendisini değiştirerek
+ * çalışıyor. Önceki `lineIn` (translateY+opacity) keyframe'i kaldırıldı;
+ * ikisi birlikte (satır kayarken harfler de çözülürken) gereğinden
+ * kalabalık dururdu. Bu yüzden burada artık `prefers-reduced-motion`
+ * bloğu da yok — hareketin tamamı hook'ta, `active=false` iken hiç
+ * tetiklenmiyor.
+ */
+.title {
+  margin: 0;
+  font-family: var(--font-chapter-display);
+  font-size: var(--chapter-display);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 0.86;
+  letter-spacing: 0;
+  color: var(--color-brand-white);
+}
+
+/* Beyaz = anlatım. globals.css'in h1 sarısı burada bilerek eziliyor. */
+.white {
+  color: var(--color-brand-white);
+}
+
+/* Sarı = bu ekranın tek odağı. WITHOUT ve LIMITS ayrı span'ler, ikisi de
+   bu bloktan rengi miras alır. */
+.overflow {
+  display: block;
+  color: var(--color-brand-yellow);
+}

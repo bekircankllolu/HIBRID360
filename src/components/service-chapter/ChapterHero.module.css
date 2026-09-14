@@ -1,0 +1,176 @@
+/*
+ * Başlık sayfası: meta satırı üstte, başlık ve lede ekranın alt kısmında.
+ * Üst dolgu 6rem sınırının çok altında — başlık ekranın ortasında
+ * "yüzmüyor", alt boşluk hero'nun sessiz kuyruğu (zirveden önceki sessizlik).
+ */
+/* Kolon açıkça `minmax(0, 1fr)`: örtük `auto` kolon, tek satırlık meta
+   satırının min-content genişliğiyle 320px'te 318px'e büyüyor ve başlığı
+   ekranın dışına itiyordu (`.chapter { overflow-x: clip }` bunu gizler). */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(var(--space-12), 1fr) auto auto;
+  row-gap: var(--space-8);
+  min-height: calc(100svh - var(--header-height));
+  padding-block: var(--space-6) var(--space-16);
+  padding-inline: var(--page-gutter);
+}
+
+/*
+ * MONA parçası — 13 Eylül 2026, beşinci geri bildirim turu (DECISIONS
+ * #47): "şu an mona başlarken bir maske içinde gibi... sayfanın her
+ * yerinden noktalar uçuşsun... sağ altta olmalı, büyük bir şekilde".
+ *
+ * Kap artık hero'nun TAMAMI (`inset:0`). Önceki denemelerde kap hero'nun
+ * içinde bir kutuydu; halo/toz noktaları kutunun sol ve üst kenarında
+ * düz bir çizgiyle kesiliyor, açılışta noktalar kutunun kenarından
+ * uçuyordu — "maske" hissi buydu. Şimdi noktalar yalnızca sayfanın
+ * kendi kenarlarında kesiliyor (sağ ve alt — "MONA'nın yarısı" köşeden
+ * içeri bakıyor) ve açılışta hero'nun kenarlarından uçup geliyor, MONA
+ * sayfasındaki gibi. Konum ve büyüklük `monaShardLayout`'ta.
+ *
+ * WebGL canvas'ı opak (siyah zemin, sayfa zeminiyle aynı renk); metinler
+ * (`.meta`, `.title`, `.lede`) `z-index:1` ile ÜSTÜNDE boyanıyor —
+ * yoksa canvas başlığın sağ ucunu örtüyordu (ölçüldü: CREATIVITY'nin
+ * "Y"si canvas kenarında kesiliyordu). Kabın kendisi `pointer-events:none`:
+ * hiçbir linki, metin seçimini engellemez; MONA imleci `window` üzerinden
+ * izliyor (bkz. MonaShard.tsx).
+ *
+ * MonaShard'ın canvas'ı bu kabın altına taşar (DECISIONS #48,
+ * `SHARD_BLEED`): hero'dan sonraki bölüm, metni canvas'ın üstünde
+ * boyansın diye konumlandırılmış olmalı (bkz. ScrollLitText `.lit`).
+ *
+ * Mobilde (dar ekran, dikey akan başlık) gizlenir.
+ */
+.mona {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .mona {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+}
+
+/* Metin katmanları MONA canvas'ının (`.mona`, mutlak konumlu) üstünde
+   boyansın — yoksa opak canvas başlığı örtüyor. */
+.meta,
+.title,
+.lede {
+  position: relative;
+  z-index: 1;
+}
+
+.meta {
+  grid-row: 1;
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.crumbs,
+.coordinate {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.crumbs {
+  color: var(--color-brand-white);
+}
+
+.hub {
+  color: var(--text-muted);
+  transition: color 180ms var(--ease-house);
+}
+
+.hub:hover,
+.hub:focus-visible {
+  color: var(--color-brand-yellow);
+}
+
+.slash {
+  color: var(--text-muted);
+}
+
+/* Derece fuşya: araç rengi (koordinat), metin değil. */
+.coordinate {
+  color: var(--color-brand-fuchsia);
+  letter-spacing: 0.08em;
+}
+
+.title {
+  grid-row: 3;
+  /* Açık kalsın — `.hero`'daki 320px örtük-kolon hatasıyla aynı sınıf
+     bir soruna karşı ucuz bir güvence (bkz. o dosyanın yorumu). `.mona`
+     artık grid hücresi paylaşmıyor (mutlak konumlu), ama bu satır
+     zararsız ve gelecekte grid'e dönen bir kardeşe karşı hâlâ doğru. */
+  grid-column: 1;
+  min-width: 0;
+}
+
+/*
+ * 13 Eylül 2026, beşinci geri bildirim turu (DECISIONS #47): "yazıyı
+ * sayfanın soluna al, CREATIVITY WITHOUT LIMITS yazısının altına" —
+ * önceki sağa yaslı (`justify-self:end`) sürüm kaldırıldı; artık
+ * `.title` ile aynı sol hizada, hemen altında akıyor (varsayılan grid
+ * yerleşimi zaten bunu veriyor, ekstra kural gerekmiyor).
+ */
+.lede {
+  grid-row: 4;
+  grid-column: 1;
+  max-width: 34ch;
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-heading-semibold);
+  line-height: 1.35;
+  color: var(--color-brand-white);
+  animation: chapterLedeIn 720ms var(--ease-house) 900ms both;
+}
+
+/* Lede'yi başlığa bağlayan kısa fuşya çizgi (STRV: başlık altında kısa çizgi). */
+.lede::before {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 2px;
+  margin-bottom: var(--space-4);
+  background: var(--color-brand-fuchsia);
+}
+
+@keyframes chapterLedeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* globals.css süreyi kısaltır ama gecikmeyi değil: `both` + 900ms gecikme
+   lede'yi o süre görünmez tutardı. Hareket azaltmada animasyon hiç yok. */
+@media (prefers-reduced-motion: reduce) {
+  .lede {
+    animation: none;
+  }
+}
