@@ -224,7 +224,9 @@ export function MonaShard({
       elapsed += dt;
       const intro = Math.min(1, elapsed / INTRO_SECONDS);
 
-      lotus = stepLotus(lotus, dt, Math.random);
+      // The bloom schedule is wall-clock based. Keeping it on the capped
+      // physics delta makes a 2.6 s morph stretch indefinitely on slow GPUs.
+      lotus = stepLotus(lotus, realDt, Math.random);
       const bloom = lotusWeight(lotus);
       shift.x = (shape === "lotus" ? LOTUS_OFFSET.x : side === "right" ? -0.88 : 0.88) * bloom;
       shift.y = (shape === "lotus" ? LOTUS_OFFSET.y : 0.28) * bloom;
