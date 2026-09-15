@@ -1,176 +1,103 @@
 import { Fragment } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbListJsonLd } from "@/lib/schema";
 import { Mona } from "@/components/mona/Mona";
+import { MonaDrift } from "@/components/mona/MonaDrift";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { ChapterIndex } from "@/components/service-chapter/ChapterIndex";
+import { ChapterNext } from "@/components/service-chapter/ChapterNext";
+import { ChapterRule } from "@/components/service-chapter/ChapterRule";
+import { ScrollLitText } from "@/components/service-chapter/ScrollLitText";
+import { humanAiFlowSignature } from "@/components/service-chapter/service-signature/human-ai-flow";
+import { ServiceSignatureDrawing } from "@/components/service-chapter/ServiceSignatureDrawing";
 import { monaQuestions, openingLine } from "@/data/mona";
 import type { Locale } from "@/i18n/routing";
+import { breadcrumbListJsonLd } from "@/lib/schema";
+import { chapterOf, nextChapter } from "@/lib/service-chapter";
 import { BRAND_SIGNATURE, localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
 
-/**
- * AI-01..09 (nihai copy deck, Ağustos 2026) — AI Creative Production
- * sayfası sabit blokları. Uzun metinlerin çoğu MONA'nın repliklerine
- * dönüştürülmüştür (5.2 MONA); burada kalan dokuz blok artık locale'e
- * göre next-intl "aiCreativeProduction" namespace'inden geliyor (önceki
- * sürüm brief-rev12'nin İngilizce-kalır varsayımıyla hardcoded İngilizceydi
- * — yeni deck AI-01/03/04/09 için ayrı TR çevirisi veriyor).
- *
- * 30 Ağustos 2026 QA denetimi: AI-06/07/08 blokları ve kapanış imzası hâlâ
- * JSX içinde sabit İngilizceydi, yani TR sayfada çevrilmemiş gövde metni
- * görünüyordu. Manifesto, ara bant ve "What We Build" mesaj dosyasına
- * taşındı ve Türkçeleştirildi. Kapanış imzası çevrilmedi: o satır markanın
- * imzası (footer'la aynı) ve BRAND_SIGNATURE'dan okunuyor.
- *
- * TODO: brief 11.9 — AI Showreel filmi (Film A "Henüz Değil") teslim
- * edilince bu sayfaya tam sürüm olarak eklenecek; VideoObject JSON-LD
- * (src/lib/schema.ts) o zaman devreye girecek.
- */
+const CHAPTER = chapterOf("aiCreativeProduction");
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
-  return {
-    title: "AI Creative Production",
-    description:
-      locale === "en"
-        ? "AI films, AI photography and hybrid production workflows — human creativity, AI precision, real impact."
-        : "AI filmleri, AI fotoğrafçılık ve hibrit prodüksiyon akışları: insan yaratıcılığı, yapay zekâ hassasiyeti ve gerçek etki.",
-    alternates: localizedAlternates(locale, "/what-we-do/ai-creative-production"),
-  };
+  return { title: "AI Creative Production", description: locale === "en" ? "AI films, AI photography and hybrid production workflows — human creativity, AI precision, real impact." : "AI filmleri, AI fotoğrafçılık ve hibrit prodüksiyon akışları: insan yaratıcılığı, yapay zekâ hassasiyeti ve gerçek etki.", alternates: localizedAlternates(locale, "/what-we-do/ai-creative-production") };
 }
 
-export default async function AiCreativeProductionPage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>;
-}) {
+export default async function AiCreativeProductionPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   const t = await getTranslations("aiCreativeProduction");
+  const tChapter = await getTranslations("services.chapter");
+  const tWhatWeDo = await getTranslations("whatWeDo");
   const slogans = t.raw("slogans") as string[];
   const proofList = t.raw("proofList") as string[];
   const flowSteps = t.raw("flowSteps") as string[];
   const buildList = t.raw("buildList") as string[];
+  const next = nextChapter(CHAPTER.id);
+  const nextBlurb = (tWhatWeDo.raw("list") as Array<{ title: string; body: string }>).find((item) => item.title === next.name)?.body ?? "";
 
   return (
     <div>
-      <JsonLd
-        data={breadcrumbListJsonLd(locale, [
-          { name: "Home", path: "" },
-          { name: "What We Do", path: "/what-we-do" },
-          {
-            name: "AI Creative Production",
-            path: "/what-we-do/ai-creative-production",
-          },
-        ])}
-      />
+      <JsonLd data={breadcrumbListJsonLd(locale, [{ name: "Home", path: "" }, { name: "What We Do", path: "/what-we-do" }, { name: "AI Creative Production", path: "/what-we-do/ai-creative-production" }])} />
 
+      {/* Bu hero mevcut MONA deneyimidir; tasarım ve davranış korunur. */}
       <Mona locale={locale} />
 
-      {/* AI-01 */}
-      <div className={styles.hero}>
-        <h2 className={styles.heroTitle}>CREATE THE FUTURE.</h2>
-        <p className={styles.heroLead}>{t("heroLead")}</p>
-      </div>
+      <article className={styles.chapter} data-chapter={CHAPTER.id} data-ai-continuation="">
+        <MonaDrift />
+        <header className={styles.intro}>
+          <ChapterRule title={`315° / ${CHAPTER.name}`} />
+          <h2>CREATE <span>THE FUTURE.</span></h2>
+          <p>{t("heroLead")}</p>
+        </header>
 
-      {/* AI-02 */}
-      <div className={styles.slogans}>
-        {slogans.map((slogan, index) => (
-          <p key={index} className={styles.sloganLine}>
-            {slogan}
-          </p>
-        ))}
-      </div>
+        <ScrollLitText sentences={slogans.map((text, index) => ({ text, tone: index === 0 ? "white" : "yellow" }))} />
 
-      {/* AI-03 — ayrıştırıcı soru bloğu */}
-      <section className={styles.block}>
-        <h2 className={styles.blockTitle}>{t("diffTitle")}</h2>
-        <p className={styles.blockBody}>{t("diffBody")}</p>
-      </section>
+        <section className={styles.proof}>
+          <div>
+            <ChapterRule title={locale === "tr" ? "FARK" : "THE DIFFERENCE"} />
+            <h2>{t("diffTitle")}</h2>
+            <p>{t("diffBody")}</p>
+          </div>
+          <div className={styles.proofPanel}>
+            <h2>{t.rich("proofTitle", { brand: (chunks) => <span lang="en">{chunks}</span> })}</h2>
+            <p>{t("proofLead")}</p>
+            <ul>{proofList.map((item) => <li key={item}>{item}</li>)}</ul>
+          </div>
+        </section>
 
-      {/* AI-04 — kanıt */}
-      <section className={`${styles.block} ${styles.proof}`}>
-        {/* Marka adı Latin logotype olarak kalmalı: lang="en" olmadan tarayıcı
-            TR sayfada text-transform: uppercase'i Türkçe kurallarıyla uygular
-            ve "Hibrid" -> "HİBRİD" olur. */}
-        <h2 className={`${styles.blockTitle} ${styles.blockTitleCaps}`}>
-          {t.rich("proofTitle", {
-            brand: (chunks) => <span lang="en">{chunks}</span>,
-          })}
-        </h2>
-        <p className={styles.blockBody}>{t("proofLead")}</p>
-        <ul className={styles.proofList}>
-          {proofList.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+        <section className={styles.flowSection}>
+          <ChapterRule title={locale === "tr" ? "İŞ AKIŞI" : "THE WORKFLOW"} />
+          <div className={styles.flow}>
+            {flowSteps.map((step, index) => (
+              <Fragment key={step}><span>{step}</span>{index < flowSteps.length - 1 ? <i aria-hidden="true">→</i> : null}</Fragment>
+            ))}
+          </div>
+        </section>
 
-      {/* AI-05 — akış şeması */}
-      <section className={styles.block}>
-        <div className={styles.flow}>
-          {flowSteps.map((step, index) => (
-            <Fragment key={step}>
-              <span className={styles.flowStep}>{step}</span>
-              {index < flowSteps.length - 1 && (
-                <span className={styles.flowArrow}>→</span>
-              )}
-            </Fragment>
-          ))}
-        </div>
-      </section>
+        <section className={styles.manifesto}><p>{t("manifestoText")}</p></section>
+        <section className={styles.band}><p>{t("bandText")}</p></section>
 
-      {/* AI-06 — manifesto bandı */}
-      <section className={`${styles.block} ${styles.manifesto}`}>
-        <p className={styles.manifestoText}>{t("manifestoText")}</p>
-      </section>
+        <ChapterIndex title={t("buildTitle")} items={buildList} />
 
-      {/* AI-07 — ara bant */}
-      <section className={styles.block}>
-        <p className={styles.bandText}>{t("bandText")}</p>
-      </section>
+        <ServiceSignatureDrawing
+          geometry={humanAiFlowSignature()}
+          title={locale === "tr" ? "İNSAN · YAPAY ZEKÂ · ÇIKTI" : "HUMAN · AI · OUTPUT"}
+        />
 
-      {/* AI-08 — What We Build */}
-      <section className={styles.block}>
-        <h2 className={styles.blockTitle}>{t("buildTitle")}</h2>
-        <ul className={styles.buildList}>
-          {buildList.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+        <section className={styles.closing}>
+          <p>{t("closingBody")}</p>
+          <p>{BRAND_SIGNATURE}</p>
+          <strong>{t("closingQuestion")}</strong>
+        </section>
 
-      {/* AI-09 — kapanış + CTA (buton layout'taki global CtaBand'dan gelir) */}
-      <section className={styles.block}>
-        <p className={styles.closing}>{t("closingBody")}</p>
-        {/* Marka imzası — footer'daki satırın aynısı. CLAUDE.md "sloganlar
-            TR sürümde de İngilizce kalır" kuralı gereği çevrilmiyor; mesaj
-            dosyasında kopyalanmak yerine tek kaynaktan (BRAND_SIGNATURE)
-            okunuyor ki footer'la sessizce ayrışmasın. */}
-        <p className={styles.closing}>{BRAND_SIGNATURE}</p>
-        <p className={styles.closingQuestion}>{t("closingQuestion")}</p>
-      </section>
+        <details className={styles.transcript}>
+          <summary>{t("transcriptTitle")}</summary>
+          <dl><dt>MONA</dt><dd>{openingLine.text[locale]}</dd>{monaQuestions.map((question) => <div key={question.id}><dt>{question.question[locale]}</dt><dd>{question.text[locale]}</dd></div>)}</dl>
+        </details>
 
-      {/* brief 11.6: "Altyazı dosyaları ... SEO için sayfada metin olarak da
-          bulunur." MONA bileşeni istemci tarafında tek replik gösterdiği
-          için tam metin burada sunucu tarafında render ediliyor. */}
-      <details className={styles.transcript}>
-        <summary>{t("transcriptTitle")}</summary>
-        <dl className={styles.transcriptList}>
-          <dt>MONA</dt>
-          <dd>{openingLine.text[locale]}</dd>
-          {monaQuestions.map((question) => (
-            <div key={question.id}>
-              <dt>{question.question[locale]}</dt>
-              <dd>{question.text[locale]}</dd>
-            </div>
-          ))}
-        </dl>
-      </details>
+        <ChapterNext currentId={CHAPTER.id} currentDegree={CHAPTER.degree} label={tChapter("next")} blurb={nextBlurb} />
+      </article>
     </div>
   );
 }

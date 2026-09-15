@@ -1,0 +1,19 @@
+.title {
+  margin: 0;
+  max-width: 10ch;
+  font-family: var(--font-chapter-display);
+  font-size: var(--chapter-display);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 0.86;
+  letter-spacing: 0;
+  color: var(--color-brand-white);
+  text-transform: uppercase;
+}
+
+.title > span {
+  display: block;
+}
+
+.accent {
+  color: var(--color-brand-yellow);
+}

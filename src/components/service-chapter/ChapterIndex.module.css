@@ -17,23 +17,8 @@
  * border-t + border-b" en tembel liste deseni) — ayrım yalnız boşluk ve
  * parlaklık/opaklık kontrastından geliyor, referans görseldeki gibi.
  */
-/* `aside` verilmişse (Creative: hizmetlerin yanındaki görsel alanı,
-   DECISIONS #48) ≥1024px'te listeyle yan yana, sayfanın sağ yarısında
-   durur — kullanıcının çizdiği kutu. Dar ekranda listenin altına iner.
-   Üstten hizalı: kalem hover'da büyüyüp liste uzadığında görsel
-   yerinden oynamaz. */
 .layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-  gap: var(--space-12);
   margin-top: var(--space-10);
-}
-
-@media (min-width: 1024px) {
-  .layout:has(> .aside) {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
 }
 
 .list {
@@ -82,11 +67,8 @@
 }
 
 /*
- * 13 Eylül 2026, ikinci geri bildirim turu: "üzerine geldiğimizde
- * büyüyeceği bir yapı kuralım... büyüyünce diğer alttaki ve üsttekiler
- * anlık olarak yer açacak." `.item` normal akışta olduğu için `.word`'ün
- * boyu büyüyünce satırın kendi yüksekliği artıyor, altındaki kalemler
- * doğal olarak aşağı kayıyor — ekstra bir yerleşim mantığı gerekmiyor.
+ * Hover ölçeği transform ile uygulanır; satırın sabit yüksekliği ve komşu
+ * kalemlerin ritmi değişmez. Uzun başlık kendi satırı içinde kırılabilir.
  */
 @media (hover: hover) and (pointer: fine) {
   .list:has(.item:hover) .item:not(:hover) {
@@ -103,6 +85,22 @@
   }
 }
 
+/* Klavye eşitliği: odaklanan satır hover'daki muameleyi görür. Hover medya
+   sorgusunun DIŞINDA — dokunmatik cihaza takılı klavye de çalışsın. Odak
+   halkası global `:focus-visible` kuralından gelir (globals.css). */
+.list:has(.item:focus-visible) .item:not(:focus-visible) {
+  opacity: 0.32;
+}
+
+.item:focus-visible {
+  --grow: 1.25;
+  color: var(--color-brand-yellow);
+}
+
+.item:focus-visible .word {
+  animation: glitch 360ms steps(3, end) 1;
+}
+
 /* Dokunmatik: kaydırmayla ilerleyen tek odak. Sönük kalemler --text-muted
    (6,2:1) — okunur kalır. Aktif kalem hover'daki gibi büyür. */
 .section[data-mode="spotlight"] .item {
@@ -110,7 +108,7 @@
 }
 
 .section[data-mode="spotlight"] .item[data-active] {
-  --grow: 1.12;
+  --grow: 1.15;
   color: var(--color-brand-yellow);
 }
 
@@ -141,11 +139,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .list:has(.item:hover) .item:not(:hover) {
+  .list:has(.item:hover) .item:not(:hover),
+  .list:has(.item:focus-visible) .item:not(:focus-visible) {
     opacity: 1;
   }
 
-  .item:hover .word {
+  .item:hover .word,
+  .item:focus-visible .word {
     animation: none;
   }
 

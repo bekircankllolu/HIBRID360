@@ -12,10 +12,9 @@ import { test, expect } from "@playwright/test";
  * İnteraktif seçim çerçevesi (DECISIONS #38) beşinci geri bildirim
  * turunda kaldırıldı (DECISIONS #47) — o teste artık gerek yok.
  *
- * Altıncı tur (DECISIONS #48): hizmetlerin yanında on ayrı görsel ve
- * parallax açılışı var (kristal çizimin yerine), MONA canvas'ı hero'nun
- * altına uzuyor, MONA arada bir nilüfere dönüşüyor, MonaDrift noktaları
- * footer'a taşmıyor.
+ * Son hizmet-sayfası turunda hizmet dizinindeki görsel/parallax alanı
+ * kaldırıldı. MONA canvas'ı hero'nun altına uzuyor, MONA arada bir
+ * nilüfere dönüşüyor, MonaDrift noktaları footer'a taşmıyor.
  *
  * Video: 13 Eylül 2026 ikinci geri bildirim turuyla S2 filmi kaldırıldı
  * (DECISIONS #39, "belki her sayfaya video eklemeyiz"). Film testleri
@@ -39,19 +38,6 @@ const CRE_03 = [
   "TV",
   "PRESS",
   "RADIO CAMPAIGNS",
-];
-
-const CREATIVE_VISUAL_FILES = [
-  "01-brand-consultancy.webp",
-  "02-corporate-identity.webp",
-  "03-marketing-strategy.webp",
-  "04-concept-development.webp",
-  "05-content-generation.webp",
-  "06-commercials.webp",
-  "07-packaging.webp",
-  "08-tv.webp",
-  "09-press.webp",
-  "10-radio-campaigns.webp",
 ];
 
 for (const locale of ["tr", "en"] as const) {
@@ -99,45 +85,12 @@ for (const locale of ["tr", "en"] as const) {
       await expect(page.locator("[data-manifesto-scene]")).toHaveCount(2);
     });
 
-    test("her hizmet kendi parallax görselini ve AI etiketini gösterir", async ({ page }) => {
-      const label = locale === "tr" ? "AI ile üretilmiş temsili görseldir" : "AI-generated representative visual";
-      const alt = locale === "tr" ? /strateji pusulası/ : /strategy compass/;
+    test("hizmet dizini görsel, parallax veya AI etiketi üretmez", async ({ page }) => {
       const services = page.locator("article section").filter({ has: page.locator('ol[role="list"]') });
-      const figure = services.locator("figure");
-      await expect(figure).toHaveCount(1);
-      await expect(figure.getByRole("img", { name: alt })).toHaveCount(1);
-      await expect(figure.locator("figcaption")).toHaveText(label);
-      await expect(figure).toHaveAttribute("data-motion", "scroll");
-
-      const reveal = figure.locator(":scope > div > div").first();
-      const rightInset = async () =>
-        reveal.evaluate((element) => {
-          const match = getComputedStyle(element).clipPath.match(
-            /inset\([^ ]+\s+([\d.]+)%/,
-          );
-          return match ? Number(match[1]) : 0;
-        });
-      const beforeScroll = await rightInset();
-      await figure.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(450);
-      const afterScroll = await rightInset();
-      expect(beforeScroll).toBeGreaterThan(afterScroll);
-      expect(afterScroll).toBeLessThan(1);
-
-      const rows = page.locator('article ol[role="list"] > li');
-      for (const [index, file] of CREATIVE_VISUAL_FILES.entries()) {
-        await rows.nth(index).hover();
-        await expect(figure).toHaveAttribute("data-visual", String(index));
-        await expect(figure.locator("img")).toHaveAttribute("src", new RegExp(file));
-      }
-
-      await rows.nth(6).hover();
-      const changedAlt = locale === "tr" ? /ambalaj/ : /package/;
-      await expect(figure.getByRole("img", { name: changedAlt })).toHaveCount(1);
-
-      await rows.nth(9).hover();
-      const finalAlt = locale === "tr" ? /stüdyo mikrofonu/ : /studio microphone/;
-      await expect(figure.getByRole("img", { name: finalAlt })).toHaveCount(1);
+      await expect(services).toHaveCount(1);
+      await expect(services.locator('ol[role="list"] > li')).toHaveCount(CRE_03.length);
+      await expect(services.locator("figure, img, figcaption")).toHaveCount(0);
+      await expect(services.locator("[data-visual]")).toHaveCount(0);
     });
 
     test("geçici galeri sahte proje göstermeden dört karelik contact sheet sunar", async ({ page }) => {

@@ -1,11 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useScrollScene } from "@/hooks/useScrollScene";
 import { activeIndex, rangeProgress } from "@/lib/scroll-scene";
 import { ChapterRule } from "./ChapterRule";
-import { ChapterVisualDeck, type ChapterVisual } from "./ChapterVisualDeck";
 import styles from "./ChapterIndex.module.css";
 
 /**
@@ -26,32 +25,21 @@ import styles from "./ChapterIndex.module.css";
  * Hover arkasında zorunlu içerik yok; efekt dekoratif. `role="list"`
  * açıkça yazıldı: Safari `list-style: none` olan listelerin rolünü düşürür.
  *
- * `aside` — listenin yanındaki boşluğa sayfaya özel bir içerik konabilir
- * (Creative: parallax görsel alanı, DECISIONS #48; önceki kristal çizimi
- * kullanıcı isteğiyle kaldırıldı). ≥1024px'te sayfanın sağ yarısında,
- * dar ekranda listenin altında; verilmezse liste tek sütun tam genişlik
- * kaplar (geri kalan sayfalar için varsayılan).
+ * Kullanıcı kararı: görsel/enstrüman hizmet satırlarının içinde değil,
+ * listenin ardından gelen tek imza sahnesinde bulunur. Bu bileşen bu yüzden
+ * yalnız dizini yönetir.
  */
 export function ChapterIndex({
   title,
   items,
-  aside,
-  visuals,
-  visualIndexByItem,
-  visualCaption,
 }: {
   title: string;
   items: readonly string[];
-  aside?: ReactNode;
-  visuals?: readonly ChapterVisual[];
-  visualIndexByItem?: readonly number[];
-  visualCaption?: string;
 }) {
   const titleId = useId();
   const reduced = usePrefersReducedMotion();
   const [touch, setTouch] = useState(false);
   const [active, setActive] = useState(-1);
-  const [preview, setPreview] = useState(-1);
   const spotlight = touch && !reduced;
   // Kaydırma geri çağırımı her karede çalışır; güncel değeri ref'ten okur,
   // böylece dinleyici her mod değişiminde yeniden kurulmaz.
@@ -85,11 +73,6 @@ export function ChapterIndex({
     onProgress,
     enabled: spotlight,
   });
-  const focusedItem = spotlight ? active : preview;
-  const visualIndex =
-    focusedItem >= 0 ? (visualIndexByItem?.[focusedItem] ?? focusedItem) : 0;
-  const hasVisualDeck = Boolean(visuals?.length && visualCaption);
-
   return (
     <section
       ref={ref}
@@ -100,13 +83,13 @@ export function ChapterIndex({
     >
       <ChapterRule title={title} id={titleId} />
       <div className={styles.layout}>
-        <ol className={styles.list} role="list" onPointerLeave={() => setPreview(-1)}>
+        <ol className={styles.list} role="list">
           {items.map((item, index) => (
             <li
               key={item}
               className={styles.item}
               data-active={spotlight && index === active ? "" : undefined}
-              onPointerEnter={() => setPreview(index)}
+              tabIndex={0}
             >
               <span className={styles.index} aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}
@@ -117,17 +100,6 @@ export function ChapterIndex({
             </li>
           ))}
         </ol>
-        {hasVisualDeck ? (
-          <div className={styles.aside}>
-            <ChapterVisualDeck
-              visuals={visuals!}
-              activeIndex={visualIndex}
-              caption={visualCaption!}
-            />
-          </div>
-        ) : aside ? (
-          <div className={styles.aside}>{aside}</div>
-        ) : null}
       </div>
     </section>
   );
