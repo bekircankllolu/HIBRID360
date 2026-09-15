@@ -16,6 +16,8 @@
   right: 0;
   left: 0;
   bottom: calc(var(--shard-bleed, 0) * -100%);
+  view-transition-name: service-mona;
+  contain: layout;
 }
 
 /*

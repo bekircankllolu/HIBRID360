@@ -160,6 +160,13 @@
   --chapter-manifesto: clamp(1.75rem, 5vw, 5rem);
   --chapter-index: clamp(2rem, 6.4vw, 6.5rem);
 
+  /* Servis bölümlerinin okunur gövde metni (field/details). Manifesto
+     ölçeğiyle karıştırılmaz: uzun paragraflar burada, kısa slogan orada.
+     Hedef mobilde 18-20px, masaüstünde 26-28px; ölçü 46 karakter bandında
+     (--measure-prose 54ch daha uzun metinler için, ona dokunulmadı). */
+  --chapter-field-body: clamp(1.125rem, 0.95rem + 0.9vw, 1.75rem);
+  --chapter-field-measure: 46ch;
+
   /* Bölüm ayraçları ve araç arayüzü dışındaki ince çizgiler. Mevcut
      sayfalardaki elle yazılmış rgba(255,255,255,.12–.15) değerlerinin ortası. */
   --color-hairline: rgba(255, 255, 255, 0.14);
