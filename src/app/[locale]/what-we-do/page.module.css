@@ -1,289 +1,99 @@
 .page {
   width: 100%;
-  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
+  padding-inline: var(--page-gutter);
+  overflow: clip;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+}
+
+.hero {
+  display: grid;
+  align-content: end;
+  min-height: clamp(34rem, 72vh, 52rem);
+  padding-block: clamp(var(--space-16), 9vw, 8rem) var(--space-8);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.kicker {
+  margin: 0 0 clamp(var(--space-8), 8vh, var(--space-16));
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  text-transform: uppercase;
+  color: var(--color-brand-fuchsia);
 }
 
 .title {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  /* Taban ölçü sorunu: clamp'in vw terimi küçük ekranlarda tabanın altında
-     kaldığı için ölçüyü TABAN belirliyordu. 64px'te tek parça uzun kelimeler
-     ("MANAGEMENT", "PRODUCTION", "PARTNERS") 320-390px içerik genişliğine
-     sığmıyor ve gövdeye yatay kaydırma ekliyordu. Taban 2rem'e indirildi:
-     artık 320px'ten itibaren ÖLÇÜYÜ vw TERİMİ belirliyor (11vw = 320px'te
-     35px, 390px'te 43px) ve kelimeler anlamsız yerden bölünmeden sığıyor.
-     11vw ve 12rem'e DOKUNULMADI — masaüstündeki dev tipografi birebir aynı.
-     Nöbetçi: e2e/canonical-routes.spec.ts "Yatay taşma". */
-  font-size: clamp(2rem, 11vw, 12rem);
-  line-height: 0.85;
+  max-width: 11ch;
   margin: 0;
+  font-family: var(--font-chapter-display);
+  font-size: clamp(3.5rem, 9.4vw, 9.5rem);
+  font-weight: var(--font-weight-chapter-display);
+  line-height: 0.86;
+  letter-spacing: 0;
+  color: var(--color-brand-white);
+  overflow-wrap: normal;
+}
+
+.titleLead {
+  color: var(--color-brand-white);
+}
+
+.titleAccent {
+  color: var(--color-brand-yellow);
+}
+
+.heroFooter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-8);
+  align-items: end;
+  margin-top: clamp(var(--space-8), 6vw, var(--space-16));
 }
 
 .heroBody {
-  max-width: var(--measure-prose);
-
-  margin: var(--space-6) 0 var(--space-16);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-}
-
-/**
- * Hizmet kartları ızgarası.
- *
- * Sütun sayısı AÇIK kırılma noktalarıyla belirleniyor. Önceki
- * `repeat(auto-fill, minmax(min(100%, 20rem), 1fr))` ekran genişledikçe
- * sütun eklemeye devam ediyordu: 1920px'te beş, 2560px'te yedi sütun —
- * kartlar daralıyor, başlıklar kötü kırılıyor ve sayfa ajans vitrini
- * yerine yoğun bir dizin gibi duruyordu. Artık üst sınır DÖRT sütun.
- *
- *   < 768px      → 1 sütun
- *   768–1199px   → 2 sütun
- *   1200–1439px  → 3 sütun
- *   ≥ 1440px     → 4 sütun (daha genişte de dört kalır, kart büyür)
- *
- * Katalogda sekiz hizmet var; 2 ve 4 sütunda ızgara tam doluyor (4×2 /
- * 2×4), yani satır sonunda boşluk kalmıyor.
- */
-.grid {
-  list-style: none;
+  max-width: 43ch;
   margin: 0;
-  padding: 0;
-  display: grid;
-  gap: clamp(1rem, 1.6vw, 1.75rem);
-  grid-template-columns: 1fr;
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 1.05rem + 0.32vw, 1.5rem);
+  line-height: 1.42;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1200px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1440px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* Kart yüzeyi: düz siyah, ince ayraç. Gölge, büyük radius ve dekoratif
-   gradient bilinçli olarak yok — hiyerarşiyi tipografi ve boşluk kuruyor. */
-.card {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: #070707;
-  overflow: hidden;
-  transition: border-color 240ms ease-out;
-}
-
-.cardLink {
+.heroCount {
   display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.media {
-  position: relative;
-  display: block;
-  /* Bütün kartlarda aynı oran: satır içindeki kart yükseklikleri
-     görselden dolayı ayrışmıyor. */
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
-  background: #0b0b0b;
-}
-
-.mediaImage {
-  object-fit: cover;
-  filter: contrast(1.06) saturate(0.9) brightness(0.82);
-  transition:
-    transform var(--media-zoom-duration) var(--media-zoom-ease),
-    filter var(--media-zoom-duration) var(--media-zoom-ease);
-}
-
-/* Görselin altında koyulaşan ince perde — kartın gövdesiyle fotoğraf
-   arasındaki geçişi yumuşatır ve açık kareli fotoğraflarda kenarı tutar. */
-.media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 58%);
-}
-
-/* Kart içi dolgu ~16–24px arasında ölçekleniyor; başlık ve açıklama
-   kart kenarına yapışmıyor. */
-.cardBody {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(0.5rem, 0.8vw, 0.75rem);
-  padding: clamp(1rem, 1.4vw, 1.5rem);
-  flex: 1;
-}
-
-.cardTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  /* ~20–28px */
-  font-size: clamp(1.25rem, 1.5vw, 1.75rem);
-  line-height: 1.2;
-  /* Negatif letter-spacing yok: "AI Creative Production" gibi uzun adlar
-     dar sütunda harf çakışması yaşamasın. */
-  letter-spacing: 0;
-  color: var(--color-brand-yellow);
-  /* Uzun tek parça adlar sütunu taşırmasın. */
-  overflow-wrap: anywhere;
-}
-
-.cardText {
-  /* 15px, satır yüksekliği 1.55 */
-  font-size: var(--font-size-body);
-
-  line-height: 1.55;
-
-  /* Okunabilir satır uzunluğu — geniş sütunda satır uzayıp gitmesin. */
-  max-width: 34ch;
+  align-items: baseline;
+  gap: var(--space-3);
   margin: 0;
-}
-
-/* Başlık/açıklama ile ok arasında belirgin dikey boşluk. */
-.cardArrow {
-  margin-top: auto;
-  padding-top: clamp(1.25rem, 2vw, 2rem);
   font-family: var(--font-brand);
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-heading-bold);
-  font-size: 1.125rem;
-  /* Fuşya yerleşik hover vurgusu (CLAUDE.md marka sistemi) — değiştirilmedi. */
-  color: var(--color-brand-yellow);
-  transform: translateX(-4px);
-  opacity: 0;
-  transition:
-    transform 240ms var(--media-zoom-ease),
-    opacity 240ms ease-out;
+  text-transform: uppercase;
 }
 
-/**
- * AI Creative Production — kendi fotoğrafı yok.
- *
- * Önceki çözüm iki sütun kaplıyor ve iki radial gradient taşıyordu; hem
- * ızgaranın ritmini kırıyor hem de dekoratif bir yüzey ekliyordu. Artık
- * kart diğerleriyle AYNI hücreyi kaplıyor (sekiz kart, 2/4 sütunda tam
- * dolu ızgara) ve fotoğrafın yerini tipografik bir kapak alıyor: hizmet
- * adı, marka sarısıyla, medya oranının içinde.
- *
- * Sahte görsel üretilmedi; kapakta görünen metin hizmetin kendi adı.
- */
-.cardFeatured {
-  /* Kartın fuşya kimliği korunuyor; kaldırılan şey yalnızca iki dekoratif
-     radial gradient'ti. Kapak metni sarı: koyu medya yüzeyinin üstündeki
-     metinler marka sarısı kalır (bkz. c8d982f). */
-  border-color: rgba(255, 0, 255, 0.4);
+.heroCount strong {
+  font-family: var(--font-chapter-display);
+  font-size: clamp(2.75rem, 4.6vw, 4.75rem);
+  line-height: 0.8;
+  color: var(--color-brand-fuchsia);
 }
 
-/* Tek sütunlu mobil düzende satır yüksekliği eşleme ihtiyacı yok; sabit
-   oran burada yalnızca boş siyah alan üretiyordu. Kapak içeriği kadar
-   yer kaplıyor. */
-.featuredPoster {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  padding: clamp(1.75rem, 6vw, 2.5rem) clamp(1rem, 1.4vw, 1.5rem)
-    clamp(1rem, 1.4vw, 1.5rem);
-  background: #050505;
-  border-bottom: 1px solid rgba(255, 0, 255, 0.4);
-}
-
-/* Çok sütunlu düzende fotoğraflı kartlarla aynı oran → satırdaki kart
-   yükseklikleri eşit kalıyor. */
-@media (min-width: 768px) {
-  .featuredPoster {
-    aspect-ratio: 3 / 2;
-    padding: clamp(1rem, 1.4vw, 1.5rem);
-  }
-}
-
-.featuredPosterText {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
-  line-height: 1.05;
-  letter-spacing: 0;
-  color: var(--color-brand-yellow);
-  overflow-wrap: anywhere;
-}
-
-/* Kapakta ad zaten büyük punto duruyor; gövdede tekrar edilmiyor. */
-.cardFeatured .cardText {
-  max-width: 38ch;
-}
-
-/**
- * Hover / focus göstergesi.
- *
- * Başlık rengi DEĞİŞMİYOR — istenen bu. Gösterge üç sakin sinyalden
- * oluşuyor: ince sınırın açılması, fotoğrafın hafif yakınlaşması ve okun
- * yerine oturması.
- *
- * `@media (hover: hover)`: dokunmatikte :hover bir sonraki dokunuşa kadar
- * yapışık kalıyor, o yüzden yalnızca gerçek imleçte devrede.
- */
-@media (hover: hover) {
-  .card:hover,
-  .card:focus-within {
-    border-color: rgba(255, 255, 255, 0.42);
+@media (max-width: 767px) {
+  .hero {
+    min-height: 34rem;
   }
 
-  .cardFeatured:hover,
-  .cardFeatured:focus-within {
-    border-color: var(--color-brand-fuchsia);
+  .title {
+    max-width: 8ch;
   }
 
-  .card:hover .mediaImage,
-  .card:focus-within .mediaImage {
-    transform: scale(var(--media-zoom-scale));
-    filter: contrast(1.06) saturate(1) brightness(0.95);
+  .heroFooter {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .card:hover .cardArrow,
-  .card:focus-within .cardArrow {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Klavye odağı dokunmatikte de görünür kalmalı. */
-.cardLink:focus-visible {
-  outline: 2px solid var(--color-brand-fuchsia);
-  outline-offset: -4px;
-}
-
-/* Dokunmatikte ok her zaman görünür — hover ipucu yok. */
-@media (hover: none) {
-  .cardArrow {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* CLAUDE.md zorunlu kuralı: hareket azaltmada geçiş ve yakınlaşma kapalı. */
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .mediaImage,
-  .cardArrow {
-    transition: none;
-  }
-
-  .card:hover .mediaImage,
-  .card:focus-within .mediaImage {
-    transform: none;
-  }
-
-  .cardArrow {
-    opacity: 1;
-    transform: none;
+  .heroCount {
+    justify-content: space-between;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-hairline);
   }
 }
