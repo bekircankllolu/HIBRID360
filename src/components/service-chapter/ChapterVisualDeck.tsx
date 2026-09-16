@@ -63,6 +63,7 @@ export function ChapterVisualDeck({
               alt={visual.alt}
               fill
               sizes="(min-width: 1024px) 42vw, 100vw"
+              quality={92}
             />
           ) : null}
         </motion.div>

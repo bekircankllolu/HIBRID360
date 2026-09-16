@@ -93,66 +93,60 @@ export const siteImages = {
   },
   services: {
     creative: {
-      src: "/images/site/services/creative.webp",
+      src: "/images/site/services/creative-editorial-v2.webp",
       alt: {
-        tr: "Ampuller ve kampanya planlama materyalleri bulunan kreatif çalışma masası",
-        en: "Creative desk with light bulbs and campaign planning materials",
+        tr: "İstanbul'daki aydınlık stüdyoda kampanya görselleri üzerinde çalışan kreatif ekip",
+        en: "Creative team working on campaign imagery in a bright Istanbul studio",
       },
-      // creative.webp 1920x614 (3.13:1) — panoramik bir kare. 3/2'lik
-      // kart kutusuna merkezden kırpılınca pencere x=499..1420'e düşüyor
-      // ve "design" kelimesini ortadan kesiyordu ("esign" görünüyordu).
-      // %31 kadrajda pencere x=305..1226 oluyor: "design thinking" bütün
-      // kalıyor ve kırpma kenarları ampuller arasındaki karanlık boşluğa
-      // denk geliyor (sütun parlaklığı ölçülerek seçildi).
-      focus: "31% 50%",
+      focus: "50% 50%",
     },
     production: {
-      src: "/images/site/services/production.webp",
+      src: "/images/site/services/production-editorial-v2.webp",
       alt: {
-        tr: "Prodüksiyon çekiminde kamera kurulumu",
-        en: "Camera setup on a production shoot",
+        tr: "Aydınlık bir film setinde sinema kamerası çevresinde çalışan yönetmen ve prodüksiyon ekibi",
+        en: "Director and production crew working around a cinema camera on a bright film set",
       },
       focus: "50% 50%",
     },
     postProduction: {
-      src: "/images/site/services/post-production.webp",
+      src: "/images/site/services/post-production-editorial-v2.webp",
       alt: {
-        tr: "Kurgu stüdyosunda post prodüksiyon ekranları",
-        en: "Post production screens in an editing suite",
+        tr: "Renk düzenleme konsolunda bir film üzerinde çalışan post prodüksiyon ekibi",
+        en: "Post-production team working on a film at a colour-grading console",
       },
-      focus: "50% 50%",
+      focus: "54% 50%",
     },
     digital: {
-      src: "/images/site/services/digital.webp",
+      src: "/images/site/services/digital-editorial-v2.webp",
       alt: {
-        tr: "Renkli bir dijital içerik sahnesinde akıllı telefon kullanan eller",
-        en: "Hands using a smartphone in a colorful digital content scene",
+        tr: "İstanbul'daki içerik stüdyosunda ürün çekimi hazırlayan dijital ekip",
+        en: "Digital team preparing a product shoot in an Istanbul content studio",
       },
       focus: "50% 50%",
     },
     liveBroadcast: {
-      src: "/images/site/services/live-broadcast.webp",
+      src: "/images/site/services/live-broadcast-editorial-v2.webp",
       alt: {
-        tr: "Yayında tabelasıyla birlikte profesyonel yayın kamerası objektifi",
-        en: "Broadcast camera lens with an on air sign",
+        tr: "İstanbul'daki canlı etkinliği yöneten çok kameralı yayın ekibi",
+        en: "Multi-camera broadcast crew directing a live event in Istanbul",
       },
       focus: "50% 50%",
     },
     cloudTv: {
-      src: "/images/site/services/cloud-tv.webp",
+      src: "/images/site/services/cloud-tv-editorial-v2.webp",
       alt: {
-        tr: "Çok ekranlı yayın kontrol odası",
-        en: "Multi-screen broadcast control room",
+        tr: "Çok ekranlı bulut yayın stüdyosunda kanal akışını yöneten ekip",
+        en: "Team managing a channel feed in a multi-screen cloud broadcast studio",
       },
-      focus: "50% 50%",
+      focus: "55% 50%",
     },
     eventManagement: {
-      src: "/images/site/services/event-management.webp",
+      src: "/images/site/services/event-management-editorial-v2.webp",
       alt: {
-        tr: "Canlı etkinlik için sahne ışıklandırması",
-        en: "Stage lighting for a live event",
+        tr: "İstanbul'daki bir etkinliğin sahne kurulumunu yöneten prodüksiyon ekibi",
+        en: "Production team directing an event stage setup in Istanbul",
       },
-      focus: "50% 50%",
+      focus: "52% 50%",
     },
     photography: {
       src: "/images/site/services/photography.webp",

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
-import { Link } from "@/i18n/navigation";
 import { siteImages } from "@/data/site-images";
 import { SERVICE_CATALOG } from "@/data/services";
 import type { Locale } from "@/i18n/routing";
+import { chapterOf, formatDegree } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
+import { ServiceDirectory, type ServiceDirectoryItem } from "./ServiceDirectory";
 import styles from "./page.module.css";
 
 /**
@@ -24,10 +24,9 @@ import styles from "./page.module.css";
  * hizmet adı üzerinden eşleşir; eşleşmenin bozulmadığını
  * src/data/services.test.ts doğruluyor.
  *
- * Sunum: görsel kart ızgarası. Kullanılan fotoğraflar hizmetlerin kendi
- * alt sayfalarındaki görsellerin aynısı (src/data/site-images.ts) — yeni
- * varlık üretilmedi. AI Creative Production'ın kendi fotoğrafı yok; o kart
- * görselsiz "featured" varyantla çıkıyor (TODO: brief 11.9).
+ * Sunum: editoryal hizmet dizini ve aktif hizmete ait sabit görsel alanı.
+ * Yeni sinematik fotoğraflar src/data/site-images.ts üzerinden paylaşılır.
+ * AI Creative Production görselsiz tipografik kapak kullanır.
  */
 
 // META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
@@ -58,7 +57,26 @@ export default async function WhatWeDoPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("whatWeDo");
+  const heroTitle = t("heroTitle");
+  const [heroLead, ...heroAccent] = heroTitle.split(" ");
   const descriptions = t.raw("list") as Array<{ title: string; body: string }>;
+  const items: ServiceDirectoryItem[] = SERVICE_CATALOG.map((service) => {
+    const image = service.imageKey ? siteImages.services[service.imageKey] : undefined;
+    return {
+      id: service.id,
+      name: service.name,
+      href: service.href,
+      description: descriptions.find((item) => item.title === service.name)?.body ?? "",
+      degree: formatDegree(chapterOf(service.id).degree),
+      image: image
+        ? {
+            src: image.src,
+            alt: image.alt[locale],
+            focus: image.focus,
+          }
+        : undefined,
+    };
+  });
 
   return (
     <div className={styles.page}>
@@ -68,69 +86,28 @@ export default async function WhatWeDoPage({
           { name: "What We Do", path: "/what-we-do" },
         ])}
       />
-      <h1 className={styles.title}>{t("heroTitle")}</h1>
-      <p className={styles.heroBody}>{t("heroBody")}</p>
+      <header className={styles.hero}>
+        <p className={styles.kicker} lang="en">Hibrid 360 / What We Do</p>
+        <h1 className={styles.title}>
+          <span className={styles.titleLead}>{heroLead}</span>{" "}
+          <span className={styles.titleAccent}>{heroAccent.join(" ")}</span>
+        </h1>
+        <div className={styles.heroFooter}>
+          <p className={styles.heroBody}>{t("heroBody")}</p>
+          <p
+            className={styles.heroCount}
+            aria-label={locale === "tr" ? "Sekiz hizmet alanı" : "Eight service disciplines"}
+          >
+            <strong>08</strong>
+            <span>{locale === "tr" ? "ALAN · 360°" : "DISCIPLINES · 360°"}</span>
+          </p>
+        </div>
+      </header>
 
-      <ul className={styles.grid}>
-        {SERVICE_CATALOG.map((service, index) => {
-          const image = service.imageKey
-            ? siteImages.services[service.imageKey]
-            : undefined;
-          const body = descriptions.find((item) => item.title === service.name)?.body;
-          return (
-            <li
-              key={service.id}
-              className={`${styles.card} ${image ? "" : styles.cardFeatured}`}
-            >
-              <Link href={service.href} className={styles.cardLink}>
-                {image ? (
-                  <>
-                    <span className={styles.media} aria-hidden="true">
-                      <Image
-                        className={styles.mediaImage}
-                        src={image.src}
-                        alt=""
-                        fill
-                        sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, (max-width: 1439px) 33vw, 25vw"
-                        /* Kadraj odağı görselin kendi kaydından gelir;
-                           panoramik kareler merkezden kırpılınca konu
-                           ortadan kesilebiliyor (bkz. site-images.ts). */
-                        style={{ objectPosition: image.focus }}
-                        priority={index < 3}
-                      />
-                    </span>
-                    <span className={styles.cardBody}>
-                      <span className={styles.cardTitle}>{service.name}</span>
-                      <span className={styles.cardText}>{body}</span>
-                      <span className={styles.cardArrow} aria-hidden="true">
-                        →
-                      </span>
-                    </span>
-                  </>
-                ) : (
-                  /* Fotoğrafı olmayan hizmet: medya oranının içine tipografik
-                     kapak. Ad burada büyük punto durduğu için gövdede
-                     tekrarlanmıyor; bağlantının erişilebilir adı yine
-                     "ad + açıklama" olarak okunuyor. */
-                  <>
-                    <span className={styles.featuredPoster}>
-                      <span className={styles.featuredPosterText}>
-                        {service.name}
-                      </span>
-                    </span>
-                    <span className={styles.cardBody}>
-                      <span className={styles.cardText}>{body}</span>
-                      <span className={styles.cardArrow} aria-hidden="true">
-                        →
-                      </span>
-                    </span>
-                  </>
-                )}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <ServiceDirectory
+        items={items}
+        label={locale === "tr" ? "Hizmet alanları" : "Service disciplines"}
+      />
     </div>
   );
 }
