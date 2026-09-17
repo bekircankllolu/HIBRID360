@@ -47,10 +47,7 @@ import styles from "./page.module.css";
  * serbestçe gezinen ambient noktalar (bkz. MonaDrift.tsx). Tamamen
  * `pointer-events:none`, etkileşim yok — yalnız doku.
  *
- * Altıncı tur (13 Eylül 2026 — DECISIONS #48): hizmetlerin yanındaki
- * kristal çizimi kaldırıldı. Hizmet odağıyla değişen on ayrı yaratıcı
- * malzeme çalışması ve parallax açılışı eklendi. MonaShard %10 küçüldü,
- * canvas'ı hero'nun altına uzadı,
+ * MonaShard %10 küçüldü, canvas'ı hero'nun altına uzadı,
  * MONA arada bir nilüfere dönüşüyor. MonaDrift noktaları makale bitince
  * duruyor (`.chapter { overflow: clip }`).
  *
@@ -73,80 +70,6 @@ const CREATIVE_SERVICES = [
   "TV",
   "PRESS",
   "RADIO CAMPAIGNS",
-] as const;
-
-/** Hizmet adları değişmez; her satır sağdaki kendi yaratıcı sahnesini seçer. */
-const SERVICE_VISUALS = [
-  {
-    src: "/images/site/services/creative/01-brand-consultancy.webp",
-    alt: {
-      tr: "Siyah zeminde sarı ışık yollarının tek yönde birleştiği krom strateji pusulası",
-      en: "Chrome strategy compass with yellow light paths converging in one direction on black",
-    },
-  },
-  {
-    src: "/images/site/services/creative/02-corporate-identity.webp",
-    alt: {
-      tr: "Siyah, krom ve şeffaf sarı parçalardan oluşan modüler kurumsal kimlik sistemi",
-      en: "Modular corporate identity system built from black, chrome and translucent yellow forms",
-    },
-  },
-  {
-    src: "/images/site/services/creative/03-marketing-strategy.webp",
-    alt: {
-      tr: "Fuşya rotaların sarı bir strateji yolunda birleştiği asılı ışık ağı",
-      en: "Suspended light network where magenta routes resolve into a yellow strategy path",
-    },
-  },
-  {
-    src: "/images/site/services/creative/04-concept-development.webp",
-    alt: {
-      tr: "Parlak sarı bir fikir çekirdeğini şekillendiren krom eller",
-      en: "Chrome hands shaping a luminous yellow idea seed",
-    },
-  },
-  {
-    src: "/images/site/services/creative/05-content-generation.webp",
-    alt: {
-      tr: "Tek bir ışığı farklı görsel karelere ayıran mercekli içerik motoru",
-      en: "Lens-based content engine splitting one light into multiple visual frames",
-    },
-  },
-  {
-    src: "/images/site/services/creative/06-commercials.webp",
-    alt: {
-      tr: "Sarı ışık çerçeveleriyle çevrili profesyonel sinema kamerası",
-      en: "Professional cinema camera framed by yellow studio lights",
-    },
-  },
-  {
-    src: "/images/site/services/creative/07-packaging.webp",
-    alt: {
-      tr: "Düz kesim yüzeyden üç boyutlu kutuya dönüşen siyah ambalaj",
-      en: "Black package folding from a flat die-cut surface into a three-dimensional box",
-    },
-  },
-  {
-    src: "/images/site/services/creative/08-tv.webp",
-    alt: {
-      tr: "Sarı ve fuşya yayın sinyalleri taşıyan retro-fütüristik televizyon ekranları",
-      en: "Retro-futuristic television screens carrying yellow and magenta broadcast signals",
-    },
-  },
-  {
-    src: "/images/site/services/creative/09-press.webp",
-    alt: {
-      tr: "Krom baskı silindirlerinden sarı tram dokusuyla geçen siyah kâğıt",
-      en: "Black paper passing through chrome press rollers with a yellow halftone pattern",
-    },
-  },
-  {
-    src: "/images/site/services/creative/10-radio-campaigns.webp",
-    alt: {
-      tr: "Sarı ve fuşya akustik dalgaların merkezindeki krom stüdyo mikrofonu",
-      en: "Chrome studio microphone centered in yellow and magenta acoustic waves",
-    },
-  },
 ] as const;
 
 export async function generateMetadata({
@@ -182,7 +105,6 @@ export default async function CreativePage({
   const t = await getTranslations("services.creative");
   const tChapter = await getTranslations("services.chapter");
   const tWhatWeDo = await getTranslations("whatWeDo");
-  const tVideo = await getTranslations("video");
   const tNav = await getTranslations("nav");
   const tCommon = await getTranslations("common");
 
@@ -192,10 +114,6 @@ export default async function CreativePage({
     .slice(0, 2)
     .map((text, index) => ({ text, tone: index === 0 ? "white" : "yellow" }));
   const next = nextChapter(CHAPTER.id);
-  const serviceVisuals = SERVICE_VISUALS.map(({ src, alt }) => ({
-    src,
-    alt: alt[locale],
-  }));
   // Tek satırlık hizmet tanımları hizmet adıyla eşleşir (services.test.ts kilitli).
   const nextBlurb =
     (tWhatWeDo.raw("list") as Array<{ title: string; body: string }>).find(
@@ -227,8 +145,6 @@ export default async function CreativePage({
       <ChapterIndex
         title={tChapter("servicesTitle")}
         items={CREATIVE_SERVICES}
-        visuals={serviceVisuals}
-        visualCaption={tVideo("aiGenerated")}
       />
 
       <DnaHelix slogan={t("band")} />

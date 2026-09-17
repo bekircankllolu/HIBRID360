@@ -1,206 +1,30 @@
-.hero {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4) var(--space-12);
-}
-
-/* brief 11.4 Soru 5 / 11.8: "CREATE THE FUTURE." MONA'nın yanında,
-   neon mint yeşili. Baby pink zemin dışında mint kullanılmadığı için
-   başlık siyah zeminde beyaz kalır; mint yalnızca MONA bölümünde. */
-.heroTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  margin: 0 0 var(--space-6);
-}
-
-.heroLead {
-  max-width: var(--measure-prose);
-
-  margin: 0;
-}
-
-/* AI-02 — hero altı dönüşümlü slogan. Deck'te "loop" olarak tarifli;
-   burada basitleştirilip iki satır art arda gösteriliyor (RotatingSlogans
-   gibi ayrı bir döngü bileşeni kurulmadı — TODO: istenirse eklenecek). */
-.slogans {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: 0 var(--space-4) var(--space-16);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.sloganLine {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1rem, 2.2vw, 1.375rem);
-  margin: 0;
-}
-
-.block {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-16) var(--space-4);
-}
-
-/* AI-05 — akış şeması. */
-.flow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
-}
-
-.flowStep {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-body);
-
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: var(--space-2) var(--space-4);
-}
-
-.flowArrow {
-  opacity: 0.5;
-}
-
-/* AI-06/07 — manifesto + ara bant. */
-.manifesto {
-  background: var(--color-brand-fuchsia);
-  color: var(--color-text-on-fuchsia);
-  text-align: center;
-}
-
-.manifestoText {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-heading);
-  margin: 0;
-}
-
-.bandText {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3.5vw, 2.25rem);
-  max-width: 44rem;
-  margin: 0;
-}
-
-/* AI-08 — What We Build. */
-.buildList {
-  list-style: none;
-  margin: var(--space-6) 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3) var(--space-6);
-}
-
-.buildList li {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: 1rem;
-}
-
-.closingQuestion {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  margin: var(--space-6) 0 0;
-}
-
-.blockTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  margin: 0 0 var(--space-4);
-}
-
-/* Yalnızca AI-04 kanıt başlığı caps. Kaynak metin cümle düzeninde tutulur
-   ("Neden Hibrid 360?") ki marka yazımı tek biçim kalsın; caps görünüm
-   buradan gelir. Marka <span lang="en"> ile sarılı olduğu için TR sayfada
-   "HİBRİD" değil "HIBRID" render edilir. */
-.blockTitleCaps {
-  text-transform: uppercase;
-}
-
-.blockBody {
-  max-width: var(--measure-prose);
-
-  margin: 0;
-}
-
-/* brief 11.8 blok 3 — kanıt satırı, sarı bant. Sarı zemin → siyah metin. */
-.proof {
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-}
-
-.proofList {
-  list-style: none;
-  margin: var(--space-4) 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-6);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-}
-
-.closing {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 3vw, 2.25rem);
-  max-width: 42rem;
-}
-
-.cta {
-  display: inline-block;
-  margin-top: var(--space-8);
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
-}
-
-.cta:hover {
-  transform: translateY(-2px);
-}
-
-/* brief 11.6: replikler SEO için sayfada metin olarak da bulunur.
-   Görsel olarak katlanabilir, tarayıcılar ve AI araçları için tam metin. */
-.transcript {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-12) var(--space-4) var(--space-24);
-}
-
-.transcript summary {
-  cursor: pointer;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-}
-
-.transcriptList {
-  margin: var(--space-6) 0 0;
-  max-width: var(--measure-prose);
-}
-
-.transcriptList dt {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  margin-top: var(--space-6);
-}
-
-.transcriptList dd {
-  margin: var(--space-2) 0 0;
-}
+.chapter { overflow: clip; background: var(--color-brand-black); color: var(--color-brand-white); }
+.intro, .proof, .flowSection, .band, .closing, .transcript { position: relative; padding: clamp(4rem, 10vw, 9rem) var(--page-gutter); }
+.intro { min-height: 72svh; display: grid; align-content: end; gap: var(--space-8); }
+.intro > h2 { max-width: 9ch; margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-display); line-height: .86; letter-spacing: 0; }
+.intro > h2 span { display: block; color: var(--color-brand-yellow); }
+.intro > p { max-width: 34ch; margin: 0; font-size: var(--font-size-lead); line-height: 1.4; }
+.proof { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 7vw, 7rem); }
+.proof > div { display: grid; align-content: start; gap: var(--space-6); }
+.proof > div > h2 { margin: 0; font-family: var(--font-chapter-display); font-size: clamp(2rem, 5vw, 5rem); line-height: .95; letter-spacing: 0; text-transform: uppercase; }
+.proof p, .proof li { font-size: var(--font-size-body-lg); line-height: 1.55; }
+.proof p { max-width: var(--measure-prose); margin: 0; }
+.proofPanel { padding: clamp(2rem, 5vw, 5rem); background: var(--color-brand-yellow); color: var(--color-text-on-yellow); }
+.proofPanel ul { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.proofPanel li::before { content: "↳ "; color: var(--color-brand-fuchsia); }
+.flowSection { display: grid; gap: var(--space-10); }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.flow span { padding: var(--space-3) var(--space-4); border: 1px solid color-mix(in srgb, var(--color-brand-white) 30%, transparent); font-family: var(--font-brand); font-size: var(--font-size-label); font-weight: var(--font-weight-heading-bold); text-transform: uppercase; }
+.flow i { color: var(--color-brand-fuchsia); font-style: normal; }
+.manifesto { position: relative; min-height: 70svh; display: grid; place-items: center; padding: var(--space-16) var(--page-gutter); background: var(--color-brand-fuchsia); color: var(--color-text-on-fuchsia); }
+.manifesto p, .band p { max-width: 18ch; margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-manifesto); font-weight: var(--font-weight-chapter-display); line-height: 1; letter-spacing: 0; }
+.band p { color: var(--color-brand-yellow); }
+.closing { display: grid; gap: var(--space-5); }
+.closing p, .closing strong { max-width: 30ch; margin: 0; font-family: var(--font-brand); font-size: clamp(1.4rem, 3vw, 3rem); line-height: 1.15; }
+.closing strong { color: var(--color-brand-yellow); }
+.transcript { padding-top: 0; }
+.transcript summary { cursor: pointer; font-family: var(--font-brand); font-size: var(--font-size-label); font-weight: var(--font-weight-heading-bold); color: var(--color-brand-yellow); text-transform: uppercase; }
+.transcript dl { max-width: var(--measure-prose); }
+.transcript dt { margin-top: var(--space-6); font-weight: var(--font-weight-heading-bold); }
+.transcript dd { margin: var(--space-2) 0 0; line-height: 1.55; }
+@media (max-width: 767px) { .proof { grid-template-columns: minmax(0, 1fr); } }

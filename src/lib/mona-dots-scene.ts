@@ -359,6 +359,13 @@ export function monaShardLayout(width: number, height: number): MonaDotsLayout {
   return { centerX: 1, centerY: (0.72 * hero) / height, radius: Math.min(width, hero) * 0.495 };
 }
 
+export function monaShardLayoutFor(side: "left" | "right") {
+  return (width: number, height: number): MonaDotsLayout => {
+    const layout = monaShardLayout(width, height);
+    return { ...layout, centerX: side === "right" ? 1 : 0 };
+  };
+}
+
 const UNIFORMS = [
   "u_time", "u_intro", "u_rotation", "u_center", "u_radius", "u_aspect", "u_pointer",
   "u_pointerStrength", "u_level", "u_pointSize", "u_parallax", "u_scale", "u_dim", "u_flash",

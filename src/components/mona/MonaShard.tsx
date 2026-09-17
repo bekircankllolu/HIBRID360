@@ -6,7 +6,7 @@ import { createCreature, creatureFrame, stepCreature } from "@/lib/mona-creature
 import { createParticleCloud } from "@/lib/mona-dots-geometry";
 import {
   createMonaDotsScene,
-  monaShardLayout,
+  monaShardLayoutFor,
   NEUTRAL_FRAME,
   SHARD_BLEED,
   tokenRgb,
@@ -16,6 +16,7 @@ import {
 } from "@/lib/mona-dots-scene";
 import { createLotus, LOTUS_OFFSET, lotusTargets, lotusWeight, stepLotus } from "@/lib/mona-lotus";
 import { LOTUS_DENSITY } from "@/lib/mona-lotus-density";
+import { serviceShapeTargets, type MonaServiceShape } from "@/lib/mona-service-shapes";
 import { acquireSceneLock, onSceneLockReleased, releaseSceneLock } from "@/lib/webgl-scene";
 import styles from "./MonaShard.module.css";
 
@@ -68,7 +69,13 @@ const HISTORY = 7;
 
 type Mode = "pending" | "webgl" | "static" | "none";
 
-export function MonaShard() {
+export function MonaShard({
+  shape = "lotus",
+  side = "right",
+}: {
+  shape?: MonaServiceShape;
+  side?: "left" | "right";
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [mode, setMode] = useState<Mode>("pending");
   const [desktop, setDesktop] = useState(false);
@@ -111,9 +118,15 @@ export function MonaShard() {
       });
       scene = createMonaDotsScene(
         canvas,
-        { ...cloud, lotus: lotusTargets(cloud, LOTUS_DENSITY) },
+        {
+          ...cloud,
+          lotus:
+            shape === "lotus"
+              ? lotusTargets(cloud, LOTUS_DENSITY)
+              : serviceShapeTargets(cloud, shape),
+        },
         { dot: tokenRgb("--color-brand-yellow"), background: tokenRgb("--color-brand-black") },
-        monaShardLayout,
+        monaShardLayoutFor(side),
       );
     } catch (error) {
       console.error("MonaShard scene failed:", error);
@@ -157,7 +170,7 @@ export function MonaShard() {
 
     const fromCenter = (x: number, y: number) => {
       const width = canvas.clientWidth, height = canvas.clientHeight;
-      const layout = monaShardLayout(width, height);
+      const layout = monaShardLayoutFor(side)(width, height);
       return {
         dx: ((x - layout.centerX) * width) / layout.radius - shift.x,
         dy: ((y - layout.centerY) * height) / layout.radius + shift.y,
@@ -211,14 +224,17 @@ export function MonaShard() {
       elapsed += dt;
       const intro = Math.min(1, elapsed / INTRO_SECONDS);
 
-      lotus = stepLotus(lotus, dt, Math.random);
+      // The bloom schedule is wall-clock based. Keeping it on the capped
+      // physics delta makes a 2.6 s morph stretch indefinitely on slow GPUs.
+      lotus = stepLotus(lotus, realDt, Math.random);
       const bloom = lotusWeight(lotus);
-      shift.x = LOTUS_OFFSET.x * bloom;
-      shift.y = LOTUS_OFFSET.y * bloom;
+      shift.x = (shape === "lotus" ? LOTUS_OFFSET.x : side === "right" ? -0.88 : 0.88) * bloom;
+      shift.y = (shape === "lotus" ? LOTUS_OFFSET.y : 0.28) * bloom;
       const phase = bloom >= 1 ? "open" : bloom > 0 ? "moving" : "closed";
       if (phase !== lotusPhase) {
         lotusPhase = phase;
-        root.dataset.lotus = phase;
+        root.dataset.morph = phase;
+        if (shape === "lotus") root.dataset.lotus = phase;
       }
 
       // Çiçek MONA'nın kendi hareketi: açarken uyanır, açıkken uyumaz.
@@ -333,13 +349,22 @@ export function MonaShard() {
       stop();
       active.dispose();
       canvas.remove();
+      delete root.dataset.morph;
       delete root.dataset.lotus;
     };
-  }, [desktop, reducedMotion]);
+  }, [desktop, reducedMotion, shape, side]);
 
   // Uzantı oranı tek kaynaktan: yerleşim (`monaShardLayout`) aynı sabiti kullanıyor.
   const bleed = { "--shard-bleed": SHARD_BLEED } as CSSProperties;
   return (
-    <div ref={rootRef} className={styles.shard} style={bleed} data-dots={mode} aria-hidden="true" />
+    <div
+      ref={rootRef}
+      className={styles.shard}
+      style={bleed}
+      data-dots={mode}
+      data-shape={shape}
+      data-side={side}
+      aria-hidden="true"
+    />
   );
 }

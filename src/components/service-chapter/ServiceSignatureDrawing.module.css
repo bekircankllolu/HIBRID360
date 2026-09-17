@@ -1,0 +1,209 @@
+/*
+ * İmza çizimi — yapışkan sahne. DnaHelix (180svh) ile aynı ölçekte:
+ * çizim kaydırma yolunda tamamlanır; son bölüm tamamlanmış kompozisyonu
+ * okumak için ayrılır.
+ */
+.section {
+  background: var(--color-brand-black);
+}
+
+.wrapper {
+  position: relative;
+  height: 180svh;
+}
+
+.stage {
+  --draw: clamp(0, (var(--progress, 1) - 0.04) / 0.72, 1);
+  position: sticky;
+  top: var(--header-height);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-6);
+  height: calc(100svh - var(--header-height));
+  padding-block: var(--space-10);
+  padding-inline: var(--page-gutter);
+  overflow: hidden;
+}
+
+.drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: visible;
+}
+
+/* Mobil geometri verilmişse (DnaHelix kalıbı): breakpoint hangisini gösterir. */
+.mobile {
+  display: none;
+}
+
+/*
+ * Çizimin kendisi: her yol kendi aralığında (--from → --to) ilerler.
+ * pathLength="1" olduğu için dasharray/dashoffset birimleri yol uzunluğunun
+ * oranıdır — geometriden bağımsız tek formül.
+ */
+.path {
+  --span: max(0.001, calc(var(--to) - var(--from)));
+  --p: clamp(0, (var(--draw) - var(--from)) / var(--span), 1);
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--p));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Çizimin nesnesi beyaz; derinlik yalnız opaklıkla ayrılır. */
+.front {
+  stroke: var(--color-brand-white);
+  stroke-width: 1.5;
+}
+
+.back {
+  stroke: var(--color-brand-white);
+  stroke-width: 1.5;
+  opacity: 0.45;
+}
+
+.construction {
+  stroke: var(--color-brand-white);
+  stroke-width: 1;
+  opacity: 0.22;
+}
+
+/* Sarı yalnız dönüşümün son izi; her sayfada tek görsel vurgu. */
+.accent {
+  stroke: var(--color-brand-yellow);
+  stroke-width: 1.5;
+}
+
+/* Araç arayüzü fuşya. Çizim o noktaya varınca belirir (DnaHelix kalıbı). */
+.anchor,
+.handle {
+  --on: clamp(0, (var(--draw) - var(--t)) * 26 + 1, 1);
+  opacity: var(--on);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(calc(0.72 + 0.28 * var(--on)));
+  transition: opacity 180ms var(--ease-house), transform 180ms var(--ease-house);
+}
+
+.anchor[data-near] {
+  opacity: 1;
+  transform: scale(calc(0.88 + 0.3 * var(--on)));
+}
+
+.nodeFilled {
+  fill: var(--color-brand-fuchsia);
+}
+
+.nodeHollow {
+  fill: var(--color-brand-black);
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1.4;
+}
+
+.handleLine {
+  fill: none;
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1.4;
+}
+
+.handleEnd {
+  fill: var(--color-brand-black);
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1.4;
+}
+
+.pen {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nib {
+  fill: var(--color-brand-black);
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+}
+
+.nibSlit {
+  fill: none;
+  stroke: var(--color-brand-fuchsia);
+  stroke-width: 1;
+}
+
+.nibHole {
+  fill: var(--color-brand-fuchsia);
+}
+
+.caption {
+  max-width: var(--chapter-field-measure);
+  margin: 0;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1023px) {
+  .front,
+  .back,
+  .accent {
+    stroke-width: 2.4;
+  }
+
+  .construction {
+    stroke-width: 1.7;
+  }
+}
+
+@media (max-width: 767px) {
+  .wrapper {
+    height: 145svh;
+  }
+
+  .stage {
+    gap: var(--space-4);
+    padding-inline: var(--space-4);
+  }
+
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+  }
+
+  .front,
+  .back,
+  .accent {
+    stroke-width: 3.8;
+  }
+
+  .construction {
+    stroke-width: 2.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    height: auto;
+  }
+
+  .stage {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding-block: var(--space-16);
+  }
+
+  .pen {
+    display: none;
+  }
+
+  .anchor,
+  .handle {
+    transition: none;
+  }
+}

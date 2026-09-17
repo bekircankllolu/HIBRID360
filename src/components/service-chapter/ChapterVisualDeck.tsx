@@ -63,13 +63,18 @@ export function ChapterVisualDeck({
               alt={visual.alt}
               fill
               sizes="(min-width: 1024px) 42vw, 100vw"
+              quality={92}
             />
           ) : null}
         </motion.div>
         <span className={styles.reticle} aria-hidden="true" />
-        <span className={styles.counter} aria-hidden="true">
-          {String(resolved + 1).padStart(2, "0")} / {String(visuals.length).padStart(2, "0")}
-        </span>
+        {/* Sayaç yalnız birden çok görsel varken anlamlı; tek görselde
+            "01 / 01" gürültüden ibaret. */}
+        {visuals.length > 1 ? (
+          <span className={styles.counter} aria-hidden="true">
+            {String(resolved + 1).padStart(2, "0")} / {String(visuals.length).padStart(2, "0")}
+          </span>
+        ) : null}
       </motion.div>
       <figcaption className={styles.caption}>{caption}</figcaption>
     </figure>
