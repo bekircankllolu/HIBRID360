@@ -42,11 +42,14 @@
 /* Arka plan wordmark — outline'dan doluya geçiş, tek eleman + ::after
    overlay tekniği (monks'taki [data-title]:after çözümünün sadeleşmiş
    hali; harf harf span bölmeye gerek yok). */
+/* Logo rolü: --font-brand DEĞİL --font-logo. Bu literal "Hibrid 360"
+   render'ı; kullanıcı isteği üzerine eskisi gibi Montserrat'ta kalıyor,
+   sitenin geri kalanının Archivo'ya geçmesinden etkilenmiyor. */
 .wordmark {
   position: absolute;
   z-index: 0;
   margin: 0;
-  font-family: var(--font-brand);
+  font-family: var(--font-logo);
   font-weight: var(--font-weight-brand);
   text-transform: uppercase;
   letter-spacing: 0;

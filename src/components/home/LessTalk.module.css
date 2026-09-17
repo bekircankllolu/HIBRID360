@@ -18,13 +18,26 @@
 /* ---------- Başlık ---------- */
 
 /**
- * Ölçüler referans PDF'ten türetildi (tasarım genişliği 1440, ölçek
- * 2.856, Montserrat ExtraBold cap/em = 0.7025):
- *   AZ LAF cap yüksekliği 104.7px → punto 149px  = 10.35vw
- *   AZ LAF mürekkep genişliği 569.1px, doğal genişlik 3.801em × 149 =
- *     566.3px → harf aralığı ≈ 0 (önceki -0.015em metni sıkıştırıyordu)
+ * Ölçüler referans PDF'ten türetildi (tasarım genişliği 1440, ölçek 2.856):
+ *   AZ LAF cap yüksekliği 104.7px
+ *   AZ LAF mürekkep genişliği 569.1px = 3.819em @ punto 149px
  *   Satır ilerlemesi 127.5px → line-height 0.856
  *   Blok 253.5..1186.1 → içerik kutusunda tam ortalı
+ *
+ * ARCHIVO'YA GEÇİŞ (17 Eylül 2026) — iki ölçü yeniden hesaplandı, çünkü
+ * bu blok referansa birebir ölçülmüştü ve font değişince ikisi de kaydı:
+ *
+ * 1) Cap yüksekliği: Montserrat 800 cap/em = 0.700, Archivo 800 = 0.686
+ *    (ölçüldü). Aynı punto %2 küçük cap veriyordu. Bütün punto ölçeği
+ *    0.700/0.686 = 1.0241 ile çarpıldı — cap 104.7px'te kalıyor.
+ *
+ * 2) Genişlik: Archivo (wdth 112) daha geniş. Ölçülen doğal genişlikler:
+ *      "AZ LAF"     Montserrat 3.791em -> Archivo 4.085em  (+7.8%)
+ *      "LESS TALK"  Montserrat 5.650em -> Archivo 6.405em  (+13.4%)
+ *    Espas 0'da kalsaydı EN sürümü kompozisyonu taşırdı. -0.044em doğal
+ *    genişliği referansın 3.819em mürekkep ölçüsüne geri getiriyor
+ *    ((3.819 - 4.085) / 6 harf aralığı = -0.0443em).
+ *    Dev puntoda sıkı espas zaten sistemin kuralı (--tracking-display).
  */
 .title {
   align-self: center;
@@ -32,9 +45,9 @@
   margin: 0 0 clamp(1.28rem, 2.55vw, 2.55rem);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(2.76rem, 8.8vw, 10.2rem);
+  font-size: clamp(2.83rem, 9.01vw, 10.45rem);
   line-height: 0.856;
-  letter-spacing: 0;
+  letter-spacing: -0.044em;
   /* Büyük harf yalnızca çizimde, metinde değil. Türkçe locale'de
      tarayıcı doğru eşlemeyi yapar (html lang="tr"). */
   text-transform: uppercase;

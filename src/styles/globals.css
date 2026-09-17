@@ -23,13 +23,26 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/**
+ * Başlık tabanı. Punto büyüdükçe espas ve satır sıkışır — tipografik
+ * hiyerarşi yalnız boyutla değil RİTİMLE de kurulsun diye (tokens.css
+ * "Espas" notu). Sayfa CSS'leri bu değerleri gerektiğinde ezebilir.
+ */
 h1,
 h2,
 h3 {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-heading);
   margin: 0;
   color: var(--color-brand-yellow);
+}
+
+/* h1 dev punto bandında: daha da sıkı. */
+h1 {
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
 }
 
 a {

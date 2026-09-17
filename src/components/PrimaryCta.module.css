@@ -1,19 +1,67 @@
+/**
+ * Birincil CTA — markanın imza hareketi.
+ *
+ * Üzerine gelince sarı zemin SOLDAN SAĞA fuşyaya süpürülür. Sebepler:
+ *
+ * - Marka paletinin dışına çıkmaz: iki renk de sabit marka renklerinden
+ *   (#FFFC00 -> #FF00FF), arada üçüncü bir ton yok.
+ * - Kontrast kuralı korunur (CLAUDE.md, sözleşmeli): hem sarı hem fuşya
+ *   zeminde metin SİYAH kalır. Renk değişirken okunabilirlik hiç düşmez.
+ * - Süpürme imlecin geldiği yönü izler, "açık/kapalı" bir renk sıçraması
+ *   değil — buton basılmayı bekleyen bir şey gibi durur.
+ *
+ * `isolation: isolate` + `z-index: -1`: süpürme katmanı butonun ZEMİNİNİN
+ * üstünde ama METNİNİN altında boyanır. Böylece etiket için ayrı bir
+ * sarmalayıcı elemana gerek kalmıyor (bileşenin JSX'i değişmedi).
+ *
+ * Yalnız `transform` animasyonu: layout değişmez, CLS üretmez.
+ * prefers-reduced-motion'da globals.css süreleri 0.01ms'e indirir —
+ * renk yine değişir, hareket olmaz.
+ */
 .button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-block;
   min-height: 3.5rem;
   background: var(--color-brand-yellow);
   color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
+  letter-spacing: var(--tracking-heading);
   padding: 1rem 2rem;
+  transition:
+    transform 320ms var(--ease-house),
+    box-shadow 320ms var(--ease-house);
 }
 
-.button:hover {
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms var(--ease-house);
+}
+
+.button:hover::before,
+.button:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.button:hover,
+.button:focus-visible {
   transform: translateY(-2px);
+  /* Gölge değil, sert bir ofset blok: markanın grafik dili yumuşak
+     gölgeye değil düz renge dayanıyor. */
+  box-shadow: 4px 4px 0 var(--color-brand-white);
 }
 
 .button:active {
-  transform: scale(0.98);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 0 0 var(--color-brand-white);
 }
 
 /**

@@ -21,7 +21,9 @@
 
 .heroKicker {
   margin: 0 0 var(--space-4);
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-bold);
   font-size: clamp(0.8125rem, 1.4vw, 1.125rem);
   letter-spacing: 0.12em;
@@ -192,7 +194,9 @@
 
 .yellowBandLabel {
   margin: 0 0 var(--space-2);
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
 
   font-weight: var(--font-weight-heading-bold);
@@ -237,7 +241,9 @@
 
 .detailLabel {
   margin: 0;
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-bold);
   font-size: var(--font-size-label);
 
@@ -274,7 +280,9 @@
 }
 
 .inlineLink {
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-bold);
   font-size: var(--font-size-label);
 
@@ -311,7 +319,9 @@
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.55);
   color: var(--color-brand-white);
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
 
   font-weight: var(--font-weight-heading-bold);

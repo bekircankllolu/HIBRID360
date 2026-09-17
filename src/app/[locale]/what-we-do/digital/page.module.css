@@ -25,8 +25,9 @@
 }
 
 /* H1 — ağırlık karşıtlığı. Boyut/aile shared .heroTitle'dan geliyor,
-   yalnızca font-weight ve letter-spacing burada. Montserrat 300 zaten
-   yüklü (fonts.css: 300–800 değişken aralık), sitede tek kullanımı var. */
+   yalnızca font-weight ve letter-spacing burada. Archivo 300 zaten yüklü
+   (fonts.css: 300–800 değişken aralık); bu ağırlığın sitedeki diğer tek
+   kullanımı hero SolarSystem `.titleLead`. */
 .page .weightLight {
   font-weight: 300;
   letter-spacing: 0;

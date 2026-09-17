@@ -7,6 +7,7 @@ import {
   type CSSProperties,
   type HTMLAttributes,
 } from "react";
+import { splitWords } from "@/lib/split-words";
 import styles from "./TextFadeIn.module.css";
 
 type FadeStyle = CSSProperties & {
@@ -37,7 +38,12 @@ export function TextFadeIn({
   ...props
 }: TextFadeInProps) {
   const rootRef = useRef<HTMLSpanElement>(null);
-  const units = by === "word" ? children.trim().split(/\s+/) : Array.from(children);
+  // `splitWords` kullanılıyor, `split(/\s+/)` değil: ikincisi bölünmez
+  // boşluğu (U+00A0) da ayırıcı sayar. Çeviri dosyalarında "Hibrid 360"
+  // gibi birlikte kalması gereken ifadeler NBSP ile yazılıyor; ham regex
+  // onları iki ayrı kelimeye bölüp satır sonunda koparıyordu — NBSP'nin
+  // tek işini boşa çıkarıyordu (bkz. src/lib/split-words.ts).
+  const units = by === "word" ? splitWords(children) : Array.from(children);
 
   useEffect(() => {
     const root = rootRef.current;

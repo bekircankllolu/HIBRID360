@@ -15,7 +15,9 @@
 .eyebrow {
   margin: 0;
   color: var(--color-brand-yellow);
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
 
   font-weight: var(--font-weight-heading-bold);
@@ -78,7 +80,9 @@
 
 .anniversaryDate {
   margin: 0 0 auto;
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
 
   font-weight: var(--font-weight-heading-bold);

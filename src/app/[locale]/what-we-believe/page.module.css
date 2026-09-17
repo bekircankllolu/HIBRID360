@@ -68,7 +68,9 @@
 .captionLead {
   margin: 0 0 var(--space-3);
   max-width: 52rem;
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-semibold);
   font-size: var(--font-size-label);
   letter-spacing: 0.1em;
@@ -88,21 +90,26 @@
   color: var(--color-brand-yellow);
 }
 
+/* Editoryal serif — sahte oblik kaldırıldı (bkz. culture-page.module.css
+   .quote notu). Serif dar olduğu için punto bir kademe büyüdü. */
 .captionQuote {
   margin: 0;
-  max-width: 30ch;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-style: italic;
-  font-size: clamp(1.25rem, 3.6vw, 2.5rem);
-  line-height: 1.2;
+  max-width: 26ch;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(1.5rem, 4.2vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-heading);
   color: var(--color-brand-yellow);
 }
 
 .captionAuthor {
   margin: var(--space-4) 0 0;
-  font-size: clamp(0.8125rem, 1.4vw, 0.9375rem);
-  letter-spacing: 0.04em;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-micro);
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
   color: var(--color-brand-yellow);
 }
 

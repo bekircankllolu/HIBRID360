@@ -116,7 +116,9 @@
 }
 
 .sectionTitle {
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-semibold);
   font-size: var(--font-size-label);
   letter-spacing: 0.12em;

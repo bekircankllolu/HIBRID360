@@ -40,9 +40,10 @@
  */
 .titleLead {
   display: block;
-  /* Referansta bu satır ince (Light). Montserrat alt kümesi Eylül 2026'da
-     300'e genişletildi; öncesinde istek 600'e kırpılıyor ve satır
-     tasarımdakinden belirgin kalın çıkıyordu. */
+  /* Referansta bu satır ince (Light). Archivo alt kümesi bu yüzden 300'den
+     başlıyor (scripts/generate-fonts.py) — 500'den başlasaydı tarayıcı
+     isteği kırpar, satır tasarımdakinden kalın çıkardı.
+     Eylül 2026'da aynı sebeple Montserrat 300'e genişletilmişti. */
   font-weight: 300;
   /* Referans mürekkep genişliği 763.8px. Light ağırlıkta metin 11.506em
      (600'de 11.931em idi), dolayısıyla punto 763.8/11.506 = 66.4px =
@@ -55,7 +56,7 @@
    kasıtlı bir ağırlık/renk karşıtlığı kuruyor. */
 .titleWord {
   display: block;
-  /* Müşteri: ExtraBold değil Montserrat Bold. */
+  /* Müşteri: ExtraBold değil Bold (800 değil 700). */
   font-weight: var(--font-weight-heading-bold);
   font-size: clamp(1.6rem, 5.81vw, 6rem);
   color: var(--color-brand-yellow);

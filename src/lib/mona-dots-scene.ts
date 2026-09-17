@@ -20,6 +20,12 @@ attribute vec4 a_eye;    // xyz + bakışı izler mi (iris, gözbebeği)
 attribute vec3 a_heart;
 attribute vec3 a_ring;
 attribute vec3 a_lotus;  // nilüfer (yalnız MonaShard verir; yoksa sabit 0)
+// Galeri: referans görsellerden türetilen silüetler (yüz, kristal, küp,
+// iris — bkz. mona-shapes.ts). Tek öznitelik yuvası; hangi şeklin
+// gösterileceği CPU tarafında TAMPON DEĞİŞTİRİLEREK seçilir, veri yeniden
+// yüklenmez. Şekiller hiç üst üste binmediği (durum makinesi giriş →
+// bekleme → çıkış sırasını tek tek işletir) için tek yuva yetiyor.
+attribute vec3 a_gallery;
 
 uniform float u_time;
 uniform float u_intro;
@@ -38,6 +44,7 @@ uniform float u_flash;
 uniform float u_scatter;
 uniform vec2 u_scatterOrigin;
 uniform vec4 u_shape;    // göz, kalp, halka, nilüfer ağırlıkları
+uniform float u_gallery; // seçili galeri silüetinin ağırlığı
 uniform vec2 u_shift;    // bütün kütlenin kayması (model birimi, yarıçap = 1)
 uniform vec2 u_look;
 uniform float u_blink;
@@ -116,14 +123,21 @@ void main() {
   vec3 lotus = a_lotus;
   lotus.x += (0.03 * sin(u_time * 0.45) + 0.012 * sin(u_time * 1.13 + 1.3)) * (lotus.y + 1.0);
   lotus.xy *= 1.0 + 0.012 * sin(u_time * 0.8 + 0.6);
-  float shapeSum = u_shape.x + u_shape.y + u_shape.z + u_shape.w;
+  // Galeri silüeti: yavaş bir nefes ve çok hafif bir salınım — donmuş bir
+  // görsel değil, duran ama yaşayan bir biçim olsun.
+  vec3 gallery = a_gallery;
+  gallery.xy *= 1.0 + 0.010 * sin(u_time * 0.7);
+  gallery.x += 0.012 * sin(u_time * 0.53 + gallery.y * 1.7);
+  float shapeSum = u_shape.x + u_shape.y + u_shape.z + u_shape.w + u_gallery;
   float shapeWeight = shapeSum * isBody;
-  // Akıntı titreşimi iri şekillerde canlılık, nilüferin ince yaprak
-  // kenarlarında bulanıklık demek (~15 px) — çiçekte dörtte birine iner.
-  float lotusShare = u_shape.w / max(shapeSum, 0.0001);
-  vec3 shaped = (eye * u_shape.x + a_heart * u_shape.y + ring * u_shape.z + lotus * u_shape.w)
+  // Akıntı titreşimi iri şekillerde canlılık, ince kenarlarda bulanıklık
+  // demek (~15 px). Nilüferin yaprak kenarları ve galeri silüetlerinin
+  // konturu (yüz profili, küp ayrıtları) aynı sebeple titreşimi kısar.
+  float crispShare = (u_shape.w + u_gallery) / max(shapeSum, 0.0001);
+  vec3 shaped = (eye * u_shape.x + a_heart * u_shape.y + ring * u_shape.z + lotus * u_shape.w
+               + gallery * u_gallery)
               / max(shapeSum, 0.0001)
-              + (flow * 0.006 + drift * 0.5) * (1.0 - 0.75 * lotusShare);
+              + (flow * 0.006 + drift * 0.5) * (1.0 - 0.75 * crispShare);
   vec3 p = mix(blob, shaped, shapeWeight) * u_scale;
   float depth = p.z / max(length(p), 0.0001);
 
@@ -253,6 +267,12 @@ export interface MonaDotsFrame {
   shapeRing: number;
   /** Nilüfer ağırlığı — bulutta `lotus` hedefi yoksa etkisiz; MONA sayfası hep 0. */
   shapeLotus: number;
+  /**
+   * Seçili galeri silüetinin ağırlığı (yüz/kristal/küp/iris). Hangi şekil
+   * olduğu `selectGallery()` ile ayrıca seçilir — bu yalnız "ne kadar
+   * o şekil" der. Galeri verilmemişse etkisiz.
+   */
+  gallery: number;
   /** Bütün kütlenin kayması, model biriminde (küre yarıçapı = 1; +y yukarı). */
   shiftX: number;
   shiftY: number;
@@ -267,7 +287,8 @@ export const NEUTRAL_FRAME: MonaDotsFrame = {
   time: 0, intro: 1, yaw: 0.6, pitch: 0.28, pointerX: 0.5, pointerY: 0.5, pointerStrength: 0,
   level: 0, parallaxX: 0, parallaxY: 0, scale: 1, dim: 1, flash: 0, scatter: 0,
   scatterOriginX: 0.5, scatterOriginY: 0.5, shapeEye: 0, shapeHeart: 0, shapeRing: 0,
-  shapeLotus: 0, shiftX: 0, shiftY: 0, lookX: 0, lookY: 0, blink: 0, morph: [0, 0, 0, 0],
+  shapeLotus: 0, gallery: 0, shiftX: 0, shiftY: 0, lookX: 0, lookY: 0, blink: 0,
+  morph: [0, 0, 0, 0],
 };
 
 export interface MonaDotsGhost {
@@ -279,6 +300,14 @@ export interface MonaDotsScene {
   resize: () => void;
   /** Önce izleri (eski kareler), sonra ana kareyi çizer. */
   render: (frame: MonaDotsFrame, ghosts?: readonly MonaDotsGhost[]) => void;
+  /**
+   * Galeriden hangi silüetin gösterileceğini seçer (`buildGallery()`
+   * dizisindeki sıra). Yalnız öznitelik işaretçisini başka bir tampona
+   * yöneltir — veri yüklemesi YOK, dolayısıyla kare atlamaz. Şekil
+   * görünürken çağrılmamalı (ağırlık 0'ken değiştirilir), yoksa noktalar
+   * ışınlanır.
+   */
+  selectGallery: (index: number) => void;
   dispose: () => void;
 }
 
@@ -333,8 +362,8 @@ export function monaShardLayout(width: number, height: number): MonaDotsLayout {
 const UNIFORMS = [
   "u_time", "u_intro", "u_rotation", "u_center", "u_radius", "u_aspect", "u_pointer",
   "u_pointerStrength", "u_level", "u_pointSize", "u_parallax", "u_scale", "u_dim", "u_flash",
-  "u_scatter", "u_scatterOrigin", "u_shape", "u_shift", "u_look", "u_blink", "u_morph", "u_ghost",
-  "u_color",
+  "u_scatter", "u_scatterOrigin", "u_shape", "u_gallery", "u_shift", "u_look", "u_blink",
+  "u_morph", "u_ghost", "u_color",
 ] as const;
 
 export function createMonaDotsScene(
@@ -349,6 +378,15 @@ export function createMonaDotsScene(
    * `src/components/mona/MonaShard.tsx`.
    */
   computeLayout: (width: number, height: number) => MonaDotsLayout = monaDotsLayout,
+  /**
+   * Galeri silüetleri (`buildGallery()` çıktısı, `GALLERY_SHAPES` sırasında).
+   * Her biri için ayrı bir GPU tamponu kurulur; şekil değişiminde yalnız
+   * öznitelik işaretçisi yön değiştirir, veri yeniden yüklenmez.
+   *
+   * Boş bırakılırsa öznitelik sabit 0'a düşer ve galeri hiç çalışmaz —
+   * MonaShard gibi yalnız nilüfer kullanan sahneler bunu boş geçer.
+   */
+  gallery: readonly Float32Array[] = [],
 ): MonaDotsScene | null {
   const gl = canvas.getContext("webgl", {
     alpha: false,
@@ -401,6 +439,31 @@ export function createMonaDotsScene(
     return [buffer];
   });
 
+  /**
+   * Galeri tamponları — şekil başına bir tane, hepsi kurulumda yüklenir.
+   * Sahne yalnız görünür alana girince kurulduğu için bu yükleme kritik
+   * yolda değil; karşılığında şekil değişimi bedava oluyor.
+   */
+  const galleryLocation = gl.getAttribLocation(program, "a_gallery");
+  const galleryBuffers: WebGLBuffer[] = [];
+  if (galleryLocation >= 0) {
+    for (const targets of gallery) {
+      const buffer = gl.createBuffer();
+      if (!buffer) continue;
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, targets, gl.STATIC_DRAW);
+      galleryBuffers.push(buffer);
+    }
+    if (galleryBuffers.length > 0) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, galleryBuffers[0]);
+      gl.enableVertexAttribArray(galleryLocation);
+      gl.vertexAttribPointer(galleryLocation, 3, gl.FLOAT, false, 0, 0);
+    } else {
+      gl.disableVertexAttribArray(galleryLocation);
+      gl.vertexAttrib3f(galleryLocation, 0, 0, 0);
+    }
+  }
+
   const u = Object.fromEntries(UNIFORMS.map(name => [name, gl.getUniformLocation(program, name)])) as
     Record<(typeof UNIFORMS)[number], WebGLUniformLocation | null>;
   gl.uniform3fv(u.u_color, new Float32Array(colors.dot));
@@ -449,6 +512,9 @@ export function createMonaDotsScene(
     gl.uniform1f(u.u_scatter, frame.scatter);
     gl.uniform2f(u.u_scatterOrigin, frame.scatterOriginX * 2 - 1, 1 - frame.scatterOriginY * 2);
     gl.uniform4f(u.u_shape, frame.shapeEye, frame.shapeHeart, frame.shapeRing, frame.shapeLotus);
+    // Galeri tamponu yoksa ağırlık zorla 0: öznitelik sabit (0,0,0) olurdu
+    // ve kütle şekil alacağım derken bir noktaya çökerdi.
+    gl.uniform1f(u.u_gallery, galleryBuffers.length > 0 ? frame.gallery : 0);
     gl.uniform2f(u.u_shift, frame.shiftX, frame.shiftY);
     gl.uniform2f(u.u_look, frame.lookX, -frame.lookY);
     gl.uniform1f(u.u_blink, frame.blink);
@@ -470,8 +536,15 @@ export function createMonaDotsScene(
       apply(frame, 1);
       gl.drawArrays(gl.POINTS, 0, narrow ? bodyCount : cloud.count);
     },
+    selectGallery(index) {
+      if (galleryLocation < 0 || galleryBuffers.length === 0) return;
+      const buffer = galleryBuffers[index % galleryBuffers.length];
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.vertexAttribPointer(galleryLocation, 3, gl.FLOAT, false, 0, 0);
+    },
     dispose() {
       buffers.forEach(buffer => gl.deleteBuffer(buffer));
+      galleryBuffers.forEach(buffer => gl.deleteBuffer(buffer));
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragmentShader);

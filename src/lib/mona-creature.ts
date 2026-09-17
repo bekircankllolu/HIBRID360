@@ -15,8 +15,25 @@
  */
 
 export type Mood = "awake" | "sleeping" | "scattered";
-export type ShapeName = "blob" | "eye" | "heart" | "ring";
-export const SHAPES: readonly Exclude<ShapeName, "blob">[] = ["eye", "heart", "ring"];
+
+/**
+ * Referans görsellerden türetilen silüetler (17 Eylül 2026 kullanıcı
+ * isteği: "mona'nın farklı farklı şekiller almasını istiyorum").
+ * Hedef konumları `mona-shapes.ts` üretir; buradaki SIRA oradaki
+ * `GALLERY_SHAPES` ile aynı olmak ZORUNDA — indeks GPU tamponunu seçiyor.
+ * `mona-creature.test.ts` bu eşleşmeyi doğruluyor.
+ *
+ * Burada string olarak tekrarlanıyor çünkü bu modül saf davranış: yoğunluk
+ * haritalarını (900 satır base64) içe aktarmadan çalışabilmeli.
+ */
+export type GalleryName = "face" | "crystal" | "cube" | "iris";
+export const GALLERY: readonly GalleryName[] = ["face", "crystal", "cube", "iris"];
+
+export type ShapeName = "blob" | "eye" | "heart" | "ring" | GalleryName;
+export const SHAPES: readonly Exclude<ShapeName, "blob">[] = ["eye", "heart", "ring", ...GALLERY];
+
+const isGallery = (shape: ShapeName): shape is GalleryName =>
+  (GALLERY as readonly string[]).includes(shape);
 
 export const SLEEP_AFTER = 20;
 const FALL_ASLEEP = 3;
@@ -27,6 +44,12 @@ const SCATTER_HOLD = 1.2;
 const SCATTER_BACK = 2;
 const SHAPE_IN = 1.4;
 const SHAPE_HOLD = 4;
+/**
+ * Galeri silüetleri daha uzun durur: göz/kalp/halka bir anda okunan basit
+ * biçimler, yüz profili ya da kristal fasetaları ise bakılacak detay
+ * taşıyor. 4 saniyede fark edilmeden geçiyorlardı.
+ */
+const GALLERY_HOLD = 6;
 const SHAPE_OUT = 1.4;
 const BLINK_TIME = 0.18;
 /** İrkilme yayı: sertlik ve sönüm (~2 Hz, iki salınımda durulur). */
@@ -67,6 +90,13 @@ export interface CreatureState {
   shapeTimer: number;
   shapeWeight: number;
   nextShapeIn: number;
+  /**
+   * Son seçilen galeri silüetinin indeksi. YAPIŞKAN: şekil göz/kalp/halkaya
+   * geçince sıfırlanmaz. Sahne bu indeksi GPU tamponu seçmek için kullanıyor
+   * ve seçim yalnız ağırlık 0'ken güvenli — değer sürekli oynasaydı
+   * görünürdeki silüet ışınlanırdı.
+   */
+  galleryIndex: number;
   blinkIn: number;
   blinkTimer: number;
   morph: Vec4;
@@ -88,6 +118,10 @@ export interface CreatureFrame {
   scatterOrigin: [number, number];
   /** Göz, kalp, halka ağırlıkları (toplamı ≤ 1). */
   shapeWeights: [number, number, number];
+  /** Galeri silüetinin ağırlığı — galeri dışı bir şekildeyken 0. */
+  gallery: number;
+  /** Hangi galeri silüeti (yapışkan indeks, `GALLERY` sırası). */
+  galleryIndex: number;
   blink: number;
   morph: Vec4;
 }
@@ -120,6 +154,7 @@ export function createCreature(random: () => number): CreatureState {
     shapeWeight: 0,
     // İlk şekil ilk ziyarette görülsün diye daha erken gelir.
     nextShapeIn: 10 + random() * 6,
+    galleryIndex: 0,
     blinkIn: 2.5 + random() * 2,
     blinkTimer: 0,
     morph,
@@ -216,6 +251,9 @@ export function stepCreature(
     if (s.nextShapeIn <= 0) {
       const options = SHAPES.filter(shape => shape !== s.shape);
       s.shape = options[Math.floor(random() * options.length)];
+      // Tampon seçimi burada sabitlenir: ağırlık henüz 0, silüet görünmüyor.
+      // Görünürken değişseydi noktalar bir kareden diğerine ışınlanırdı.
+      if (isGallery(s.shape)) s.galleryIndex = GALLERY.indexOf(s.shape);
       s.shapeStage = "in";
       s.shapeTimer = 0;
     }
@@ -227,7 +265,8 @@ export function stepCreature(
       if (s.shapeTimer >= SHAPE_IN) { s.shapeStage = "hold"; s.shapeTimer = 0; }
     } else if (s.shapeStage === "hold") {
       s.shapeWeight = 1;
-      if (s.shapeTimer >= SHAPE_HOLD) { s.shapeStage = "out"; s.shapeTimer = 0; }
+      const hold = isGallery(s.shape) ? GALLERY_HOLD : SHAPE_HOLD;
+      if (s.shapeTimer >= hold) { s.shapeStage = "out"; s.shapeTimer = 0; }
     } else {
       s.shapeWeight = Math.max(0, s.shapeWeight - step / SHAPE_OUT);
       if (s.shapeWeight <= 0) {
@@ -262,6 +301,7 @@ export function creatureFrame(s: CreatureState): CreatureFrame {
     s.shape === "heart" ? weight : 0,
     s.shape === "ring" ? weight : 0,
   ];
+  const gallery = isGallery(s.shape) ? weight : 0;
   const breath = Math.sin(s.breathPhase) * (0.015 + 0.03 * sleep);
   const scale = (1 - 0.28 * sleep) * (1 + s.squash) * (1 + 0.06 * s.wake)
     * (1 + breath) * (1 + 0.06 * heartbeat(s.clock) * weights[1]);
@@ -275,6 +315,8 @@ export function creatureFrame(s: CreatureState): CreatureFrame {
     scatter: s.scatter,
     scatterOrigin: s.scatterOrigin,
     shapeWeights: weights,
+    gallery,
+    galleryIndex: s.galleryIndex,
     blink: s.blinkTimer > 0 ? Math.sin(Math.PI * (1 - s.blinkTimer / BLINK_TIME)) : 0,
     morph: s.morph,
   };

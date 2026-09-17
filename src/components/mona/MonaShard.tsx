@@ -268,6 +268,9 @@ export function MonaShard() {
         shapeHeart: 0,
         shapeRing: 0,
         shapeLotus: bloom,
+        // Creative'in parçası yalnız nilüfer kullanır (DECISIONS #48);
+        // galeri silüetleri MONA'nın kendi sohbet sahnesine ait.
+        gallery: 0,
         shiftX: shift.x,
         shiftY: shift.y,
         lookX: look.x,

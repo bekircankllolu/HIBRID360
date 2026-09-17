@@ -75,9 +75,12 @@
   width: min(68rem, 100%);
 }
 
+/* Logo rolü: --font-brand DEĞİL --font-logo. Bu literal "Hibrid 360"
+   render'ı; kullanıcı isteği üzerine eskisi gibi Montserrat'ta kalıyor,
+   sitenin geri kalanının Archivo'ya geçmesinden etkilenmiyor. */
 .eyebrow {
   margin: 0 0 clamp(2rem, 5vh, 4rem);
-  font-family: var(--font-brand);
+  font-family: var(--font-logo);
   font-size: 0.875rem;
   font-weight: var(--font-weight-brand);
   text-transform: uppercase;

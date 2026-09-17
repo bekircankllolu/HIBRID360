@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { BrandIdent } from "@/components/ui/BrandIdent";
 import { WorkArchive } from "@/components/work/WorkArchive";
 import type { Locale } from "@/i18n/routing";
 import { getPublishedWorks } from "@/lib/content";
@@ -76,6 +77,11 @@ export default async function WorkPage({
         confidentialLabel={t("confidentialClient")}
         initialService={service}
       />
+
+      {/* Arşiv ile kapanış çağrısı arasında bir marka anı. Burası daha önce
+          boş siyah bir aralıktı; bant hem o boşluğu dolduruyor hem de işler
+          bittikten sonra sayfayı markaya geri bağlıyor. */}
+      <BrandIdent />
 
       <div className={styles.outro}>
         <p className={styles.seoHeading}>{t("tagline")}</p>
