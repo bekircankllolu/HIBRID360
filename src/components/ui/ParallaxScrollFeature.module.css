@@ -1,0 +1,39 @@
+/* `position: relative`: framer-motion'ın kaydırma ölçümü hedefi konumlu ister. */
+.figure {
+  position: relative;
+  margin: 0;
+}
+
+/*
+ * Dar ekranda yatay bir kare. Yan yana düzende kare, ama listenin dinlenme
+ * boyundan (10 kalem × ~68 px ≈ 42,5rem) uzun değil — kullanıcının çizdiği
+ * kutu listenin boyundaydı. Geniş ekranda kare yerine yatay dikdörtgen
+ * olur; `object-fit: cover` figürü ortada tutar.
+ */
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 1024px) {
+  .frame {
+    aspect-ratio: 1 / 1;
+    max-height: 42.5rem;
+  }
+}
+
+.reveal {
+  position: absolute;
+  inset: 0;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.caption {
+  margin-top: var(--space-4);
+  font-size: var(--font-size-micro);
+  line-height: 1.4;
+  color: var(--text-muted);
+}

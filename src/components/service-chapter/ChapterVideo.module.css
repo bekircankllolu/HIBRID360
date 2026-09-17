@@ -1,0 +1,40 @@
+/*
+ * ChapterVideo — medya sahnesini kaplar; konumlandırma (pencere, şerit)
+ * onu saran bölümün işi. Ebeveynin `position: relative` olması beklenir.
+ */
+.media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--color-brand-black);
+}
+
+/*
+ * Keskin köşe (sistemin köşe kuralı 0). 44px dokunma hedefi. Siyah zemin
+ * + beyaz ikon her film karesinde okunur; hover'da sarı (sarı = odak).
+ */
+/* Konum, saran bölüm isterse `--toggle-top/--toggle-right` ile değişir
+   (ör. S2'de buton büyüyen pencerenin köşesini izler, kırpılmaz). */
+.toggle {
+  position: absolute;
+  top: var(--toggle-top, var(--space-4));
+  right: var(--toggle-right, var(--space-4));
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  cursor: pointer;
+  transition: color 180ms var(--ease-house), border-color 180ms var(--ease-house);
+}
+
+.toggle:hover,
+.toggle:focus-visible {
+  color: var(--color-brand-yellow);
+  border-color: var(--color-brand-yellow);
+}
