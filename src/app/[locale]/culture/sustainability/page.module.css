@@ -2,6 +2,8 @@
   margin: var(--space-12) 0 var(--space-16);
   padding: clamp(2rem, 6vw, 5rem);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
 }
 

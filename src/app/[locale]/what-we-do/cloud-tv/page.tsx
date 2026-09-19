@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { ServiceChapter } from "@/components/service-chapter/ServiceChapter";
 import detailStyles from "@/components/service-chapter/ServiceChapter.module.css";
 import { ServiceSignatureVideo } from "@/components/service-chapter/ServiceSignatureVideo";
@@ -11,8 +12,6 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { nextChapter } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
-
-const SERVICES = ["CONTENT", "INFRASTRUCTURE", "TRAINING & OPERATION"] as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -40,7 +39,7 @@ export default async function CloudTvPage({ params }: { params: Promise<{ locale
         titleLines={["CLOUD", "TV"]}
         lede="THERE IS NO TIME LIKE RIGHT NOW."
         body={[t("body"), ...bandBody]}
-        services={SERVICES}
+        services={SERVICE_OFFERINGS.cloudTv}
         visual={{ src: siteImages.services.cloudTv.src, alt: siteImages.services.cloudTv.alt[locale] }}
         shape="cloud"
         blurb={blurb}

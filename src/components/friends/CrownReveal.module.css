@@ -13,15 +13,37 @@
   background: #000;
 }
 
+/*
+ * Kadraj: `cover` — sahne viewport'u tamamen doldurur, kenarda şerit kalmaz.
+ *
+ * Neden maske: filmin zemini SAF SİYAH DEĞİL. Kaynakta köşeler RGB ≈ 32/21/12
+ * ve taç parladıkça zemin daha da yükseliyor (son karede ≈ 54/38/20). Encode'da
+ * siyah noktası çekildi ama parıltıyı kesmemek için tam sıfıra indirilmedi;
+ * kalan fark siyah sayfa üzerinde görünür bir dikdörtgen yapıyordu (kullanıcı:
+ * "kenarlarda boşluk kalmasın"). Maske filmin dört kenarını sayfaya eritiyor:
+ * dikdörtgen kenarı hiçbir ekran oranında görünmüyor, parıltı korunuyor.
+ */
 .video {
   position: absolute;
   inset: 0;
   z-index: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   background: #000;
+  -webkit-mask-image: radial-gradient(
+    ellipse 96% 92% at 50% 50%,
+    #000 58%,
+    rgba(0, 0, 0, 0.55) 84%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 96% 92% at 50% 50%,
+    #000 58%,
+    rgba(0, 0, 0, 0.55) 84%,
+    transparent 100%
+  );
 }
 
 .title {
@@ -86,8 +108,25 @@
     height: 320svh;
   }
 
+  /* Dar ekranda `cover` 16:9 filmi yatayda ~2.2 kat büyütür ve tacın yanları
+     kadraj dışında kalırdı. Burada film genişliğe oturur (`contain`), taç tam
+     görünür; üstte/altta kalan alan maskeyle sayfaya eridiği için şerit
+     görünmez. */
   .video {
-    transform: scale(1.34);
+    object-fit: contain;
+    transform: scale(1.12);
+    -webkit-mask-image: radial-gradient(
+      ellipse 104% 62% at 50% 50%,
+      #000 46%,
+      rgba(0, 0, 0, 0.5) 78%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 104% 62% at 50% 50%,
+      #000 46%,
+      rgba(0, 0, 0, 0.5) 78%,
+      transparent 100%
+    );
   }
 
   .title {

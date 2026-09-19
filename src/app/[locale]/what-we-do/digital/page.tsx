@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { ServiceChapter } from "@/components/service-chapter/ServiceChapter";
 import detailStyles from "@/components/service-chapter/ServiceChapter.module.css";
 import { ServiceSignatureVideo } from "@/components/service-chapter/ServiceSignatureVideo";
@@ -11,8 +12,6 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { nextChapter } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
-
-const SERVICES = ["WEB DESIGN", "WEB DEVELOPMENT", "SEM & SEO", "SEEDING", "MAILING", "BANNERS", "SOCIAL MEDIA MANAGEMENT", "SOCIAL MEDIA ADVERTISING STRATEGY", "VIRAL VIDEOS", "E-NEWS", "GIF"] as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -45,7 +44,7 @@ export default async function DigitalPage({ params }: { params: Promise<{ locale
         titleLines={["BUILT FOR THE FEED.", "MADE TO MOVE."]}
         lede={body[0]}
         body={bandBody}
-        services={SERVICES}
+        services={SERVICE_OFFERINGS.digital}
         visual={{ src: siteImages.services.digital.src, alt: siteImages.services.digital.alt[locale] }}
         shape="cursor"
         blurb={blurb}

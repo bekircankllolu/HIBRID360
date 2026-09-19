@@ -179,6 +179,8 @@
 .yellowBand {
   padding: clamp(3rem, 8vw, 6rem) var(--gutter);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
 }
 
@@ -295,6 +297,8 @@
 .inlineLink:hover,
 .inlineLink:focus-visible {
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   border-bottom-color: transparent;
 }
@@ -371,6 +375,8 @@
 
 .mapFallback a:hover {
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   border-bottom-color: transparent;
 }
@@ -460,6 +466,8 @@
 
 .bookingLinks a:hover {
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   border-bottom-color: transparent;
 }

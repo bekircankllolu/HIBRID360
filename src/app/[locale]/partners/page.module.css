@@ -1,0 +1,207 @@
+/**
+ * Partners — sayfaya özgü yerleşim.
+ *
+ * 19 Eylül 2026 kullanıcı geri bildirimi: *"Bu sayfayı biraz daha düzgün
+ * ele alabiliriz. Şu an sayfanın içeriği çok kısıtlı, farkındayım... ama
+ * bu sayfanın profesyonel bir dokunuşa ihtiyacı var, hem tipografi hem
+ * tasarım anlamında. Şu an çok sade ve düz duruyor, bir olay yok."*
+ *
+ * İÇERİK EKLENMEDİ — eklenemezdi: Marry Me Kitchen'ın onaylı bir
+ * açıklaması yok ve uydurulmaz (CLAUDE.md). Arşivde de bu iki ortağa ait
+ * bir fotoğraf bulunmadı; alakasız bir arşiv karesi koymak o görseli
+ * ortağın işiymiş gibi gösterirdi.
+ *
+ * Değişen tamamen TASARIM:
+ *
+ * 1. Sayfanın ağırlık merkezi ALINTI oldu. Sayfadaki en iyi metin oydu
+ *    ama gövde puntosunda, diğer paragrafların arasında duruyordu.
+ *    Şimdi tam genişlik editoryal bir an.
+ * 2. Ortaklar numaralı bir dizin (01 · 02) — sitenin diğer sayfalarında
+ *    kurulan sayma diliyle aynı.
+ * 3. Eksik açıklama GİZLENMİYOR: sitenin standart "içerik hazırlanıyor"
+ *    işaretiyle açıkça duruyor.
+ */
+
+/* ---------- Alıntı ---------- */
+
+.statement {
+  margin-top: clamp(2rem, 6vw, 5rem);
+  padding-block: clamp(3rem, 8vw, 8rem);
+  border-top: 1px solid var(--color-hairline);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+/*
+ * Editoryal serif — alıntı sesi (bkz. culture-page.module.css .quote
+ * notu: Archivo'nun gerçek italiği yok, sahte oblik kullanılmıyor).
+ */
+.quote {
+  max-width: 20ch;
+  margin: 0;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 5.2vw, 5rem);
+  line-height: 1.06;
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-brand-yellow);
+  text-wrap: balance;
+}
+
+.quoteAuthor {
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ---------- Ortak dizini ---------- */
+
+.list {
+  list-style: none;
+  margin: clamp(3rem, 7vw, 6rem) 0 0;
+  padding: 0;
+}
+
+.item {
+  --reveal: clamp(0, (var(--progress, 1) - 0.04) / 0.22, 1);
+
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 3.5rem) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 4vw, 4rem);
+  align-items: start;
+  padding-block: clamp(2rem, 4.5vw, 4.5rem);
+  opacity: var(--reveal);
+  transform: translate3d(0, calc(2rem * (1 - var(--reveal))), 0);
+}
+
+.index {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-body-medium);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  color: var(--color-brand-yellow);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(1.75rem, 4.2vw, 4rem);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  color: var(--color-text-on-black);
+  transition: translate 420ms var(--ease-house);
+}
+
+.row:hover .name {
+  translate: 0.35rem 0;
+}
+
+.detail {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.body {
+  margin: 0;
+  max-width: var(--measure-prose);
+  font-family: var(--font-ui);
+  font-size: clamp(1rem, 1.3vw, 1.1875rem);
+  line-height: 1.6;
+  color: var(--color-text-on-black);
+}
+
+.link {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15rem;
+  transition: color 200ms var(--ease-house);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-brand-fuchsia);
+}
+
+/* Onaylı açıklaması olmayan ortak: boş bırakılmıyor, durumu yazıyor. */
+.pending {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pendingDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  background: var(--color-brand-fuchsia);
+}
+
+/* Satırın altından soldan sağa akan sarı hairline — imleç tepkisi. */
+.sweep {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--color-brand-yellow);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 520ms var(--ease-house);
+}
+
+.row:hover .sweep {
+  transform: scaleX(1);
+}
+
+@media (max-width: 800px) {
+  .row {
+    grid-template-columns: minmax(0, 2.5rem) minmax(0, 1fr);
+  }
+
+  .detail {
+    grid-column: 2;
+  }
+}
+
+/* CLAUDE.md: prefers-reduced-motion zorunlu destek. */
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .name {
+    translate: none !important;
+    transition: none !important;
+  }
+
+  .sweep {
+    display: none;
+  }
+}

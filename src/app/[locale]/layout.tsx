@@ -89,7 +89,7 @@ export default async function LocaleLayout({
     <html lang={locale} data-consent="pending" suppressHydrationWarning>
       <head>
         {/* Gövde fontu ilk boyamada gereken tek font — preload edilir.
-            Başlık ve editoryal aileler (Archivo, Instrument Serif) preload
+            Başlık ve editoryal aileler (Archivo, Newsreader) preload
             EDİLMEZ: kritik yolu meşgul etmesinler, metrik uyumlu yedekle
             çizilip display:swap ile hemen sonra yerlerine otururlar. */}
         <link

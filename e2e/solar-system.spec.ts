@@ -1,651 +1,265 @@
-import { expect, test, type Page, type Locator } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import sharp from "sharp";
 import { acceptCookies } from "./utils";
-import {
-  CRYSTAL_MEDIA,
-  orbitStones,
-  ORBIT_RINGS,
-  ORBIT_TILT,
-  ORBIT_VIEW,
-} from "../src/data/solar-system";
+import { CRYSTAL_MEDIA, orbitStones } from "../src/data/solar-system";
+import { SERVICE_OFFERINGS } from "../src/data/service-offerings";
 
-const title = "One Hybrid Production Ecosystem.";
+/**
+ * Hibrid ekosistemi — 3B uzay sahnesi (18 Eylül 2026).
+ *
+ * Sahne Canvas 2B'den WebGL'e taşındı: düz noktalar yerine gerçek gezegenler,
+ * gerçek Kepler yörüngeleri, tıklanınca kameranın uçtuğu bir odak kipi.
+ * Bu dosya o yeni sözleşmeyi bekçiliyor. Eski sürümün sürükleme ve
+ * "kristali kaydırarak sar" testleri KALDIRILDI — o etkileşimler artık yok
+ * (gezegen sürüklenmiyor, kamera döndürülüyor).
+ *
+ * Korunan sözleşmeler (eski dosyadan taşındı, hâlâ geçerli):
+ * - medya görünür alana girmeden indirilmiyor,
+ * - duraklat düğmesi sahneyi gerçekten donduruyor,
+ * - hareket azaltmada tek statik kare,
+ * - klavyeyle gezinme + Escape ile kapanış ve odak dönüşü,
+ * - üç ekran genişliğinde sahne boş değil ve detay paneli kırpılmıyor.
+ *
+ * Piksel kontrolleri MONA sahnesindeki kalıbı izliyor: canvas'tan 2B bağlam
+ * okunamayacağı için ekran görüntüsü alınıp `sharp` ile ölçülüyor.
+ */
 
-async function aimAtMovingPoint(page: Page, button: Locator) {
-  const box = (await button.boundingBox())!;
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(button).toBeVisible();
-}
-const services = [
-  "PRODUCTION",
-  "DIGITAL",
-  "CREATIVE",
-  "AI CREATIVE PRODUCTION",
-  "LIVE BROADCAST",
-  "CLOUD TV",
-  "POST PRODUCTION",
-  "EVENT MANAGEMENT",
-];
+const services = orbitStones.map((stone) => stone.label);
 
 async function openScene(page: Page, locale = "tr", reduced = false) {
   await page.goto(`/${locale}`);
   await acceptCookies(page);
   const stage = page.getByTestId("ecosystem-stage");
   await stage.scrollIntoViewIfNeeded();
-  await expect(stage).toHaveAttribute(
-    "data-motion",
-    reduced ? "paused" : "running",
-  );
+  await expect(stage).toHaveAttribute("data-motion", reduced ? "paused" : "running");
+  // WebGL kurulmalı; kurulamazsa bileşen poster'a düşer ve bunu söyler.
+  await expect(stage).toHaveAttribute("data-scene", "webgl", { timeout: 30_000 });
   if (!reduced) {
-    await expect
-      .poll(() =>
-        stage.locator("video").evaluate((v: HTMLVideoElement) => v.readyState),
-      )
-      .toBeGreaterThanOrEqual(2);
-    await expect
-      .poll(() =>
-        stage.locator("canvas").evaluate((c: HTMLCanvasElement) => {
-          const data = c
-            .getContext("2d")!
-            .getImageData(
-              c.width * 0.44,
-              c.height * 0.42,
-              c.width * 0.12,
-              c.height * 0.15,
-            ).data;
-          let bright = 0;
-          for (let i = 0; i < data.length; i += 4) if (data[i] > 100) bright++;
-          return bright;
-        }),
-      )
-      .toBeGreaterThan(100);
+    await expect(stage).toHaveAttribute("data-running", "true", { timeout: 30_000 });
   }
-  return {
-    stage,
-    region: page.getByRole("region", { name: title, exact: true }),
-    video: stage.locator("video"),
-  };
+  return stage;
 }
 
-test("crystal pauses on hover, ignores scroll while held, then resumes", async ({
-  page,
-}) => {
-  const { video } = await openScene(page);
-  await page.getByTestId("crystal-hit").hover();
-  await expect
-    .poll(() => video.evaluate((v: HTMLVideoElement) => v.paused))
-    .toBe(true);
-  const held = await video.evaluate((v: HTMLVideoElement) => v.currentTime);
-  await page.mouse.wheel(0, 24);
-  await page.waitForTimeout(250);
-  expect(
-    await video.evaluate((v: HTMLVideoElement) => v.currentTime),
-  ).toBeCloseTo(held, 1);
-  await page.mouse.move(2, 100);
-  await expect
-    .poll(() =>
-      video.evaluate((v: HTMLVideoElement) => ({
-        mode: v.parentElement!.dataset.mediaMode,
-        paused: v.paused,
-        seeking: v.seeking,
-        readyState: v.readyState,
-        currentTime: v.currentTime,
-        duration: v.duration,
-      })),
-    )
-    .toMatchObject({ mode: "idle", paused: false });
-});
+/** Sahnenin ne kadarı aydınlık — "boş siyah kutu" nöbetçisi. */
+async function litFraction(buffer: Buffer): Promise<number> {
+  const { data } = await sharp(buffer).removeAlpha().resize(160, 100, { fit: "fill" }).raw().toBuffer({ resolveWithObject: true });
+  let lit = 0;
+  for (let i = 0; i < data.length; i += 3) {
+    if (data[i] > 40 || data[i + 1] > 40 || data[i + 2] > 40) lit++;
+  }
+  return lit / (data.length / 3);
+}
 
-test("scroll scrubs in both directions without resetting playback", async ({
-  page,
-}) => {
-  const { stage, video } = await openScene(page);
-  await page.mouse.move(5, 150);
-  const duration = await video.evaluate((v: HTMLVideoElement) => v.duration);
-  const before = await video.evaluate((v: HTMLVideoElement) => v.currentTime);
-  const samples: unknown[] = [];
-  await page.mouse.wheel(0, 120);
-  await expect(stage).toHaveAttribute("data-media-mode", "scrub");
-  await expect
-    .poll(async () => {
-      const state = await video.evaluate((v: HTMLVideoElement) => ({
-        time: v.currentTime,
-        mode: v.parentElement!.dataset.mediaMode,
-        paused: v.paused,
-        seeking: v.seeking,
-        ready: v.readyState,
-        scroll: scrollY,
-      }));
-      samples.push(state);
-      return ((state.time - before + duration * 1.5) % duration) - duration / 2;
-    })
-    .toBeGreaterThan(0.3)
-    .catch(async (error) => {
-      await test.info().attach("scroll-media-state", {
-        body: JSON.stringify({ before, duration, samples }),
-        contentType: "application/json",
-      });
-      throw error;
-    });
-  const forward = await video.evaluate((v: HTMLVideoElement) => v.currentTime);
-  await page.mouse.wheel(0, -160);
-  await expect(stage).toHaveAttribute("data-media-mode", "scrub");
-  await expect
-    .poll(async () => {
-      const now = await video.evaluate((v: HTMLVideoElement) => v.currentTime);
-      return ((forward - now + duration * 1.5) % duration) - duration / 2;
-    })
-    .toBeGreaterThan(0.3);
-  await expect
-    .poll(() =>
-      video.evaluate((v: HTMLVideoElement) => ({
-        mode: v.parentElement!.dataset.mediaMode,
-        paused: v.paused,
-        seeking: v.seeking,
-        readyState: v.readyState,
-        currentTime: v.currentTime,
-        duration: v.duration,
-      })),
-    )
-    .toMatchObject({ mode: "idle", paused: false });
-});
+test("sahne yıldız, gezegenler ve yörüngelerle çiziliyor", async ({ page }, info) => {
+  const stage = await openScene(page);
+  await page.waitForTimeout(2500);
+  const shot = await stage.screenshot();
+  await page.screenshot({ path: info.outputPath("solar-wide.png") });
+  // Yıldız + gezegenler + yıldız alanı: kareye dağılmış aydınlık pikseller.
+  expect(await litFraction(shot)).toBeGreaterThan(0.04);
 
-test("all eight points can be dragged and return without opening details", async ({
-  page,
-}) => {
-  test.setTimeout(60_000);
-  const { region, stage } = await openScene(page);
-  for (const name of services) {
-    const button = region.getByRole("button", { name, exact: true });
-    await aimAtMovingPoint(page, button);
-    const start = (await button.boundingBox())!;
-    const x = start.x + start.width / 2;
-    const y = start.y + start.height / 2;
-    await page.mouse.move(x, y);
-    await page.mouse.down();
-    await page.mouse.move(x + (x > 650 ? -90 : 90), y - 65, { steps: 14 });
-    await expect(button).toHaveAttribute("data-dragging", "true");
-    const moved = (await button.boundingBox())!;
-    expect(Math.hypot(moved.x - start.x, moved.y - start.y)).toBeGreaterThan(
-      60,
-    );
-    await page.mouse.up();
-    await expect(button).toHaveAttribute("data-dragging", "false");
-    await expect(button.locator("..")).toHaveAttribute(
-      "data-returning",
-      "false",
-      { timeout: 3000 },
-    );
-    await expect(region.locator("#ecosystem-detail")).toBeHidden();
-    await expect
-      .poll(async () => {
-        const returned = (await button.boundingBox())!;
-        const scene = (await stage.boundingBox())!;
-        const stone = orbitStones.find((item) => item.label === name)!;
-        const radius = ORBIT_RINGS[stone.ring];
-        const dx =
-          ((returned.x + returned.width / 2 - scene.x) / scene.width) *
-            ORBIT_VIEW.w -
-          ORBIT_VIEW.cx;
-        const dy =
-          ((returned.y + returned.height / 2 - scene.y) / scene.height) *
-            ORBIT_VIEW.h -
-          ORBIT_VIEW.cy;
-        // WebKit does not focus a button on mouse-down, so its orbit keeps moving.
-        return Math.abs(
-          (dx / radius) ** 2 + (dy / (radius * ORBIT_TILT)) ** 2 - 1,
-        );
-      })
-      .toBeLessThan(0.12);
+  // Sekiz gezegenin etiketi de sahnenin İÇİNDE duruyor (kadraj dışına
+  // düşen bir gezegen tıklanamaz olurdu).
+  const box = (await stage.boundingBox())!;
+  for (const label of services) {
+    const button = page.getByRole("button", { name: label, exact: true });
+    const target = (await button.boundingBox())!;
+    expect(target.x).toBeGreaterThanOrEqual(box.x - 4);
+    expect(target.x + target.width).toBeLessThanOrEqual(box.x + box.width + 4);
+    expect(target.y).toBeGreaterThanOrEqual(box.y - 4);
+    expect(target.y + target.height).toBeLessThanOrEqual(box.y + box.height + 4);
   }
 });
 
-test("Escape releases a captured drag and the next click still opens details", async ({
-  page,
-}) => {
-  const { region } = await openScene(page);
-  const button = region.getByRole("button", { name: "CREATIVE", exact: true });
-  await aimAtMovingPoint(page, button);
-  const box = (await button.boundingBox())!;
-  await page.mouse.down();
-  await page.mouse.move(box.x + 100, box.y - 70, { steps: 8 });
-  await expect(button).toHaveAttribute("data-dragging", "true");
-  await page.keyboard.press("Escape");
-  await page.mouse.up();
-  await expect(button).toHaveAttribute("data-dragging", "false");
-  await expect(button.locator("..")).toHaveAttribute("data-returning", "false");
-  await aimAtMovingPoint(page, button);
-  const returned = (await button.boundingBox())!;
-  await page.mouse.click(
-    returned.x + returned.width / 2,
-    returned.y + returned.height / 2,
-  );
-  await expect(
-    region.getByRole("heading", { name: "CREATIVE", exact: true }),
-  ).toBeVisible();
+test("gezegene odaklanınca kamera yaklaşıyor, panel hizmetin tamamını gösteriyor", async ({ page }) => {
+  const stage = await openScene(page);
+  await page.waitForTimeout(2000);
+  // Gezegenin ekrandaki yarıçapı: bileşen her karede `--ring` değişkenine
+  // yazıyor (odak halkasının çapı). Kameranın yaklaşıp yaklaşmadığının
+  // doğrudan ölçüsü bu — "aydınlık piksel oranı" yanıltıcı, çünkü odakta
+  // yıldız ve yörüngeler kadraj dışında kalıyor.
+  const ringPx = async () =>
+    Number.parseFloat(
+      await page
+        .locator("[data-testid='ecosystem-stage'] [class*='point__']")
+        .nth(5)
+        .evaluate((el) => getComputedStyle(el).getPropertyValue("--ring")),
+    );
+  const wideRing = await ringPx();
+
+  const button = page.getByRole("button", { name: "CLOUD TV", exact: true });
+  // Gezegen hareket ediyor: klavye yolu hem kararlı hem erişilebilir yol.
+  await button.focus();
+  await page.keyboard.press("Enter");
+
+  await expect(stage).toHaveAttribute("data-focus", "CLOUD TV");
+  const detail = page.locator("#ecosystem-detail");
+  await expect(detail).toBeVisible();
+  await expect(detail.getByRole("heading", { level: 3 })).toHaveText("CLOUD TV");
+
+  // Panel artık tek satırlık tanımla yetinmiyor: hizmet kapsamının tamamı.
+  for (const offering of SERVICE_OFFERINGS.cloudTv) {
+    await expect(detail.getByText(offering, { exact: true })).toBeVisible();
+  }
+  await expect(detail.getByRole("link")).toHaveAttribute("href", "/tr/what-we-do/cloud-tv");
+
+  // Kamera gerçekten yaklaşmalı: Cloud TV (6. gezegen) ekranda en az üç
+  // katına çıkmalı.
+  await page.waitForTimeout(2800);
+  expect(await ringPx()).toBeGreaterThan(wideRing * 3);
 });
 
-for (const locale of ["tr", "en"]) {
-  test(`${locale}: keyboard details, real links, dismissal and focus return`, async ({
-    page,
-  }) => {
-    const { region } = await openScene(page, locale);
-    const button = region.getByRole("button", {
-      name: "PRODUCTION",
-      exact: true,
-    });
-    await button.focus();
-    await page.keyboard.press("Enter");
-    await expect(button).toHaveAttribute("aria-expanded", "true");
-    await expect(
-      region.getByRole("link", {
-        name: locale === "tr" ? "Detaya git" : "View details",
-      }),
-    ).toHaveAttribute("href", `/${locale}/what-we-do/production`);
-    const accessibility = await new AxeBuilder({ page })
-      .include('section[aria-labelledby="solar-system-title"]')
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      .analyze();
-    expect(accessibility.violations).toEqual([]);
-    await region
-      .getByRole("button", {
-        name: locale === "tr" ? "Detayı kapat" : "Close details",
-      })
-      .click();
-    await expect(button).toBeFocused();
-    await expect(button).toHaveAttribute("aria-expanded", "false");
+test("boşluğa tıklayınca odak bırakılıyor", async ({ page }) => {
+  const stage = await openScene(page);
+  await page.getByRole("button", { name: "CREATIVE", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await expect(stage).toHaveAttribute("data-focus", "CREATIVE");
+
+  const box = (await stage.boundingBox())!;
+  // Sahnenin sol alt köşesi: gezegen de panel de orada değil.
+  await page.mouse.click(box.x + 40, box.y + box.height - 40);
+  await expect(stage).toHaveAttribute("data-focus", "none");
+  await expect(page.locator("#ecosystem-detail")).toBeHidden();
+});
+
+for (const locale of ["tr", "en"] as const) {
+  test(`${locale}: klavyeyle gezinme, gerçek bağlantılar, Escape ile kapanış`, async ({ page }) => {
+    const stage = await openScene(page, locale);
+    for (const [index, stone] of orbitStones.entries()) {
+      const button = page.getByRole("button", { name: stone.label, exact: true });
+      await button.focus();
+      await expect(button).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(stage).toHaveAttribute("data-focus", stone.label);
+      const detail = page.locator("#ecosystem-detail");
+      await expect(detail.getByRole("link")).toHaveAttribute(
+        "href",
+        `/${locale}${stone.href}`,
+      );
+      // Escape kapatır ve odağı tetikleyen düğmeye geri verir.
+      await page.keyboard.press("Escape");
+      await expect(detail).toBeHidden();
+      await expect(button).toBeFocused();
+      if (index === 0) {
+        const accessibility = await new AxeBuilder({ page })
+          .include("[data-testid='ecosystem-stage']")
+          .analyze();
+        expect(accessibility.violations).toEqual([]);
+      }
+    }
   });
 }
 
-test("manual pause freezes the canvas and offscreen video stops", async ({
-  page,
-}) => {
-  const { region, stage, video } = await openScene(page);
-  await region.getByRole("button", { name: "Animasyonu duraklat" }).click();
+test("duraklat düğmesi sahneyi donduruyor", async ({ page }) => {
+  const stage = await openScene(page);
+  await page.waitForTimeout(1500);
+  const before = (await page.getByRole("button", { name: "PRODUCTION", exact: true }).boundingBox())!;
+  await page.waitForTimeout(1500);
+  const moving = (await page.getByRole("button", { name: "PRODUCTION", exact: true }).boundingBox())!;
+  expect(Math.hypot(moving.x - before.x, moving.y - before.y)).toBeGreaterThan(1);
+
+  await page.getByRole("button", { name: /duraklat/i }).click();
   await expect(stage).toHaveAttribute("data-motion", "paused");
-  const image = await stage
-    .locator("canvas")
-    .evaluate((c: HTMLCanvasElement) => c.toDataURL());
-  const held = await video.evaluate((v: HTMLVideoElement) => v.currentTime);
-  await page.waitForTimeout(200);
-  expect(
-    await stage
-      .locator("canvas")
-      .evaluate((c: HTMLCanvasElement) => c.toDataURL()),
-  ).toBe(image);
-  expect(await video.evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(
-    held,
-  );
-  await region.getByRole("button", { name: "Animasyonu sürdür" }).click();
-  await expect(stage).toHaveAttribute("data-motion", "running");
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-  await expect(stage).toHaveAttribute("data-motion", "paused");
-  await expect
-    .poll(() => video.evaluate((v: HTMLVideoElement) => v.paused))
-    .toBe(true);
+  await page.waitForTimeout(600);
+  const paused = (await page.getByRole("button", { name: "PRODUCTION", exact: true }).boundingBox())!;
+  await page.waitForTimeout(1800);
+  const still = (await page.getByRole("button", { name: "PRODUCTION", exact: true }).boundingBox())!;
+  expect(Math.hypot(still.x - paused.x, still.y - paused.y)).toBeLessThan(1);
 });
 
-test("reduced motion uses a nonblank poster, including after resize", async ({
-  page,
-}) => {
-  const requests: string[] = [];
-  page.on("request", (request) => requests.push(request.url()));
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  const { stage, region, video } = await openScene(page, "tr", true);
-  await expect(video).not.toHaveAttribute("src");
-  await expect
-    .poll(() =>
-      stage.locator("canvas").evaluate((c: HTMLCanvasElement) => {
-        const pixels = c
-          .getContext("2d")!
-          .getImageData(
-            c.width * 0.4,
-            c.height * 0.35,
-            c.width * 0.2,
-            c.height * 0.3,
-          ).data;
-        return pixels.filter((value, index) => index % 4 === 0 && value > 100)
-          .length;
-      }),
-    )
-    .toBeGreaterThan(200);
-  await page.setViewportSize({ width: 390, height: 844 });
-  await stage.scrollIntoViewIfNeeded();
-  await expect(stage).toHaveAttribute("data-motion", "paused");
-  await region.getByRole("button", { name: "AI CREATIVE PRODUCTION", exact: true }).click();
-  await expect(
-    region.getByRole("heading", { name: "AI CREATIVE PRODUCTION", exact: true }),
-  ).toBeVisible();
-  expect(requests.some((url) => /hibrid-stone.*\.(mp4|webm)/.test(url))).toBe(
-    false,
-  );
-});
-
-test("media remains unloaded above the fold", async ({ page }) => {
+test("hareket azaltmada tek statik kare çiziliyor, video hiç indirilmiyor", async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: "reduce" });
+  const page = await context.newPage();
   const media: string[] = [];
   page.on("request", (request) => {
-    if (request.url().includes("/videos/")) media.push(request.url());
+    if (/hibrid-stone.*\.(mp4|webm)/.test(request.url())) media.push(request.url());
   });
+  const stage = await openScene(page, "tr", true);
+  await page.waitForTimeout(1500);
+  const first = await stage.screenshot();
+  expect(await litFraction(first)).toBeGreaterThan(0.02);
+
+  // Sahne donuk: iki kare arasında fark yok.
+  await page.waitForTimeout(1500);
+  const second = await stage.screenshot();
+  expect(Buffer.compare(first, second)).toBe(0);
+
+  // Yeniden boyutlandırmadan sonra da boş kalmıyor.
+  await page.setViewportSize({ width: 900, height: 800 });
+  await page.waitForTimeout(800);
+  expect(await litFraction(await stage.screenshot())).toBeGreaterThan(0.03);
+
+  expect(media).toEqual([]);
+  await context.close();
+});
+
+test("medya görünür alana girmeden indirilmiyor", async ({ page }) => {
+  const requests: string[] = [];
+  page.on("request", (request) => requests.push(request.url()));
   await page.goto("/tr");
   await acceptCookies(page);
-  await expect(page.getByRole("heading", { level: 1 })).toBeAttached();
-  await page.waitForTimeout(400);
-  expect(media).toEqual([]);
-});
+  await page.waitForTimeout(1200);
+  expect(requests.some((url) => url.includes(CRYSTAL_MEDIA.interactive))).toBe(false);
+  expect(requests.some((url) => url.includes("/images/site/solar/"))).toBe(false);
 
-test("distant stars visibly twinkle in the background", async ({ page }) => {
-  const { stage } = await openScene(page);
-  await page.mouse.move(2, 100);
-  const sample = () =>
-    stage.locator("canvas").evaluate((canvas: HTMLCanvasElement) => {
-      const pixels = canvas
-        .getContext("2d")!
-        .getImageData(0, 0, canvas.width, Math.floor(canvas.height * 0.1)).data;
-      return Array.from(pixels).filter((_, i) => i % 4 !== 3);
-    });
-  const before = await sample();
-  expect(before.filter((channel) => channel > 25).length).toBeGreaterThan(20);
-  await page.waitForTimeout(1400);
-  const after = await sample();
-  expect(
-    after.filter((channel, i) => Math.abs(channel - before[i]) > 2).length,
-  ).toBeGreaterThan(30);
-});
-
-test("point popover stays in the scene, gently focuses the crystal and dismisses", async ({
-  page,
-}) => {
-  const { stage, region } = await openScene(page);
-  const initialStage = (await stage.boundingBox())!;
-  const initialCrystal = (await page.getByTestId("crystal-hit").boundingBox())!;
-  const point = region.getByRole("button", { name: "AI CREATIVE PRODUCTION", exact: true });
-  await aimAtMovingPoint(page, point);
-  const pointBounds = (await point.boundingBox())!;
-  await page.mouse.click(
-    pointBounds.x + pointBounds.width / 2,
-    pointBounds.y + pointBounds.height / 2,
-  );
-  const dialog = region.getByRole("dialog", { name: "AI CREATIVE PRODUCTION", exact: true });
-  await expect(dialog).toBeFocused();
-  await expect(dialog).toHaveAttribute("aria-modal", "false");
-  const bounds = (await dialog.boundingBox())!;
-  expect(bounds.width).toBeLessThanOrEqual(250);
-  expect(bounds.height).toBeLessThan(190);
-  expect(bounds.y).toBeGreaterThan(initialStage.y);
-  expect(bounds.y + bounds.height).toBeLessThan(
-    initialStage.y + initialStage.height,
-  );
-  expect((await stage.boundingBox())!.height).toBe(initialStage.height);
+  await page.getByTestId("ecosystem-stage").scrollIntoViewIfNeeded();
   await expect
-    .poll(
-      async () =>
-        (await page.getByTestId("crystal-hit").boundingBox())!.width /
-        initialCrystal.width,
-    )
-    .toBeGreaterThan(1.04);
-  await page.keyboard.press("Tab");
-  await expect(
-    region.getByRole("button", { name: "Detayı kapat" }),
-  ).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await expect(point).toBeFocused();
-  await point.press("Enter");
-  await expect(dialog).toBeVisible();
-  await region.getByRole("heading", { name: title, exact: true }).click();
-  await expect(dialog).toBeHidden();
+    .poll(() => requests.some((url) => url.includes("/images/site/solar/")), { timeout: 20_000 })
+    .toBe(true);
+});
+
+test("sahne uzun süre çizmeye devam ediyor", async ({ page }) => {
+  test.setTimeout(90_000);
+  const stage = await openScene(page);
+  await page.waitForTimeout(2000);
+  const early = await litFraction(await stage.screenshot());
+  await page.waitForTimeout(30_000);
+  const late = await litFraction(await stage.screenshot());
+  expect(late).toBeGreaterThan(0.03);
+  // Sahne kararmamalı: geç kare erken kareyle aynı mertebede.
+  expect(Math.abs(late - early)).toBeLessThan(0.06);
 });
 
 for (const width of [390, 768, 1440]) {
-  test(`${width}px: nonblank scene, flat dots and unclipped details`, async ({
-    page,
-  }, info) => {
-    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
-    const { stage, region } = await openScene(page);
-    await region.getByRole("button", { name: "Animasyonu duraklat" }).click();
-    await expect(stage).toHaveAttribute("data-motion", "paused");
-    const sceneWidth = (await stage.boundingBox())!.width;
-    const originalWidth =
-      sceneWidth <= 640
-        ? Math.min(178, sceneWidth * 0.5)
-        : Math.min(350, sceneWidth * 0.32);
-    const hit = (await page.getByTestId("crystal-hit").boundingBox())!;
-    expect(Math.abs(hit.width - originalWidth * 0.85 * 0.69)).toBeLessThan(0.1);
-    expect(
-      await stage
-        .locator("video")
-        .evaluate((v: HTMLVideoElement) => v.playbackRate),
-    ).toBe(1);
-    const pixels = await stage
-      .locator("canvas")
-      .evaluate((c: HTMLCanvasElement) => {
-        const ctx = c.getContext("2d")!;
-        const data = ctx.getImageData(0, 0, c.width, c.height).data;
-        let bright = 0;
-        for (let i = 0; i < data.length; i += 4)
-          if (data[i] > 100 && data[i + 1] > 60) bright++;
-        return bright;
-      });
-    expect(pixels).toBeGreaterThan(1000);
-    const frameQuality = await stage.locator("canvas").evaluate(
-      (c: HTMLCanvasElement, offsets) => {
-        const ctx = c.getContext("2d")!;
-        const w = c.clientWidth;
-        const scale = c.width / w;
-        const size =
-          (w <= 640 ? Math.min(178, w * 0.5) : Math.min(350, w * 0.32)) *
-          scale *
-          0.85;
-        const cx = c.width * 0.5 + offsets.x * size;
-        const cy = c.height * (324 / 640) + offsets.y * size;
-        const corners: number[] = [];
-        for (const x of [-0.43, 0.43]) {
-          for (const y of [-0.43, 0.43]) {
-            const patch = ctx.getImageData(
-              cx + x * size,
-              cy + y * size,
-              7,
-              7,
-            ).data;
-            const values = [...patch]
-              .filter((_, index) => index % 4 !== 3)
-              .sort((a, b) => a - b);
-            corners.push(values[Math.floor(values.length / 2)]);
-          }
-        }
-        const core = ctx.getImageData(
-          cx - size * 0.1,
-          cy - size * 0.1,
-          size * 0.2,
-          size * 0.2,
-        ).data;
-        const colors = new Set<number>();
-        for (let i = 0; i < core.length; i += 4)
-          colors.add(
-            (core[i] >> 3) * 1024 +
-              (core[i + 1] >> 3) * 32 +
-              (core[i + 2] >> 3),
-          );
-        return { corners, colors: colors.size };
-      },
-      { x: CRYSTAL_MEDIA.offsetX, y: CRYSTAL_MEDIA.offsetY },
-    );
-    expect(Math.max(...frameQuality.corners)).toBeLessThan(8);
-    expect(frameQuality.colors).toBeGreaterThan(32);
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth - innerWidth,
-      ),
-    ).toBeLessThanOrEqual(0);
-    for (const name of services) {
-      if (await region.locator("#ecosystem-detail").isVisible()) {
-        await region.getByRole("button", { name: "Detayı kapat" }).click();
-      }
-      const button = region.getByRole("button", { name, exact: true });
-      await button.click();
-      const detail = region.locator("#ecosystem-detail");
-      const bounds = (await detail.boundingBox())!;
-      expect(bounds.x).toBeGreaterThanOrEqual(0);
-      expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
-      const stageBounds = (await stage.boundingBox())!;
-      const crystal = (await page.getByTestId("crystal-hit").boundingBox())!;
-      expect(bounds.y).toBeGreaterThanOrEqual(stageBounds.y);
-      expect(bounds.y + bounds.height).toBeLessThanOrEqual(
-        stageBounds.y + stageBounds.height,
-      );
-      expect(bounds.width).toBeLessThanOrEqual(250);
-      const overlap =
-        Math.max(
-          0,
-          Math.min(bounds.x + bounds.width, crystal.x + crystal.width) -
-            Math.max(bounds.x, crystal.x),
-        ) *
-        Math.max(
-          0,
-          Math.min(bounds.y + bounds.height, crystal.y + crystal.height) -
-            Math.max(bounds.y, crystal.y),
-        );
-      expect(overlap).toBe(0);
-      expect(
-        await detail.evaluate((el) => el.scrollWidth <= el.clientWidth),
-      ).toBe(true);
-    }
-    await stage.scrollIntoViewIfNeeded();
-    await page.screenshot({ path: info.outputPath(`ecosystem-${width}.png`) });
+  test(`${width}px: sahne dolu, panel kırpılmıyor`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    const stage = await openScene(page);
+    await page.waitForTimeout(2200);
+    expect(await litFraction(await stage.screenshot())).toBeGreaterThan(0.03);
+
+    await page.getByRole("button", { name: "PRODUCTION", exact: true }).focus();
+    await page.keyboard.press("Enter");
+    const detail = page.locator("#ecosystem-detail");
+    await expect(detail).toBeVisible();
+    const panel = (await detail.boundingBox())!;
+    const box = (await stage.boundingBox())!;
+    expect(panel.x).toBeGreaterThanOrEqual(box.x - 1);
+    expect(panel.x + panel.width).toBeLessThanOrEqual(box.x + box.width + 1);
+    expect(panel.y + panel.height).toBeLessThanOrEqual(box.y + box.height + 1);
   });
 }
 
-test("three complete video loops stay rendered", async ({ page }) => {
-  test.setTimeout(60_000);
-  const { stage, video } = await openScene(page);
-  const cycleMillis = await video.evaluate(
-    (v: HTMLVideoElement) => (v.duration / v.playbackRate) * 1000,
-  );
-  test.setTimeout(Math.max(60_000, cycleMillis * 3 + 30_000));
-  await page.mouse.move(2, 100);
-  const result = await video.evaluate(async (v: HTMLVideoElement) => {
-    let loops = 0;
-    let previous = v.currentTime;
-    let blanks = 0;
-    const blankFrames: Array<{
-      time: number;
-      bright: number;
-      ready: number;
-      seeking: boolean;
-    }> = [];
-    const canvas = v.parentElement!.querySelector("canvas")!;
-    const context = canvas.getContext("2d")!;
-    const deadline =
-      performance.now() + ((v.duration / v.playbackRate) * 3 + 5) * 1000;
-    while (loops < 3 && performance.now() < deadline) {
-      await new Promise((resolve) => setTimeout(resolve, 40));
-      if (v.currentTime < previous - 1) loops++;
-      const pixels = context.getImageData(
-        canvas.width * 0.44,
-        canvas.height * 0.42,
-        canvas.width * 0.12,
-        canvas.height * 0.15,
-      ).data;
-      let bright = 0;
-      for (let i = 0; i < pixels.length; i += 4) if (pixels[i] > 100) bright++;
-      if (bright < 100) {
-        blanks++;
-        blankFrames.push({
-          time: v.currentTime,
-          bright,
-          ready: v.readyState,
-          seeking: v.seeking,
-        });
-      }
-      previous = v.currentTime;
-    }
-    return { loops, blanks, blankFrames };
-  });
-  expect(result.loops).toBe(3);
-  expect(result.blanks, JSON.stringify(result.blankFrames)).toBe(0);
-  await expect(stage).toHaveAttribute("data-media-mode", "idle");
-});
-
-test.describe("touch", () => {
+test.describe("dokunmatik", () => {
   test.use({
     viewport: { width: 390, height: 844 },
-    isMobile: true,
     hasTouch: true,
-  });
-  test("tap reveals details without navigation", async ({ page }) => {
-    const { region } = await openScene(page);
-    const point = (await region
-      .getByRole("button", { name: "AI CREATIVE PRODUCTION", exact: true })
-      .boundingBox())!;
-    await page.touchscreen.tap(
-      point.x + point.width / 2,
-      point.y + point.height / 2,
-    );
-    await expect(
-      region.getByRole("heading", { name: "AI CREATIVE PRODUCTION", exact: true }),
-    ).toBeVisible();
-    await expect(page).toHaveURL(/\/tr$/);
-    await expect(
-      region.getByRole("link", { name: "Detaya git" }),
-    ).toHaveAttribute("href", "/tr/what-we-do/ai-creative-production");
+    isMobile: true,
   });
 
-  test("touch drag returns to orbit while empty-space swipes still scroll", async ({
-    page,
-    browserName,
-  }) => {
-    test.skip(
-      browserName !== "chromium",
-      "Native touch gesture injection uses Chromium CDP.",
-    );
-    const { stage, region } = await openScene(page);
-    const point = region.getByRole("button", { name: "CREATIVE", exact: true });
-    const box = (await point.boundingBox())!;
-    const client = await page.context().newCDPSession(page);
-    const beforeScroll = await page.evaluate(() => scrollY);
-    const x = box.x + box.width / 2;
-    const y = box.y + box.height / 2;
-    await client.send("Input.dispatchTouchEvent", {
-      type: "touchStart",
-      touchPoints: [{ x, y }],
-    });
-    for (let i = 1; i <= 12; i++) {
-      await client.send("Input.dispatchTouchEvent", {
-        type: "touchMove",
-        touchPoints: [{ x: x + i * 5, y: y - i * 5 }],
-      });
-    }
-    await expect(point).toHaveAttribute("data-dragging", "true");
-    await client.send("Input.dispatchTouchEvent", {
-      type: "touchEnd",
-      touchPoints: [],
-    });
-    await expect
-      .poll(async () => {
-        const returned = (await point.boundingBox())!;
-        return Math.hypot(returned.x - box.x, returned.y - box.y);
-      })
-      .toBeLessThan(15);
-    expect(await page.evaluate(() => scrollY)).toBe(beforeScroll);
-    await expect(region.locator("#ecosystem-detail")).toBeHidden();
-    const bounds = (await stage.boundingBox())!;
-    await client.send("Input.dispatchTouchEvent", {
-      type: "touchStart",
-      touchPoints: [{ x: bounds.x + 3, y: bounds.y + 180 }],
-    });
-    for (let i = 1; i <= 8; i++) {
-      await client.send("Input.dispatchTouchEvent", {
-        type: "touchMove",
-        touchPoints: [{ x: bounds.x + 3, y: bounds.y + 180 - i * 10 }],
-      });
-    }
-    await client.send("Input.dispatchTouchEvent", {
-      type: "touchEnd",
-      touchPoints: [],
-    });
-    await expect
-      .poll(() => page.evaluate(() => scrollY))
-      .toBeGreaterThan(beforeScroll + 20);
-    await client.detach();
+  test("dokunuş paneli açıyor, dikey kaydırma sayfayı kaydırmaya devam ediyor", async ({ page }) => {
+    const stage = await openScene(page);
+    await page.getByRole("button", { name: "DIGITAL", exact: true }).tap({ force: true });
+    await expect(page.locator("#ecosystem-detail")).toBeVisible();
+    await expect(page).toHaveURL(/\/tr$/);
+
+    // Boş alanda dikey kaydırma sahneye takılmamalı.
+    const box = (await stage.boundingBox())!;
+    const before = await page.evaluate(() => window.scrollY);
+    await page.touchscreen.tap(box.x + 20, box.y + box.height - 20);
+    await page.mouse.move(box.x + 20, box.y + box.height - 30);
+    await page.mouse.wheel(0, 400);
+    await page.waitForTimeout(500);
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(before);
   });
 });

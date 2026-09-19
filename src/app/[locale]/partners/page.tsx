@@ -5,6 +5,8 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import styles from "@/styles/culture-page.module.css";
+import partner from "./page.module.css";
+import { PartnerRow } from "./PartnerRow";
 
 /**
  * PAR-01..03 (nihai copy deck, Ağustos 2026) — Partners.
@@ -43,6 +45,7 @@ export default async function PartnersPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("culture.partners");
+  const tCommon = await getTranslations("common");
   const partners = [
     {
       id: "studio-room",
@@ -70,29 +73,32 @@ export default async function PartnersPage({
       <h1 className={styles.heroTitle}>PARTNERS</h1>
       <p className={styles.heroLead}>Love Is on the Air</p>
 
-      <section className={styles.section}>
-        {/* TODO: PAR-02 [DOĞRULA] — David Ogilvy atfı teyit edilmeden
-            yayına girmeden önce doğrulanmalı. */}
-        <p className={styles.quote}>{t("quote")}</p>
-        <p className={styles.quoteAuthor}>{t("quoteAuthor")}</p>
+      {/*
+        Sayfanın ağırlık merkezi: alıntı. Gövde puntosunda, diğer
+        paragrafların arasında duruyordu; sayfadaki en iyi metin oydu ve
+        görünmüyordu.
+
+        TODO: PAR-02 [DOĞRULA] — David Ogilvy atfı yayına girmeden önce
+        doğrulanmalı (deck kendi belirsizliğini not düşüyor).
+      */}
+      <section className={partner.statement}>
+        <p className={partner.quote}>{t("quote")}</p>
+        <p className={partner.quoteAuthor}>{t("quoteAuthor")}</p>
       </section>
 
-      {partners.map((partner) => (
-        <section id={partner.id} className={styles.partnerItem} key={partner.id}>
-          <h2 className={styles.partnerName}>{partner.name}</h2>
-          {partner.body && <p className={styles.partnerBody}>{partner.body}</p>}
-          {partner.url && (
-            <a
-              href={`https://${partner.url}`}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.partnerLink}
-            >
-              {partner.url}
-            </a>
-          )}
-        </section>
-      ))}
+      <ol className={partner.list}>
+        {partners.map((entry, index) => (
+          <PartnerRow
+            key={entry.id}
+            index={String(index + 1).padStart(2, "0")}
+            name={entry.name}
+            body={entry.body}
+            url={entry.url}
+            pendingLabel={tCommon("pendingLabel")}
+          />
+        ))}
+      </ol>
+
     </div>
   );
 }

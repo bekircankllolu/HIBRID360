@@ -9,9 +9,13 @@
  * 1600w + 2560w) ve kaynak/ölçü/sha256 kayıtları
  * `docs/content/LEGACY_CONTENT_ROUTE_MAP.md` içinde.
  *
- * Eski sitedeki sarı/yeşil filtre marka sistemine göre YENİDEN türetildi:
- * kaynak parlaklığa indirgenip siyah → marka sarısı (#FFFC00) rampasından
- * geçirildi. Eski dosyada ton zeytin yeşiliydi, marka sarısı değildi.
+ * 19 Eylül 2026 — SARI KALKTI. Kullanıcı: *"buradaki fotoğrafların
+ * üzerinde sarı efekt istemiyorum."* Önce marka sarısı duotone
+ * uygulanıyordu; o kaldırıldı. Yalnız duotone'u kapatmak yetmedi, çünkü
+ * eski sitenin sarı/zeytin filtresi KAYNAK dosyaların piksellerinde
+ * (ataturk.jpg ortalama R211 G203 B92) — görüntüler görünür luma'ya
+ * indirgeniyor. Sonuç nötr siyah-beyaz; marka birliğini artık görselin
+ * üstündeki tipografi kuruyor, görsele sürülen bir filtre değil.
  *
  * ## TELİF — AÇIK BLOCKER (kapanmadı)
  *
@@ -58,8 +62,8 @@ export const BELIEF_IMAGES = {
     width: 2560,
     height: 1436,
     alt: {
-      tr: "Mustafa Kemal Atatürk bir pencerenin yanında düşünceli otururken, marka sarısı duotone",
-      en: "Mustafa Kemal Atatürk sitting thoughtfully beside a window in brand-yellow duotone",
+      tr: "Mustafa Kemal Atatürk bir pencerenin yanında düşünceli otururken, siyah beyaz arşiv fotoğrafı",
+      en: "Mustafa Kemal Atatürk sitting thoughtfully beside a window, black and white archive photograph",
     },
   },
   littlePrince: {

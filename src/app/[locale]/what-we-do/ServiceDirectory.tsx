@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { MonaShard } from "@/components/mona/MonaShard";
 import { Link } from "@/i18n/navigation";
 import styles from "./ServiceDirectory.module.css";
 
@@ -36,6 +37,20 @@ export function ServiceDirectory({
   const stageRef = useRef<HTMLElement>(null);
   const pointerFrameRef = useRef<number | null>(null);
   const active = items[activeIndex] ?? items[0];
+  const [monaMounted, setMonaMounted] = useState(false);
+
+  // MONA (WebGL) yalnız AI satırı ÜZERİNDE KALINDIĞINDA kurulur. Listede
+  // hızlıca gezinirken satır bir an aktif olup geçiyor; gecikme olmasaydı
+  // her geçişte bir WebGL bağlamı kurulup yıkılırdı.
+  const aiActive = !active?.image;
+  useEffect(() => {
+    if (!aiActive) {
+      setMonaMounted(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setMonaMounted(true), 180);
+    return () => window.clearTimeout(timer);
+  }, [aiActive]);
 
   const setPointerOffset = (progress: number) => {
     if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
@@ -111,9 +126,18 @@ export function ServiceDirectory({
               />
             </div>
           ) : (
-            <div className={styles.typePoster}>
-              <span>H360 / AI</span>
-              <strong lang="en">{active.name}</strong>
+            /* Görseli olmayan tek satır AI Creative Production: orada fotoğraf
+               değil MONA'nın kendisi duruyor (18 Eylül 2026 kullanıcı isteği:
+               "AI Creative Production üzerine geldiğimizde orada MONA'yı
+               görelim, partiküllerden oluşsun ve fareye tepki versin").
+               Tipografik poster altta kalır: MONA kurulamadığında (dokunmatik,
+               dar ekran, WebGL yok) sahne boş kalmasın. */
+            <div className={styles.aiStage}>
+              <div className={styles.typePoster}>
+                <span>H360 / AI</span>
+                <strong lang="en">{active.name}</strong>
+              </div>
+              {monaMounted ? <MonaShard placement="center" /> : null}
             </div>
           )}
         </div>

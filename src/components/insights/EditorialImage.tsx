@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import type { CSSProperties, PointerEvent } from "react";
+import { useScrollScene } from "@/hooks/useScrollScene";
 import styles from "./EditorialImage.module.css";
 
 type EditorialImageProps = {
@@ -9,10 +10,11 @@ type EditorialImageProps = {
   alt: string;
   sizes: string;
   priority?: boolean;
+  /** Görsel kaydırdıkça döner (dairesel kadraj). */
   rotating?: boolean;
-  /** Sürekli, kendiliğinden nefes alan zoom in/out döngüsü (hover'a bağlı
-   * değil) — brief'te referans verilen landonorris.com/oryzo.ai tarzı
-   * ambient hareket. `rotating` ile birlikte kullanılmaz. */
+  /** Görsel kaydırdıkça yavaşça yaklaşır — brief'te referans verilen
+   * landonorris.com/oryzo.ai tarzı ambient hareket. `rotating` ile
+   * birlikte kullanılmaz. */
   ambient?: boolean;
 };
 
@@ -29,6 +31,13 @@ export function EditorialImage({
   rotating = false,
   ambient = false,
 }: EditorialImageProps) {
+  // Dönme ve yaklaşma eskiden zamana bağlı sonsuz döngülerdi (28 sn / 9 sn);
+  // 17 Eylül 2026'dan beri kaydırmaya bağlı. Hareketsiz görseller dinlemez.
+  const { ref, motion } = useScrollScene<HTMLDivElement>({
+    mode: "pass",
+    enabled: rotating || ambient,
+  });
+
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
     if (event.pointerType === "touch") return;
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -45,7 +54,9 @@ export function EditorialImage({
 
   return (
     <div
+      ref={ref}
       className={`${styles.frame} ${rotating ? styles.rotating : ""} ${ambient ? styles.ambient : ""}`}
+      data-motion={rotating || ambient ? motion : undefined}
       onPointerMove={handlePointerMove}
       onPointerLeave={resetPointer}
       style={

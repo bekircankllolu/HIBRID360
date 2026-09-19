@@ -1,18 +1,30 @@
+/* İçerik dikeyde ORTADA: eskiden `min-height` yüksekliği içerik üstte
+   kalınca bandın altında ~280px boş şerit bırakıyordu (17 Eylül 2026
+   boşluk taraması, mobilde her sayfada). */
 .band {
   width: 100%;
-  min-height: 46svh;
-  padding: clamp(4rem, 8vw, 8rem) var(--page-gutter);
+  min-height: 36svh;
+  padding: clamp(3.5rem, 7vw, 7rem) var(--page-gutter);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-6);
   text-align: center;
 }
 
 .band[data-compact] {
-  min-height: 34svh;
-  padding-block: clamp(3rem, 6vw, 6rem);
+  min-height: 28svh;
+  padding-block: clamp(2.5rem, 5vw, 5rem);
   border-top: 1px solid color-mix(in srgb, var(--color-brand-black) 20%, transparent);
+}
+
+/* Dar ekranda yüksekliği içerik belirler. */
+@media (max-width: 760px) {
+  .band,
+  .band[data-compact] {
+    min-height: 0;
+  }
 }
 
 .secondary {

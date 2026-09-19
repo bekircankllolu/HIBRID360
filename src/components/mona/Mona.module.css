@@ -120,6 +120,8 @@
   height: 6px;
   border-radius: 50%;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
 }
 
 /* ---------- konuşma kolonu ---------- */
@@ -300,6 +302,8 @@
 .pillPrimary {
   border-color: var(--color-brand-yellow);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   font-weight: var(--font-weight-body-medium);
 }
@@ -415,6 +419,8 @@
   width: 100%;
   height: 4px;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   transform: scaleX(var(--progress, 0));
   transform-origin: left;
   transition: transform 0.3s var(--mona-ease);

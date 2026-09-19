@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { ServiceChapter } from "@/components/service-chapter/ServiceChapter";
 import detailStyles from "@/components/service-chapter/ServiceChapter.module.css";
 import { ServiceSignatureVideo } from "@/components/service-chapter/ServiceSignatureVideo";
@@ -10,12 +11,6 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { nextChapter } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
-
-const SERVICES = [
-  "EDITING", "COLOUR GRADING", "DUBBING", "AFTER EFFECTS", "JINGLE", "RE-TOUCH",
-  "ILLUSTRATION", "STORYBOARD", "3D ANIMATION", "STYLING", "PHOTOGRAPHY",
-  "MOTION GRAPHICS", "TRACK MOTION",
-] as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -51,7 +46,7 @@ export default async function PostProductionPage({ params }: { params: Promise<{
         titleLines={["POST", "PRODUCTION"]}
         lede="OFF WE GO!"
         body={body}
-        services={SERVICES}
+        services={SERVICE_OFFERINGS.postProduction}
         visual={{ src: siteImages.services.postProduction.src, alt: siteImages.services.postProduction.alt[locale] }}
         shape="timeline"
         blurb={blurb}

@@ -1,6 +1,7 @@
 import type {
   CultureFilm,
   CultureFilmCaption,
+  SilentLoopCultureFilm,
   VideoCultureFilm,
 } from "@/data/who-we-are";
 
@@ -27,6 +28,50 @@ export interface CaptionTrack extends CultureFilmCaption {
 /** Ayrık birleşim daraltıcısı — `film.sources.length` tahminine gerek yok. */
 export function isPlayableFilm(film: CultureFilm): film is VideoCultureFilm {
   return film.kind === "video";
+}
+
+/** Sessiz döngü: oynar ama konuşmaz — altyazı istemez, CTA'sı yoktur. */
+export function isSilentLoop(film: CultureFilm): film is SilentLoopCultureFilm {
+  return film.kind === "loop";
+}
+
+/** Ekranda bir video öğesi var mı (sessiz döngü ya da sesli film). */
+export function hasMovingImage(film: CultureFilm): boolean {
+  return film.kind !== "poster";
+}
+
+/*
+ * Dairenin açıklığı — monks.com kalıbı (18 Eylül 2026 kullanıcı isteği:
+ * "önce daireyi görüyoruz, sayfayı indirdikçe daire büyüyor, içindeki insan
+ * konuşmaya başlıyor, inmeye devam edince daire tekrar küçülüp eski formuna
+ * dönüyor; tekrar çıktığımızda tekrar büyüyor").
+ *
+ * Yani açıklık ilerlemenin MONOTON bir fonksiyonu değil, bir çan eğrisi:
+ * [OPEN_IN → OPEN_FULL] büyür, [OPEN_FULL → CLOSE_START] tam açık bekler,
+ * [CLOSE_START → CLOSE_END] küçülür. Kaydırma geri alındığında aynı eğri
+ * ters yönde okunur — ekstra durum tutmaya gerek yok.
+ */
+export const OPEN_IN = 0.06;
+export const OPEN_FULL = 0.34;
+export const CLOSE_START = 0.66;
+export const CLOSE_END = 0.94;
+
+export function openness(progress: number): number {
+  if (!Number.isFinite(progress)) return 1;
+  const rise = (progress - OPEN_IN) / (OPEN_FULL - OPEN_IN);
+  const fall = (CLOSE_END - progress) / (CLOSE_END - CLOSE_START);
+  return Math.min(Math.max(Math.min(rise, fall), 0), 1);
+}
+
+/**
+ * Video ancak daire gerçekten açılmışken oynar: kapalıyken (küçük nokta)
+ * kare başına iş yapmanın anlamı yok ve WCAG 2.2.2 açısından da ekranda
+ * sürekli oynayan bir hareket bırakmıyoruz.
+ */
+export const PLAYBACK_THRESHOLD = 0.18;
+
+export function shouldPlay(open: number): boolean {
+  return open >= PLAYBACK_THRESHOLD;
 }
 
 /**
@@ -72,15 +117,15 @@ export function revealProgress(
 }
 
 /**
- * Reveal'ın kapanması tamamlandığı ve CTA'nın belirdiği eşik. CTA, maske
- * tüm yaygın ekran oranlarında köşeleri kapattıktan sonra görünür; bu
- * eşikten önce görünmez ve **odaklanılamaz** olmalı — görünmeyen bir
- * butona tab ile gitmek WCAG "odak görünür" kuralını ihlal eder.
+ * CTA/etiketin belirdiği eşik — artık ham ilerlemeye değil AÇIKLIĞA bakar
+ * (daire tam ekran olmuyor, bir yere kadar büyüyüp duruyor). Eşikten önce
+ * görünmez ve **odaklanılamaz** olmalı: görünmeyen bir butona tab ile
+ * gitmek WCAG "odak görünür" kuralını ihlal eder.
  */
 export const CTA_REVEAL_THRESHOLD = 0.9;
 
-export function isCtaRevealed(progress: number): boolean {
-  return progress >= CTA_REVEAL_THRESHOLD;
+export function isCtaRevealed(open: number): boolean {
+  return open >= CTA_REVEAL_THRESHOLD;
 }
 
 /**

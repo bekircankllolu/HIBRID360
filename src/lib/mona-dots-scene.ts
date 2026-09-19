@@ -334,6 +334,20 @@ export function monaDotsLayout(width: number, height: number): MonaDotsLayout {
 }
 
 /**
+ * Kabın tam ortasında, kısa kenara göre ölçeklenen küre — What We Do
+ * dizininin AI satırı için (18 Eylül 2026). `monaDotsLayout` buraya
+ * uymuyor: o sohbet sahnesinin yerleşimi ve dar kaplarda (≤1024px) küreyi
+ * üst çeyreğe, küçük yarıçapla koyuyor; dizin sahnesi 740px geniş olduğu
+ * için MONA yukarıda ve küçük kalıyordu.
+ *
+ * 0.36: hale ve toz yarıçapın dışına taşıyor; daha büyük bir değerde küre
+ * kabın kenarlarında kesiliyor.
+ */
+export function monaCenterLayout(width: number, height: number): MonaDotsLayout {
+  return { centerX: 0.5, centerY: 0.5, radius: Math.min(width, height) * 0.36 };
+}
+
+/**
  * `MonaShard`'ın canvas'ı hero'nun altına, hero yüksekliğinin bu oranı
  * kadar uzar (13 Eylül 2026, altıncı geri bildirim turu — DECISIONS #48:
  * "burada bir kesilme var, bu kesilme olmasın"). Küre hero'nun alt

@@ -17,56 +17,58 @@
  * `100vw` HİÇBİR DURUMDA kullanılmıyor — masaüstünde kaydırma çubuğu
  * genişliği kadar taşıp aynı sorunu başka yoldan üretiyor.
  */
+/**
+ * Tam genişlik marka bandı — parçacık sahnesi (bkz. BrandIdent.tsx).
+ *
+ * VARSAYILAN: hiç negatif margin YOK — bant konteynerini olduğu gibi
+ * doldurur. Bu, yatay boşluğu OLMAYAN sayfa kapsayıcıları içindir
+ * (ör. work `.page`: kendi padding'i yok, çocukları gutter'ı tek tek
+ * uyguluyor).
+ *
+ * `bleed` sınıfı: konteynerin kendi yatay padding'i VARSA onu iptal edip
+ * kenara taşmak için eklenir.
+ *
+ * Bu ayrım zor yoldan öğrenildi: bant başta koşulsuz negatif margin
+ * taşıyordu ve Work sayfasında tam bir gutter kadar (1440px'te 41px)
+ * yatay kaydırma açıyordu. Yatay taşma nöbetçisi yakaladı
+ * (e2e/canonical-routes.spec.ts).
+ *
+ * `100vw` HİÇBİR DURUMDA kullanılmıyor — masaüstünde kaydırma çubuğu
+ * genişliği kadar taşıp aynı sorunu başka yoldan üretiyor.
+ */
 .band {
   position: relative;
-  margin-block: clamp(4rem, 9vw, 8rem);
-  /* Oran sabit → poster ile video aynı kutuyu kaplar, geçişte sıçrama yok. */
-  aspect-ratio: 16 / 9;
-  /* Kaynak kare zaten düz siyah; kutu da siyah ki yükleme anında bant
-     kenarları görünmesin. */
+  margin-block: clamp(2.5rem, 6vw, 5rem);
+  /* Oran, videonun 21:9'undan biraz daha ferah: yazı toplanırken
+     parçacıkların geleceği bir pay gerekiyor. */
+  aspect-ratio: 16 / 7;
   background: var(--color-brand-black);
   overflow: hidden;
 }
 
-/* Yatay padding'i olan konteynerlerde kenara taşmak için. Negatif margin
-   konteynerin kendi padding'iyle birebir eşleşir, fazladan genişlik
-   üretmez. */
 .bleed {
   margin-inline: calc(-1 * var(--page-gutter));
 }
 
-.video {
+.canvas {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
-/**
- * Bandın üstünde ve altında siyaha eriyen kenar.
- *
- * Video 16:9 dikdörtgen bir kutu; sayfa da siyah. Kesin kenar "buraya bir
- * video kondu" der. Eriyen kenar bandı sayfanın kendi karanlığının içinden
- * çıkıyormuş gibi gösteriyor — asıl istenen his bu.
+/*
+ * Marka adı ekran okuyucu ve arama motoru için METİN olarak duruyor —
+ * sahne yalnızca onun görsel karşılığı. Görsel olarak gizli ama
+ * `display: none` DEĞİL: o, öğeyi erişilebilirlik ağacından da çıkarır.
  */
-.band::after {
-  content: "";
+.label {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    var(--color-brand-black) 0%,
-    rgba(0, 0, 0, 0) 14%,
-    rgba(0, 0, 0, 0) 86%,
-    var(--color-brand-black) 100%
-  );
-}
-
-/* Dar ekranda 16:9 bant çok kısalıyor ve kompozisyonun sol üçte ikilik
-   boşluğu anlamını kaybediyor; kadraj biraz daha kareye çekilir. */
-@media (max-width: 640px) {
-  .band {
-    aspect-ratio: 5 / 4;
-  }
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }

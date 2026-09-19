@@ -1,13 +1,39 @@
 .section {
   position: relative;
   min-height: 100svh;
-  padding: clamp(3rem, 7vh, 5rem) 0 0;
+  /* Alt dolgu ışığın sönmesi için: yıldızın halesi sahnenin dışına taşıyor
+     ama bölümün içinde sönüyor — alt bölüme sert bir kenarla girmiyor. */
+  padding: clamp(3rem, 7vh, 5rem) 0 clamp(2rem, 7vh, 6rem);
   background: var(--color-brand-black);
   color: var(--color-brand-white);
   overflow: clip;
 }
+
+/*
+ * Yıldızın ışığı SAHNENİN DIŞINA taşıyor (19 Eylül 2026 kullanıcı isteği:
+ * "üst taraftaki ışıklar kesiliyor... ya azaltalım ya taşsın; üstteki
+ * ECOSYSTEM yazısının arkasına da taşırabiliriz").
+ *
+ * Kanvasın kendi koronası kanvas kutusunda bitiyor ve kenarında görünür bir
+ * kesik bırakıyordu. Bu katman bölümün tamamını kaplıyor: başlığın arkasından
+ * geçiyor, altta yavaşça sönüyor. Kanvas koronası da bu yüzden küçültüldü.
+ */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 62% 52% at 50% 62%,
+    rgba(255, 196, 64, 0.17),
+    rgba(255, 176, 40, 0.07) 42%,
+    transparent 72%
+  );
+}
 .heading {
   position: relative;
+  z-index: 1;
   width: 100%;
   margin: 0 auto clamp(1rem, 2vh, 2rem);
   padding-inline: var(--page-gutter);
@@ -74,13 +100,19 @@
 }
 .stage {
   position: relative;
+  z-index: 1;
+  cursor: grab;
   width: 100%;
   height: clamp(36rem, 74svh, 54rem);
   min-height: 36rem;
   margin: 0 auto;
   isolation: isolate;
+  /* Dikey kaydırma sayfaya kalır; yatay sürükleme kamerayı çevirir. */
   touch-action: pan-y;
   scroll-margin-top: calc(var(--header-height) + var(--space-4));
+}
+.stage:active {
+  cursor: grabbing;
 }
 .canvas {
   position: absolute;
@@ -111,27 +143,11 @@
   clip-path: inset(50%);
   pointer-events: none;
 }
-.crystalHit {
-  position: absolute;
-  left: 50%;
-  top: 50.625%;
-  width: calc(24% * var(--crystal-scale));
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  clip-path: ellipse(48% 48% at 50% 50%);
-  z-index: 1;
-}
-.coreLabel {
-  position: absolute;
-  top: 84%;
-  left: 50%;
-  transform: translateX(-50%);
-  font: var(--font-weight-brand) clamp(1rem, 1.3vw, 1.35rem) / 1 var(--font-brand);
-  letter-spacing: 0;
-  color: var(--color-brand-yellow);
-  pointer-events: none;
-  text-transform: uppercase;
-}
+/* Kristal tıklama alanı ve "HIBRID 360" çekirdek etiketi kaldırıldı:
+   yıldız artık 3B bir gövde, etrafındaki etiketler gezegenlere ait. */
+/* Konum her karede 3B izdüşümden yazılıyor (transform), CSS yalnız
+   yerleşim kutusunu kuruyor. z-index de JS'ten: öndeki gezegenin etiketi
+   arkadakini örtsün. */
 .point {
   position: absolute;
   left: 0;
@@ -139,6 +155,8 @@
   width: 0;
   height: 0;
   z-index: 2;
+  will-change: transform, opacity;
+  transition: opacity 240ms ease;
 }
 .pointActive,
 .point:focus-within,
@@ -147,40 +165,36 @@
 }
 .dot {
   position: absolute;
-  left: -32px;
-  top: -32px;
+  left: calc(var(--ring, 44px) / -2);
+  top: calc(var(--ring, 44px) / -2);
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: var(--ring, 44px);
+  height: var(--ring, 44px);
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--stone-color);
-  cursor: grab;
-  touch-action: none;
+  cursor: pointer;
+  touch-action: pan-y;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-.dot[data-dragging="true"] {
-  cursor: grabbing;
-}
-.stage[data-motion="paused"] .dot {
-  cursor: pointer;
-  touch-action: pan-y;
-}
+/* Eski düz sarı/fuşya nokta KALDIRILDI: 3B sahnede gezegenin kendisi
+   görünüyor, üstüne bir de disk çizmek onu örtüyordu. Öğe DOM'da kalıyor
+   çünkü odak/hover halkasının merkezi o. */
 .dotCore {
   display: block;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: var(--point-opacity, 1);
+  width: 0;
+  height: 0;
 }
+/* Gezegeni çevreleyen ince halka — yalnız hover/odak/seçimde. */
 .dot::after {
   content: "";
   position: absolute;
-  inset: 17px;
+  inset: 0;
   border: 1px solid currentColor;
   border-radius: 50%;
   opacity: 0;
@@ -188,19 +202,24 @@
 }
 .dot:hover::after,
 .dot:focus-visible::after,
-.pointActive .dot::after,
-.dot[data-dragging="true"]::after {
+.pointActive .dot::after {
   opacity: 0.75;
 }
+.dot {
+  border-radius: 50%;
+}
+/* Odak halkası gezegenin yuvarlağını izliyor — kare bir çerçeve
+   gezegenin üstünde yabancı duruyordu. */
 .dot:focus-visible {
-  outline: 1px solid var(--color-brand-white);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-brand-white);
+  outline-offset: 3px;
 }
 .dotLabel {
   position: absolute;
-  top: 51px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  /* Kayma JS'ten geliyor: yıldızın tersi yön (bkz. layoutLabels). */
+  transform: translate(calc(-50% + var(--label-x, 0px)), calc(-50% + var(--label-y, 0px)));
   padding: 0.2rem 0.3rem;
   background: rgba(0, 0, 0, 0.72);
   font: var(--font-weight-heading-semibold) clamp(0.68rem, 0.75vw, 0.82rem) / 1.25 var(--font-brand);
@@ -212,27 +231,26 @@
 }
 .dot:hover .dotLabel,
 .dot:focus-visible .dotLabel,
-.pointActive .dotLabel,
-.dot[data-dragging="true"] .dotLabel {
+.pointActive .dotLabel {
   opacity: 1;
 }
-.point[data-label-side="start"] .dotLabel {
-  left: 22px;
-  transform: none;
-}
-.point[data-label-side="end"] .dotLabel {
-  right: 22px;
-  left: auto;
-  transform: none;
-}
+/* Panel artık gezegeni takip eden küçük bir balon değil: kamera zaten
+   gezegene uçuyor, panel de sahnenin sağında sabit duruyor ve hizmetin
+   TAMAMINI gösteriyor (kullanıcı: "çok detaylı bir şekilde özelliklerini
+   görelim"). Dar ekranda sahnenin altına, tam genişliğe oturur. */
 .detail {
   position: absolute;
   z-index: 6;
+  top: var(--space-6);
+  right: var(--space-6);
+  max-height: calc(100% - 2 * var(--space-6));
   display: grid;
-  width: 248px;
+  align-content: start;
+  width: min(23rem, 42%);
   max-width: calc(100% - 24px);
-  gap: 8px;
-  padding: 12px 14px;
+  overflow-y: auto;
+  gap: 10px;
+  padding: 16px 18px;
   border: 1px solid color-mix(in srgb, var(--stone-color) 35%, #202020);
   border-top-color: var(--stone-color);
   border-radius: 2px;
@@ -242,7 +260,7 @@
   visibility: hidden;
   animation: detailReveal 180ms ease-out both;
 }
-.detail[data-positioned="true"] {
+.detail:not([hidden]) {
   visibility: visible;
 }
 .detail[hidden] {
@@ -252,10 +270,17 @@
   outline: none;
 }
 .detailHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 4px 8px;
+}
+.detailHeader h3 {
+  grid-column: 1;
+}
+.detailHeader .control {
+  grid-row: 1 / span 2;
+  grid-column: 2;
 }
 .detailHeader .control {
   width: 32px;
@@ -265,9 +290,33 @@
 }
 .detail h3 {
   margin: 0;
-  font: var(--font-weight-heading-bold) 0.75rem / 1.4 var(--font-brand);
-  letter-spacing: 0;
+  font: var(--font-weight-brand) clamp(1.1rem, 1.6vw, 1.5rem) / 1.1 var(--font-brand);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
   color: var(--stone-color);
+}
+/* Derece: hizmet sayfasının kendi koordinatı — sahneyi siteyle bağlıyor. */
+.detailDegree {
+  margin: 0;
+  font: var(--font-weight-body-medium) var(--font-size-label) / 1 var(--font-ui);
+  letter-spacing: 0.14em;
+  color: var(--color-brand-fuchsia);
+}
+/* Hizmet kapsamı: src/data/service-offerings.ts (sayfalarla aynı kaynak). */
+.detailList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.detailList li {
+  padding: 3px 7px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  font: var(--font-weight-heading-semibold) 0.6875rem / 1.3 var(--font-brand);
+  letter-spacing: 0.02em;
+  color: #cfcfd4;
 }
 .detail p {
   margin: 0;
@@ -369,5 +418,18 @@
   }
   .dotLabel {
     opacity: 1;
+  }
+}
+
+/* Dar ekran: panel sahnenin altına, tam genişliğe oturur; sağda duran bir
+   kart 390px'te sahneyi tamamen kapatırdı. */
+@media (max-width: 760px) {
+  .detail {
+    top: auto;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    left: var(--space-4);
+    width: auto;
+    max-height: 52%;
   }
 }

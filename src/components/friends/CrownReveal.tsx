@@ -119,8 +119,13 @@ export function CrownReveal() {
       targetProgress = progress;
       seekToTarget();
 
-      setCopy(firstLine, revealWindow(progress, 0.03, 0.14, 0.48, 0.6), 42);
-      setCopy(accentLine, revealWindow(progress, 0.14, 0.26, 0.48, 0.6), 56);
+      // İlk satır sahne sabitlenmeden, bölüm ekrana girerken belirir: entry
+      // bölümün üst kenarı ekranın altındayken 0, yapışınca 1. Sayfanın en
+      // üstündeki bölümde yüklemede zaten 1 — ilk ekran boş açılmaz.
+      const entry = clamp(1 - rect.top / window.innerHeight);
+      const titleExit = 1 - smoothstep(0.48, 0.6, progress);
+      setCopy(firstLine, smoothstep(0.3, 0.85, entry) * titleExit, 42);
+      setCopy(accentLine, revealWindow(progress, 0.02, 0.12, 0.48, 0.6), 56);
       setCopy(body, revealWindow(progress, 0.56, 0.7, 0.94, 1), 34);
     };
 
@@ -159,6 +164,9 @@ export function CrownReveal() {
         <video
           ref={videoRef}
           className={styles.video}
+          poster="/images/site/friends/crown-poster.webp"
+          width={1920}
+          height={1080}
           muted
           playsInline
           preload="auto"

@@ -77,6 +77,8 @@
   left: 0;
   height: 2px;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   transform: scaleX(0);
   transform-origin: left;
   /* Ev eğrisi — footer bağlantılarındaki süpürmeyle aynı his. Nav daha
@@ -152,6 +154,8 @@
   min-height: 13rem;
   padding: clamp(2.5rem, 4vw, 4.5rem) clamp(1rem, 2.5vw, 3rem);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
   opacity: 0;
   transform: translateY(-0.75rem);

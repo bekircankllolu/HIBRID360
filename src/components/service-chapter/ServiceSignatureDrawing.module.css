@@ -53,6 +53,9 @@
   stroke-linejoin: round;
 }
 
+/* Soluk iz katmanı 19 Eylül 2026'da kaldırıldı (kullanıcı: arka plandaki
+   gölge hissi istenmiyor). */
+
 /* Çizimin nesnesi beyaz; derinlik yalnız opaklıkla ayrılır. */
 .front {
   stroke: var(--color-brand-white);

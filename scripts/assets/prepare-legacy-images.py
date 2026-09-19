@@ -71,7 +71,15 @@ SOURCES = [
         "dir": "what-we-believe",
         "out": "ataturk",
         "sha256": "820cede696bdc080998c699ff1d93f95cf2890c578bfeca2eaef8d31c1569d88",
-        "duotone": True,
+        # 19 Eylul 2026: duotone KAPATILDI, yerine notrallestirme.
+        # Kullanici: "buradaki fotograflarin uzerinde sari efekt
+        # istemiyorum". Yalniz duotone'u kapatmak YETMEDI -- olculdu:
+        # eski sitenin sari/zeytin filtresi KAYNAK dosyanin piksellerinde
+        # (ataturk.jpg ortalama R211 G203 B92). Bu yuzden gorunur luma'ya
+        # indirgeniyor: arsiv karesi kendi gri tonlariyla duruyor, marka
+        # birligini uzerindeki tipografi kuruyor.
+        "duotone": False,
+        "neutralise": True,
         "note": '"Everything in the world created by women" alıntısının arka planı',
     },
     {
@@ -79,7 +87,9 @@ SOURCES = [
         "dir": "what-we-believe",
         "out": "little-prince",
         "sha256": "fb3149535122cae3479b84c0f3c8773f76c3a1d04d66e3276b5629cf41929580",
-        "duotone": True,
+        # 19 Eylul 2026: duotone KAPATILDI + notrallestirme (ayni gerekce).
+        "duotone": False,
+        "neutralise": True,
         "note": "Küçük Prens alıntısının arka planı",
     },
 ]
@@ -149,6 +159,16 @@ def main() -> int:
         }
 
         rgb = image.convert("RGB")
+        if src.get("neutralise"):
+            from PIL import ImageOps
+
+            # Kaynaktaki renk yanliligini luma'ya indirger. Eski filtrenin
+            # "gercek" renkleri geri getirilemez (tek yonlu bir islemdi);
+            # notr gri, uydurma bir renklendirmeden durust ve siyah zeminde
+            # tipografiyle daha iyi calisiyor.
+            rgb = ImageOps.grayscale(rgb).convert("RGB")
+            entry["treatment"] = "notrallestirildi (luma) — eski site filtresi kaldirildi"
+
         if src["duotone"]:
             from PIL import ImageOps
 

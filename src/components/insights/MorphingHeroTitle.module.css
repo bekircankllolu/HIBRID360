@@ -30,12 +30,19 @@
   pointer-events: none;
 }
 
+/* Hareket azaltmada morf yok, başlık tek statik metin ("THINK & THANK").
+   Animasyon düzeni (1em yüksek sahne, üst üste mutlak konumlu iki satır,
+   nowrap) burada geçersiz: tek satır hâli geniş ekranda bile kolonu aşıp
+   kırpılıyordu. Metin akışa döner ve "THINK" / "& THANK" olarak kırılır. */
 @media (prefers-reduced-motion: reduce) {
   .stage {
+    height: auto;
     filter: none;
   }
 
   .text {
+    position: static;
+    white-space: normal;
     will-change: auto;
   }
 }

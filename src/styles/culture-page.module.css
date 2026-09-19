@@ -3,9 +3,11 @@
  * paylaşılan stil — service-page.module.css ile aynı desen, alıntı ve
  * kurucu bloğu gibi Culture'a özgü sınıflar eklendi.
  */
+/* Alt dolgu üstten kısa: sayfanın ardından her zaman CtaBand geliyor ve
+   kendi üst dolgusunu taşıyor; iki dolgu üst üste ~310px boşluk açıyordu. */
 .page {
   width: 100%;
-  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
+  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter) clamp(2.5rem, 5vw, 5rem);
 }
 
 .heroTitle {
@@ -128,9 +130,9 @@
  *    serif bunu BİÇİMLE söyler — eğime ya da tırnağa ihtiyacı olmaz.
  *    monks.com'un aynı rolde Morian kullanması bu yüzden.
  *
- * Punto büyüdü çünkü Instrument Serif dar bir yüz (Georgia'ya göre 76.86%
- * ortalama genişlik): aynı px'te sans'tan küçük görünür, eşit ağırlıkta
- * durması için büyümesi gerekir.
+ * Punto sans'tan bir kademe büyük: serif aynı px'te daha küçük görünür
+ * (Newsreader Georgia'ya göre %91.5 ortalama genişlik), eşit ağırlıkta
+ * durması için büyümesi gerekiyor.
  */
 .quote {
   font-family: var(--font-editorial);

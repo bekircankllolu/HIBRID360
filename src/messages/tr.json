@@ -5,7 +5,8 @@
     "skipToContent": "İçeriğe geç",
     "pauseAnimation": "Animasyonu duraklat",
     "resumeAnimation": "Animasyonu sürdür",
-    "closeDetails": "Detayı kapat"
+    "closeDetails": "Detayı kapat",
+    "aiRepresentative": "AI ile üretilmiş temsili görsel"
   },
   "nav": {
     "whoWeAre": "Biz Kimiz",
@@ -51,7 +52,7 @@
       "label": "AI SHOWREEL",
       "cta": "İmleci hareket ettirin",
       "touchCta": "Ekrana dokunun",
-      "representative": "AI ile üretilmiş temsili showreel görseli"
+      "representative": "AI ile üretilmiş temsili showreel videosu"
     },
     "lessTalk": {
       "title": "Az Laf, Çok İş",
@@ -423,7 +424,8 @@
     },
     "ctaLead": "Birlikte ne ürettiğimizi görmek ister misiniz?",
     "testimonialsTitle": "Ne diyorlar",
-    "testimonialsEmpty": "Müşteri sözleri hazırlanıyor."
+    "testimonialsEmpty": "Müşteri sözleri hazırlanıyor.",
+    "friendsCountLabel": "DOST"
   },
   "serviceProduction": {
     "localeNote": "Bu sayfa, Türkiye’de çekim yapmak isteyen yurt dışı ajans, yapımcı ve markalar için hazırlandı; içeriği İngilizcedir.",

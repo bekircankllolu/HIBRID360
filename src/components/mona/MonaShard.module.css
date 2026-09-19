@@ -33,3 +33,22 @@
   opacity: 0.9;
   mask-image: linear-gradient(to bottom, var(--color-brand-black) 80%, transparent);
 }
+
+/*
+ * Merkezî varyant (What We Do dizininin AI satırı): küre kabın ortasında,
+ * kap kadar canvas, taşma yok. `view-transition-name` BİLEREK yok — hizmet
+ * sayfalarındaki köşe varyantı o adı taşıyor ve aynı ad aynı anda iki kez
+ * var olursa geçiş API'si hata veriyor.
+ */
+.center {
+  position: absolute;
+  inset: 0;
+  contain: layout;
+}
+
+/* Alt şeridin sönümü köşe varyantına özgü (küre oradan taşıyor); merkezde
+   küre zaten kabın içinde, maske kürenin altını yerdi. */
+.canvasCenter {
+  opacity: 1;
+  mask-image: none;
+}

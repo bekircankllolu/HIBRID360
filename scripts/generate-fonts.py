@@ -152,15 +152,26 @@ def main() -> None:
 
     build_logo_font()
 
-    # Yalnız Regular. Instrument Serif'in italiği (20.8 KB) editoryal seste
-    # güzel duruyor ama henüz onunla tasarlanmış bir yer yok — tasarım onu
-    # gerçekten isterse Faz 3'te eklenip yeniden ölçülecek.
-    print("Instrument Serif — editoryal kontrast (Regular)")
-    serif = TTFont(io.BytesIO(fetch(f"{GF}/instrumentserif/InstrumentSerif-Regular.ttf")))
-    build(serif, OUT / "instrument-serif-latin-tr.woff2")
+    # Editoryal serif: 18 Eylül 2026'da Instrument Serif'ten Newsreader'a
+    # geçildi (kullanıcı: "serifli fontları daha okunaklı şık serifli fontla
+    # değiştir"). Instrument Serif dar ve ince; alıntı puntolarında (20-48px)
+    # okunabilirliği düşüktü — numune: ölçülen ortalama genişlik 0.344 em,
+    # Newsreader 0.405 em, harfler belirgin biçimde daha açık.
+    #
+    # İki eksen de SABİTLENİR. wght 400: beş kullanımın hepsi 400. opsz 24:
+    # optik boyut eksenini değişken bırakmak ölçüldü — 20.3 KB yerine 53.9 KB,
+    # yani yalnız birkaç alıntı için +34 KB. Kullanılan punto aralığı 20-48px
+    # (≈15-36pt) ve 24 bu aralığın ortası; kazanç bütçeye değmiyor
+    # (CLAUDE.md performans bütçesi).
+    print("Newsreader — editoryal serif (wght 400, opsz 24 sabit)")
+    serif = TTFont(io.BytesIO(fetch(f"{GF}/newsreader/Newsreader%5Bopsz%2Cwght%5D.ttf")))
+    serif = instancer.instantiateVariableFont(
+        serif, {"wght": 400, "opsz": 24}, updateFontNames=False
+    )
+    build(serif, OUT / "newsreader-latin-tr.woff2")
 
     print("Lisanslar (OFL 1.1)")
-    for family, name in (("archivo", "Archivo"), ("instrumentserif", "InstrumentSerif")):
+    for family, name in (("archivo", "Archivo"), ("newsreader", "Newsreader")):
         target = OUT / f"OFL-{name}.txt"
         target.write_bytes(fetch(f"{GF}/{family}/OFL.txt"))
         print(f"  {target.name}")

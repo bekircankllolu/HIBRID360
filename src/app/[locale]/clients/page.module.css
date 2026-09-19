@@ -57,55 +57,115 @@
   border-block: 1px solid rgba(255, 252, 0, 0.35);
 }
 
+/* İşaret artık kadrajı dolduran bir fotoğraf değil, çizilen bir vektör
+   (AnniversaryMark): siyah alanın ortasında, kendi nefes payıyla durur. */
 .anniversaryImageWrap {
   position: relative;
+  display: grid;
+  place-items: center;
   min-height: 34rem;
+  padding: clamp(2rem, 5vw, 5rem);
   overflow: hidden;
   background: #000;
 }
 
-.anniversaryImage {
-  object-fit: cover;
-  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+.anniversaryImageWrap > * {
+  width: min(30rem, 100%);
 }
 
+/*
+ * Sarı panel — üç çapalı editoryal kompozisyon (bkz. page.tsx notu).
+ *
+ * Eski hâl: `justify-content: flex-end` + tarihin `margin-bottom: auto`
+ * ile tepeye itilmesi. Panel 778px, içerik ~370px → aradaki 210px ölü
+ * boşluk. Yeni hâl `space-between` ile ÜÇ blok taşıyor (tarih · söz ·
+ * sayı), yani boşluk üçe bölünüyor ve her parça bir şey anlatıyor.
+ */
 .anniversaryCopy {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: clamp(2rem, 4vw, 3.5rem);
   padding: clamp(2rem, 6vw, 6rem) var(--page-gutter);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
 }
 
 .anniversaryDate {
-  margin: 0 0 auto;
+  margin: 0;
+  padding-bottom: var(--space-3);
   /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
      harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
   font-family: var(--font-ui);
   font-size: var(--font-size-label);
-
   font-weight: var(--font-weight-heading-bold);
   letter-spacing: 0.14em;
+  /* İnce çizgi paneli üç bölüme ayıran ilk ayraç. Sarı zeminde siyah:
+     marka kuralı (beyaz sarı üzerinde AA'yı geçmiyor). */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
 }
 
+.anniversaryStatement {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/*
+ * Punto SÜTUNUN İÇ GENİŞLİĞİNE göre tavanlı: 1440px'te sütun 662px,
+ * yatay dolgu 2x86px → iç genişlik 490px. "CHAMPIONS" Archivo 800'de
+ * ~5.6em; 86px'te tam o genişliği dolduruyor, daha büyüğü kelimeyi
+ * taşırıyor. Bu yüzden başlığı büyütmek boşluk sorununun çözümü değildi.
+ */
 .anniversaryCopy h2 {
-  margin: 0 0 var(--space-6);
+  margin: 0;
   font-family: var(--font-brand);
   font-size: clamp(2.25rem, 6vw, 6rem);
   line-height: 0.88;
+  letter-spacing: -0.02em;
 }
 
-.anniversaryCopy p:last-child {
+.anniversaryCopy .anniversaryStatement p {
   margin: 0;
   max-width: 34rem;
   font-size: clamp(1rem, 1.6vw, 1.25rem);
   line-height: 1.5;
 }
 
-@media (hover: hover) {
-  .anniversary:hover .anniversaryImage { transform: scale(var(--media-zoom-scale)); }
+/*
+ * Alt çapa: sayfanın hemen altındaki isim dizininin sayısı. Sayı sayfada
+ * gerçekten gösterilen listeden geliyor (page.tsx), uydurma bir rakam
+ * değil.
+ */
+.anniversaryCount {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  margin: 0;
+  padding-top: clamp(1rem, 2.5vw, 2rem);
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
 }
+
+.anniversaryCountValue {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(3rem, 8vw, 7.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.anniversaryCountLabel {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.14em;
+}
+
+/* Eski fotoğrafın hover zoom'u kalktı: işaret artık vektör ve kendi hover
+   tepkisini taşıyor (AnniversaryMark — altın parlama). */
 
 .testimonials,
 .cta {

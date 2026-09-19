@@ -1,0 +1,213 @@
+/**
+ * Culture indeksi — bkz. CultureIndex.tsx.
+ *
+ * Scroll bağlantısı: `--progress` (0→1) useScrollScene "pass" modundan
+ * gelir; liste ekranın altından girerken 0. Her satırın kendi ilerlemesi
+ * `--i` sırasıyla kaydırılmış bir alt aralık: satırlar sırayla, geri
+ * kaydırınca ters sırayla. Son satır ilerleme 0.28'de tamamlanıyor — sayfa
+ * açıldığında liste zaten ekranın üst yarısında (ilerleme ~0.34), yani
+ * hiç kaydırmayan ziyaretçi de listeyi tam görür.
+ *
+ * `--progress` yoksa (JS yüklenmeden, hareket azaltma) varsayılan 1: liste
+ * her koşulda görünür başlar.
+ */
+.wrap {
+  position: relative;
+}
+
+.list {
+  --p: var(--progress, 1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  --row: clamp(0, calc((var(--p) - 0.02 - var(--i) * 0.03) / 0.14), 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Satırın üst çizgisi soldan çizilir. */
+.row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scaleX(var(--row));
+  transform-origin: left;
+}
+
+.list::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scaleX(clamp(0, calc((var(--p) - 0.14) / 0.14), 1));
+  transform-origin: left;
+}
+
+/* Hover / odak: satır aşağıdan marka sarısıyla dolar. */
+.row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 560ms var(--ease-house);
+}
+
+.link {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: clamp(3rem, 6vw, 6rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+  /* İç boşluk cömert — eski kartlarda metin kutu kenarına yapışıktı. */
+  padding: clamp(1.25rem, 2.6vw, 2.4rem) clamp(1rem, 2vw, 2rem);
+  color: var(--color-brand-white);
+  transition: color 420ms var(--ease-house);
+}
+
+.number {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-body-medium);
+  font-size: var(--font-size-label);
+  letter-spacing: var(--tracking-micro);
+  color: var(--color-brand-yellow);
+  opacity: var(--row);
+  transition: color 420ms var(--ease-house);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-brand);
+  font-size: clamp(2rem, 5.6vw, 5.25rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  opacity: var(--row);
+  transform: translateY(calc((1 - var(--row)) * 1.5em));
+  transition: translate 560ms var(--ease-house);
+}
+
+.arrow {
+  display: grid;
+  place-items: center;
+  width: clamp(2.75rem, 4.5vw, 4rem);
+  height: clamp(2.75rem, 4.5vw, 4rem);
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: 1.25rem;
+  opacity: var(--row);
+  rotate: -45deg;
+  transition:
+    rotate 560ms var(--ease-house),
+    background-color 420ms var(--ease-house),
+    color 420ms var(--ease-house),
+    border-color 420ms var(--ease-house);
+}
+
+.row:hover::after,
+.row:focus-within::after {
+  transform: scaleY(1);
+}
+
+/* Sarı zeminde SİYAH metin — CLAUDE.md kontrast kuralı. */
+.row:hover .link,
+.row:focus-within .link,
+.row:hover .number,
+.row:focus-within .number {
+  color: var(--color-text-on-yellow);
+}
+
+/* `translate` bireysel özelliği: scroll'un yazdığı `transform` ile
+   çakışmadan hover kaymasını ekler. */
+.row:hover .title,
+.row:focus-within .title {
+  translate: clamp(0.75rem, 2vw, 2rem) 0;
+}
+
+.row:hover .arrow,
+.row:focus-within .arrow {
+  rotate: 0deg;
+  background: var(--color-brand-black);
+  color: var(--color-brand-yellow);
+  border-color: var(--color-brand-black);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-brand-fuchsia);
+  outline-offset: -4px;
+}
+
+/* İmleci takip eden önizleme — yalnız hassas işaretçi + hareket açık. */
+.peek {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: clamp(12rem, 18vw, 16rem);
+  aspect-ratio: 4 / 5;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.86;
+  transition:
+    opacity 280ms var(--ease-house),
+    scale 420ms var(--ease-house);
+}
+
+.peek[data-visible="true"] {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (max-width: 760px) {
+  /* Numara başlığın üstüne çıkar, başlık tam genişliği alır: tek parça
+     uzun kelimeler ("Sürdürülebilirlik") 390px'te satıra sığsın. */
+  .link {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.5rem;
+    padding: 1.25rem 0.25rem;
+  }
+
+  .number {
+    grid-column: 1 / -1;
+  }
+
+  .title {
+    font-size: 6.6vw;
+    letter-spacing: -0.03em;
+  }
+
+  .arrow {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+    /* Dokunmatikte hover yok: ok baştan düz dursun. */
+    rotate: 0deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row::after,
+  .link,
+  .number,
+  .title,
+  .arrow {
+    transition: none;
+  }
+}

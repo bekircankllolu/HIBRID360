@@ -41,7 +41,7 @@
    *
    * SONRASI: her rolün kendi sesi var. Referans monks.com'un dört sesli
    * yapısı (Helvetica Now Extended 800 / Helvetica Now / Morian / Caveat);
-   * buradaki karşılıkları Archivo / Inter / Instrument Serif.
+   * buradaki karşılıkları Archivo / Inter / Newsreader.
    *
    *   --font-display    büyük tipografik an: h1, statement, bant sloganı
    *   --font-brand      başlık ve marka sesi (h2, h3, kart başlığı)
@@ -67,7 +67,7 @@
   --font-brand: "Archivo", "Archivo Fallback", system-ui, sans-serif;
   --font-body: "Inter", "Inter Fallback", system-ui, sans-serif;
   --font-ui: "Inter", "Inter Fallback", system-ui, sans-serif;
-  --font-editorial: "Instrument Serif", "Instrument Serif Fallback", Georgia, serif;
+  --font-editorial: "Newsreader", "Newsreader Fallback", Georgia, serif;
 
   /**
    * Logotype — YALNIZ literal "Hibrid 360" yazımı (5 kullanım: Header
@@ -127,6 +127,9 @@
 
   /* Gövde metni: 16-18px, satır yüksekliği 1.5 (CLAUDE.md) */
   --font-size-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  /* Gövdenin bir kademe büyüğü (17-20px) — AI Creative Production kanıt
+     listesi kullanıyordu ama tanımlı değildi, punto miras alınıyordu. */
+  --font-size-body-lg: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
   --line-height-body: 1.5;
 
   /**
@@ -153,8 +156,15 @@
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  /* --space-5 ve --space-10 ölçekte yoktu ama 8 yerde kullanılıyordu
+     (17 Eylül 2026 denetimi). Tanımsız bir var() bütün kısayolu
+     geçersiz kılıyor: `padding: var(--space-6) var(--space-5)` padding'i
+     SIFIRA düşürüyordu — Culture kartlarında metnin kutu kenarına
+     yapışmasının sebebi buydu. Eksik adımlar tanımlandı. */
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
   --space-24: 6rem;

@@ -1,17 +1,135 @@
 /**
- * What We Believe — tam genişlik alıntı/görsel bölümleri.
+ * What We Believe — sayfaya özgü yerleşim.
  *
- * Eski sitenin anlatım yapısı korunuyor: liste bloklarının ardından iki
- * tam genişlik görsel bandı geliyor (Atatürk · Küçük Prens), metin
- * görselin üzerinde duruyor.
+ * 19 Eylül 2026'da yeniden tasarlandı; gerekçe page.tsx dosya başında.
+ * İki yapısal karar burada:
  *
- * OKUNAKLILIK: kontrast görselin kendisine bırakılmıyor. Her bandın
- * üstünde alttan yukarı koyulaşan bir perde var; metin o perdenin
- * içinde, görselin en parlak yerinde bile beyaz metin AA'yı geçiyor
- * (axe ile doğrulandı). Bu yüzden marka kuralındaki "sarı zemin →
- * siyah metin" durumu burada oluşmuyor: metnin arkasındaki zemin sarı
- * değil, siyaha yakın.
+ * 1. Metin fotoğrafın ÜZERİNDE değil, ALTINDA. Eskiden alttan yukarı
+ *    koyulaşan bir perdenin içindeydi — kontrast her kadrajda yeniden
+ *    doğrulanması gereken bir riskti ve perde görselin alt üçte birini
+ *    yutuyordu. Şimdi kadraj tam görünüyor, metin siyah zeminde: kontrast
+ *    tanımı gereği garanti (beyaz/sarı üzeri #000).
+ *
+ * 2. Vizyon/Misyon satırları display ölçeğinde. Sayfanın en iddialı
+ *    cümleleri 14px Inter etiketleri olarak diziliyordu.
  */
+
+/* ---------- Creed bölümleri (Vizyon · Misyon · İlham · İlkeler) ---------- */
+
+/*
+ * İki sütun: solda sabit genişlikte etiket, sağda içerik. Etiket sütunu
+ * dört bölümde de aynı genişlikte — bölümler arasında dikey bir hat
+ * oluşuyor, sayfa bir sisteme oturmuş gibi duruyor.
+ */
+.creed {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  margin-top: clamp(3rem, 7vw, 7rem);
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.creedLabel {
+  margin: 0;
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — bu ölçüde fazla
+     geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-heading-semibold);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-yellow);
+}
+
+.creedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Satır: numara + iddia (+ varsa em-dash'in sağındaki nitelik).
+ * `baseline` hizası bilinçli — numara display puntosunun yanında küçük
+ * kalıyor, üst hizada asılı durmasın.
+ */
+.creedItem {
+  display: grid;
+  grid-template-columns: minmax(0, 2.5rem) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0 clamp(0.75rem, 1.8vw, 1.5rem);
+  padding-block: clamp(0.65rem, 1.4vw, 1.1rem);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.creedItem:last-child {
+  border-bottom: 0;
+}
+
+.creedIndex {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-body-medium);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  color: var(--color-brand-yellow);
+}
+
+/*
+ * Metinler zaten BÜYÜK HARF yazılmış (deck metni) — `text-transform`
+ * eklenmiyor. Espas dev puntoda sıkı: sistemin kuralı.
+ */
+.creedClaim {
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.2rem, 2.9vw, 2.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--color-text-on-black);
+}
+
+/* Em-dash'in sağı: aynı ölçekte ama marka sarısı ve numara sütununun
+   sağında ikinci satır olarak. İki kademe tek satıra sığmıyor. */
+.creedEcho {
+  grid-column: 2;
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  font-size: clamp(1.2rem, 2.9vw, 2.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-yellow);
+}
+
+/* Cümle uzunluğundaki maddeler — display değil, proz ölçüsü. */
+.proseList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.proseItem {
+  max-width: var(--measure-prose);
+  padding-block: clamp(0.8rem, 1.6vw, 1.3rem);
+  border-bottom: 1px solid var(--color-hairline);
+  font-family: var(--font-ui);
+  font-size: clamp(1.0625rem, 1.35vw, 1.3125rem);
+  line-height: 1.5;
+  color: var(--color-text-on-black);
+}
+
+.proseItem:last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 780px) {
+  .creed {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+/* ---------- Tam genişlik görsel bantları ---------- */
+
 .figure {
   position: relative;
   /* Tam genişlik: sayfa konteynerinin yatay boşluğu kadar dışarı taşar.
@@ -21,7 +139,6 @@
   margin-inline: calc(-1 * var(--page-gutter));
   margin-block: clamp(4rem, 9vw, 8rem);
   isolation: isolate;
-  overflow: hidden;
 }
 
 .image {
@@ -33,6 +150,12 @@
   object-fit: cover;
   object-position: center;
   transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+/* Zoom görselin kendi kutusunda kalmalı; `overflow` artık `.figure`da
+   değil (caption dışarıda), burada. */
+.imageWrap {
+  overflow: hidden;
 }
 
 @media (hover: hover) {
@@ -48,32 +171,32 @@
   aspect-ratio: 16 / 11;
 }
 
-/* Metin perdesi — alttan yukarı. */
+/*
+ * Metin şeridi — görselin ALTINDA, siyah zeminde. Perde yok: kadraj tam
+ * görünüyor ve kontrast görselin en parlak yerine bağlı değil.
+ * Üstte marka sarısı bir hairline: şerit görselin devamı gibi değil,
+ * bilinçli bir söz alanı gibi okunuyor.
+ */
 .caption {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: clamp(3rem, 9vw, 7rem) var(--page-gutter)
-    clamp(1.5rem, 4vw, 3.5rem);
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.82) 32%,
-    rgba(0, 0, 0, 0.45) 62%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  display: grid;
+  grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+  gap: clamp(0.75rem, 4vw, 4rem);
+  align-items: start;
+  padding: clamp(1.25rem, 2.6vw, 2.25rem) var(--page-gutter)
+    clamp(1.5rem, 3vw, 2.75rem);
+  border-top: 1px solid var(--color-brand-yellow);
+  background: var(--color-brand-black);
 }
 
 .captionLead {
-  margin: 0 0 var(--space-3);
-  max-width: 52rem;
+  margin: 0;
   /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
      harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
   font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-semibold);
   font-size: var(--font-size-label);
-  letter-spacing: 0.1em;
+  line-height: 1.45;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-brand-yellow);
 }
@@ -82,26 +205,27 @@
    okunmasın diye (bkz. src/data/what-we-believe.ts atıf notu). */
 .captionStatement {
   margin: 0;
-  max-width: 34ch;
+  max-width: 24ch;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-brand);
-  font-size: clamp(1.5rem, 4.5vw, 3.25rem);
-  line-height: 1.05;
-  color: var(--color-brand-yellow);
+  font-size: clamp(1.75rem, 4.4vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  color: var(--color-text-on-black);
 }
 
 /* Editoryal serif — sahte oblik kaldırıldı (bkz. culture-page.module.css
    .quote notu). Serif dar olduğu için punto bir kademe büyüdü. */
 .captionQuote {
   margin: 0;
-  max-width: 26ch;
+  max-width: 24ch;
   font-family: var(--font-editorial);
   font-weight: 400;
   font-style: normal;
-  font-size: clamp(1.5rem, 4.2vw, 3rem);
-  line-height: 1.15;
+  font-size: clamp(1.6rem, 4.2vw, 3.5rem);
+  line-height: 1.12;
   letter-spacing: var(--tracking-heading);
-  color: var(--color-brand-yellow);
+  color: var(--color-text-on-black);
 }
 
 .captionAuthor {
@@ -111,6 +235,24 @@
   letter-spacing: var(--tracking-ui);
   text-transform: uppercase;
   color: var(--color-brand-yellow);
+}
+
+/* Alıntı bandında sol sütun boş kalıyor; imza alıntının altında durmalı,
+   yan sütuna kaçmamalı. */
+.captionQuote,
+.captionAuthor {
+  grid-column: 2;
+}
+
+@media (max-width: 780px) {
+  .caption {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .captionQuote,
+  .captionAuthor {
+    grid-column: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -123,10 +265,13 @@
     transform: none;
   }
 }
+
 .values {
   margin-top: clamp(4rem, 10vw, 9rem);
   padding: clamp(3rem, 7vw, 6rem) var(--page-gutter);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
 }
 

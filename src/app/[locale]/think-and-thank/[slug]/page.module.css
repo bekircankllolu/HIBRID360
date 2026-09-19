@@ -112,6 +112,8 @@
   margin: 0.04em 0.12em 0 0;
   padding: 0.05em 0.09em;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
   font-family: var(--font-brand);
   font-size: 3.7em;

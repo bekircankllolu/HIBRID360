@@ -36,6 +36,21 @@ export function HeroTypography() {
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showreelInView, setShowreelInView] = useState(false);
+  /**
+   * Showreel indirmesi sayfa oturana kadar BEKLETİLİR.
+   *
+   * 19 Eylül 2026'da ölçüldü (Lighthouse, mobil throttling): showreel
+   * videosu kadraja konur konmaz LCP ÖĞESİ oldu ve LCP 5.1 sn'ye çıktı —
+   * CLAUDE.md'nin 2.5 sn'lik sözleşme maddesinin iki katı. Sebep: kadraj
+   * hero'nun içinde, yani daha ilk karede görünür; `preload="none"` olsa
+   * da `play()` hemen çağrılınca 1.2 MB'lık dosya kritik yola giriyordu.
+   *
+   * Çözüm indirmeyi ERTELEMEK: `load` olayından (ve varsa bir boşta
+   * geçen kareden) sonra başlıyor. O ana kadar poster karesi (88 KB webp)
+   * görünüyor ve LCP'yi o karşılıyor; video birkaç yüz milisaniye sonra
+   * sessizce devralıyor. Kullanıcı açısından görünen kadraj aynı.
+   */
+  const [deferredLoad, setDeferredLoad] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const hasShowreel = HOME_SHOWREEL !== null;
   const hasPlayableShowreel = Boolean(
@@ -57,10 +72,35 @@ export function HeroTypography() {
   }, [hasShowreel]);
 
   useEffect(() => {
+    if (!hasShowreel || prefersReducedMotion) return;
+
+    let idle = 0;
+    let timer = 0;
+    const begin = () => {
+      // Boşta geçen ilk kareyi bekle: hidrasyon işi videoyla yarışmasın.
+      const request = window.requestIdleCallback;
+      if (request) idle = request(() => setDeferredLoad(true), { timeout: 1500 });
+      else timer = window.setTimeout(() => setDeferredLoad(true), 400);
+    };
+
+    if (document.readyState === "complete") {
+      begin();
+    } else {
+      window.addEventListener("load", begin, { once: true });
+    }
+
+    return () => {
+      window.removeEventListener("load", begin);
+      if (idle) window.cancelIdleCallback?.(idle);
+      if (timer) window.clearTimeout(timer);
+    };
+  }, [hasShowreel, prefersReducedMotion]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (showreelInView && !prefersReducedMotion) {
+    if (deferredLoad && showreelInView && !prefersReducedMotion) {
       void video.play().catch(() => {
         // Tarayıcı otomatik oynatmayı engellerse poster görünmeye devam eder.
       });
@@ -68,7 +108,7 @@ export function HeroTypography() {
     }
 
     video.pause();
-  }, [prefersReducedMotion, showreelInView]);
+  }, [deferredLoad, prefersReducedMotion, showreelInView]);
 
   useEffect(() => {
     if (!hasShowreel) return;

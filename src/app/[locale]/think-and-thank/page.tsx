@@ -8,6 +8,7 @@ import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import { EditorialImage } from "@/components/insights/EditorialImage";
+import { ScrollContours } from "@/components/insights/ScrollContours";
 import { YouTubeLite } from "@/components/insights/YouTubeLite";
 import { KineticStatement } from "@/components/insights/KineticStatement";
 import { MorphingHeroTitle } from "@/components/insights/MorphingHeroTitle";
@@ -53,11 +54,7 @@ export default async function ThinkAndThankPage({
         ])}
       />
       <header className={styles.hero}>
-        <div className={styles.contours} aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
+        <ScrollContours className={styles.contours} />
         <div className={styles.heroInner}>
           <p className={styles.heroEyebrow} lang="en">{t("heroEyebrow")} / 01</p>
           <MorphingHeroTitle className={styles.heroTitle} />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/EmptyState";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ServiceChapter } from "@/components/service-chapter/ServiceChapter";
 import { ServiceSignatureVideo } from "@/components/service-chapter/ServiceSignatureVideo";
@@ -11,8 +12,6 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { nextChapter } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
-
-const SERVICES = ["ONLINE LIVE BROADCASTING", "LIVE BROADCAST WITH A SATELLITE UPLINK", "LIVE MEDICAL BROADCASTING", "LIVE REMOTE BROADCASTING"] as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -40,7 +39,7 @@ export default async function LiveBroadcastPage({ params }: { params: Promise<{ 
         titleLines={["LIVE", "BROADCAST"]}
         lede="LIVE IS THE HARDEST FORMAT. IT’S OUR FAVOURITE."
         body={body}
-        services={SERVICES}
+        services={SERVICE_OFFERINGS.liveBroadcast}
         visual={{ src: siteImages.services.liveBroadcast.src, alt: siteImages.services.liveBroadcast.alt[locale] }}
         shape="broadcast"
         blurb={blurb}

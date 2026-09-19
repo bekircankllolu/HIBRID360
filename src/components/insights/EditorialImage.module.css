@@ -9,6 +9,9 @@
   isolation: isolate;
 }
 
+/* İmleç kayması ve hover yaklaşması `transform`'da (geçişli); kaydırmaya
+   bağlı dönme/yaklaşma ayrı `rotate`/`scale` özelliklerinde (geçişsiz) —
+   ikisi çarpılır, biri diğerinin geçişine takılmaz. */
 .image {
   object-fit: cover;
   transform: translate3d(var(--image-shift-x), var(--image-shift-y), 0) scale(1.045);
@@ -24,35 +27,23 @@
   border-radius: 50%;
 }
 
+/* Görsel ekrandan geçerken -70° → +70° döner. `--progress` yokken (JS
+   öncesi) .5: düz durur. */
 .rotating .image {
-  animation: editorialTurn 28s linear infinite;
   transform: scale(1.1);
+  rotate: calc((var(--progress, 0.5) - 0.5) * 140deg);
 }
 
 .rotating:hover .image {
-  animation-play-state: paused;
-  transform: scale(1.16) rotate(4deg);
+  transform: scale(1.16);
 }
 
-@keyframes editorialTurn {
-  to { transform: scale(1.1) rotate(360deg); }
-}
-
-/* Sürekli nefes alan zoom in/out — hover'dan bağımsız, kendiliğinden
-   döngü. Metni gömülü statik grafikler icin (brief'in "tüm fotolar
-   zoom in-zoom out olur" talebi). */
+/* Kaydırdıkça yaklaşma: 1.045 × (0.99 → 1.06) ≈ 1.03 → 1.11 — eski nefes
+   döngüsüyle aynı aralık, zamana değil kaydırmaya bağlı. Metni gömülü
+   statik grafikler için (brief'in "tüm fotolar zoom in-zoom out olur"
+   talebi). */
 .ambient .image {
-  animation: editorialBreathe 9s ease-in-out infinite;
-}
-
-.ambient:hover .image {
-  animation-play-state: paused;
-  transform: scale(1.12);
-}
-
-@keyframes editorialBreathe {
-  0%, 100% { transform: scale(1.03); }
-  50% { transform: scale(1.11); }
+  scale: calc(0.99 + 0.07 * var(--progress, 0.5));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -60,10 +51,10 @@
   .frame:hover .image,
   .rotating .image,
   .rotating:hover .image,
-  .ambient .image,
-  .ambient:hover .image {
-    animation: none;
+  .ambient .image {
     transform: none;
+    rotate: none;
+    scale: none;
     transition: none;
   }
 }

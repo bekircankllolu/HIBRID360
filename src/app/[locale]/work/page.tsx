@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { BrandIdent } from "@/components/ui/BrandIdent";
+import { TeamBand } from "@/components/work/TeamBand";
+import { WorkHeroFilm } from "@/components/work/WorkHeroFilm";
 import { WorkArchive } from "@/components/work/WorkArchive";
 import type { Locale } from "@/i18n/routing";
 import { getPublishedWorks } from "@/lib/content";
@@ -41,6 +42,7 @@ export default async function WorkPage({
   const { locale } = await params;
   const { service } = await searchParams;
   const t = await getTranslations("work");
+  const tCommon = await getTranslations("common");
   const works = await getPublishedWorks();
 
   return (
@@ -53,17 +55,11 @@ export default async function WorkPage({
       />
 
       <header className={styles.hero}>
-        <video
-          className={styles.heroVideo}
-          src="/videos/hibrid-stone-loop-20260827.mp4"
-          poster="/videos/hibrid-stone-poster.webp"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        />
+        {/* 20 Eylül 2026: etkileşimli nöron ağı kaldırıldı (kullanıcı:
+            "buradaki nöron görselini değiştirelim, buraya takım
+            çalışmasını anlatan özgün bir video koyabilirsin"). Sunulan üç
+            yönden GERÇEK SET seçildi. */}
+        <WorkHeroFilm locale={locale} disclosure={tCommon("aiRepresentative")} />
         <div className={styles.heroCopy}>
           <h1 className={styles.heroTitle}>THE ART OF TEAMWORK</h1>
           <p className={styles.heroLead}>{t("showreelBody")}</p>
@@ -78,10 +74,12 @@ export default async function WorkPage({
         initialService={service}
       />
 
-      {/* Arşiv ile kapanış çağrısı arasında bir marka anı. Burası daha önce
-          boş siyah bir aralıktı; bant hem o boşluğu dolduruyor hem de işler
-          bittikten sonra sayfayı markaya geri bağlıyor. */}
-      <BrandIdent />
+      {/* Arşiv ile kapanış çağrısı arasında bir nefes. Burası daha önce
+          marka ident'i taşıyordu (önce dönen parçacık küresi videosu,
+          sonra parçacıkların "HIBRID 360" yazdığı sahne); ikisi de
+          markadan söz ediyordu. Kullanıcı isteğiyle bant artık sayfanın
+          KONUSUNU gösteriyor: birlikte çalışan bir ekip. */}
+      <TeamBand locale={locale} disclosure={tCommon("aiRepresentative")} />
 
       <div className={styles.outro}>
         <p className={styles.seoHeading}>{t("tagline")}</p>

@@ -3,11 +3,11 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
-  type PointerEvent,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -15,57 +15,75 @@ import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   orbitStones,
-  stonePoint,
-  ORBIT_VIEW,
-  ORBIT_RINGS,
-  ORBIT_TILT,
-  COMPACT_RINGS,
-  COMPACT_TILT,
   CRYSTAL_MEDIA,
+  SOLAR_BODIES,
+  SOLAR_CAMERA,
+  SOLAR_STAR_RADIUS,
   SOLAR_SYSTEM_TITLE,
+  STONE_SERVICE_KEYS,
 } from "@/data/solar-system";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
+import { chapterOf, formatDegree } from "@/lib/service-chapter";
 import {
-  createStarfield,
-  starAppearance,
-  STARLIGHT_RGB,
-  STAR_RGB,
-  STAR_PARALLAX,
-} from "@/lib/starfield";
-import { placeSolarPopover, type PopoverPlacement } from "@/lib/solar-popover";
-import {
-  createCrystalPlayback,
-  createParticleTrail,
-  returnWeight,
-  DRAG_THRESHOLD,
-  RETURN_SECONDS,
-  TRAIL_CAPACITY,
-  type Point,
-} from "@/lib/solar-motion";
+  approach,
+  approachVec,
+  focusDistance,
+  orbitPosition,
+  shortestAngle,
+  type CameraState,
+  type Vec3,
+} from "@/lib/solar-orbits";
+import { createSolarScene, type SolarBodyDef, type SolarScene } from "@/lib/solar-scene";
+import { acquireSceneLock, onSceneLockReleased, releaseSceneLock } from "@/lib/webgl-scene";
 import styles from "./SolarSystem.module.css";
 
-interface Body extends Point {
-  time: number;
-  returnAge: number;
-  offsetX: number;
-  offsetY: number;
-}
+/**
+ * Hibrid ekosistemi — WebGL uzay sahnesi.
+ *
+ * 18 Eylül 2026 kullanıcı revizyonu: *"ortadaki hibrit taşını görüyoruz, bu
+ * bir yıldız; etrafında dönenler gezegenler. Arka planda yıldızları görelim,
+ * gerçek bir uzay yaratalım. Üzerine tıkladığımızda o gezegen bize
+ * yakınlaşsın, boşluğa tıklayınca uzaklaşsın. Tıklayınca çok detaylı bir
+ * şekilde özelliklerini görelim — şu an çok yüzeysel."*
+ *
+ * Önceki sürüm Canvas 2B idi: düz noktalar, elips halkalar, sahte derinlik.
+ * Şimdi gerçek 3B (bkz. `src/lib/solar-scene.ts`), gerçek Kepler yörüngeleri
+ * (`src/lib/solar-orbits.ts`) ve kamera uçuşu var.
+ *
+ * ## Korunan sözleşmeler
+ * - Etiketler CANVAS'TA DEĞİL, DOM'da: gerçek `<button>`'lar, klavye sırası
+ *   ve ekran okuyucu adları aynen çalışıyor; her kare 3B konumdan ekran
+ *   koordinatına izdüşümle taşınıyorlar (React render'ı yok).
+ * - WCAG 2.2.2: kendiliğinden dönen sahne duraklatılabilir.
+ * - `prefers-reduced-motion`: tek statik kare çizilir, video hiç yüklenmez.
+ * - Video (kristal) yalnız sahne görünür alana girince indirilir.
+ * - Tek WebGL sahnesi kilidi (`acquireSceneLock`) — hero ile çakışmaz.
+ * - WebGL yoksa poster görseline düşer.
+ */
 
-interface Drag {
-  index: number;
-  pointerId: number;
-  clientX: number;
-  clientY: number;
-  offsetX: number;
-  offsetY: number;
-  moved: boolean;
-}
+const FOV = Math.PI / 4;
+const DRAG_THRESHOLD = 6;
 
-function crystalSize(width: number, compact: boolean, focus: number) {
-  return (
-    (compact ? Math.min(178, width * 0.5) : Math.min(350, width * 0.32)) *
-    CRYSTAL_MEDIA.scale *
-    (1 + focus * 0.045)
-  );
+/**
+ * 20 Eylül 2026 — PARÇACIK SÜRÜMÜNDEN GERİ DÖNÜLDÜ. Kullanıcı: *"gezegen
+ * list sistem olabilir, bundan bir önceki yaptığımız, onu geri getirelim.
+ * ekosistem düzenlemesini bir türlü beğenemedim."* Dokulu gezegen sahnesi
+ * (`solar-scene.ts`) hiç silinmemişti — yalnız kullanımdan kaldırılmıştı,
+ * bu yüzden geri dönüş bir dosya değişimi. Parçacık sahnesi
+ * (`solar-dust-scene.ts`, `solar-dust.ts`) dosyada duruyor, kullanılmıyor.
+ */
+function bodyDefs(): SolarBodyDef[] {
+  return SOLAR_BODIES.map((body) => ({
+    id: body.id,
+    albedo: `/images/site/solar/${body.id}-albedo.webp`,
+    height: `/images/site/solar/${body.id}-height.webp`,
+    radius: body.radius,
+    tilt: body.tilt,
+    spin: body.spin,
+    orbit: body.orbit,
+    ring: "ring" in body ? body.ring : undefined,
+    nightLights: "nightLights" in body ? body.nightLights : undefined,
+  }));
 }
 
 export function SolarSystem() {
@@ -73,634 +91,373 @@ export function SolarSystem() {
   const locale = useLocale();
   const t = useTranslations("common");
   const wwd = useTranslations("whatWeDo");
-  const descriptions = wwd.raw("list") as Array<{
-    title: string;
-    body: string;
-  }>;
+  const descriptions = wwd.raw("list") as Array<{ title: string; body: string }>;
+
   const [active, setActive] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
-  const [canvasUnavailable, setCanvasUnavailable] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
+
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const crystalHitRef = useRef<HTMLDivElement>(null);
   const detailRef = useRef<HTMLDivElement>(null);
-  const detailSize = useRef({ width: 248, height: 156 });
-  const detailPlacement = useRef<PopoverPlacement | null>(null);
-  const nodeRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const labelRefs = useRef<Array<HTMLDivElement | null>>([]);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const bodies = useRef<Body[]>(
-    orbitStones.map((stone) => ({
-      ...stonePoint(stone, 0),
-      time: 0,
-      returnAge: RETURN_SECONDS,
-      offsetX: 0,
-      offsetY: 0,
-    })),
-  );
-  const interaction = useRef({
-    active,
-    paused,
-    hover: null as number | null,
-    focus: null as number | null,
-    crystalHover: false,
+
+  // Kare döngüsünün okuduğu değerler ref'te: React render'ı kare başına
+  // çalışmasın (sahne 60fps, state 8 öğe için yeterince yavaş değişiyor).
+  const focusRef = useRef<number>(-1);
+  const pausedRef = useRef(false);
+  /**
+   * İmleç (ya da klavye odağı) bir gezegenin üstündeyken sistem duruyor.
+   * İki sebep: hareket eden 44px'lik bir hedefe tıklamak zor — Playwright
+   * bile "element is not stable" diyip tıklayamadı; ve sahne "nefesini
+   * tutuyor" gibi okunuyor. Durma ani değil, sönümlenerek (`timeScaleRef`).
+   */
+  const hoverRef = useRef<number | null>(null);
+  const timeScaleRef = useRef(1);
+  const dragRef = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
+  const cameraRef = useRef<CameraState>({
+    target: [0, 0, 0],
+    distance: SOLAR_CAMERA.distance,
+    yaw: SOLAR_CAMERA.yaw,
+    pitch: SOLAR_CAMERA.pitch,
   });
-  interaction.current.active = active;
-  interaction.current.paused = paused;
-  const dragRef = useRef<Drag | null>(null);
-  const suppressClick = useRef(false);
-  const pointer = useRef<Point | null>(null);
-  const metrics = useRef({
-    w: 1,
-    h: 1,
-    compact: false,
-    parX: 0,
-    parY: 0,
-    focus: 0,
-  });
-  const engine = useRef<{ wake: () => void; stop: () => void } | null>(null);
+  const yawDriftRef = useRef(SOLAR_CAMERA.yaw);
+  const manualYawRef = useRef(0);
+  const manualPitchRef = useRef(0);
 
-  const layoutDetail = useCallback(() => {
-    const index = interaction.current.active;
-    const detail = detailRef.current;
-    if (index === null || !detail || detail.hidden) return;
-    const { w, h, compact, parX, parY } = metrics.current;
-    if (w <= 1) return;
-    const body = bodies.current[index];
-    const anchor = {
-      x: (body.x * w) / ORBIT_VIEW.w + parX,
-      y: (body.y * h) / ORBIT_VIEW.h + parY,
-    };
-    const size = crystalSize(w, compact, 1);
-    const cx = (ORBIT_VIEW.cx * w) / ORBIT_VIEW.w + parX * 0.35;
-    const cy = (ORBIT_VIEW.cy * h) / ORBIT_VIEW.h + parY * 0.35;
-    const obstacles = bodies.current
-      .filter((_, i) => i !== index)
-      .map((point) => ({
-        x: (point.x * w) / ORBIT_VIEW.w + parX - 16,
-        y: (point.y * h) / ORBIT_VIEW.h + parY - 16,
-        width: 32,
-        height: 32,
-      }));
-    obstacles.push({ x: w - 48, y: h * 0.12 - 4, width: 48, height: 52 });
-    const placement = placeSolarPopover(
-      anchor,
-      detailSize.current,
-      { width: w, height: h },
-      {
-        x: cx - size * 0.36 - 8,
-        y: cy - size * 0.34 - 8,
-        width: size * 0.72 + 16,
-        height: size * 0.68 + 16,
-      },
-      obstacles,
-      detailPlacement.current?.side,
-    );
-    detailPlacement.current = placement;
-    detail.style.left = `${placement.x}px`;
-    detail.style.top = `${placement.y}px`;
-    detail.dataset.positioned = "true";
-  }, []);
-
-  const localPoint = useCallback(
-    (event: { clientX: number; clientY: number }): Point => {
-      const rect = stageRef.current!.getBoundingClientRect();
-      const { parX, parY } = metrics.current;
-      return {
-        x: ((event.clientX - rect.left - parX) / rect.width) * ORBIT_VIEW.w,
-        y: ((event.clientY - rect.top - parY) / rect.height) * ORBIT_VIEW.h,
-        depth: 1,
-      };
-    },
-    [],
-  );
-
-  const finishDrag = useCallback(() => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    dragRef.current = null;
-    const button = buttonRefs.current[drag.index];
-    if (button?.hasPointerCapture(drag.pointerId))
-      button.releasePointerCapture(drag.pointerId);
-    if (drag.moved) {
-      const body = bodies.current[drag.index];
-      const home = stonePoint(
-        orbitStones[drag.index],
-        body.time,
-        metrics.current.compact,
-      );
-      body.offsetX = body.x - home.x;
-      body.offsetY = body.y - home.y;
-      body.returnAge = 0;
-      suppressClick.current = true;
-    }
-    if (button) button.dataset.dragging = "false";
-    engine.current?.wake();
-  }, []);
-
-  const dismiss = useCallback((restoreFocus = false) => {
-    const previous = interaction.current.active;
-    detailPlacement.current = null;
-    setActive(null);
-    if (restoreFocus && previous !== null)
-      buttonRefs.current[previous]?.focus({ preventScroll: true });
-  }, []);
+  const bodies = useMemo(bodyDefs, []);
 
   useEffect(() => {
-    const outside = (event: globalThis.PointerEvent) => {
-      const target = event.target as Node;
-      if (
-        !detailRef.current?.contains(target) &&
-        !buttonRefs.current.some((button) => button?.contains(target))
-      )
-        dismiss();
-    };
-    const focusOutside = (event: FocusEvent) => {
-      const target = event.target as Node;
-      if (
-        interaction.current.active !== null &&
-        !detailRef.current?.contains(target) &&
-        !buttonRefs.current[interaction.current.active]?.contains(target)
-      )
-        dismiss();
-    };
-    const escape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      finishDrag();
-      dismiss(true);
-    };
-    const blur = () => {
-      finishDrag();
-      interaction.current.hover = null;
-      interaction.current.crystalHover = false;
-      pointer.current = null;
-    };
-    document.addEventListener("pointerdown", outside);
-    document.addEventListener("focusin", focusOutside);
-    document.addEventListener("keydown", escape);
-    window.addEventListener("blur", blur);
-    return () => {
-      document.removeEventListener("pointerdown", outside);
-      document.removeEventListener("focusin", focusOutside);
-      document.removeEventListener("keydown", escape);
-      window.removeEventListener("blur", blur);
-    };
-  }, [dismiss, finishDrag]);
-
-  useLayoutEffect(() => {
-    detailPlacement.current = null;
-    const detail = detailRef.current;
-    if (active === null || !detail) return;
-    const measure = () => {
-      detailSize.current = {
-        width: detail.offsetWidth,
-        height: detail.offsetHeight,
-      };
-      layoutDetail();
-      engine.current?.wake();
-    };
-    measure();
-    detail.focus({ preventScroll: true });
-    const observer = new ResizeObserver(measure);
-    observer.observe(detail);
-    return () => observer.disconnect();
-  }, [active, layoutDetail]);
+    focusRef.current = active ?? -1;
+  }, [active]);
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   useEffect(() => {
-    const stage = stageRef.current;
     const canvas = canvasRef.current;
+    const stage = stageRef.current;
+    if (!canvas || !stage) return;
+
     const video = videoRef.current;
-    if (!stage || !canvas || !video) return;
-    const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) {
-      setCanvasUnavailable(true);
-      return;
-    }
-    video.defaultPlaybackRate = CRYSTAL_MEDIA.playbackRate;
-    video.playbackRate = CRYSTAL_MEDIA.playbackRate;
-    const playback = createCrystalPlayback(video, CRYSTAL_MEDIA.fps);
-    const poster = new window.Image();
-    // Preserve the last decoded frame across loop boundaries and pending seeks.
-    const mediaFrame = document.createElement("canvas");
-    mediaFrame.width = CRYSTAL_MEDIA.width;
-    mediaFrame.height = CRYSTAL_MEDIA.height;
-    const mediaContext = mediaFrame.getContext("2d", { alpha: false });
-    let hasMediaFrame = false;
-    let mediaTime = -1;
-    const stars = createStarfield(0x1b360, 220);
-    const starSprites = Object.fromEntries(
-      Object.entries(STARLIGHT_RGB).map(([tint, rgb]) => {
-        const sprite = document.createElement("canvas");
-        sprite.width = sprite.height = 64;
-        const context = sprite.getContext("2d")!;
-        const light = context.createRadialGradient(32, 32, 0, 32, 32, 32);
-        light.addColorStop(0, "rgba(255,255,255,1)");
-        light.addColorStop(0.08, `rgba(${rgb},0.9)`);
-        light.addColorStop(0.2, `rgba(${rgb},0.32)`);
-        light.addColorStop(0.5, `rgba(${rgb},0.06)`);
-        light.addColorStop(1, `rgba(${rgb},0)`);
-        context.fillStyle = light;
-        context.fillRect(0, 0, 64, 64);
-        return [tint, sprite];
-      }),
-    );
-    let trails = orbitStones.map((_, i) =>
-      createParticleTrail(360 + i, TRAIL_CAPACITY.desktop),
-    );
-    const previousPoints = bodies.current.map((body) => ({
-      x: body.x,
-      y: body.y,
-      depth: body.depth,
-    }));
-    let inView = false;
-    let frame: number | null = null;
-    let last = 0;
-    let skyTime = 0;
-    let lastScroll = window.scrollY;
-    let dpr = 1;
-    let alive = true;
+    let live: SolarScene | null = null;
+    let attempted = false;
 
-    const frozen = () =>
-      reducedMotion ||
-      interaction.current.paused ||
-      interaction.current.crystalHover ||
-      !inView ||
-      document.hidden;
-
-    const paint = () => {
-      const { w, h, parX, parY, compact, focus } = metrics.current;
-      const sx = w / ORBIT_VIEW.w;
-      const sy = h / ORBIT_VIEW.h;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.globalCompositeOperation = "source-over";
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, w, h);
-
-      for (let i = 0; i < (compact ? 110 : 220); i++) {
-        const star = stars[i];
-        const appearance = starAppearance(star, skyTime, reducedMotion);
-        const par = STAR_PARALLAX[star.layer];
-        const x = appearance.x * w + parX * par * 0.4;
-        const y = appearance.y * h + parY * par * 0.4;
-        const alpha = Math.min(1, appearance.alpha * 1.3);
-        const size = star.radius * 8;
-        ctx.globalAlpha = alpha;
-        ctx.drawImage(
-          starSprites[star.tint],
-          x - size / 2,
-          y - size / 2,
-          size,
-          size,
-        );
-        ctx.beginPath();
-        ctx.arc(x, y, Math.max(0.3, star.radius * 0.58), 0, Math.PI * 2);
-        ctx.fillStyle = `rgb(${STARLIGHT_RGB[star.tint]})`;
-        ctx.fill();
-        if (star.alpha > 0.84) {
-          const ray = star.radius * 2.5;
-          ctx.beginPath();
-          ctx.moveTo(x - ray, y);
-          ctx.lineTo(x + ray, y);
-          ctx.moveTo(x, y - ray);
-          ctx.lineTo(x, y + ray);
-          ctx.strokeStyle = `rgba(${STARLIGHT_RGB[star.tint]},0.22)`;
-          ctx.lineWidth = 0.4;
-          ctx.stroke();
-        }
-      }
-      ctx.globalAlpha = 1;
-
-      const radii = compact
-        ? [COMPACT_RINGS[0], COMPACT_RINGS[2]]
-        : ORBIT_RINGS;
-      const highlight =
-        interaction.current.active ??
-        interaction.current.hover ??
-        interaction.current.focus;
-      radii.forEach((radius, index) => {
-        const highlighted =
-          highlight !== null &&
-          (compact ? COMPACT_RINGS : ORBIT_RINGS)[
-            orbitStones[highlight].ring
-          ] === radius;
-        ctx.beginPath();
-        ctx.ellipse(
-          ORBIT_VIEW.cx * sx + parX,
-          ORBIT_VIEW.cy * sy + parY,
-          radius * sx,
-          radius * (compact ? COMPACT_TILT : ORBIT_TILT) * sy,
-          0,
-          0,
-          Math.PI * 2,
-        );
-        const rgb = highlighted
-          ? STAR_RGB[orbitStones[highlight!].color]
-          : "255,255,255";
-        ctx.strokeStyle = `rgba(${rgb},${highlighted ? 0.3 : 0.18 - index * 0.03})`;
-        ctx.lineWidth = 0.75;
-        ctx.stroke();
-      });
-
-      const paintParticles = (front: boolean) => {
-        if (reducedMotion) return;
-        trails.forEach((trail, i) => {
-          for (const p of trail.particles) {
-            if (p.age >= p.life || p.depth >= 0.5 !== front) continue;
-            const alpha = (1 - p.age / p.life) ** 1.2 * (0.5 + p.depth * 0.45);
-            ctx.beginPath();
-            ctx.arc(p.x * sx + parX, p.y * sy + parY, p.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${STAR_RGB[orbitStones[i].color]},${alpha})`;
-            ctx.fill();
-          }
+    /**
+     * Sahne GÖRÜNÜR ALANA GİRİNCE kuruluyor, mount'ta değil. Kurulum
+     * sekiz gezegenin dokusunu (~300 KB) indiriyor; sayfanın altındaki bir
+     * bölüm için bunu peşin ödemek performans bütçesini deler (CLAUDE.md;
+     * e2e "medya görünür alana girmeden indirilmiyor" nöbetçisi).
+     */
+    const ensureScene = (): SolarScene | null => {
+      if (live || attempted) return live;
+      attempted = true;
+      try {
+        live = createSolarScene({
+          canvas,
+          bodies,
+          starTexture: reducedMotion ? null : video,
+          starRadius: SOLAR_STAR_RADIUS,
         });
-      };
-      paintParticles(false);
+      } catch (error) {
+        console.error("Solar scene failed:", error);
+      }
+      if (!live) {
+        setUnavailable(true);
+        stage.dataset.scene = "fallback";
+        return null;
+      }
+      stage.dataset.scene = "webgl";
+      stage.dataset.running = "false";
+      live.resize();
+      return live;
+    };
 
-      // Blend with actual scene pixels. Black video pixels cannot leave a matte.
-      const mediaWidth = crystalSize(w, compact, focus);
-      const cx = ORBIT_VIEW.cx * sx + parX * 0.35;
-      const cy = ORBIT_VIEW.cy * sy + parY * 0.35;
-      const decodedFrame = Math.floor(video.currentTime * CRYSTAL_MEDIA.fps);
-      if (
-        mediaContext &&
-        video.readyState >= 2 &&
-        !video.seeking &&
-        (!hasMediaFrame || decodedFrame !== mediaTime)
-      ) {
-        mediaContext.drawImage(
-          video,
-          0,
-          0,
-          mediaFrame.width,
-          mediaFrame.height,
-        );
-        hasMediaFrame = true;
-        mediaTime = decodedFrame;
-      }
-      const source = hasMediaFrame
-        ? mediaFrame
-        : poster.complete && poster.naturalWidth
-          ? poster
-          : null;
-      if (source) {
-        ctx.globalCompositeOperation = "screen";
-        ctx.drawImage(
-          source,
-          cx - mediaWidth / 2 + CRYSTAL_MEDIA.offsetX * mediaWidth,
-          cy - mediaWidth / 2 + CRYSTAL_MEDIA.offsetY * mediaWidth,
-          mediaWidth,
-          mediaWidth,
-        );
-        ctx.globalCompositeOperation = "source-over";
-      }
-      paintParticles(true);
-      if (interaction.current.active !== null && detailPlacement.current) {
-        const body = bodies.current[interaction.current.active];
-        const tip = detailPlacement.current.tip;
-        const x = body.x * sx + parX;
-        const y = body.y * sy + parY;
-        // A distant mobile placement should not draw a wire through the crystal.
-        if (Math.hypot(tip.x - x, tip.y - y) <= 80) {
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(tip.x, tip.y);
-          ctx.strokeStyle = `rgba(${STAR_RGB[orbitStones[interaction.current.active].color]},0.35)`;
-          ctx.lineWidth = 0.75;
-          ctx.stroke();
+    const holder = Symbol("solar-system");
+    let frameId: number | null = null;
+    let running = false;
+    let inView = false;
+    let holdsLock = false;
+    let unsubscribe: (() => void) | null = null;
+    let last = 0;
+    let sceneTime = 0;
+
+    const positions: Vec3[] = bodies.map((body) => orbitPosition(body.orbit, 0));
+
+    /**
+     * Etiket kalabalığını açar. Gezegenler bir araya geldiğinde (iç
+     * yörüngeler sık) iki üç etiket üst üste biniyordu; ekranda yakın
+     * duran etiketler dikeyde ayrılıyor. Basit ve ucuz: sekiz öğe için
+     * tek geçiş yeterli, düzen kararlı kalsın diye hep aynı sırada.
+     */
+    const declutter = (placed: Array<{ x: number; y: number } | null>) => {
+      const MIN_Y = 17;
+      const MAX_X = 150;
+      for (let i = 1; i < placed.length; i++) {
+        const current = placed[i];
+        if (!current) continue;
+        for (let j = 0; j < i; j++) {
+          const other = placed[j];
+          if (!other) continue;
+          if (Math.abs(current.x - other.x) > MAX_X) continue;
+          const gap = current.y - other.y;
+          if (Math.abs(gap) >= MIN_Y) continue;
+          current.y = other.y + (gap >= 0 ? MIN_Y : -MIN_Y);
         }
-      }
-      const hit = crystalHitRef.current;
-      if (hit) {
-        hit.style.left = `${cx}px`;
-        hit.style.top = `${cy}px`;
-        hit.style.width = `${mediaWidth * 0.69}px`;
-        hit.style.height = `${mediaWidth * 0.67}px`;
       }
     };
 
-    const place = (dt: number) => {
-      const { w, h, compact, parX, parY } = metrics.current;
-      bodies.current.forEach((body, i) => {
-        const from = previousPoints[i];
-        const held =
-          interaction.current.active === i ||
-          interaction.current.hover === i ||
-          interaction.current.focus === i ||
-          dragRef.current?.index === i;
-        if (!held) body.time += dt;
-        const home = stonePoint(orbitStones[i], body.time, compact);
-        if (!(dragRef.current?.index === i && dragRef.current.moved)) {
-          body.returnAge += dt;
-          const weight = reducedMotion ? 0 : returnWeight(body.returnAge);
-          body.x = home.x + body.offsetX * weight;
-          body.y = home.y + body.offsetY * weight;
-          body.depth = home.depth;
+    const layoutLabels = (scene: SolarScene) => {
+      const focus = focusRef.current;
+      const centre = scene.project([0, 0, 0]);
+      const placed: Array<{ x: number; y: number } | null> = [];
+      for (const [index, position] of positions.entries()) {
+        const element = labelRefs.current[index];
+        if (!element) continue;
+        const screen = scene.project(position);
+        if (!screen.visible) {
+          element.style.opacity = "0";
+          element.style.pointerEvents = "none";
+          placed.push(null);
+          continue;
         }
-        if (dt > 0) trails[i].step(dt, from, body, pointer.current);
-        from.x = body.x;
-        from.y = body.y;
-        from.depth = body.depth;
-        const el = nodeRefs.current[i];
-        if (!el) return;
-        el.style.left = "0px";
-        el.style.top = "0px";
-        const x = (body.x * w) / ORBIT_VIEW.w + parX;
-        const y = (body.y * h) / ORBIT_VIEW.h + parY;
-        el.style.transform = `translate3d(${x}px,${y}px,0)`;
-        el.style.setProperty(
-          "--point-opacity",
-          `${held ? 1 : 0.65 + body.depth * 0.35}`,
-        );
-        el.dataset.labelSide =
-          x < 130 ? "start" : x > w - 130 ? "end" : "center";
-        el.dataset.returning =
-          body.returnAge < RETURN_SECONDS ? "true" : "false";
-      });
-      layoutDetail();
+        // Uzaktaki etiket soluk: derinlik hissi yazıda da sürsün.
+        const fade = Math.max(0.35, Math.min(1, 26 / screen.distance));
+        // Etiket gezegenden YILDIZIN TERSİ yöne kayıyor: hem gezegenin
+        // üstünü kapatmıyor hem de sekiz etiket birbirinden ayrışıyor
+        // (hepsi merkeze bakan bir çember üzerinde dağılıyor).
+        const dx = screen.x - centre.x;
+        const dy = screen.y - centre.y;
+        const length = Math.hypot(dx, dy) || 1;
+        const focal = canvas.clientHeight / (2 * Math.tan(FOV / 2));
+        const radiusPx = (bodies[index].radius / Math.max(0.001, screen.distance)) * focal;
+        // Kap gezegenin TAM ÜSTÜNDE (tıklama hedefi gezegenin kendisi),
+        // yazı ise yıldızın tersine doğru kayıyor — gezegeni örtmüyor.
+        const push = radiusPx + 20;
+        element.style.transform = `translate3d(${screen.x.toFixed(1)}px, ${screen.y.toFixed(1)}px, 0)`;
+        placed.push({
+          x: screen.x + (dx / length) * push,
+          y: screen.y + (dy / length) * push,
+        });
+        // Odak halkası gezegenin ekrandaki boyutuna göre büyüyor.
+        element.style.setProperty("--ring", `${Math.max(26, radiusPx * 2.3).toFixed(0)}px`);
+        // Odaktaki gezegenin etiketi gizleniyor: adını zaten panel yazıyor,
+        // etiket gezegenin yüzünü örtüyordu. Diğerleri soluklaşıyor.
+        element.style.opacity =
+          focus === index ? "0" : focus >= 0 ? "0.22" : fade.toFixed(2);
+        element.style.pointerEvents = "auto";
+        element.style.zIndex = String(1000 - Math.round(screen.distance * 10));
+      }
+
+      // Kalabalık açıldıktan SONRA yazının kaymasını yaz: kap (tıklama
+      // hedefi) gezegenin üstünde kalıyor, yalnız yazı yer değiştiriyor.
+      declutter(placed);
+      for (const [index, spot] of placed.entries()) {
+        const element = labelRefs.current[index];
+        if (!element || !spot) continue;
+        const screen = scene.project(positions[index]);
+        element.style.setProperty("--label-x", `${(spot.x - screen.x).toFixed(1)}px`);
+        element.style.setProperty("--label-y", `${(spot.y - screen.y).toFixed(1)}px`);
+      }
     };
 
     const step = (now: number) => {
-      frame = null;
-      if (!alive || !inView || document.hidden) return;
-      const staticScene = reducedMotion || interaction.current.paused;
-      const dt = staticScene ? 0 : Math.min((now - last) / 1000, 0.04);
+      frameId = null;
+      const scene = live;
+      if (!scene) return;
+      const delta = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
       last = now;
-      skyTime += dt;
-      if (
-        !staticScene &&
-        !dragRef.current &&
-        interaction.current.active === null
-      ) {
-        const p = pointer.current;
-        const targetX =
-          (p ? (p.x / ORBIT_VIEW.w - 0.5) * 8 : 0) +
-          Math.sin(skyTime * 0.16) * 1.2;
-        const targetY =
-          (p ? (p.y / ORBIT_VIEW.h - 0.5) * 5 : 0) +
-          Math.sin(skyTime * 0.12) * 0.6;
-        const smooth = 1 - Math.exp(-6 * dt);
-        metrics.current.parX += (targetX - metrics.current.parX) * smooth;
-        metrics.current.parY += (targetY - metrics.current.parY) * smooth;
+      const wantsStill = hoverRef.current !== null;
+      timeScaleRef.current = approach(timeScaleRef.current, wantsStill ? 0 : 1, 6, delta);
+      if (!pausedRef.current) sceneTime += delta * timeScaleRef.current;
+
+      for (const [index, body] of bodies.entries()) {
+        positions[index] = orbitPosition(body.orbit, sceneTime);
       }
-      const targetFocus =
-        !staticScene && interaction.current.active !== null ? 1 : 0;
-      metrics.current.focus +=
-        (targetFocus - metrics.current.focus) *
-        (staticScene ? 1 : 1 - Math.exp(-4 * dt));
-      playback.step(now, frozen());
-      place(dt);
-      paint();
-      stage.dataset.motion = staticScene ? "paused" : "running";
-      stage.dataset.mediaMode = playback.mode;
-      if (!staticScene) frame = requestAnimationFrame(step);
-    };
 
-    const wake = () => {
-      if (!alive || frame !== null || !inView || document.hidden) return;
-      last = performance.now();
-      frame = requestAnimationFrame(step);
-    };
-    const stop = () => {
-      if (frame !== null) cancelAnimationFrame(frame);
-      frame = null;
-      playback.stop();
-      stage.dataset.motion = "paused";
-      stage.dataset.mediaMode = "paused";
-    };
-    engine.current = { wake, stop };
-
-    const resize = () => {
-      finishDrag();
-      detailPlacement.current = null;
-      const rect = stage.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      const compact = rect.width <= 640;
-      if (compact !== metrics.current.compact) {
-        trails = orbitStones.map((_, i) =>
-          createParticleTrail(
-            360 + i,
-            compact ? TRAIL_CAPACITY.compact : TRAIL_CAPACITY.desktop,
-          ),
+      const focus = focusRef.current;
+      const camera = cameraRef.current;
+      if (focus >= 0 && positions[focus]) {
+        // Yıldız kameranın ARKASINDA kalsın: gezegenin aydınlık yüzünü
+        // görüyoruz. Göz, yıldızla gezegen arasındaki doğruda duruyor.
+        const p = positions[focus];
+        const length = Math.hypot(p[0], p[1], p[2]) || 1;
+        const goalYaw = Math.atan2(-p[0], -p[2]);
+        const goalPitch = Math.asin(Math.max(-1, Math.min(1, -p[1] / length))) + 0.14;
+        camera.target = approachVec(camera.target, p, 3.2, delta);
+        camera.distance = approach(
+          camera.distance,
+          focusDistance(bodies[focus].radius, FOV),
+          3.0,
+          delta,
         );
-        for (const body of bodies.current) body.returnAge = RETURN_SECONDS;
+        camera.yaw = approach(shortestAngle(camera.yaw, goalYaw + manualYawRef.current), goalYaw + manualYawRef.current, 2.6, delta);
+        camera.pitch = approach(camera.pitch, goalPitch + manualPitchRef.current, 2.6, delta);
+      } else {
+        // Kamera kayması da aynı zaman ölçeğine bağlı: gezegenin üstünde
+        // dururken sahnenin tamamı duruyor, yalnız gezegenler değil.
+        if (!pausedRef.current) {
+          yawDriftRef.current += SOLAR_CAMERA.drift * delta * timeScaleRef.current;
+        }
+        const goalYaw = yawDriftRef.current + manualYawRef.current;
+        camera.target = approachVec(camera.target, [0, 0, 0], 2.4, delta);
+        camera.distance = approach(camera.distance, SOLAR_CAMERA.distance, 2.2, delta);
+        camera.yaw = approach(shortestAngle(camera.yaw, goalYaw), goalYaw, 2.4, delta);
+        camera.pitch = approach(camera.pitch, SOLAR_CAMERA.pitch + manualPitchRef.current, 2.4, delta);
       }
-      metrics.current = {
-        ...metrics.current,
-        w: rect.width,
-        h: rect.height,
-        compact,
-      };
-      dpr = Math.min(window.devicePixelRatio || 1, compact ? 1.5 : 2);
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      place(0);
-      paint();
-      wake();
+
+      scene.render({ timeSeconds: sceneTime, camera, focus, positions });
+      layoutLabels(scene);
+      if (running) frameId = requestAnimationFrame(step);
     };
-    const visibility = () => {
-      lastScroll = window.scrollY;
-      if (document.hidden) {
-        finishDrag();
-        stop();
-      } else wake();
+
+    const stop = () => {
+      running = false;
+      stage.dataset.running = "false";
+      last = 0;
+      if (frameId !== null) cancelAnimationFrame(frameId);
+      frameId = null;
+      video?.pause();
+      if (holdsLock) {
+        releaseSceneLock(holder);
+        holdsLock = false;
+      }
     };
-    const scroll = () => {
-      const delta = window.scrollY - lastScroll;
-      lastScroll = window.scrollY;
-      playback.scroll(
-        delta,
-        window.innerHeight,
-        performance.now(),
-        frozen() || dragRef.current !== null,
-      );
+
+    const start = () => {
+      if (!inView || running || document.hidden || reducedMotion) return;
+      if (!ensureScene()) return;
+      if (!holdsLock) holdsLock = acquireSceneLock(holder);
+      if (!holdsLock) {
+        unsubscribe ??= onSceneLockReleased(() => {
+          unsubscribe = null;
+          start();
+        });
+        return;
+      }
+      running = true;
+      stage.dataset.running = "true";
+      // Kristal videosu YALNIZ burada yükleniyor: sahneyi hiç görmeyen
+      // ziyaretçi dosyayı indirmez (CLAUDE.md performans bütçesi).
+      if (video && !video.src) {
+        video.src = CRYSTAL_MEDIA.interactive;
+        video.load();
+      }
+      video?.play().catch(() => undefined);
+      frameId = requestAnimationFrame(step);
     };
+
+    /** Hareket azaltma: tek kare, gezegenler başlangıç konumlarında. */
+    const renderStill = () => {
+      const scene = ensureScene();
+      if (!scene) return;
+      scene.render({ timeSeconds: 0, camera: cameraRef.current, focus: -1, positions });
+      layoutLabels(scene);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         inView = entry.isIntersecting;
-        lastScroll = window.scrollY;
-        if (inView) wake();
-        else {
-          finishDrag();
+        if (inView) {
+          if (reducedMotion) renderStill();
+          else start();
+        } else {
+          unsubscribe?.();
+          unsubscribe = null;
           stop();
         }
       },
-      { threshold: 0.08 },
+      { rootMargin: "10% 0px" },
     );
-    const mediaObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        poster.src = CRYSTAL_MEDIA.poster;
-        if (!reducedMotion && !video.getAttribute("src"))
-          video.src = CRYSTAL_MEDIA.interactive;
-        mediaObserver.disconnect();
-      },
-      { rootMargin: "300px" },
-    );
-    poster.onload = () => {
-      paint();
-      wake();
-    };
-    const resizer = new ResizeObserver(resize);
-    resize();
-    resizer.observe(stage);
     observer.observe(stage);
-    mediaObserver.observe(stage);
-    document.addEventListener("visibilitychange", visibility);
-    window.addEventListener("scroll", scroll, { passive: true });
-    return () => {
-      alive = false;
-      stop();
-      poster.onload = null;
-      observer.disconnect();
-      mediaObserver.disconnect();
-      resizer.disconnect();
-      document.removeEventListener("visibilitychange", visibility);
-      window.removeEventListener("scroll", scroll);
-      engine.current = null;
+
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
     };
-  }, [reducedMotion, finishDrag, layoutDetail]);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (!live) return;
+      live.resize();
+      if (reducedMotion) renderStill();
+    });
+    resizeObserver.observe(canvas);
+
+    return () => {
+      observer.disconnect();
+      resizeObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      unsubscribe?.();
+      stop();
+      live?.dispose();
+    };
+  }, [bodies, reducedMotion]);
+
+  /* ------------------------------------------------------------ etkileşim */
+
+  const onPointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0) return;
+    dragRef.current = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
+  }, []);
+
+  const onPointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+    drag.moved = true;
+    drag.x = event.clientX;
+    drag.y = event.clientY;
+    // Sürükleme kamerayı döndürür (eski sürümde gezegenler sürükleniyordu;
+    // 3B'de sahneyi gezmek çok daha doğal). Dikey açı sınırlı: kutba
+    // yapışınca sahne düzleşiyor.
+    manualYawRef.current -= dx * 0.005;
+    manualPitchRef.current = Math.max(-0.5, Math.min(0.7, manualPitchRef.current + dy * 0.004));
+  }, []);
+
+  const endDrag = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    dragRef.current = null;
+    if (!drag || drag.moved) return;
+    // Sürükleme değil, tıklama: boşluğa tıklandıysa odaktan çık.
+    const target = event.target as HTMLElement;
+    if (target.closest("button") || target.closest("[data-detail]")) return;
+    setActive(null);
+  }, []);
+
+  const dismiss = useCallback(
+    (returnFocus: boolean) => {
+      const index = active;
+      setActive(null);
+      if (returnFocus && index !== null) buttonRefs.current[index]?.focus();
+    },
+    [active],
+  );
 
   useEffect(() => {
-    engine.current?.wake();
-  }, [active, paused]);
-
-  const pointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    const p = localPoint(event);
-    if (event.pointerType === "mouse") pointer.current = p;
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    if (
-      !drag.moved &&
-      Math.hypot(event.clientX - drag.clientX, event.clientY - drag.clientY) <
-        DRAG_THRESHOLD
-    )
-      return;
-    drag.moved = true;
-    suppressClick.current = true;
-    const body = bodies.current[drag.index];
-    const { w, h } = metrics.current;
-    const marginX = (24 * ORBIT_VIEW.w) / w;
-    const marginY = (24 * ORBIT_VIEW.h) / h;
-    body.x = Math.max(
-      marginX,
-      Math.min(ORBIT_VIEW.w - marginX, p.x + drag.offsetX),
-    );
-    body.y = Math.max(
-      marginY,
-      Math.min(ORBIT_VIEW.h - marginY, p.y + drag.offsetY),
-    );
-    body.depth = 1;
-    const button = buttonRefs.current[drag.index];
-    if (button) button.dataset.dragging = "true";
-    engine.current?.wake();
-  };
+    if (active === null) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        dismiss(true);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [active, dismiss]);
 
   const selected = active === null ? null : orbitStones[active];
+  const selectedKey = active === null ? null : STONE_SERVICE_KEYS[active];
   const selectedBody = selected
-    ? descriptions.find((item) => item.title === selected.wwdTitle)?.body
+    ? (descriptions.find((item) => item.title === selected.wwdTitle)?.body ?? "")
     : "";
+  const offerings = selectedKey ? SERVICE_OFFERINGS[selectedKey] : [];
+  const degree = selectedKey ? formatDegree(chapterOf(selectedKey).degree) : "";
 
   return (
     <section
@@ -710,15 +467,10 @@ export function SolarSystem() {
       style={{ "--crystal-scale": CRYSTAL_MEDIA.scale } as CSSProperties}
     >
       <div className={styles.heading}>
-        {/* Taslak (Eylül 2026): başlık iki katmanlı okunuyor — üstte ince
-            "One Hybrid Production", altta harf aralığı açılmış ECOSYSTEM.
-            Erişilebilir ad özgün cümle olarak kalıyor, çünkü hem anlamı
-            taşıyan metin o hem de e2e testleri başlığı bu adla buluyor. */}
-        <h2
-          id="solar-system-title"
-          className={styles.title}
-          aria-label={SOLAR_SYSTEM_TITLE}
-        >
+        {/* Başlık iki katmanlı okunuyor — üstte ince "One Hybrid Production",
+            altta harf aralığı açılmış ECOSYSTEM. Erişilebilir ad özgün
+            cümle olarak kalıyor. */}
+        <h2 id="solar-system-title" className={styles.title} aria-label={SOLAR_SYSTEM_TITLE}>
           <span className={styles.titleLead} aria-hidden="true">
             One Hybrid Production
           </span>
@@ -728,21 +480,29 @@ export function SolarSystem() {
         </h2>
         <p className={styles.instruction}>
           {locale === "tr"
-            ? "Servisleri keşfetmek için noktalara tıklayın"
-            : "Click the points to explore each service"}
+            ? "Gezegene tıklayın: yakınlaşır ve o hizmetin tamamını gösterir. Sürükleyerek sistemi çevirin."
+            : "Click a planet to fly closer and see the full service. Drag to turn the system."}
         </p>
       </div>
+
       <div
         className={styles.stage}
         ref={stageRef}
         data-testid="ecosystem-stage"
-        onPointerMove={pointerMove}
-        onPointerLeave={() => {
-          pointer.current = null;
-          interaction.current.hover = null;
+        // Test kancaları (MONA sahnesiyle aynı desen): sahne türü, kare
+        // döngüsünün durumu ve hangi gezegenin odakta olduğu.
+        data-motion={reducedMotion || paused ? "paused" : "running"}
+        data-scene="pending"
+        data-focus={active === null ? "none" : orbitStones[active].label}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={() => {
+          dragRef.current = null;
         }}
       >
         <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
+
         {!reducedMotion && (
           <button
             type="button"
@@ -755,7 +515,8 @@ export function SolarSystem() {
             <span aria-hidden="true">{paused ? "▷" : "Ⅱ"}</span>
           </button>
         )}
-        {canvasUnavailable && (
+
+        {unavailable && (
           <Image
             src={CRYSTAL_MEDIA.poster}
             width={512}
@@ -765,6 +526,9 @@ export function SolarSystem() {
             className={styles.fallback}
           />
         )}
+
+        {/* Kristal videosu yıldızın yüzey dokusu. Kaynak JS ile veriliyor —
+            sahne görünmeden indirilmesin. */}
         <video
           ref={videoRef}
           className={styles.mediaSource}
@@ -774,39 +538,19 @@ export function SolarSystem() {
           muted
           loop
           playsInline
+          crossOrigin="anonymous"
           aria-hidden="true"
           tabIndex={-1}
         />
-        <div
-          ref={crystalHitRef}
-          className={styles.crystalHit}
-          aria-hidden="true"
-          data-testid="crystal-hit"
-          onPointerEnter={(event) => {
-            if (event.pointerType === "mouse")
-              interaction.current.crystalHover = true;
-          }}
-          onPointerLeave={() => {
-            interaction.current.crystalHover = false;
-          }}
-        />
-        <span className={styles.coreLabel} aria-hidden="true" lang="en">
-          Hibrid 360
-        </span>
+
         {orbitStones.map((stone, index) => (
           <div
             key={stone.orbit}
             ref={(el) => {
-              nodeRefs.current[index] = el;
+              labelRefs.current[index] = el;
             }}
             className={`${styles.point} ${active === index ? styles.pointActive : ""}`}
-            style={
-              {
-                "--stone-color": `var(--color-brand-${stone.color})`,
-                left: `${(stonePoint(stone, 0).x / ORBIT_VIEW.w) * 100}%`,
-                top: `${(stonePoint(stone, 0).y / ORBIT_VIEW.h) * 100}%`,
-              } as CSSProperties
-            }
+            style={{ "--stone-color": `var(--color-brand-${stone.color})` } as CSSProperties}
           >
             <button
               ref={(el) => {
@@ -818,49 +562,19 @@ export function SolarSystem() {
               aria-expanded={active === index}
               aria-controls="ecosystem-detail"
               aria-haspopup="dialog"
-              onPointerEnter={(event) => {
-                if (event.pointerType === "mouse")
-                  interaction.current.hover = index;
+              onPointerEnter={() => {
+                hoverRef.current = index;
               }}
               onPointerLeave={() => {
-                if (interaction.current.hover === index)
-                  interaction.current.hover = null;
+                if (hoverRef.current === index) hoverRef.current = null;
               }}
               onFocus={() => {
-                interaction.current.focus = index;
+                hoverRef.current = index;
               }}
               onBlur={() => {
-                if (interaction.current.focus === index)
-                  interaction.current.focus = null;
+                if (hoverRef.current === index) hoverRef.current = null;
               }}
-              onPointerDown={(event) => {
-                if (!event.isPrimary || event.button !== 0 || dragRef.current)
-                  return;
-                suppressClick.current = false;
-                if (paused || reducedMotion) return;
-                const p = localPoint(event);
-                const body = bodies.current[index];
-                dragRef.current = {
-                  index,
-                  pointerId: event.pointerId,
-                  clientX: event.clientX,
-                  clientY: event.clientY,
-                  offsetX: body.x - p.x,
-                  offsetY: body.y - p.y,
-                  moved: false,
-                };
-                event.currentTarget.setPointerCapture(event.pointerId);
-              }}
-              onPointerUp={finishDrag}
-              onPointerCancel={finishDrag}
-              onLostPointerCapture={finishDrag}
-              onClick={(event) => {
-                if (event.detail > 0 && suppressClick.current) {
-                  suppressClick.current = false;
-                  return;
-                }
-                setActive((value) => (value === index ? null : index));
-              }}
+              onClick={() => setActive((value) => (value === index ? null : index))}
             >
               <span className={styles.dotCore} aria-hidden="true" />
               <span className={styles.dotLabel} aria-hidden="true">
@@ -869,30 +583,30 @@ export function SolarSystem() {
             </button>
           </div>
         ))}
+
         <div
           ref={detailRef}
           id="ecosystem-detail"
+          data-detail=""
           className={styles.detail}
           hidden={!selected}
           role="dialog"
           aria-modal="false"
           aria-labelledby={selected ? "ecosystem-detail-title" : undefined}
-          aria-describedby={
-            selected ? "ecosystem-detail-description" : undefined
-          }
+          aria-describedby={selected ? "ecosystem-detail-description" : undefined}
           tabIndex={-1}
-          onPointerMove={(event) => event.stopPropagation()}
           style={
             {
-              "--stone-color": selected
-                ? `var(--color-brand-${selected.color})`
-                : undefined,
+              "--stone-color": selected ? `var(--color-brand-${selected.color})` : undefined,
             } as CSSProperties
           }
         >
           {selected && (
             <>
               <div className={styles.detailHeader}>
+                <p className={styles.detailDegree} aria-hidden="true">
+                  {degree}
+                </p>
                 <h3 id="ecosystem-detail-title">{selected.label}</h3>
                 <button
                   type="button"
@@ -905,6 +619,15 @@ export function SolarSystem() {
                 </button>
               </div>
               <p id="ecosystem-detail-description">{selectedBody}</p>
+              {offerings.length > 0 && (
+                <ul className={styles.detailList}>
+                  {offerings.map((item) => (
+                    <li key={item} lang="en">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <Link href={selected.href} className={styles.detailLink}>
                 {t("learnMore")} <span aria-hidden="true">→</span>
               </Link>
@@ -912,6 +635,7 @@ export function SolarSystem() {
           )}
         </div>
       </div>
+
       <noscript>
         <nav aria-label={SOLAR_SYSTEM_TITLE}>
           {orbitStones.map((stone) => (

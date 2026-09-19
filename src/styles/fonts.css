@@ -4,7 +4,7 @@
  * Rol sistemi (17 Eylül 2026 — bkz. tokens.css "Typography"):
  *   display/başlık  = Archivo
  *   gövde/UI        = Inter
- *   editoryal       = Instrument Serif
+ *   editoryal       = Newsreader
  *   chapter display = Space Grotesk (Creative)
  *   logotype        = Montserrat (YALNIZ "Hibrid 360" yazımı — aşağıda)
  *
@@ -16,8 +16,8 @@
  * AĞIRLIKTA (800, statik) geri eklendi — aşağıdaki ayrı @font-face notuna
  * bakın. Bunların dışında hiçbir yer Montserrat kullanmıyor.
  *
- * Toplam font yükü: Archivo+Inter+Instrument Serif+Space Grotesk 84.3 KB,
- * + logo-only Montserrat 14.5 KB = 98.7 KB (eski değişken Montserrat tek
+ * Toplam font yükü: Archivo+Inter+Newsreader+Space Grotesk 85.1 KB,
+ * + logo-only Montserrat 14.5 KB = 99.6 KB (eski değişken Montserrat tek
  * başına 32.3 KB'tı).
  *
  * Hero'daki "HIBRID" yazısı bundan etkilenmez: canlı metin değil, WebGL
@@ -36,7 +36,7 @@
  * Lisans: hepsi SIL Open Font License 1.1 — yeniden dağıtım serbest,
  * lisans metinleri public/fonts/ altında birlikte taşınıyor.
  *
- * Üretim: `python scripts/generate-fonts.py` (Archivo + Instrument Serif;
+ * Üretim: `python scripts/generate-fonts.py` (Archivo + Newsreader;
  * Inter ve Space Grotesk aynı yöntemle daha önce üretilmişti). Script
  * Türkçe gliflerin varlığını subset sonrası doğruluyor.
  */
@@ -86,25 +86,29 @@
 }
 
 /**
- * Instrument Serif — editoryal kontrast sesi.
+ * Newsreader — editoryal kontrast sesi.
  *
  * monks.com'un dördüncü sesi `Morian Trial` 400: yüksek kontrastlı bir
  * display serif. Alıntı, manifesto ve giriş cümlesi gibi "durup okunacak"
  * yerlerde grotesk'in yanında duruyor. Sayfaya insan tonu veren şey bu
  * kontrast — tek bir sans ailesinin punto oynayarak yapamadığı şey.
  *
- * Instrument Serif (Rodrigo Fuenzalida, OFL) aynı rolü karşılıyor: tek
- * ağırlık, yüksek kontrast, geniş display karakteri.
+ * 18 Eylül 2026'ya kadar bu rol Instrument Serif'teydi. Kullanıcı geri
+ * bildirdi: "serifli fontları daha okunaklı şık serifli fontla değiştir".
+ * Ölçüm de aynı yöne işaret ediyordu — Instrument Serif'in ağırlıklı
+ * ortalama harf genişliği 0.344 em, Newsreader'ın 0.405 em; Instrument
+ * dar gövdesi ve ince çizgileriyle 20px alıntılarda sıkışıyordu
+ * (numune karşılaştırması: dört aday aynı metinle çekildi).
  *
- * Yalnız Regular yükleniyor. İtaliği (20.8 KB) güzel duruyor ama henüz
- * onunla tasarlanmış bir yer yok; tasarım gerçekten isterse eklenip font
- * bütçesi yeniden ölçülecek. Kullanılmayan ağırlık indirilmez.
+ * Newsreader (Production Type, OFL) ekran okuması için tasarlandı:
+ * açık kadran, dengeli kontrast, Türkçe glifleri tam. Tek ağırlık (400)
+ * ve optik boyut 24'e sabit — bkz. scripts/generate-fonts.py notu.
  *
- * Lisans: SIL Open Font License 1.1 — public/fonts/OFL-InstrumentSerif.txt
+ * Lisans: SIL Open Font License 1.1 — public/fonts/OFL-Newsreader.txt
  */
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/instrument-serif-latin-tr.woff2") format("woff2");
+  font-family: "Newsreader";
+  src: url("/fonts/newsreader-latin-tr.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -120,8 +124,8 @@
  * (nav), Header `.megaBrand` (mobil menü), Footer `.wordmark`,
  * MeetTheCrewReveal `.wordmark` (arka plan), LanguageSwitcher `.eyebrow`.
  * Bunların dışındaki HİÇBİR yer Montserrat kullanmıyor — sitenin geri
- * kalan tipografisi (başlık, gövde, editoryal) Archivo/Inter/Instrument
- * Serif sisteminde kalıyor (bkz. tokens.css `--font-logo` notu).
+ * kalan tipografisi (başlık, gövde, editoryal) Archivo/Inter/Newsreader
+ * sisteminde kalıyor (bkz. tokens.css `--font-logo` notu).
  *
  * Tek ağırlık, statik (300-800 aralık değil): beş kullanımın hepsi
  * yalnız 800 (var(--font-weight-brand)) istiyor, aralığa ihtiyaç yok.
@@ -174,7 +178,7 @@
 }
 
 /**
- * Archivo ve Instrument Serif yedekleri.
+ * Archivo ve Newsreader yedekleri.
  *
  * ascent/descent: fontun kendi hhea (== OS/2 typo) değerleri, upm'e bölünmüş.
  * Bu yöntem yukarıdaki Montserrat (96.8 / 25.1) ve Inter (96.88 / 24.12)
@@ -202,18 +206,21 @@
 
 /* Serif'in yedeği de serif olmalı (Arial değil): yoksa font inene kadar
    alıntılar sans görünüp sonra serif'e atlıyor — swap anı göze çarpıyor.
-   size-adjust bu yüzden Arial'a değil GEORGIA'ya göre hesaplandı: Georgia
-   0.44246 em, Instrument Serif 0.34007 em -> 76.86%. (Arial'a göre 76.55%
-   çıkıyordu; yanlış temel olurdu.) Georgia listede ilk, Windows ve macOS'ta
-   kurulu geliyor. Times New Roman'a düşen sistemlerde oran 84.47% olurdu —
-   tek değer ikisini birden tutturamaz, yaygın olan seçildi. */
+   size-adjust bu yüzden Arial'a değil GEORGIA'ya göre hesaplanır. Georgia
+   listede ilk, Windows ve macOS'ta kurulu geliyor.
+
+   Değerler `python scripts/font-fallback-metrics.py <font>` çıktısı:
+   Newsreader hhea 73.5%/26.5%, ağırlıklı ortalama genişlik 0.40474 em,
+   Georgia 0.44246 em -> 91.47%. (Aynı script Instrument Serif için 77.71%
+   veriyor; dosyadaki eski elle hesap 76.86% idi — %1'lik fark harf sıklık
+   tablosundan geliyor, yöntem doğrulanmış sayılır.) */
 @font-face {
-  font-family: "Instrument Serif Fallback";
+  font-family: "Newsreader Fallback";
   src: local("Georgia"), local("Times New Roman"), local("Liberation Serif");
-  ascent-override: 99%;
-  descent-override: 31%;
+  ascent-override: 73.5%;
+  descent-override: 26.5%;
   line-gap-override: 0%;
-  size-adjust: 76.86%;
+  size-adjust: 91.47%;
 }
 
 /**
