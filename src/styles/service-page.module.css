@@ -116,7 +116,9 @@
 }
 
 .sectionTitle {
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-semibold);
   font-size: var(--font-size-label);
   letter-spacing: 0.12em;
@@ -296,6 +298,8 @@
   display: inline-block;
   margin-top: var(--space-6);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);

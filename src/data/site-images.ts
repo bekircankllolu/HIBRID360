@@ -91,68 +91,81 @@ export const siteImages = {
       },
     },
   },
+  /**
+   * What We Do hizmet görselleri — v4 seti (19 Eylül 2026).
+   *
+   * Sekizi de TEK bir prompt ailesinden üretildi: siyah baskın kadraj, tek
+   * pratik sarı ışık kaynağı, tek küçük fuşya gösterge, 50mm f/2 sığ alan
+   * derinliği. Sanat yönetimi ve kabul ölçütleri
+   * `docs/design/WHAT_WE_DO_VISUAL_LANGUAGE.md`; türevler
+   * `scripts/generate-service-photos-v4.mjs` (2400x1600 webp, q82).
+   *
+   * v3'teki marka sarısı DUOTONE kalktı: birliği artık sahnenin kendisi
+   * kuruyor, görsele sürülen bir filtre değil. Yüzler gerçek bir kişiye
+   * benzemiyor ve hiçbirinde yazı/logo/filigran yok.
+   */
   services: {
     creative: {
-      src: "/images/site/services/creative-editorial-v2.webp",
+      src: "/images/site/services/creative-photo-v4.webp",
       alt: {
-        tr: "İstanbul'daki aydınlık stüdyoda kampanya görselleri üzerinde çalışan kreatif ekip",
-        en: "Creative team working on campaign imagery in a bright Istanbul studio",
+        tr: "Karanlık bir stüdyoda masaya yayılmış storyboard karelerinin üzerine eğilmiş iki kişi, biri bir kareyi işaret ediyor",
+        en: "Two people leaning over storyboard frames spread across a table in a dark studio, one pointing at a frame",
       },
       focus: "50% 50%",
     },
     production: {
-      src: "/images/site/services/production-editorial-v2.webp",
+      src: "/images/site/services/production-photo-v4.webp",
       alt: {
-        tr: "Aydınlık bir film setinde sinema kamerası çevresinde çalışan yönetmen ve prodüksiyon ekibi",
-        en: "Director and production crew working around a cinema camera on a bright film set",
+        tr: "Gece çekiminde sinema kamerası kurulumunda çalışan operatörün elleri, monitör ışığı yüzüne vuruyor",
+        en: "A camera operator's hands on a cinema camera rig at a night shoot, the monitor lighting their face",
       },
       focus: "50% 50%",
     },
     postProduction: {
-      src: "/images/site/services/post-production-editorial-v2.webp",
+      src: "/images/site/services/post-production-photo-v4.webp",
       alt: {
-        tr: "Renk düzenleme konsolunda bir film üzerinde çalışan post prodüksiyon ekibi",
-        en: "Post-production team working on a film at a colour-grading console",
+        tr: "Karanlık bir renk odasında grading masasında çalışan kolorist, trackball paneli alttan aydınlatılmış",
+        en: "A colourist working at a grading desk in a dark suite, the trackball panel lit from below",
       },
-      focus: "54% 50%",
+      focus: "50% 50%",
     },
     digital: {
-      src: "/images/site/services/digital-editorial-v2.webp",
+      src: "/images/site/services/digital-photo-v4.webp",
       alt: {
-        tr: "İstanbul'daki içerik stüdyosunda ürün çekimi hazırlayan dijital ekip",
-        en: "Digital team preparing a product shoot in an Istanbul content studio",
+        tr: "Loş bir odada küçük ekranlardan oluşan duvarda dikey sosyal medya kurgularını inceleyen ekip",
+        en: "A team reviewing vertical social edits on a wall of small screens in a dim room",
       },
       focus: "50% 50%",
     },
     liveBroadcast: {
-      src: "/images/site/services/live-broadcast-editorial-v2.webp",
+      src: "/images/site/services/live-broadcast-photo-v4.webp",
       alt: {
-        tr: "İstanbul'daki canlı etkinliği yöneten çok kameralı yayın ekibi",
-        en: "Multi-camera broadcast crew directing a live event in Istanbul",
+        tr: "Karanlık yayın odasında switcher üzerindeki eller, arkada odak dışı önizleme monitörleri",
+        en: "Hands over a broadcast switcher in a dark gallery, preview monitors out of focus behind",
       },
       focus: "50% 50%",
     },
     cloudTv: {
-      src: "/images/site/services/cloud-tv-editorial-v2.webp",
+      src: "/images/site/services/cloud-tv-photo-v4.webp",
       alt: {
-        tr: "Çok ekranlı bulut yayın stüdyosunda kanal akışını yöneten ekip",
-        en: "Team managing a channel feed in a multi-screen cloud broadcast studio",
+        tr: "Sunucu raflarının arasındaki dar koridorda dizüstü bilgisayarla çalışan mühendis, iki yanda uzanan durum ışıkları",
+        en: "An engineer working on a laptop in a narrow aisle between server racks, status lights receding on both sides",
       },
-      focus: "55% 50%",
+      focus: "50% 50%",
     },
     eventManagement: {
-      src: "/images/site/services/event-management-editorial-v2.webp",
+      src: "/images/site/services/event-management-photo-v4.webp",
       alt: {
-        tr: "İstanbul'daki bir etkinliğin sahne kurulumunu yöneten prodüksiyon ekibi",
-        en: "Production team directing an event stage setup in Istanbul",
+        tr: "Işık provasında boş arena sahnesinin kenarında kulaklıklı ve panolu sahne amiri",
+        en: "A stage manager with a headset and clipboard at the edge of an empty arena stage during a lighting check",
       },
-      focus: "52% 50%",
+      focus: "50% 50%",
     },
     photography: {
-      src: "/images/site/services/photography.webp",
+      src: "/images/site/services/photography-photo-v4.webp",
       alt: {
-        tr: "Siyah beyaz portre çekimi kurulumu",
-        en: "Black and white portrait production setup",
+        tr: "Karanlık bir sette softbox ayarlayan fotoğrafçı, modelling ışığı zemine yayılıyor",
+        en: "A photographer adjusting a softbox on a dark set, the modelling light spilling across the floor",
       },
       focus: "50% 50%",
     },

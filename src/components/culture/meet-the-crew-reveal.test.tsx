@@ -1,4 +1,6 @@
 // @vitest-environment jsdom
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -20,11 +22,13 @@ import {
 /**
  * CUL-06 "Meet the crew" reveal'ı.
  *
- * Bölüm production'da `CULTURE_FILM === null` ile yayında (film teslim
- * edilmedi), yani gerçek sayfa bileşeni hiç çalıştırmıyor. Bu testler o
- * boşluğu kapatıyor: film gelip sabit doldurulduğunda erişilebilirlik
- * sözleşmesinin (TR+EN altyazı, sessiz başlama, hareket azaltma) hâlâ
- * geçerli olduğunu bugünden garanti ediyorlar.
+ * Bölüm production'da SESSİZ DÖNGÜ modunda yayında (18 Eylül 2026): konuşan
+ * gerçek film hâlâ teslim edilmedi, daire MONA'nın performans çekimiyle
+ * açılıyor. Bu testler üç şeyi bekçilik ediyor: (1) sessiz döngü altyazı/ses
+ * numarası yapmıyor ve temsili olduğunu yazıyor, (2) film gelip sabit
+ * `kind: "video"` ile doldurulduğunda erişilebilirlik sözleşmesi (TR+EN
+ * altyazı, sessiz başlama, hareket azaltma) bugünden garanti, (3) arka
+ * plandaki wordmark geri gelmiyor (kullanıcı kaldırılmasını istedi).
  */
 
 // React'in act() ortam bayrağı; olmadan her istemci render'ı
@@ -168,8 +172,32 @@ describe("culture film data contract", () => {
     expect(isPlayableFilm(POSTER_ONLY)).toBe(false);
   });
 
-  it("keeps the section on the honest EmptyState until the film ships", () => {
-    expect(CULTURE_FILM).toBeNull();
+  /*
+   * 18 Eylül 2026'ya kadar bu test `CULTURE_FILM`'in null kalmasını
+   * bekçilik ediyordu: film teslim edilmemişti ve sahte medya yayına
+   * girmesin isteniyordu. Kullanıcı geri bildirdi — dairesel reveal
+   * (monks kalıbı) yazılmıştı ama null yüzünden sayfada hiç görünmüyordu.
+   * Karar değişti: bölüm GERÇEK bir arşiv fotoğrafıyla poster modunda
+   * açılıyor. Dürüstlük kuralı aynen duruyor ve testin yeni işi bu:
+   * poster modunda oynatılabilir film numarası yapılmamalı.
+   */
+  it("runs the reveal on a real asset, without faking a playable film", () => {
+    expect(CULTURE_FILM).not.toBeNull();
+    const film = CULTURE_FILM!;
+    // 18 Eylül 2026: sessiz karakter döngüsü (MONA'nın performans çekimi).
+    // Konuşan gerçek film gelince kind "video" olacak ve altyazı zorunlu
+    // hale gelecek — sözleşme orada değişmiyor.
+    expect(film.kind).toBe("loop");
+    // Sesli film numarası yok: CTA pasif etikete düşüyor, altyazı istenmiyor.
+    expect(isPlayableFilm(film)).toBe(false);
+    expect("captions" in film).toBe(false);
+    // Poster gerçek bir dosya — yol uydurulmuş olamaz.
+    expect(existsSync(join(process.cwd(), "public", film.poster.src))).toBe(true);
+    // CLS için ölçüler zorunlu ve gerçek dosyayla tutarlı olmalı.
+    expect(film.poster.width).toBeGreaterThan(0);
+    expect(film.poster.height).toBeGreaterThan(0);
+    expect(film.alt.tr.length).toBeGreaterThan(10);
+    expect(film.alt.en.length).toBeGreaterThan(10);
   });
 
   it("emits both mandated caption tracks, defaulting to the active locale", () => {
@@ -245,11 +273,13 @@ describe("MeetTheCrewReveal markup", () => {
     ).toBe("Crew film");
   });
 
-  it("keeps the brand wordmark spelled 'Hibrid 360' and uppercases via CSS", () => {
-    const wordmark = renderStatic(FILM).querySelector(`.${styles.wordmark}`);
-    expect(wordmark?.textContent).toBe("Hibrid 360");
-    expect(wordmark?.getAttribute("data-text")).toBe("Hibrid 360");
-    expect(wordmark?.getAttribute("aria-hidden")).toBe("true");
+  /* 18 Eylül 2026, kullanıcı: "içi tamamen boş olsun, burada hibrit
+     yazmasına gerek yok" — arka plandaki wordmark kaldırıldı. Test artık
+     geri gelmediğini bekçilik ediyor. */
+  it("leaves the stage empty behind the circle — no background wordmark", () => {
+    const host = renderStatic(FILM);
+    expect(host.textContent).not.toContain("Hibrid 360");
+    expect(host.querySelector("[data-text]")).toBeNull();
   });
 
   it("wires the CTA button to the video it controls", () => {
@@ -339,10 +369,10 @@ describe("MeetTheCrewReveal behaviour", () => {
 
     expect(wrapper.dataset.reveal).toBe("static");
     expect(wrapper.className).toContain(styles.wrapperStatic);
-    // Sahne baştan tamamen açık: ilerleme 1, yani `clip-path` yarıçapı
-    // final değerde ve CTA odaklanılabilir.
+    // Sahne baştan tamamen açık: açıklık 1, yani daire final ölçeğinde ve
+    // CTA odaklanılabilir.
     const stage = wrapper.querySelector<HTMLElement>(`.${styles.stage}`);
-    expect(stage?.style.getPropertyValue("--progress")).toBe("1");
+    expect(stage?.style.getPropertyValue("--open")).toBe("1");
     expect(wrapper.querySelector("button")?.className).toContain(styles.ctaRevealed);
   });
 
@@ -395,7 +425,7 @@ describe("MeetTheCrewReveal behaviour", () => {
 });
 
 describe("Who We Are CUL-06 section gate", () => {
-  it("shows the honest EmptyState — not a fake film — while CULTURE_FILM is null", async () => {
+  it("renders the circular reveal in silent-loop mode — video, no captions, no playable CTA", async () => {
     const { default: WhoWeArePage } = await import("@/app/[locale]/who-we-are/page");
 
     const page = await WhoWeArePage({
@@ -405,12 +435,25 @@ describe("Who We Are CUL-06 section gate", () => {
     const host = document.createElement("div");
     host.innerHTML = renderToStaticMarkup(<WithIntl locale="tr">{page}</WithIntl>);
 
-    // Onaylı bekleme metni görünür, sahte medya yok.
-    expect(host.textContent).toContain(trMessages.culture.whoWeAre.filmNote);
-    expect(host.querySelector('[role="status"]')).not.toBeNull();
-    expect(host.querySelector("[data-reveal]")).toBeNull();
-    expect(host.querySelector("video")).toBeNull();
-    // Bölümün CTA'sı da sızmamalı: tıklanacak bir film yok.
-    expect(host.textContent).not.toContain(trMessages.culture.whoWeAre.filmCta);
+    // Reveal sayfada: bölüm artık boş durum değil.
+    const reveal = host.querySelector("[data-reveal]");
+    expect(reveal).not.toBeNull();
+    expect(reveal?.getAttribute("data-film")).toBe("loop");
+    // Sessiz döngü: video var ama sesi ve altyazısı yok, bekleme metni yok.
+    const video = host.querySelector("video");
+    expect(video).not.toBeNull();
+    expect(video?.hasAttribute("muted")).toBe(true);
+    expect(video?.hasAttribute("autoplay")).toBe(false);
+    expect(video?.getAttribute("preload")).toBe("none");
+    expect(host.querySelector("track")).toBeNull();
+    expect(host.textContent).not.toContain(trMessages.culture.whoWeAre.filmNote);
+    // CTA oktan arınmış pasif etikete düşer — başlatılacak sesli film yok.
+    expect(host.textContent).toContain(passiveCtaLabel(trMessages.culture.whoWeAre.filmCta));
+    // "AI ile üretilmiş temsili görseldir" etiketi görünür olmalı.
+    expect(host.textContent).toContain(trMessages.video.aiGenerated);
+    // Tek buton WCAG 2.2.2 duraklat/oynat — sesli film başlatan CTA değil.
+    const buttons = [...host.querySelectorAll("button")];
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0].textContent).toBe(trMessages.video.pause);
   });
 });

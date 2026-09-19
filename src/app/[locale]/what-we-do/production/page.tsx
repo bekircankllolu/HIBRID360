@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/EmptyState";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ServiceChapter } from "@/components/service-chapter/ServiceChapter";
 import detailStyles from "@/components/service-chapter/ServiceChapter.module.css";
@@ -12,13 +13,6 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { nextChapter } from "@/lib/service-chapter";
 import { localizedAlternates } from "@/lib/site";
-
-const SERVICES = [
-  "LIVE BROADCAST / STAGE DIRECTION", "FILM / VIDEO", "SOCIAL MEDIA VIDEOS",
-  "VIRAL VIDEOS", "TV COMMERCIALS", "SHOWREELS", "ON-SITE VIDEOS",
-  "INDUSTRIAL FILMS", "INTRODUCTORY / LAUNCH VIDEOS", "DRONE CAMERA SERVICES",
-  "PHOTOGRAPHY",
-] as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -55,7 +49,7 @@ export default async function ProductionPage({ params }: { params: Promise<{ loc
         titleLines={["PRODUCTION"]}
         lede="PURE. SIMPLE. POWERFUL."
         body={body}
-        services={SERVICES}
+        services={SERVICE_OFFERINGS.production}
         visual={{ src: siteImages.services.production.src, alt: siteImages.services.production.alt[locale] }}
         shape="aperture"
         blurb={blurb}

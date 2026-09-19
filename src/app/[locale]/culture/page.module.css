@@ -24,127 +24,6 @@
   line-height: 1.15;
 }
 
-/* Beş bölüm — düz bağlantı listesi yerine numaralı kartlar. */
-.grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-4);
-  /* Beş kart: 24rem eşiği masaüstünde üç sütun veriyor (3 + 2), 20rem
-     dört sütun verip beşinciyi tek başına bırakıyordu. */
-  /* `min(100%, 24rem)`: 24rem sabit eşik 320px ekranda sütunu içerikten
-     geniş yapıp gövdeyi yatay kaydırıyordu. min() eşiği dar ekranda
-     konteyner genişliğine indiriyor; 384px üstünde davranış aynı. */
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
-}
-
-.card {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: #070707;
-  overflow: hidden;
-}
-
-/* Kartın içinden yükselen marka rengi ışıması — hover'da açılır. */
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    120% 100% at 50% 118%,
-    rgba(255, 0, 255, 0.22),
-    transparent 68%
-  );
-  opacity: 0;
-  transition: opacity 240ms ease-out;
-  pointer-events: none;
-}
-
-/* Kartın yüksekliği içeriğine bağlı — sabit bir min-height yok. Deck
-   henüz bölüm açıklamalarını vermediği için kart şu an numara + başlık
-   kadar yer kaplıyor; açıklama geldiğinde (bkz. page.tsx TODO) .cardText
-   ikinci satıra girer ve kart kendiliğinden büyür.
-
-   Izgara: numara üstte tam genişlik, altında başlık ve oku aynı satırda
-   tabana hizalı — başlık bloğu okla kapanıyor. */
-.cardLink {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  column-gap: var(--space-4);
-  row-gap: var(--space-3);
-  padding: var(--space-6) var(--space-5);
-  height: 100%;
-}
-
-.index,
-.cardText {
-  grid-column: 1 / -1;
-}
-
-.index {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.18em;
-  color: var(--color-brand-yellow);
-}
-
-.cardTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
-  line-height: 1.12;
-  transition: color 200ms ease-out;
-}
-
-.arrow {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
-  line-height: 1.12;
-  color: var(--color-brand-yellow);
-  transform: translateX(-4px);
-  opacity: 0;
-  transition:
-    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 240ms ease-out;
-}
-
-@media (hover: hover) {
-  .card:hover,
-  .card:focus-within {
-    border-color: var(--color-brand-yellow);
-  }
-
-  .card:hover::after,
-  .card:focus-within::after {
-    opacity: 1;
-  }
-
-  .card:hover .cardTitle,
-  .card:focus-within .cardTitle {
-    color: var(--color-brand-yellow);
-  }
-
-  .card:hover .arrow,
-  .card:focus-within .arrow {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@media (hover: none) {
-  .arrow {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 .standFor {
   margin-top: clamp(2rem, 7vw, 7rem);
   background: #050505;
@@ -168,6 +47,8 @@
   width: clamp(4rem, 8vw, 8rem);
   height: 0.625rem;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
 }
 
 .standForEyebrow {
@@ -278,6 +159,8 @@
 
   .value:hover {
     background: var(--color-brand-yellow);
+    /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+    --heading-color: var(--color-text-on-yellow);
     color: #050505;
   }
 
@@ -342,17 +225,6 @@
 
 /* CLAUDE.md zorunlu kuralı: hareket azaltmada geçişler anlık/sade. */
 @media (prefers-reduced-motion: reduce) {
-  .card::after,
-  .cardTitle,
-  .arrow {
-    transition: none;
-  }
-
-  .arrow {
-    opacity: 1;
-    transform: none;
-  }
-
   .standForImage img,
   .value {
     transition: none;

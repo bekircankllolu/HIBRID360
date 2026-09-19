@@ -2,107 +2,56 @@
 
 import {
   Fragment,
-  useEffect,
-  useRef,
   type CSSProperties,
   type HTMLAttributes,
 } from "react";
+import { useScrollScene } from "@/hooks/useScrollScene";
+import { splitWords } from "@/lib/split-words";
 import styles from "./TextFadeIn.module.css";
 
-type FadeStyle = CSSProperties & {
-  "--text-fade-duration": string;
-};
-
 type UnitStyle = CSSProperties & {
-  "--text-fade-unit-delay": string;
+  "--i": number;
 };
 
 export interface TextFadeInProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   children: string;
-  duration?: number;
-  delay?: number;
   by?: "character" | "word";
-  staggerDelay?: number;
 }
 
+/**
+ * Kelime (ya da harf) sırasıyla beliren metin.
+ *
+ * 17 Eylül 2026'dan beri scroll'a bağlı: eskiden ekrana girince BİR KEZ
+ * zamanlı bir geçiş oynuyordu; artık her birim metin ekrana girdikçe
+ * yanar, geri kaydırınca söner (useScrollScene "pass", ölçüler CSS'te).
+ * `--progress` yokken (sunucu render'ı, JS yok, hareket azaltma) metin tam
+ * görünür.
+ */
 export function TextFadeIn({
   children,
   className,
-  duration = 0.6,
-  delay = 0,
   by = "word",
-  staggerDelay = 0.085,
-  style,
   ...props
 }: TextFadeInProps) {
-  const rootRef = useRef<HTMLSpanElement>(null);
-  const units = by === "word" ? children.trim().split(/\s+/) : Array.from(children);
-
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
-    if (reducedMotion.matches) return;
-
-    let revealFrame = 0;
-    let observer: IntersectionObserver | null = null;
-
-    const reveal = () => {
-      if (revealFrame !== 0) return;
-      revealFrame = window.requestAnimationFrame(() => {
-        revealFrame = 0;
-        root.dataset.revealed = "true";
-        observer?.disconnect();
-      });
-    };
-
-    const handleMotionPreference = () => {
-      if (!reducedMotion.matches) return;
-      root.dataset.revealed = "true";
-      observer?.disconnect();
-    };
-
-    root.dataset.motion = "on";
-    observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) reveal();
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.16 },
-    );
-    observer.observe(root);
-    reducedMotion.addEventListener("change", handleMotionPreference);
-
-    return () => {
-      observer?.disconnect();
-      reducedMotion.removeEventListener("change", handleMotionPreference);
-      if (revealFrame !== 0) window.cancelAnimationFrame(revealFrame);
-    };
-  }, []);
-
-  const rootStyle = {
-    ...style,
-    "--text-fade-duration": `${duration}s`,
-  } as FadeStyle;
+  const { ref, motion } = useScrollScene<HTMLSpanElement>({ mode: "pass" });
+  // `splitWords` kullanılıyor, `split(/\s+/)` değil: ikincisi bölünmez
+  // boşluğu (U+00A0) da ayırıcı sayar. Çeviri dosyalarında "Hibrid 360"
+  // gibi birlikte kalması gereken ifadeler NBSP ile yazılıyor; ham regex
+  // onları iki ayrı kelimeye bölüp satır sonunda koparıyordu — NBSP'nin
+  // tek işini boşa çıkarıyordu (bkz. src/lib/split-words.ts).
+  const units = by === "word" ? splitWords(children) : Array.from(children);
 
   return (
     <span
-      ref={rootRef}
+      ref={ref}
       className={`${styles.root}${className ? ` ${className}` : ""}`}
-      style={rootStyle}
+      data-motion={motion}
       {...props}
     >
       {units.map((unit, index) => (
         <Fragment key={`${unit}-${index}`}>
-          <span
-            className={styles.unit}
-            style={{
-              "--text-fade-unit-delay": `${delay + index * staggerDelay}s`,
-            } as UnitStyle}
-          >
+          <span className={styles.unit} style={{ "--i": index } as UnitStyle}>
             {unit}
           </span>
           {by === "word" && index < units.length - 1 ? " " : null}

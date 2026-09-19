@@ -1,0 +1,76 @@
+/*
+ * Koreografi — bkz. AnniversaryMark.tsx. Tüm ölçüler tek bir `--progress`
+ * değişkeninden türetilir; değişken yoksa (sunucu render'ı, JS yok, hareket
+ * azaltma) 1: işaret tam çizili görünür.
+ */
+.host {
+  --p: var(--progress, 1);
+  /* Parlama yalnız hover'da: 0 → sönük, 1 → işaretin üzerinden geçmiş. */
+  --sheen: 0;
+  position: relative;
+  width: 100%;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Halka saat yönünde çizilir. -90deg: başlangıç noktası tepe. */
+.ring {
+  --draw: clamp(0, (var(--p) - 0.06) / 0.28, 1);
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--draw));
+  transform: rotate(-90deg);
+  transform-origin: 711.47px 578.83px;
+  transform-box: view-box;
+}
+
+/*
+ * Işınlar sırayla (saat yönünde) ve merkezden dışa doğru fırlar: geometri
+ * çıkarılırken her ışının başlangıç noktası içeriye alındı, bu yüzden
+ * dashoffset'in azalması "dışa doğru uzama" olarak okunuyor.
+ */
+.ray {
+  --start: calc(0.18 + (var(--i) / var(--n)) * 0.3);
+  --draw: clamp(0, (var(--p) - var(--start)) / 0.12, 1);
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--draw));
+  opacity: calc(0.25 + 0.75 * var(--draw));
+}
+
+/* "2" ve alt metin: ışınlar yolun yarısına gelince belirir. */
+.type {
+  --in: clamp(0, (var(--p) - 0.3) / 0.24, 1);
+  opacity: var(--in);
+  transform: translateY(calc((1 - var(--in)) * 1.4%));
+}
+
+/* İmleç üzerine gelince altın parlama işaretin üzerinden geçer. Parlama
+   ayrı bir katman değil: çizginin kendi rengini kısa süreliğine
+   aydınlatan bir filtre — ek DOM, ek istek yok. */
+.host:hover .ring,
+.host:hover .ray {
+  filter: brightness(1.35) saturate(1.1);
+  transition: filter 520ms var(--ease-house);
+}
+
+.ring,
+.ray {
+  transition: filter 820ms var(--ease-house);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring,
+  .ray,
+  .type {
+    transition: none;
+  }
+
+  .host:hover .ring,
+  .host:hover .ray {
+    filter: none;
+  }
+}

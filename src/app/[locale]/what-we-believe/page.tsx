@@ -4,7 +4,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
-import { BeliefFounderVideo } from "@/components/culture/BeliefFounderVideo";
 import { BELIEF_IMAGES } from "@/data/what-we-believe";
 import { CULTURE_INTRO, CULTURE_VALUES } from "@/data/culture-values";
 import styles from "@/styles/culture-page.module.css";
@@ -19,10 +18,35 @@ import belief from "./page.module.css";
  *
  * 29 Ağustos 2026 revizyonu — görseller: müşteri Atatürk ve Küçük Prens
  * bölümlerinin korunmasını istedi. Eski sitenin anlatım yapısı geri
- * geldi: liste bloklarından sonra iki tam genişlik görsel bandı, metin
- * görselin üzerinde. Görseller marka sarısı duotone ile yeniden
- * türetildi (eski zeytin yeşili filtre yerine) ve WebP+AVIF, 1600w+2560w
- * olarak servis ediliyor — bkz. src/data/what-we-believe.ts.
+ * geldi: liste bloklarından sonra iki tam genişlik görsel bandı.
+ *
+ * ## 19 Eylül 2026 — sayfa yeniden tasarlandı
+ *
+ * Kullanıcı: *"What We Believe, tasarım anlamında çok güçlü olmamız
+ * gereken sayfalardan biri. Buradaki fotoğrafların üzerinde sarı efekt
+ * istemiyorum. Fotoğrafların üzerine gelen metinleri de farklı ele
+ * alabiliriz. Altta bir video var, 'AI ile üretilmiş temsili görseldir'
+ * diye — bu videoyu kaldırabiliriz."*
+ *
+ * Üç değişiklik:
+ *
+ * 1. SARI EFEKT KALKTI. Görseller nötr siyah-beyaz; gerekçe ve ölçüm
+ *    src/data/what-we-believe.ts içinde.
+ *
+ * 2. METİN GÖRSELİN ÜSTÜNDEN İNDİ. Eskiden alttan yukarı koyulaşan bir
+ *    perdenin içinde duruyordu — perde fotoğrafın alt üçte birini
+ *    yutuyordu ve okunaklılık her kadrajda yeniden hesaplanması gereken
+ *    bir riskti. Metin artık görselin ALTINDA, siyah bir şeritte: kadraj
+ *    tam görünüyor, kontrast tanımı gereği garanti.
+ *
+ * 3. LİSTELER TİPOGRAFİK OLARAK YÜKSELDİ. Vizyon/Misyon maddeleri 14px
+ *    Inter etiketleri olarak diziliyordu; sayfanın en iddialı cümleleri
+ *    en küçük puntodaydı. Artık numaralı display satırları. Misyon
+ *    maddelerindeki em-dash doğal bir eksen veriyor ("DOĞRU EKİP —
+ *    DENEYİMLİ EKİP"): solu beyaz, sağı marka sarısı.
+ *
+ * Kaldırılan `BeliefFounderVideo` bileşeni dosyada DURUYOR ama artık
+ * hiçbir yerden çağrılmıyor; finalizasyonda silinecekler listesinde.
  *
  * TELİF AÇIK BLOCKER: iki görselin de kullanım hakkı teyit edilmedi
  * (Küçük Prens en yüksek riskli madde). Bkz. docs/visual-audit/
@@ -53,6 +77,89 @@ export async function generateMetadata({
     title: t("title.whatWeBelieve"),
     alternates: localizedAlternates(locale, "/what-we-believe"),
   };
+}
+
+/**
+ * Misyon maddelerindeki em-dash ekseni: "DOĞRU EKİP — DENEYİMLİ EKİP".
+ * Sol taraf iddia, sağ taraf onun niteliği. Tipografide iki kademe olarak
+ * çiziliyor (beyaz / marka sarısı).
+ *
+ * Em-dash YOKSA (vizyon maddelerinin hepsi böyle) `echo` boş döner ve
+ * satır tek parça çizilir — yani aynı bileşen iki listeyi de taşıyor.
+ * Ayraç olarak YALNIZCA em-dash (—) aranıyor: metinlerde tire (-) normal
+ * kelime içinde de geçebiliyor.
+ */
+function splitPivot(item: string): { claim: string; echo: string } {
+  const at = item.indexOf("—");
+  if (at < 0) return { claim: item.trim(), echo: "" };
+  return { claim: item.slice(0, at).trim(), echo: item.slice(at + 1).trim() };
+}
+
+/**
+ * Vizyon / Misyon — büyük harfli kısa satırlar, display ölçeğinde
+ * numaralı liste. Etiket solda kendi sütununda durur (geniş ekranda),
+ * satırlar sağda akar.
+ */
+function CreedSection({
+  id,
+  title,
+  items,
+}: {
+  id: string;
+  title: string;
+  items: string[];
+}) {
+  return (
+    <section className={belief.creed} aria-labelledby={id}>
+      <h2 id={id} className={belief.creedLabel}>
+        {title}
+      </h2>
+      <ol className={belief.creedList}>
+        {items.map((item, index) => {
+          const { claim, echo } = splitPivot(item);
+          return (
+            <li key={item} className={belief.creedItem}>
+              <span className={belief.creedIndex} aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className={belief.creedClaim}>{claim}</span>
+              {echo ? <span className={belief.creedEcho}>{echo}</span> : null}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
+/**
+ * İlham / İlkeler — cümle uzunluğunda maddeler. Display ölçeği burada
+ * okunmayı bozardı; ölçü ve punto proz metni için ayarlı, maddeler
+ * arasındaki ayrım ince çizgiyle.
+ */
+function ProseSection({
+  id,
+  title,
+  items,
+}: {
+  id: string;
+  title: string;
+  items: string[];
+}) {
+  return (
+    <section className={belief.creed} aria-labelledby={id}>
+      <h2 id={id} className={belief.creedLabel}>
+        {title}
+      </h2>
+      <ul className={belief.proseList}>
+        {items.map((item) => (
+          <li key={item} className={belief.proseItem}>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 export default async function WhatWeBelievePage({
@@ -94,49 +201,16 @@ export default async function WhatWeBelievePage({
         Beyond Production: An AI-Native Creative Organization
       </p>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{vision.title}</h2>
-        <ul className={styles.list}>
-          {vision.items.map((item) => (
-            <li key={item} className={styles.listTag}>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* Vizyon ve Misyon: kısa, büyük harfli satırlar — display ölçeğinde
+          numaralı creed listesi. Misyon maddelerindeki em-dash iki kademe
+          veriyor; `splitPivot` onu ayırıyor. */}
+      <CreedSection id="wwb-vision" title={vision.title} items={vision.items} />
+      <CreedSection id="wwb-mission" title={mission.title} items={mission.items} />
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{mission.title}</h2>
-        <ul className={styles.list}>
-          {mission.items.map((item) => (
-            <li key={item} className={styles.listTag}>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{inspires.title}</h2>
-        <ul className={styles.list}>
-          {inspires.items.map((item) => (
-            <li key={item} className={styles.listSentence}>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{edict.title}</h2>
-        <ul className={styles.list}>
-          {edict.items.map((item) => (
-            <li key={item} className={styles.listSentence}>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* İlham ve ilkeler: cümle uzunluğunda — okunur ölçüde, numarasız,
+          kendi ayraçlarıyla. */}
+      <ProseSection id="wwb-inspires" title={inspires.title} items={inspires.items} />
+      <ProseSection id="wwb-edict" title={edict.title} items={edict.items} />
 
       <section className={belief.values} aria-labelledby="culture-values-title">
         <div className={belief.valuesIntro}>
@@ -158,28 +232,30 @@ export default async function WhatWeBelievePage({
       {/* Tam genişlik bant 1 — Atatürk. Üzerindeki metin şirketin kendi
           manifesto cümlesi; tırnak ve imza YOK (bkz. dosya başı notu). */}
       <figure className={belief.figure}>
-        <picture>
-          <source
-            type="image/avif"
-            srcSet={BELIEF_IMAGES.ataturk.avif}
-            sizes="100vw"
-          />
-          <source
-            type="image/webp"
-            srcSet={BELIEF_IMAGES.ataturk.webp}
-            sizes="100vw"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className={belief.image}
-            src={BELIEF_IMAGES.ataturk.fallback}
-            width={BELIEF_IMAGES.ataturk.width}
-            height={BELIEF_IMAGES.ataturk.height}
-            alt={BELIEF_IMAGES.ataturk.alt[locale]}
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
+        <div className={belief.imageWrap}>
+          <picture>
+            <source
+              type="image/avif"
+              srcSet={BELIEF_IMAGES.ataturk.avif}
+              sizes="100vw"
+            />
+            <source
+              type="image/webp"
+              srcSet={BELIEF_IMAGES.ataturk.webp}
+              sizes="100vw"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className={belief.image}
+              src={BELIEF_IMAGES.ataturk.fallback}
+              width={BELIEF_IMAGES.ataturk.width}
+              height={BELIEF_IMAGES.ataturk.height}
+              alt={BELIEF_IMAGES.ataturk.alt[locale]}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
         <figcaption className={belief.caption}>
           <p className={belief.captionLead}>{t("bandLead")}</p>
           <p className={belief.captionStatement}>{t("manifesto")}</p>
@@ -190,38 +266,36 @@ export default async function WhatWeBelievePage({
           doğrulanmış (yazım eski sitedeki hatalı hâliyle değil, doğru
           hâliyle: Antoine de Saint-Exupéry). */}
       <figure className={belief.figure}>
-        <picture>
-          <source
-            type="image/avif"
-            srcSet={BELIEF_IMAGES.littlePrince.avif}
-            sizes="100vw"
-          />
-          <source
-            type="image/webp"
-            srcSet={BELIEF_IMAGES.littlePrince.webp}
-            sizes="100vw"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className={`${belief.image} ${belief.imageTall}`}
-            src={BELIEF_IMAGES.littlePrince.fallback}
-            width={BELIEF_IMAGES.littlePrince.width}
-            height={BELIEF_IMAGES.littlePrince.height}
-            alt={BELIEF_IMAGES.littlePrince.alt[locale]}
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
+        <div className={belief.imageWrap}>
+          <picture>
+            <source
+              type="image/avif"
+              srcSet={BELIEF_IMAGES.littlePrince.avif}
+              sizes="100vw"
+            />
+            <source
+              type="image/webp"
+              srcSet={BELIEF_IMAGES.littlePrince.webp}
+              sizes="100vw"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className={`${belief.image} ${belief.imageTall}`}
+              src={BELIEF_IMAGES.littlePrince.fallback}
+              width={BELIEF_IMAGES.littlePrince.width}
+              height={BELIEF_IMAGES.littlePrince.height}
+              alt={BELIEF_IMAGES.littlePrince.alt[locale]}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
         <figcaption className={belief.caption}>
           <blockquote className={belief.captionQuote}>{t("quote")}</blockquote>
           <p className={belief.captionAuthor}>{t("quoteAuthor")}</p>
         </figcaption>
       </figure>
 
-      {/* Gerçek müşteri konuşma videosu teslim edilene kadar aynı scroll
-          sahnesi, açıkça AI üretimi olduğu belirtilen temsili posterle
-          çalışır. Gerçek medya geldiğinde yalnızca veri kaynağı değişir. */}
-      <BeliefFounderVideo />
     </div>
   );
 }

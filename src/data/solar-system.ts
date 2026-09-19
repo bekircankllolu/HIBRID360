@@ -123,6 +123,75 @@ export const orbitStones: OrbitStone[] = [
 ];
 
 /**
+ * ---------------------------------------------------------------------
+ * 3B gövdeler (18 Eylül 2026)
+ * ---------------------------------------------------------------------
+ *
+ * Kullanıcı: *"bu hibrit taşı bir yıldız ve etrafını dönenler de diğer
+ * gezegenler gibi düşünebiliriz... gerçek bir uzay yaratalım... gerçek
+ * gezegenler gibi konumlandıralım."* Sahne Canvas 2B düz noktalardan
+ * WebGL'e taşındı (`src/lib/solar-scene.ts`); yörünge elemanları burada.
+ *
+ * Sıra `orbitStones` ile BİREBİR aynı: etiketler, paneller ve gövdeler
+ * aynı indeksle eşleşiyor. Yarı büyük eksenler içten dışa artıyor, yani
+ * Kepler III gereği içteki gezegen görünür biçimde daha hızlı dönüyor
+ * (hız elle verilmiyor, yarıçaptan çıkıyor — bkz. solar-orbits.ts).
+ *
+ * Dokular `scripts/generate-planet-textures.mjs` ile üretildi.
+ */
+export const SOLAR_STAR_RADIUS = 1.15;
+
+export const SOLAR_BODIES = [
+  // PRODUCTION — kayaç dünya, derin kanyonlar
+  { id: "production", radius: 0.34, tilt: 0.18, spin: 0.22,
+    orbit: { semiMajor: 2.7, eccentricity: 0.04, inclination: 0.03, node: 0.2, phase: 0.7 } },
+  // DIGITAL — gece yüzü ışıl ışıl (tek "şehir ışıkları" dünyası)
+  { id: "digital", radius: 0.3, tilt: 0.36, spin: 0.3, nightLights: true,
+    orbit: { semiMajor: 3.4, eccentricity: 0.09, inclination: 0.07, node: 2.4, phase: 3.9 } },
+  // CREATIVE — akan bulut örtüsü
+  { id: "creative", radius: 0.4, tilt: 0.12, spin: 0.16,
+    orbit: { semiMajor: 4.1, eccentricity: 0.06, inclination: 0.04, node: 1.1, phase: 2.3 } },
+  // AI CREATIVE PRODUCTION — ince halkalı fuşya dünya
+  { id: "ai-creative-production", radius: 0.36, tilt: 0.42, spin: 0.19,
+    ring: { inner: 1.45, outer: 2.0 },
+    orbit: { semiMajor: 4.8, eccentricity: 0.12, inclination: 0.1, node: 4.2, phase: 5.4 } },
+  // LIVE BROADCAST — buzul dünya, kutup örtüsü
+  { id: "live-broadcast", radius: 0.32, tilt: 0.26, spin: 0.26,
+    orbit: { semiMajor: 5.5, eccentricity: 0.05, inclination: 0.06, node: 0.7, phase: 4.1 } },
+  // CLOUD TV — bantlı gaz devi, geniş halka
+  { id: "cloud-tv", radius: 0.58, tilt: 0.22, spin: 0.34,
+    ring: { inner: 1.35, outer: 2.1 },
+    orbit: { semiMajor: 6.2, eccentricity: 0.03, inclination: 0.02, node: 3.3, phase: 1.2 } },
+  // POST PRODUCTION — ince katmanlı yüzey
+  { id: "post-production", radius: 0.33, tilt: 0.5, spin: 0.21,
+    orbit: { semiMajor: 6.8, eccentricity: 0.14, inclination: 0.09, node: 5.1, phase: 5.6 } },
+  // EVENT MANAGEMENT — kraterli dünya
+  { id: "event-management", radius: 0.38, tilt: 0.08, spin: 0.14,
+    orbit: { semiMajor: 7.4, eccentricity: 0.07, inclination: 0.12, node: 1.9, phase: 2.5 } },
+] as const;
+
+/** Varsayılan kamera: tüm sistem kadrajda, hafif yukarıdan. */
+export const SOLAR_CAMERA = { distance: 15.6, pitch: 0.34, yaw: 0.6, drift: 0.035 } as const;
+
+/**
+ * Üç dizi (orbitStones, SOLAR_BODIES, STONE_SERVICE_KEYS) AYNI SIRADA.
+ * Gezegen paneli bu anahtarla hem hizmet sayfasının derecesini
+ * (`chapterOf`) hem de gerçek hizmet kapsam listesini
+ * (`SERVICE_OFFERINGS`) okuyor — panel artık tek satırlık tanımla
+ * yetinmiyor. Hizalama `solar-system.test.ts` ile kilitli.
+ */
+export const STONE_SERVICE_KEYS = [
+  "production",
+  "digital",
+  "creative",
+  "aiCreativeProduction",
+  "liveBroadcast",
+  "cloudTv",
+  "postProduction",
+  "eventManagement",
+] as const;
+
+/**
  * Yörünge geometrisi — hem Canvas halkaları hem nokta konum matematiği bu
  * sabitlerden türetilir; iki katman ayrı kaynak kullanırsa nokta halkadan
  * kayar (bu hata bir kez yaşandı, bkz. eski WebGL sahnesindeki

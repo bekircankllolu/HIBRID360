@@ -56,3 +56,6 @@ next-env.d.ts
 /localhost-*.report.json
 /lhr-*.html
 /lhr-*.json
+
+# QA/görsel doğrulama sırasında oluşan geçici ekran görüntüsü ve log dosyaları
+/.qa-tmp/

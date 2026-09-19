@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import sharp from "sharp";
 import { acceptCookies } from "./utils";
 
 test("desktop shell, mega menu and ecosystem use the full viewport", async ({
@@ -66,23 +67,24 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
   await expect(mega).toBeHidden();
   const stage = page.getByTestId("ecosystem-stage");
   await expect(stage).toHaveAttribute("data-motion", "running");
+  // Sahne 18 Eylül 2026'da WebGL'e geçti: canvas'tan 2B bağlam okunamıyor,
+  // parlaklık ekran görüntüsünden ölçülüyor (MONA sahnesindeki kalıp).
+  await expect(stage).toHaveAttribute("data-scene", "webgl", { timeout: 30_000 });
   await expect
-    .poll(() =>
-      stage.locator("canvas").evaluate((canvas: HTMLCanvasElement) => {
-        const pixels = canvas
-          .getContext("2d")!
-          .getImageData(
-            canvas.width * 0.42,
-            canvas.height * 0.36,
-            canvas.width * 0.16,
-            canvas.height * 0.28,
-          ).data;
+    .poll(
+      async () => {
+        const { data } = await sharp(await stage.screenshot())
+          .removeAlpha()
+          .resize(160, 100, { fit: "fill" })
+          .raw()
+          .toBuffer({ resolveWithObject: true });
         let bright = 0;
-        for (let index = 0; index < pixels.length; index += 4) {
-          if (pixels[index] > 100 && pixels[index + 1] > 60) bright += 1;
+        for (let index = 0; index < data.length; index += 3) {
+          if (data[index] > 100 && data[index + 1] > 60) bright += 1;
         }
         return bright;
-      }),
+      },
+      { timeout: 30_000 },
     )
     .toBeGreaterThan(200);
   const stageBounds = (await stage.boundingBox())!;
@@ -157,12 +159,20 @@ test("representative showreel expands from the top-right frame to the viewport",
   await page.goto("/tr");
   await acceptCookies(page);
 
+  /*
+   * 19 Eylül 2026: kadraj artık POSTER DEĞİL, VİDEO taşıyor (10 sn'lik
+   * temsili showreel üretildi). Bu yüzden `img` yerine `video` aranıyor.
+   * AI açıklaması yerinde duruyor ve durmaya devam etmeli — onaylı master
+   * gelene kadar bu görüntünün gerçek bir kampanya olmadığı sayfada
+   * yazılı kalmalı.
+   */
   const frame = page.locator('[class*="HeroTypography_showreelFrame"]');
+  const showreel = frame.locator("video");
+  await expect(showreel).toHaveCount(1);
+  await expect(showreel).toHaveAttribute("preload", "none");
+  await expect(showreel).toHaveJSProperty("muted", true);
   await expect(
-    frame.getByRole("img", { name: /temsili AI showreel görseli/ }),
-  ).toBeVisible();
-  await expect(
-    frame.getByText("AI ile üretilmiş temsili showreel görseli"),
+    frame.getByText("AI ile üretilmiş temsili showreel videosu"),
   ).toBeVisible();
 
   const initial = (await frame.boundingBox())!;

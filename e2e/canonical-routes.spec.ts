@@ -319,6 +319,18 @@ test.describe("Görseller", () => {
     });
   }
 
+  /*
+   * 19 Eylül 2026'da güncellendi. İki sözleşme değişti:
+   *
+   * 1. Temsili kurucu videosu (BeliefFounderVideo) sayfadan KALDIRILDI —
+   *    kullanıcı isteği. "anonim yaratıcı profesyoneli" görseli ve onun
+   *    AI açıklaması artık bu sayfada YOK; testin onları araması, kaldırma
+   *    işleminin sessizce geri alınmasını da fark etmez hâle getirirdi.
+   *    Bu yüzden yokluk AÇIKÇA doğrulanıyor.
+   *
+   * 2. Alt metinlerden "duotone" ibaresi çıktı: görseller artık nötr
+   *    siyah-beyaz (sarı efekt kaldırıldı).
+   */
   test("What We Believe görsel alt metinleri sayfa diliyle eşleşiyor", async ({
     page,
   }) => {
@@ -329,24 +341,25 @@ test.describe("Görseller", () => {
       page.getByRole("img", { name: /bir pencerenin yanında/ }),
     ).toHaveCount(1);
     await expect(
-      page.getByRole("img", { name: /anonim yaratıcı profesyoneli/ }),
+      page.getByRole("img", { name: /Küçük Prens illüstrasyonu/ }),
     ).toHaveCount(1);
+    // Duotone kalktı: alt metin artık sarıdan değil, siyah-beyazdan söz ediyor.
+    await expect(page.getByRole("img", { name: /duotone/i })).toHaveCount(0);
+    // Kaldırılan temsili kurucu videosu geri gelmemeli.
     await expect(
-      page.getByText("AI ile üretilmiş temsili görseldir"),
-    ).toBeVisible();
+      page.getByRole("img", { name: /anonim yaratıcı profesyoneli/ }),
+    ).toHaveCount(0);
 
     await page.goto("/en/what-we-believe");
     await expect(
       page.getByRole("img", { name: /sitting thoughtfully beside a window/ }),
     ).toHaveCount(1);
-    await expect(page.getByRole("img", { name: /Küçük Prens/ })).toHaveCount(
-      0,
-    );
+    await expect(
+      page.getByRole("img", { name: /The Little Prince/ }),
+    ).toHaveCount(1);
+    await expect(page.getByRole("img", { name: /duotone/i })).toHaveCount(0);
     await expect(
       page.getByRole("img", { name: /anonymous creative professional/ }),
-    ).toHaveCount(1);
-    await expect(
-      page.getByText("AI-generated representative visual"),
-    ).toBeVisible();
+    ).toHaveCount(0);
   });
 });

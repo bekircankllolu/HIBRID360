@@ -160,19 +160,11 @@
   transform: translateY(calc((1 - var(--copy)) * 1.5rem));
 }
 
-.stage[data-complete] .helixWrap {
-  animation: dnaBreath 5.5s ease-in-out infinite;
-}
-
-@keyframes dnaBreath {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.008);
-  }
+/* Çizim bittikten sonraki kaydırma yolu (--progress .70 → 1) sarmalı çok
+   hafif yaklaştırır. Eskiden zamana bağlı bir "nefes" döngüsüydü; artık
+   scroll'a bağlı — geri kaydırınca geri çekilir, durunca durur. */
+.helixWrap {
+  transform: scale(calc(1 + 0.03 * clamp(0, (var(--progress, 0.7) - 0.7) / 0.3, 1)));
 }
 
 @media (max-width: 767px) {
@@ -210,7 +202,7 @@
     display: none;
   }
 
-  .stage[data-complete] .helixWrap {
-    animation: none;
+  .helixWrap {
+    transform: none;
   }
 }

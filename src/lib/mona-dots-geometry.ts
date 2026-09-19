@@ -53,7 +53,10 @@ export const MAX_DELAY = 0.3;
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 const STREAMS = 8;
 
-function mulberry32(seed: number): () => number {
+/** Tohumlanabilir PRNG — aynı tohum her zaman aynı bulutu verir.
+    `mona-shapes.ts` de bunu kullanır (kendi kopyasını taşımasın diye
+    dışa açıldı; davranış değişmedi). */
+export function mulberry32(seed: number): () => number {
   let state = seed >>> 0;
   return () => {
     state = (state + 0x6d2b79f5) >>> 0;

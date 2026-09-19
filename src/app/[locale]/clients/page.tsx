@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
 import { ClientNameIndex } from "@/components/friends/ClientNameIndex";
+import { AnniversaryMark } from "@/components/friends/AnniversaryMark";
 import { CrownReveal } from "@/components/friends/CrownReveal";
 import { TestimonialList } from "@/components/testimonials/TestimonialList";
 import { Link } from "@/i18n/navigation";
@@ -75,6 +75,15 @@ export default async function ClientsPage({
   // yazımlarından şüpheli olduğu için teyit istiyor — teyit gelmeden
   // listede görünmezler.
   const publishableClients = clients.filter((client) => client.verified);
+  /* Dizinin TAM listesi tek yerde kuruluyor: sarı paneldeki sayı ile
+     aşağıdaki isim dizini aynı diziden besleniyor, ayrışamazlar. */
+  const indexedClients = [
+    ...publishableClients,
+    ...(SHOW_NEW_CLIENTS
+      ? newClients.map((name) => ({ name, verified: true }))
+      : []),
+  ];
+  const friendsCount = indexedClients.length;
 
   return (
     <div className={styles.page}>
@@ -94,32 +103,45 @@ export default async function ClientsPage({
         <p className={styles.body}>{t("heroBody")}</p>
       </header>
 
+      {/*
+        19 Eylül 2026 — sarı panel yeniden kuruldu. Kullanıcı: *"yazının
+        olduğu yerde çok büyük bir boşluk var; ya bu yazıyı büyütelim, güzel
+        bir tipografiyle kutunun içine sığdıralım, ya da buraya başka bir
+        çözüm bulmamız lazım. Bu şekilde çok kötü duruyor."*
+
+        Ölçüldü: "2004 → TODAY" ile başlık arasında 210px ölü boşluk vardı.
+        Sebebi `justify-content: flex-end` + tarihin `margin-bottom: auto`
+        ile tepeye itilmesiydi — panel 778px, içerik ~370px.
+
+        Başlığı büyütmek çözüm DEĞİLDİ: sütunun iç genişliği 490px ve
+        "CHAMPIONS" zaten 86px'te o genişliği dolduruyor; daha büyüğü
+        kelimeyi taşırıyordu. Onun yerine panele bir ALT ÇAPA eklendi —
+        sayfanın hemen altındaki isim dizininin sayısı. Boşluk artık
+        anlamlı bir içerikle doluyor ve panel bir ilana dönüşüyor.
+
+        Sayı buradan geçiriliyor, bileşende sabit yazılmıyor: dizin ile
+        panelin sayısı hiçbir koşulda ayrışamaz.
+      */}
       <section className={styles.anniversary} aria-labelledby="friends-champions">
         <div className={styles.anniversaryImageWrap}>
-          <Image
-            src="/images/site/friends-anniversary.png"
-            alt={t("anniversaryAlt")}
-            fill
-            sizes="(max-width: 760px) 100vw, 50vw"
-            className={styles.anniversaryImage}
-            priority
-          />
+          <AnniversaryMark label={t("anniversaryAlt")} />
         </div>
         <div className={styles.anniversaryCopy}>
           <p className={styles.anniversaryDate}>2004 → TODAY</p>
-          <h2 id="friends-champions">WORK WITH THE CHAMPIONS</h2>
-          <p>{t("friendsBody")}</p>
+          <div className={styles.anniversaryStatement}>
+            <h2 id="friends-champions">WORK WITH THE CHAMPIONS</h2>
+            <p>{t("friendsBody")}</p>
+          </div>
+          <p className={styles.anniversaryCount}>
+            <span className={styles.anniversaryCountValue}>{friendsCount}</span>
+            <span className={styles.anniversaryCountLabel}>
+              {t("friendsCountLabel")}
+            </span>
+          </p>
         </div>
       </section>
 
-      <ClientNameIndex
-        clients={[
-          ...publishableClients,
-          ...(SHOW_NEW_CLIENTS
-            ? newClients.map((name) => ({ name, verified: true }))
-            : []),
-        ]}
-      />
+      <ClientNameIndex clients={indexedClients} />
 
       <section
         className={`${styles.testimonials} ${

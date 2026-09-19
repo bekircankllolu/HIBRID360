@@ -5,7 +5,8 @@
     "skipToContent": "Skip to content",
     "pauseAnimation": "Pause animation",
     "resumeAnimation": "Resume animation",
-    "closeDetails": "Close details"
+    "closeDetails": "Close details",
+    "aiRepresentative": "AI-generated representative visual"
   },
   "nav": {
     "whoWeAre": "Who We Are",
@@ -51,7 +52,7 @@
       "label": "AI SHOWREEL",
       "cta": "Move your cursor",
       "touchCta": "Tap the screen",
-      "representative": "AI-generated representative showreel visual"
+      "representative": "AI-generated representative showreel video"
     },
     "lessTalk": {
       "title": "Less Talk, More Work",
@@ -423,7 +424,8 @@
     },
     "ctaLead": "Want to see what we made together?",
     "testimonialsTitle": "What they say",
-    "testimonialsEmpty": "Client testimonials are on the way."
+    "testimonialsEmpty": "Client testimonials are on the way.",
+    "friendsCountLabel": "FRIENDS"
   },
   "serviceProduction": {
     "localeNote": "",

@@ -9,15 +9,24 @@
   padding-left: var(--space-4);
 }
 
+/* Müşteri sözü = editoryal serif (bkz. culture-page.module.css .quote
+   notu). Grotesk'ten serif'e geçiş, "bunu biz değil müşteri söyledi"
+   ayrımını punto değiştirmeden kuruyor. */
 .quote {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: clamp(1rem, 2vw, 1.375rem);
-  margin: 0 0 var(--space-3);
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: var(--tracking-heading);
+  margin: 0 0 var(--space-4);
 }
 
 .attribution {
-  font-size: 0.8125rem;
+  font-family: var(--font-ui);
+  /* 0.8125rem elle yazılmıştı — micro token'ı zaten tam o değer. */
+  font-size: var(--font-size-micro);
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
   opacity: 0.75;
   margin: 0;
 }

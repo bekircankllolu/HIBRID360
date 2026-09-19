@@ -48,6 +48,8 @@
 .poster:focus-visible .play {
   color: var(--color-brand-black);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   transform: scale(1.08);
 }
 

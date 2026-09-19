@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { createCreature, creatureFrame, stepCreature } from "@/lib/mona-creature";
 import { createParticleCloud, projectFrontDots } from "@/lib/mona-dots-geometry";
+import { buildGallery } from "@/lib/mona-shapes";
 import {
   createMonaDotsScene,
   monaDotsLayout,
@@ -80,10 +81,19 @@ export function MonaDots({ hostRef, levelRef, typing, reducedMotion }: {
 
     let scene: MonaDotsScene | null = null;
     try {
-      scene = createMonaDotsScene(canvas, createParticleCloud(), {
-        dot: tokenRgb("--color-brand-yellow"),
-        background: tokenRgb("--color-brand-black"),
-      });
+      const cloud = createParticleCloud();
+      scene = createMonaDotsScene(
+        canvas,
+        cloud,
+        {
+          dot: tokenRgb("--color-brand-yellow"),
+          background: tokenRgb("--color-brand-black"),
+        },
+        undefined,
+        // Galeri silüetleri (yüz, kristal, küp, iris). Sahne yalnız görünür
+        // alana girince kurulduğu için bu hesap kritik yolda değil.
+        buildGallery(cloud),
+      );
     } catch (error) {
       console.error("MONA dots scene failed:", error);
     }
@@ -113,6 +123,10 @@ export function MonaDots({ hostRef, levelRef, typing, reducedMotion }: {
     const look = { x: 0, y: 0, targetX: 0, targetY: 0 };
     const input = { pointerMoved: false, keyed: false, taps: [] as { x: number; y: number }[] };
     let creature = createCreature(Math.random);
+    // Hangi galeri tamponunun bağlı olduğu. Yalnız indeks değiştiğinde
+    // yeniden bağlanır; durum makinesi indeksi ağırlık 0'ken değiştirdiği
+    // için görünürdeki silüet asla ortada değişmez.
+    let boundGallery = -1;
     const history: MonaDotsFrame[] = [];
     let level = 0;
     // Açılış ve sahne zamanı yalnızca sahne çalışırken ilerler: açılış
@@ -182,6 +196,10 @@ export function MonaDots({ hostRef, levelRef, typing, reducedMotion }: {
       input.keyed = false;
       input.taps = [];
       const mood = creatureFrame(creature);
+      if (mood.galleryIndex !== boundGallery) {
+        boundGallery = mood.galleryIndex;
+        active.selectGallery(boundGallery);
+      }
       sceneTime += dt * mood.timeScale;
 
       pointer.x += (pointer.targetX - pointer.x) * 0.12;
@@ -214,6 +232,7 @@ export function MonaDots({ hostRef, levelRef, typing, reducedMotion }: {
         shapeRing: mood.shapeWeights[2],
         // Nilüfer ve kayma yalnız Creative'in MonaShard'ına ait (DECISIONS #48).
         shapeLotus: 0,
+        gallery: mood.gallery,
         shiftX: 0,
         shiftY: 0,
         lookX: look.x,

@@ -41,7 +41,10 @@
   margin: auto;
   color: var(--color-brand-black);
   font-family: var(--font-brand);
-  font-size: clamp(3.8rem, 8.5vw, 8rem);
+  /* %20 büyütüldü (17 Eylül 2026 kullanıcı isteği): clamp'in üç terimi de
+     1.2 ile çarpıldı — 3.8rem/8.5vw/8rem -> 4.56rem/10.2vw/9.6rem. En uzun
+     durum "& THANK" 1440px'te ~780px, 70rem kolona sığıyor. */
+  font-size: clamp(4.56rem, 10.2vw, 9.6rem);
   font-weight: var(--font-weight-brand);
   line-height: 0.86;
   text-align: center;
@@ -81,29 +84,33 @@
   pointer-events: none;
 }
 
+/* Kaydırmaya bağlı süzülme (ScrollContours `--progress` yazar). Hero sayfa
+   başında: yüklemede ilerleme ~.5 → --d ~0 (dinginlik), hero ekrandan
+   çıkarken --d 1'e gider. Üç çizgi farklı yönlere kayıp döner. */
+.contours {
+  --d: calc((var(--progress, 0.5) - 0.5) * 2);
+}
+
 .contours span {
   width: 72vw;
   height: 43vw;
   margin: auto;
   border: 1px solid rgba(0, 0, 0, 0.17);
   border-radius: 47% 53% 58% 42% / 44% 39% 61% 56%;
-  animation: contourDrift 20s ease-in-out infinite alternate;
+  transform: translate3d(calc(9% * var(--d)), calc(5% * var(--d)), 0) rotate(calc(13deg * var(--d)));
 }
 
 .contours span:nth-child(2) {
   width: 91vw;
   height: 58vw;
-  transform: rotate(19deg);
-  animation-delay: -7s;
-  animation-duration: 25s;
+  transform: translate3d(calc(-4% * var(--d)), 0, 0) rotate(calc(19deg - 16deg * var(--d)));
 }
 
 .contours span:nth-child(3) {
   width: 54vw;
   height: 69vw;
-  transform: translate(24vw, -8vw) rotate(-28deg);
-  animation-delay: -12s;
-  animation-duration: 29s;
+  transform: translate3d(calc(24vw - 6vw * var(--d)), calc(-8vw + 4vw * var(--d)), 0)
+    rotate(calc(-28deg + 20deg * var(--d)));
 }
 
 .featuredVideo {
@@ -147,8 +154,8 @@
   grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.8fr);
   gap: clamp(3rem, 9vw, 10rem);
   align-items: center;
-  min-height: min(88svh, 64rem);
-  padding: clamp(4rem, 9vw, 9rem) var(--page-gutter);
+  min-height: min(70svh, 50rem);
+  padding: clamp(3.5rem, 7vw, 7rem) var(--page-gutter);
   overflow: hidden;
   background: var(--mag-mint);
   color: var(--color-brand-black);
@@ -177,17 +184,17 @@
 
 .content { width: 100%; }
 
-@keyframes contourDrift {
-  0% { transform: translate3d(-4%, -2%, 0) rotate(-6deg); }
-  100% { transform: translate3d(5%, 3%, 0) rotate(7deg); }
-}
-
 @media (max-width: 760px) {
   .hero,
   .heroInner { min-height: 72svh; }
 
   .heroTitle {
-    font-size: clamp(2.9rem, 13vw, 4rem);
+    /* Masaüstüyle aynı oranda %20: 13vw/4rem -> 15.6vw/4.8rem. Taban
+       3.48rem değil 3.3rem: en uzun durum "& THANK" 5.16em genişliğinde,
+       320px'te kolon 283px; 3.48rem (55.7px) 287px tutup taşıyordu, 3.3rem
+       (52.8px) 272px ile sığıyor. 390px ve üstünde taban devreye girmiyor,
+       orada artış tam %20. */
+    font-size: clamp(3.3rem, 15.6vw, 4.8rem);
     line-height: 0.88;
   }
 
@@ -209,6 +216,8 @@
   }
 }
 
+/* Hareket azaltmada useScrollScene --progress 1 yazar; çizgiler sabit,
+   dingin konumlarında dursun. */
 @media (prefers-reduced-motion: reduce) {
-  .contours span { animation: none; }
+  .contours { --d: 0; }
 }

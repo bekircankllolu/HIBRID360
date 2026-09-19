@@ -17,7 +17,9 @@
   --lit: clamp(0, (var(--progress, 1) - 0.14) / 0.5, 1);
   display: flex;
   align-items: center;
-  min-height: min(82svh, 56rem);
+  /* 82svh'ten indirildi: cümleler arasında 300–590px boş kalıyordu
+     (17 Eylül 2026 boşluk taraması). Yanma süresi kısalır ama okunur. */
+  min-height: min(58svh, 40rem);
   padding-inline: var(--page-gutter);
 }
 
@@ -52,7 +54,7 @@
 
 @media (max-width: 767px) {
   .scene {
-    min-height: 68svh;
+    min-height: 46svh;
   }
 
   .scene[data-align="end"] p {

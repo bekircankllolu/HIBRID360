@@ -1,5 +1,7 @@
 .footer {
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   border-top: 1px solid var(--color-brand-black);
 }
@@ -20,26 +22,41 @@
   margin-bottom: clamp(3rem, 5vw, 5rem);
 }
 
+/* Logo rolü: --font-brand DEĞİL --font-logo. Bu literal "Hibrid 360"
+   render'ı; kullanıcı isteği üzerine eskisi gibi Montserrat'ta kalıyor,
+   sitenin geri kalanının Archivo'ya geçmesinden etkilenmiyor. */
 .wordmark {
   margin: 0;
-  font-family: var(--font-brand);
+  font-family: var(--font-logo);
   font-size: clamp(1rem, 1.25vw, 1.35rem);
   font-weight: var(--font-weight-brand);
+  letter-spacing: var(--tracking-ui);
   /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
   text-transform: uppercase;
 }
 
+/**
+ * Footer'ın display anı — sayfadaki son ve en yüksek sesli cümle.
+ *
+ * Ölçü 44ch: referans yerleşimde ilk cümle tek satır ("The future of
+ * creativity isn't artificial." / "It's hybrid."); 28ch cümleyi "isn't"ten
+ * kırıp üç satıra çıkarıyordu.
+ *
+ * Archivo'ya geçişte espas display kuralına alındı (--tracking-display):
+ * bu punto bandında (4rem'e kadar) varsayılan espas harfler arasında
+ * boşluk bırakıyor, cümle bir blok gibi durmuyordu. Satır 0.98 -> 0.94:
+ * iki satır birbirine kenetlensin, tek bir tipografik kütle olsun.
+ */
 .statement {
-  /* Referans yerleşimde ilk cümle tek satır: "The future of creativity
-     isn't artificial." / "It's hybrid." 28ch bu cümleyi "isn't"ten
-     kırıp üç satıra çıkarıyordu. */
   max-width: 44ch;
   margin: 0;
-  font-family: var(--font-brand);
+  font-family: var(--font-display);
   font-size: clamp(1.7rem, 3.25vw, 4rem);
   font-weight: var(--font-weight-heading-semibold);
-  line-height: 0.98;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.94;
   color: var(--color-brand-black);
+  text-wrap: balance;
 }
 
 .statement span {
@@ -62,14 +79,15 @@
   position: relative;
   margin: 0 0 1.5rem;
   padding-left: 1rem;
-  font-family: var(--font-body);
+  font-family: var(--font-ui);
   /* 12px'ti; altındaki linklerden (14.4px) küçük olduğu için hiyerarşi ters
      görünüyordu. Ayrım artık punto değil BİÇİM üzerinden: başlık büyük harf +
-     espasla etiket rolü alır, linkler içerik olur. Espas 0.12em kod tabanının
-     mevcut eyebrow standardı (service-page/culture-page .sectionTitle). */
+     espasla etiket rolü alır, linkler içerik olur. Espas elle yazılmış
+     0.12em yerine --tracking-ui token'ı (kod tabanındaki 0.08/0.12/0.14
+     üçlüsü tek role indirildi). */
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-body-medium);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-ui);
   text-transform: uppercase;
   color: var(--color-brand-black);
 }
@@ -100,10 +118,43 @@
   line-height: 1.4;
 }
 
-.column a:hover,
-.column a:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+/**
+ * Bağlantı hover'ı — altı çizgi ANINDA belirmez, soldan sağa süpürülür.
+ *
+ * `text-decoration: underline` açık/kapalı iki durumdur; göz değişimi
+ * fark eder ama hareketi okumaz. Süpürme, imlecin gittiği yönü takip
+ * ettiği için bağlantının "uyandığı" hissini verir — kullanıcının istediği
+ * "detaylar bizi eğlendirsin" burada, gürültü çıkarmadan.
+ *
+ * Yalnız transform animasyonu: layout değişmez, CLS üretmez.
+ * prefers-reduced-motion'da geçiş globals.css tarafından 0.01ms'e iner,
+ * yani çizgi yine görünür ama anında — erişilebilirlik korunur.
+ */
+.column a,
+.social a {
+  position: relative;
+  display: inline-block;
+}
+
+.column a::after,
+.social a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.15em;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 340ms var(--ease-house);
+}
+
+.column a:hover::after,
+.column a:focus-visible::after,
+.social a:hover::after,
+.social a:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .contact {
@@ -152,17 +203,30 @@
   font-size: var(--font-size-micro);
 }
 
+/* Büyük harfe ÇEVRİLMEZ: karbon nötr metni iki dilde tam çevrilen bir
+   cümle (CLAUDE.md i18n kuralı), etiket değil. */
 .carbonBadge {
   border: 1px solid var(--color-brand-black);
   color: var(--color-brand-black);
+  font-family: var(--font-ui);
   font-size: var(--font-size-micro);
   padding: 0.45rem 0.75rem;
 }
 
+/* Mikro boy (13px) büyük harf: espas --tracking-ui değil --tracking-micro,
+   bu puntoda 0.08em harfleri birbirine yapıştırıyor (tokens.css notu). */
 .backToTop {
+  font-family: var(--font-ui);
   font-size: var(--font-size-micro);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--tracking-micro);
   text-transform: uppercase;
+  transition: transform 300ms var(--ease-house);
+}
+
+/* Ok yukarı kayar — "başa dön"ü kelimeyi okumadan da anlatır. */
+.backToTop:hover,
+.backToTop:focus-visible {
+  transform: translateY(-2px);
 }
 
 @media (max-width: 1180px) {

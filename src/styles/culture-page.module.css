@@ -3,9 +3,11 @@
  * paylaşılan stil — service-page.module.css ile aynı desen, alıntı ve
  * kurucu bloğu gibi Culture'a özgü sınıflar eklendi.
  */
+/* Alt dolgu üstten kısa: sayfanın ardından her zaman CtaBand geliyor ve
+   kendi üst dolgusunu taşıyor; iki dolgu üst üste ~310px boşluk açıyordu. */
 .page {
   width: 100%;
-  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter);
+  padding: clamp(5rem, 10vw, 10rem) var(--page-gutter) clamp(2.5rem, 5vw, 5rem);
 }
 
 .heroTitle {
@@ -33,12 +35,15 @@
   margin-bottom: var(--space-6);
 }
 
+/* Editoryal serif — sahte oblik kaldırıldı (aşağıdaki .quote notu). */
 .heroQuote {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-subheading);
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(1.375rem, 2.6vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-heading);
   margin: 0;
-  font-style: italic;
 }
 
 .heroLead {
@@ -69,7 +74,9 @@
 }
 
 .sectionTitle {
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-semibold);
   font-size: var(--font-size-label);
   letter-spacing: 0.12em;
@@ -96,7 +103,9 @@
 }
 
 .listTag {
-  font-family: var(--font-brand);
+  /* Etiket rolü: Inter. Archivo display ve başlık sesi — 14px büyük
+     harfte fazla geniş ve ağır duruyor, içeriğin önüne geçiyor. */
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-heading-semibold);
   font-size: var(--font-size-label);
   letter-spacing: 0;
@@ -108,18 +117,42 @@
   line-height: var(--line-height-body);
 }
 
-/* Partners (PAR-02). What We Believe alıntı bandı kendi modülünde. */
+/**
+ * Partners (PAR-02). What We Believe alıntı bandı kendi modülünde.
+ *
+ * Alıntı sesi = editoryal serif (17 Eylül 2026). İki sebep:
+ *
+ * 1) DÜZELTME: burada `font-style: italic` vardı ama ne Montserrat'ın ne
+ *    Archivo'nun gerçek italiği var — tarayıcı harfleri eğerek SAHTE oblik
+ *    üretiyordu. Kalın bir grotesk'i yatırmak tipografik olarak kötü;
+ *    kavisler bozuluyor, espas dağılıyor.
+ * 2) TASARIM: alıntı sayfanın durup okunan yeri. Yüksek kontrastlı bir
+ *    serif bunu BİÇİMLE söyler — eğime ya da tırnağa ihtiyacı olmaz.
+ *    monks.com'un aynı rolde Morian kullanması bu yüzden.
+ *
+ * Punto sans'tan bir kademe büyük: serif aynı px'te daha küçük görünür
+ * (Newsreader Georgia'ya göre %91.5 ortalama genişlik), eşit ağırlıkta
+ * durması için büyümesi gerekiyor.
+ */
 .quote {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-style: italic;
-  font-size: var(--font-size-subheading);
-  max-width: 40rem;
-  margin: 0 0 var(--space-2);
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-heading);
+  max-width: 24ch;
+  margin: 0 0 var(--space-4);
 }
 
+/* Yazar adı bilinçle küçük ve sans: alıntının serif sesiyle karışmasın,
+   imza gibi dursun. */
 .quoteAuthor {
+  font-family: var(--font-ui);
   font-size: var(--font-size-label);
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 
 /* Partners */

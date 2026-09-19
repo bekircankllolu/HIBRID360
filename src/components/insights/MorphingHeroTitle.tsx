@@ -68,7 +68,11 @@ function useMorphingText(texts: readonly string[]) {
     if (!current1 || !current2) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      current1.textContent = "THINK & THANK";
+      // "&" ile "THANK" arasında bölünmez boşluk: tek kırılma noktası
+      // "THINK"ten sonra kalsın, "&" satır sonunda asılı kalmasın. Tek satır
+      // hâli 1440px'te 1309px tutup 1120px'lik kolonu aşıyordu (CSS'te
+      // hareket azaltmada satır kırılması açık).
+      current1.textContent = "THINK & THANK";
       current1.style.filter = "none";
       current1.style.opacity = "1";
       current2.style.display = "none";

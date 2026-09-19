@@ -1,0 +1,104 @@
+/*
+ * Zirve en uzun sahne: masaüstü 260svh, mobil 180svh (S5 180/140).
+ * Yerleşim CSS media query'ye bağlı (hidrasyonda yükseklik sıçramaz).
+ */
+.wrapper {
+  position: relative;
+  height: 260svh;
+}
+
+/*
+ * Sahne iki satır: film alanı + AI etiketi. Etiket filmin ALTINDA, üstünde
+ * değil; film ekrandayken etiket de ekranda.
+ *
+ * --p: pencerenin açılma oranı. Kaydırma yolunun ilk %62'sinde açılır,
+ * kalanında film alanını kaplar (zirvede nefes).
+ * Pencere 16:9; genişliği masaüstünde 56vw, mobilde 84vw. Dikeyde filmin
+ * odağına yerleşir (--focus-y, 0 üst → 1 alt): boş dikey pay odağa göre
+ * üste ve alta bölünür.
+ * JS yoksa --progress tanımsız → 0 → küçük pencere + poster (geçerli bir durum).
+ */
+.stage {
+  --p: clamp(0, var(--progress, 0) / 0.62, 1);
+  --win-w: 56vw;
+  --cap-h: 2.5rem;
+  --stage-h: calc(100svh - var(--header-height));
+  --frame-h: calc(var(--stage-h) - var(--cap-h));
+  --free-y: max(0px, var(--frame-h) - var(--win-w) * 0.5625);
+  --inset-x: calc((100% - var(--win-w)) / 2 * (1 - var(--p)));
+  --inset-top: calc(var(--free-y) * var(--focus-y, 0.5) * (1 - var(--p)));
+  --inset-bottom: calc(var(--free-y) * (1 - var(--focus-y, 0.5)) * (1 - var(--p)));
+  --toggle-top: calc(var(--inset-top) + var(--space-4));
+  --toggle-right: calc(var(--inset-x) + var(--space-4));
+  position: sticky;
+  top: var(--header-height);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) var(--cap-h);
+  height: var(--stage-h);
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-brand-black);
+}
+
+.frame {
+  position: relative;
+  min-height: 0;
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(
+    var(--inset-top) var(--inset-x) var(--inset-bottom) var(--inset-x)
+    round calc(4px * (1 - var(--p)))
+  );
+}
+
+.wrapper[data-motion="scroll"] .media {
+  will-change: clip-path;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--page-gutter);
+  font-size: var(--font-size-micro);
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+@media (max-width: 767px) {
+  .wrapper {
+    height: 180svh;
+  }
+
+  .stage {
+    --win-w: 84vw;
+  }
+}
+
+/* Hareket azaltma: sticky ve maske yok; film kendi oranında, poster +
+   oynat butonuyla durur (otomatik oynatma zaten yok). */
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    height: auto;
+  }
+
+  .stage {
+    --toggle-top: var(--space-4);
+    --toggle-right: var(--space-4);
+    position: relative;
+    top: 0;
+    height: auto;
+    grid-template-rows: auto var(--cap-h);
+  }
+
+  .frame {
+    aspect-ratio: 16 / 9;
+  }
+
+  .media {
+    clip-path: none;
+  }
+}

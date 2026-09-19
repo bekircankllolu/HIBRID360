@@ -14,6 +14,8 @@
   right: 0;
   z-index: 90;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   border-top: 2px solid var(--color-brand-black);
 }

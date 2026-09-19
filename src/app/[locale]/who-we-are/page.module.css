@@ -63,14 +63,17 @@
   color: var(--color-brand-yellow);
 }
 
+/* Editoryal serif — sahte oblik kaldırıldı (bkz. culture-page.module.css
+   .quote notu: Archivo'nun gerçek italiği yok, tarayıcı eğiyordu). */
 .quote {
   margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-style: italic;
-  font-size: clamp(1.125rem, 2.6vw, 1.75rem);
-  line-height: 1.35;
-  max-width: 34rem;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+  line-height: 1.18;
+  letter-spacing: var(--tracking-heading);
+  max-width: 24ch;
 }
 
 .disclaimer {

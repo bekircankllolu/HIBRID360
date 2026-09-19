@@ -2,10 +2,10 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
+import { CultureIndex } from "@/components/culture/CultureIndex";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteImages } from "@/data/site-images";
 import { breadcrumbListJsonLd } from "@/lib/schema";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import styles from "./page.module.css";
 
@@ -39,12 +39,14 @@ export async function generateMetadata({
   };
 }
 
+// Önizleme görselleri scripts ile değil elle üretildi: sitedeki/arşivdeki
+// ilgili fotoğrafın siyah->marka sarısı duotone'u, 640x800 (4:5).
 const SECTIONS = [
-  { href: "/who-we-are", key: "whoWeAre" },
-  { href: "/what-we-believe", key: "whatWeBelieve" },
-  { href: "/think-and-thank", key: "thinkAndThank" },
-  { href: "/culture/directors", key: "directors" },
-  { href: "/culture/sustainability", key: "sustainability" },
+  { href: "/who-we-are", key: "whoWeAre", image: "/images/site/culture/hub-who-we-are.webp" },
+  { href: "/what-we-believe", key: "whatWeBelieve", image: "/images/site/culture/hub-what-we-believe.webp" },
+  { href: "/think-and-thank", key: "thinkAndThank", image: "/images/site/culture/hub-think-and-thank.webp" },
+  { href: "/culture/directors", key: "directors", image: "/images/site/culture/hub-directors.webp" },
+  { href: "/culture/sustainability", key: "sustainability", image: "/images/site/culture/hub-sustainability.webp" },
 ] as const;
 
 const STAND_FOR_COPY = {
@@ -121,21 +123,13 @@ export default async function CulturePage({
             : "The ideas, people and values that shape who we are."}
         </p>
 
-        <ul className={styles.grid}>
-          {SECTIONS.map((section, index) => (
-            <li key={section.href} className={styles.card}>
-              <Link href={section.href} className={styles.cardLink}>
-                <span className={styles.index} aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className={styles.cardTitle}>{t(section.key)}</span>
-                <span className={styles.arrow} aria-hidden="true">
-                  →
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <CultureIndex
+          items={SECTIONS.map((section) => ({
+            href: section.href,
+            title: t(section.key),
+            image: section.image,
+          }))}
+        />
       </div>
 
       <section className={styles.standFor} aria-labelledby="stand-for-title">

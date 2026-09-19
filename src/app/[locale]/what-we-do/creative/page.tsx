@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { preload } from "react-dom";
 import { getTranslations } from "next-intl/server";
 import { MonaDrift } from "@/components/mona/MonaDrift";
+import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { MonaShard } from "@/components/mona/MonaShard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ChapterHero } from "@/components/service-chapter/ChapterHero";
@@ -58,19 +59,9 @@ import styles from "./page.module.css";
 
 const CHAPTER = chapterOf("creative");
 
-/** CRE-03 — hizmet kapsamı; marka dili, EN ve TR aynı. */
-const CREATIVE_SERVICES = [
-  "BRAND CONSULTANCY",
-  "CORPORATE IDENTITY",
-  "MARKETING PLAN AND STRATEGY",
-  "CONCEPT DEVELOPMENT",
-  "CONTENT GENERATION",
-  "COMMERCIALS",
-  "PACKAGING",
-  "TV",
-  "PRESS",
-  "RADIO CAMPAIGNS",
-] as const;
+/* CRE-03 — hizmet kapsamı; marka dili, EN ve TR aynı. Liste artık
+   src/data/service-offerings.ts'te: ekosistem sahnesinin gezegen paneli de
+   aynı kaynağı okuyor. */
 
 export async function generateMetadata({
   params,
@@ -144,13 +135,18 @@ export default async function CreativePage({
 
       <ChapterIndex
         title={tChapter("servicesTitle")}
-        items={CREATIVE_SERVICES}
+        items={SERVICE_OFFERINGS.creative}
       />
 
       <DnaHelix slogan={t("band")} />
 
       <CreativeArchive
-        pending={{ label: tCommon("pendingLabel"), message: t("galleryEmpty") }}
+        locale={locale}
+        pending={{
+          label: tCommon("pendingLabel"),
+          message: t("galleryEmpty"),
+          representative: tCommon("aiRepresentative"),
+        }}
         link={{ href: "/work?service=Creative", label: tNav("work") }}
       />
 

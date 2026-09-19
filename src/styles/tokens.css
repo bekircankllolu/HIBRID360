@@ -32,9 +32,57 @@
   --color-mona-neon-mint: #08402f;
   --color-mona-lilac: #b49bd8;
 
-  /* Typography */
-  --font-brand: "Montserrat", "Montserrat Fallback", system-ui, sans-serif;
+  /**
+   * Typography — rol tabanlı sistem (17 Eylül 2026).
+   *
+   * ÖNCESİ: `--font-brand` (Montserrat) kod tabanındaki 200 `font-family`
+   * çağrısının 182'sini tek başına karşılıyordu — h1'den buton etiketine.
+   * Hiyerarşi yalnız punto ve kalınlıkla kuruluyordu; biçim hiç çalışmıyordu.
+   *
+   * SONRASI: her rolün kendi sesi var. Referans monks.com'un dört sesli
+   * yapısı (Helvetica Now Extended 800 / Helvetica Now / Morian / Caveat);
+   * buradaki karşılıkları Archivo / Inter / Newsreader.
+   *
+   *   --font-display    büyük tipografik an: h1, statement, bant sloganı
+   *   --font-brand      başlık ve marka sesi (h2, h3, kart başlığı)
+   *   --font-ui         nav, buton, etiket, eyebrow, meta — okunmak için değil
+   *                     yönlendirmek için olan her metin
+   *   --font-body       gövde/proz
+   *   --font-editorial  alıntı, manifesto, giriş cümlesi — durup okunan yer
+   *   --font-chapter-display  Creative chapter'ları (değişmedi)
+   *
+   * `--font-brand` Montserrat yerine Archivo'yu gösteriyor: 182 kullanımın
+   * hepsi tek satırda yeni sese geçiyor, sonra sayfa sayfa doğru role
+   * (display / ui / editorial) ayrılıyor.
+   *
+   * İSTİSNA — logotype: kullanıcı gerçek "Hibrid 360" logo render'larının
+   * (5 yer) eskisi gibi kalmasını istedi. Onlar `--font-brand` DEĞİL, ayrı
+   * `--font-logo` token'ını kullanıyor ve Montserrat'ta kalıyor (aşağıda,
+   * tek ağırlıkta/statik — bkz. fonts.css Montserrat notu).
+   *
+   * Hero'daki "HIBRID" yazısı bundan ETKİLENMEZ: o canlı metin değil, WebGL
+   * alfa maskesi (public/images/hibrid-wordmark.png).
+   */
+  --font-display: "Archivo", "Archivo Fallback", system-ui, sans-serif;
+  --font-brand: "Archivo", "Archivo Fallback", system-ui, sans-serif;
   --font-body: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-ui: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-editorial: "Newsreader", "Newsreader Fallback", Georgia, serif;
+
+  /**
+   * Logotype — YALNIZ literal "Hibrid 360" yazımı (5 kullanım: Header
+   * `.logo`, Header `.megaBrand`, Footer `.wordmark`, MeetTheCrewReveal
+   * `.wordmark`, LanguageSwitcher `.eyebrow`).
+   *
+   * Kullanıcı geri bildirdi (17 Eylül 2026): gerçek logo eskisi gibi
+   * kalmalı, --font-brand'in Archivo'ya geçmesinden ETKİLENMEMELİ. Bu
+   * yüzden ayrı bir rol: --font-brand her yerde Archivo'yu gösterirken
+   * --font-logo yalnız bu beş yerde Montserrat'a sabit kalıyor.
+   *
+   * Yeni bir yerde "Hibrid 360" render edilecekse (yeni bir logo
+   * yerleşimi) --font-brand DEĞİL --font-logo kullanılmalı.
+   */
+  --font-logo: "Montserrat", "Montserrat Fallback", system-ui, sans-serif;
 
   /* Service Chapter — büyük tipografik anlar (h1, hizmet dizini, manifesto,
      DNA sloganı, "sıradaki servis"). DECISIONS #37, 13 Eylül 2026. Marka
@@ -43,14 +91,45 @@
   --font-chapter-display: "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
   --font-weight-chapter-display: 700; /* Space Grotesk'in en kalın ağırlığı — 800/900 yok */
 
-  --font-weight-brand: 800; /* Montserrat Extra Bold — hero/dev başlık */
-  --font-weight-heading-bold: 700; /* Montserrat Bold — H1-H3 */
-  --font-weight-heading-semibold: 600; /* Montserrat SemiBold — H1-H3 */
+  --font-weight-brand: 800; /* Archivo ExtraBold — dev başlık/statement */
+  --font-weight-heading-bold: 700; /* Archivo Bold — H1-H3 */
+  --font-weight-heading-semibold: 600; /* Archivo SemiBold — H1-H3 */
   --font-weight-body-regular: 400;
   --font-weight-body-medium: 500;
 
+  /**
+   * Espas (letter-spacing) — biçimsel hiyerarşinin ikinci yarısı.
+   *
+   * Denetimde aynı iş için üç ayrı değer vardı: `0.08em` (8 yer), `0.12em`
+   * (15 yer), `0.14em` (10 yer) — üçü de "büyük harf etiket" rolünde.
+   * Tek değere indiriliyor.
+   *
+   * Dev puntoda espas DARALIR: 5rem'de harfler arası varsayılan boşluk
+   * kocaman bir delik gibi durur. monks.com'un display ritmi de bu —
+   * sıkı espas + sıkı satır. Küçük büyük-harf etikette tersine açılır,
+   * yoksa harfler birbirine yapışır.
+   */
+  --tracking-display: -0.03em; /* h1, statement, bant — dev punto */
+  --tracking-heading: -0.015em; /* h2, h3, kart başlığı */
+  --tracking-body: 0; /* gövde: dokunma */
+  --tracking-ui: 0.08em; /* büyük harf etiket ~14-16px */
+  /* Metin küçüldükçe espas AÇILIR: 13px büyük harfte 0.08em harfleri
+     birbirine yapıştırıyor. Kod tabanındaki 0.12em/0.14em değerlerinin
+     karşılığı bu rol — ikisi de aynı işi yapıyordu. */
+  --tracking-micro: 0.14em; /* büyük harf mikro metin ~13px */
+
+  /**
+   * Satır yüksekliği — punto büyüdükçe azalır.
+   * Gövdenin 1.5'i CLAUDE.md'de sözleşmeli, dokunulmuyor.
+   */
+  --leading-display: 0.92; /* dev başlık: satırlar kenetlenir */
+  --leading-heading: 1.06;
+
   /* Gövde metni: 16-18px, satır yüksekliği 1.5 (CLAUDE.md) */
   --font-size-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  /* Gövdenin bir kademe büyüğü (17-20px) — AI Creative Production kanıt
+     listesi kullanıyordu ama tanımlı değildi, punto miras alınıyordu. */
+  --font-size-body-lg: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
   --line-height-body: 1.5;
 
   /**
@@ -77,8 +156,15 @@
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  /* --space-5 ve --space-10 ölçekte yoktu ama 8 yerde kullanılıyordu
+     (17 Eylül 2026 denetimi). Tanımsız bir var() bütün kısayolu
+     geçersiz kılıyor: `padding: var(--space-6) var(--space-5)` padding'i
+     SIFIRA düşürüyordu — Culture kartlarında metnin kutu kenarına
+     yapışmasının sebebi buydu. Eksik adımlar tanımlandı. */
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
   --space-24: 6rem;

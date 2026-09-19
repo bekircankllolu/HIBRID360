@@ -66,13 +66,38 @@
   text-transform: uppercase;
 }
 
+/*
+ * Derece etiketi BEYAZ (eskiden fuşya). Fotoğrafın üzerinde fuşya ölçüldü:
+ * 3.23:1 — küçük punto için gereken 4.5:1'in altında (18 Eylül 2026 kontrast
+ * taraması, hem TR hem EN). Beyaz aynı zeminde ~10:1 veriyor. Fuşya "araç
+ * rengi" olarak zeminin garanti koyu olduğu yerlerde kalıyor (tipografik
+ * poster çizgileri, ChapterHero koordinatı).
+ */
 .stageMeta span:first-child {
-  color: var(--color-brand-fuchsia);
+  color: var(--color-brand-white);
+  opacity: 0.85;
+}
+
+/*
+ * AI satırının sahnesi: altta tipografik poster, üstünde MONA'nın partikül
+ * küresi. MONA kurulduğunda (WebGL ya da hareket-azaltmada tek kare) poster
+ * sönerek çekilir; kurulamadığı yerde (dokunmatik, dar ekran, WebGL yok)
+ * poster tek başına sahneyi taşır.
+ */
+.aiStage {
+  position: absolute;
+  inset: 0;
+}
+
+.aiStage:has([data-dots="webgl"]) .typePoster,
+.aiStage:has([data-dots="static"]) .typePoster {
+  opacity: 0;
 }
 
 .typePoster {
   position: absolute;
   inset: 0;
+  transition: opacity 520ms var(--ease-house);
   display: grid;
   align-content: space-between;
   padding: clamp(var(--space-6), 4vw, var(--space-12));

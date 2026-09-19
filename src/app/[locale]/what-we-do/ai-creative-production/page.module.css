@@ -9,14 +9,17 @@
 .proof > div > h2 { margin: 0; font-family: var(--font-chapter-display); font-size: clamp(2rem, 5vw, 5rem); line-height: .95; letter-spacing: 0; text-transform: uppercase; }
 .proof p, .proof li { font-size: var(--font-size-body-lg); line-height: 1.55; }
 .proof p { max-width: var(--measure-prose); margin: 0; }
-.proofPanel { padding: clamp(2rem, 5vw, 5rem); background: var(--color-brand-yellow); color: var(--color-text-on-yellow); }
+/* Sarı zemin: başlıklar da siyah (globals.css --heading-color notu). */
+.proofPanel { padding: clamp(2rem, 5vw, 5rem); background: var(--color-brand-yellow); color: var(--color-text-on-yellow); --heading-color: var(--color-text-on-yellow); }
+/* Marka adı başlıkta ayrı bir <span> taşıyor; rengi panelden miras alsın. */
+.proofPanel h2 span { color: inherit; }
 .proofPanel ul { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
 .proofPanel li::before { content: "↳ "; color: var(--color-brand-fuchsia); }
-.flowSection { display: grid; gap: var(--space-10); }
+.flowSection { display: grid; gap: var(--space-10); padding-block: clamp(3rem, 6vw, 5.5rem); }
 .flow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .flow span { padding: var(--space-3) var(--space-4); border: 1px solid color-mix(in srgb, var(--color-brand-white) 30%, transparent); font-family: var(--font-brand); font-size: var(--font-size-label); font-weight: var(--font-weight-heading-bold); text-transform: uppercase; }
 .flow i { color: var(--color-brand-fuchsia); font-style: normal; }
-.manifesto { position: relative; min-height: 70svh; display: grid; place-items: center; padding: var(--space-16) var(--page-gutter); background: var(--color-brand-fuchsia); color: var(--color-text-on-fuchsia); }
+.manifesto { position: relative; min-height: min(52svh, 34rem); display: grid; place-items: center; padding: var(--space-16) var(--page-gutter); background: var(--color-brand-fuchsia); color: var(--color-text-on-fuchsia); }
 .manifesto p, .band p { max-width: 18ch; margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-manifesto); font-weight: var(--font-weight-chapter-display); line-height: 1; letter-spacing: 0; }
 .band p { color: var(--color-brand-yellow); }
 .closing { display: grid; gap: var(--space-5); }

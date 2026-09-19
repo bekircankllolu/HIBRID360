@@ -1,81 +1,229 @@
+/*
+ * İletişim formu — gerekçe ContactForm.tsx dosya başında.
+ *
+ * Tek renk sistemi, iki tema: koyu (Contact sayfası, siyah zemin) ve sarı
+ * (ana sayfa ReachOut bandı). Renkler `--ink` / `--rule` üzerinden
+ * geçiyor; tema yalnız bu iki değişkeni değiştiriyor, kuralların hiçbiri
+ * iki kez yazılmıyor.
+ */
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  max-width: 32rem;
-}
+  --ink: var(--color-text-on-black);
+  --rule: rgba(255, 255, 255, 0.28);
+  --accent: var(--color-brand-yellow);
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  font-size: 0.875rem;
-}
-
-.field input,
-.field textarea {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: var(--color-brand-white);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  padding: var(--space-3);
-}
-
-.yellow {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-  max-width: none;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 40rem;
+  color: var(--ink);
 }
 
-.yellow .field {
-  color: var(--color-brand-black);
+/* ---------- Alan ---------- */
+
+/*
+ * Izgara: numara sütunu + içerik. Numara iki hanelik sabit genişlikte,
+ * dolayısıyla bütün alanların etiket ve girdi kenarı aynı hatta.
+ */
+.field {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 2.25rem) minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: clamp(0.6rem, 1.4vw, 1rem);
+  padding-bottom: clamp(0.55rem, 1.1vw, 0.8rem);
+}
+
+.fieldIndex {
+  grid-row: 1;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-micro);
   font-weight: var(--font-weight-body-medium);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  color: var(--accent);
 }
 
-.yellow .field input,
-.yellow .field textarea {
+.fieldLabel {
+  grid-row: 1;
+  grid-column: 2;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* Etiket her zaman görünür — placeholder-as-label deseni KULLANILMIYOR
+     (ekran okuyucu ve otomatik doldurmada bozuluyor). */
+  opacity: 0.72;
+}
+
+/*
+ * Girdi: kutu yok. Büyük punto bilinçli — burası bir form alanı gibi
+ * değil, yazılan cümle gibi dursun.
+ */
+.input {
+  grid-column: 2;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0;
   border: 0;
-  border-bottom: 1px solid var(--color-brand-black);
-  background: transparent;
-  color: var(--color-brand-black);
-  padding: 0.75rem 0;
   border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-brand);
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  font-weight: var(--font-weight-body-medium);
+  line-height: 1.3;
 }
 
-.yellow .field input:focus,
-.yellow .field textarea:focus {
-  outline: 2px solid var(--color-brand-black);
-  outline-offset: 3px;
+.input:focus {
+  /* Odak halkası korunuyor: hairline animasyonu onun YERİNE geçmiyor. */
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.textarea {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+/* ---------- Hairline ---------- */
+
+/* Durağan çizgi alanın tamamı boyunca; dolan kısmı ::after. */
+.fieldRule {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--rule);
+}
+
+.fieldRule::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms var(--ease-house);
+}
+
+.field:focus-within .fieldRule::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Onay ---------- */
+
+.consent {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  max-width: var(--measure-prose);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.checkbox {
+  /* Tarayıcı varsayılanı mavi; marka rengine çekiliyor. `accent-color`
+     kutunun kendi çizimini korur, yani klavye ve yüksek kontrast
+     davranışı bozulmaz. */
+  accent-color: var(--accent);
+  margin-top: 0.15rem;
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+/* ---------- Gönder ---------- */
+
+.submit {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding: clamp(0.85rem, 1.5vw, 1.1rem) clamp(1.5rem, 3vw, 2.25rem);
+  border: 0;
+  background: var(--accent);
+  color: var(--color-text-on-yellow);
+  font-family: var(--font-brand);
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: gap 260ms var(--ease-house);
+}
+
+.submit svg {
+  transition: transform 260ms var(--ease-house);
+}
+
+.submit:hover:not(:disabled) svg,
+.submit:focus-visible:not(:disabled) svg {
+  transform: translateX(0.35rem);
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Durum mesajları ---------- */
+
+.success {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-brand);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: var(--font-weight-heading-semibold);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-brand-yellow);
+}
+
+.error {
+  margin: 0;
+  border-left: 2px solid var(--color-brand-fuchsia);
+  padding-left: var(--space-4);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* ---------- Sarı tema (ana sayfa ReachOut bandı) ---------- */
+
+/*
+ * Sarı zeminde metin SİYAH — marka kuralı (CLAUDE.md): beyaz metin sarı
+ * üzerinde AA'yı geçmiyor. Vurgu rengi de siyah: sarı zeminde sarı bir
+ * hairline görünmez.
+ */
+.yellow {
+  --ink: var(--color-brand-black);
+  --rule: rgba(0, 0, 0, 0.35);
+  --accent: var(--color-brand-black);
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem) clamp(1.5rem, 3vw, 2.5rem);
+  max-width: none;
 }
 
 .yellow .emailField,
 .yellow .messageField,
 .yellow .consent,
 .yellow .error,
-.yellow .submit {
+.yellow .submit,
+.yellow .success {
   grid-column: 1 / -1;
 }
 
-.yellow .consent {
-  color: var(--color-brand-black);
-}
-
 .yellow .submit {
-  justify-self: start;
   background: var(--color-brand-black);
   color: var(--color-brand-yellow);
-  border: 2px solid var(--color-brand-black);
-  min-width: 10rem;
-  transition: background 180ms ease, color 180ms ease;
 }
 
-.yellow .submit:hover,
-.yellow .submit:focus-visible {
-  background: var(--color-brand-black);
-  color: var(--color-brand-yellow);
-  transform: translateY(-2px);
+.yellow .success {
+  color: var(--color-brand-black);
 }
 
 .yellow .error {
@@ -84,50 +232,14 @@
 
 @media (max-width: 560px) {
   .yellow {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-.field textarea {
-  min-height: 6rem;
-  resize: vertical;
-}
-
-.field input:focus,
-.field textarea:focus {
-  outline: 2px solid var(--color-brand-fuchsia);
-  outline-offset: 1px;
-}
-
-.consent {
-  display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-  font-size: 0.8125rem;
-}
-
-.submit {
-  align-self: flex-start;
-  background: var(--color-brand-yellow);
-  color: var(--color-text-on-yellow);
-  border: none;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
-  cursor: pointer;
-}
-
-.submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.success {
-  font-size: 1.125rem;
-}
-
-.error {
-  border-left: 2px solid var(--color-brand-fuchsia);
-  padding-left: var(--space-4);
-  font-size: 0.875rem;
+@media (prefers-reduced-motion: reduce) {
+  .fieldRule::after,
+  .submit,
+  .submit svg {
+    transition: none;
+  }
 }

@@ -6,6 +6,7 @@ import { createCreature, creatureFrame, stepCreature } from "@/lib/mona-creature
 import { createParticleCloud } from "@/lib/mona-dots-geometry";
 import {
   createMonaDotsScene,
+  monaCenterLayout,
   monaShardLayoutFor,
   NEUTRAL_FRAME,
   SHARD_BLEED,
@@ -72,9 +73,19 @@ type Mode = "pending" | "webgl" | "static" | "none";
 export function MonaShard({
   shape = "lotus",
   side = "right",
+  placement = "corner",
 }: {
   shape?: MonaServiceShape;
   side?: "left" | "right";
+  /**
+   * "corner": kürenin merkezi kabın köşesinin dışında — MONA'nın yarısı
+   * görünür (hizmet sayfası hero'ları).
+   * "center": küre kabın ortasında, tam görünür (What We Do dizininin AI
+   * satırı). Merkezî varyant `view-transition-name` TAŞIMAZ: aynı ad aynı
+   * anda iki kez var olursa View Transitions API hata fırlatıyor
+   * (e2e/service-chapter-rollout.spec.ts bunu bekçiliyor).
+   */
+  placement?: "corner" | "center";
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [mode, setMode] = useState<Mode>("pending");
@@ -98,10 +109,12 @@ export function MonaShard({
     if (!root) return;
 
     const canvas = document.createElement("canvas");
-    canvas.className = styles.canvas;
+    canvas.className =
+      placement === "center" ? `${styles.canvas} ${styles.canvasCenter}` : styles.canvas;
     canvas.setAttribute("aria-hidden", "true");
     root.appendChild(canvas);
 
+    const layout = placement === "center" ? monaCenterLayout : monaShardLayoutFor(side);
     let scene: MonaDotsScene | null = null;
     try {
       // MONA'nın kendi bulutu (varsayılan ~19.000 nokta) — "görünüm olarak
@@ -126,7 +139,7 @@ export function MonaShard({
               : serviceShapeTargets(cloud, shape),
         },
         { dot: tokenRgb("--color-brand-yellow"), background: tokenRgb("--color-brand-black") },
-        monaShardLayoutFor(side),
+        layout,
       );
     } catch (error) {
       console.error("MonaShard scene failed:", error);
@@ -170,10 +183,10 @@ export function MonaShard({
 
     const fromCenter = (x: number, y: number) => {
       const width = canvas.clientWidth, height = canvas.clientHeight;
-      const layout = monaShardLayoutFor(side)(width, height);
+      const frame = layout(width, height);
       return {
-        dx: ((x - layout.centerX) * width) / layout.radius - shift.x,
-        dy: ((y - layout.centerY) * height) / layout.radius + shift.y,
+        dx: ((x - frame.centerX) * width) / frame.radius - shift.x,
+        dy: ((y - frame.centerY) * height) / frame.radius + shift.y,
       };
     };
     const onLeave = () => {
@@ -228,8 +241,13 @@ export function MonaShard({
       // physics delta makes a 2.6 s morph stretch indefinitely on slow GPUs.
       lotus = stepLotus(lotus, realDt, Math.random);
       const bloom = lotusWeight(lotus);
-      shift.x = (shape === "lotus" ? LOTUS_OFFSET.x : side === "right" ? -0.88 : 0.88) * bloom;
-      shift.y = (shape === "lotus" ? LOTUS_OFFSET.y : 0.28) * bloom;
+      // Köşe yerleşiminde çiçek sayfa kenarında yarım kalmasın diye kütle
+      // kayıyor; merkezde böyle bir sorun yok, kayma 0.
+      shift.x =
+        placement === "center"
+          ? 0
+          : (shape === "lotus" ? LOTUS_OFFSET.x : side === "right" ? -0.88 : 0.88) * bloom;
+      shift.y = placement === "center" ? 0 : (shape === "lotus" ? LOTUS_OFFSET.y : 0.28) * bloom;
       const phase = bloom >= 1 ? "open" : bloom > 0 ? "moving" : "closed";
       if (phase !== lotusPhase) {
         lotusPhase = phase;
@@ -284,6 +302,9 @@ export function MonaShard({
         shapeHeart: 0,
         shapeRing: 0,
         shapeLotus: bloom,
+        // Creative'in parçası yalnız nilüfer kullanır (DECISIONS #48);
+        // galeri silüetleri MONA'nın kendi sohbet sahnesine ait.
+        gallery: 0,
         shiftX: shift.x,
         shiftY: shift.y,
         lookX: look.x,
@@ -349,14 +370,15 @@ export function MonaShard({
       delete root.dataset.morph;
       delete root.dataset.lotus;
     };
-  }, [desktop, reducedMotion, shape, side]);
+  }, [desktop, reducedMotion, shape, side, placement]);
 
   // Uzantı oranı tek kaynaktan: yerleşim (`monaShardLayout`) aynı sabiti kullanıyor.
-  const bleed = { "--shard-bleed": SHARD_BLEED } as CSSProperties;
+  const centered = placement === "center";
+  const bleed = { "--shard-bleed": centered ? 0 : SHARD_BLEED } as CSSProperties;
   return (
     <div
       ref={rootRef}
-      className={styles.shard}
+      className={centered ? styles.center : styles.shard}
       style={bleed}
       data-dots={mode}
       data-shape={shape}

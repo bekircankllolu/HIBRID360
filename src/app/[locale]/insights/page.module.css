@@ -56,6 +56,8 @@
   height: 2px;
   margin-top: var(--space-6);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
 }
 
 .content {
@@ -71,6 +73,8 @@
   align-items: end;
   padding: clamp(3rem, 7vw, 6rem) var(--page-gutter);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
 }
 

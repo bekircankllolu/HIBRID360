@@ -119,6 +119,28 @@ export interface PosterOnlyCultureFilm {
 }
 
 /**
+ * SESSİZ karakter döngüsü — konuşma sesi olmayan, dekoratif bir video.
+ *
+ * Neden ayrı bir tür: `kind: "video"` sözleşmesi TR+EN altyazıyı ZORUNLU
+ * kılıyor, çünkü konuşan bir filmde altyazısızlık erişilebilirlik ihlali.
+ * Ama bu döngüde ses kanalı bile yok (MONA'nın performans çekimi); ona
+ * altyazı yazmak "altyazı var" numarası yapmak olurdu. Tür ayrımı kuralı
+ * korur: sesli film gelirse `kind: "video"`ya geçilir ve derleyici yine
+ * altyazı ister.
+ *
+ * `representative: true` yayında "AI ile üretilmiş temsili görseldir"
+ * etiketini zorunlu kılar — izleyici bunun gerçek bir ekip kaydı
+ * olmadığını görmeli.
+ */
+export interface SilentLoopCultureFilm {
+  kind: "loop";
+  sources: readonly [CultureFilmSource, ...CultureFilmSource[]];
+  poster: CultureFilmPoster;
+  alt: Record<"tr" | "en", string>;
+  representative: true;
+}
+
+/**
  * Oynatılabilir film. `sources` boş olamaz (en az bir öğeli demet) ve
  * `captions` iki dilde de zorunludur — altyazısız video yayına giremez.
  */
@@ -130,6 +152,37 @@ export interface VideoCultureFilm {
   captions: Record<"tr" | "en", CultureFilmCaption>;
 }
 
-export type CultureFilm = PosterOnlyCultureFilm | VideoCultureFilm;
+export type CultureFilm =
+  | PosterOnlyCultureFilm
+  | SilentLoopCultureFilm
+  | VideoCultureFilm;
 
-export const CULTURE_FILM: CultureFilm | null = null;
+/**
+ * 18 Eylül 2026: film HÂLÂ teslim edilmedi, ama bölüm artık boş kutu değil.
+ *
+ * Kullanıcı geri bildirdi: "monks sayfasındaki gibi bir animasyon yapmıştık,
+ * onu da eklemen lazım; nerede olduğunu bul ve düzeltilmiş şekilde ekle."
+ * Animasyon (MeetTheCrewReveal — dairesel scroll-reveal) yazılmıştı ama
+ * `CULTURE_FILM` null olduğu için sayfada hiç görünmüyordu: yerinde
+ * "Ekip filmi hazırlanıyor." boş durumu duruyordu.
+ *
+ * Çözüm poster modu: müşterinin kendi arşivinden GERÇEK bir ekip fotoğrafı
+ * (iki meslektaş birlikte çalışırken, 5616x3744 kaynaktan 2200px webp).
+ * Sahte film, sahte replik, stok görsel yok (CLAUDE.md). Film teslim
+ * edilince tek değişiklik bu sabiti `kind: "video"` sürümüne çevirmek —
+ * sayfa ve bileşen kodu değişmez.
+ */
+export const CULTURE_FILM: CultureFilm | null = {
+  kind: "loop",
+  sources: [{ src: "/videos/meet-the-crew-loop.mp4", type: "video/mp4" }],
+  poster: {
+    src: "/images/site/culture/meet-the-crew-loop-poster.webp",
+    width: 960,
+    height: 540,
+  },
+  alt: {
+    tr: "MONA, Hibrid 360'ın yapay zekâ karakteri — televizyon yüzünde konuşma dalgası",
+    en: "MONA, the Hibrid 360 AI character — a speech waveform on her television face",
+  },
+  representative: true,
+};

@@ -63,6 +63,8 @@
   display: inline-block;
   border: 0;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);

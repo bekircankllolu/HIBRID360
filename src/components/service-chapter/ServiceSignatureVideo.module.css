@@ -2,7 +2,10 @@
   background: var(--color-brand-black);
 }
 
+/* --draw, bileşendeki DRAW_START (.04) / DRAW_END (.76) ile birebir aynı
+   aralık: iz, video çizimiyle aynı hızda söner. */
 .wrapper {
+  --draw: clamp(0, (var(--progress, 1) - 0.04) / 0.72, 1);
   position: relative;
   height: 180svh;
 }
@@ -37,6 +40,12 @@
   object-position: center;
   background: var(--color-brand-black);
 }
+
+/* 19 Eylül 2026: tamamlanmış çizimin soluk izi KALDIRILDI (kullanıcı:
+   "arka planda sanki bir gölge varmış hissiyatı var, bunun olmasını
+   istemiyorum"). Sahnenin boş açılmaması artık videonun kendi ilk
+   karesiyle çözülüyor — videolar tam-intra kodlandı, çizim ilk kaydırmada
+   anında başlıyor. */
 
 .caption {
   max-width: var(--chapter-field-measure);

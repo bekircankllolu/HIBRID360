@@ -15,12 +15,18 @@
   gap: clamp(2rem, 5vw, 7rem);
 }
 
+/* Logo rolü: --font-brand DEĞİL --font-logo. Bu literal "Hibrid 360"
+   render'ı; kullanıcı isteği üzerine eskisi gibi Montserrat'ta kalıyor,
+   sitenin geri kalanının Archivo'ya geçmesinden etkilenmiyor. */
 .logo {
   flex: 0 0 auto;
-  font-family: var(--font-brand);
+  font-family: var(--font-logo);
   font-weight: var(--font-weight-brand);
   font-size: clamp(1rem, 1.25vw, 1.35rem);
   line-height: 1;
+  /* Büyük harf marka yazımında espas açılır: Archivo 800'ün kalın harfleri
+     bu puntoda birbirine yapışıyordu. Footer'daki wordmark ile aynı değer. */
+  letter-spacing: var(--tracking-ui);
   color: var(--color-brand-white);
   white-space: nowrap;
   /* Kaynakta marka yazımı "Hibrid 360"; caps görünüm buradan gelir. */
@@ -71,9 +77,14 @@
   left: 0;
   height: 2px;
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 180ms ease;
+  /* Ev eğrisi — footer bağlantılarındaki süpürmeyle aynı his. Nav daha
+     kısa (180ms): gezinme öğesi oyalanmamalı, footer'daki 340ms okuma
+     ritmine ait. */
+  transition: transform 180ms var(--ease-house);
 }
 
 .navItem > a:hover::after,
@@ -143,6 +154,8 @@
   min-height: 13rem;
   padding: clamp(2.5rem, 4vw, 4.5rem) clamp(1rem, 2.5vw, 3rem);
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-brand-black);
   opacity: 0;
   transform: translateY(-0.75rem);
@@ -167,9 +180,12 @@
   width: 100%;
 }
 
+/* Logo rolü: --font-brand DEĞİL --font-logo. Bu literal "Hibrid 360"
+   render'ı; kullanıcı isteği üzerine eskisi gibi Montserrat'ta kalıyor,
+   sitenin geri kalanının Archivo'ya geçmesinden etkilenmiyor. */
 .megaBrand {
   margin: 0;
-  font-family: var(--font-brand);
+  font-family: var(--font-logo);
   font-weight: var(--font-weight-brand);
   font-size: clamp(1.25rem, 1.8vw, 2rem);
   line-height: 1;

@@ -47,6 +47,16 @@
   display: none;
 }
 
+/* MONA'sız dar ekranda tam ekran yüksekliğini dolduracak bir şey yok:
+   başlıkla meta satırı arasında 320–400px boş kalıyordu (17 Eylül 2026
+   boşluk taraması). Yükseklik içerikten gelsin. */
+@media (max-width: 899px) {
+  .hero {
+    min-height: 0;
+    padding-bottom: var(--space-12);
+  }
+}
+
 @media (min-width: 900px) {
   .mona {
     display: block;

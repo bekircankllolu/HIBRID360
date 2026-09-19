@@ -13,7 +13,10 @@
 
 .fieldGrid {
   display: grid;
-  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  /* Metin sütunu 0.78fr'den genişletildi: açılış paragrafı display
+     ölçeğine çıkınca 460px'lik sütunda sekiz satıra yayılıyordu ve bir
+     "lede" gibi değil, bir duvar gibi okunuyordu. */
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: clamp(var(--space-8), 7vw, 7rem);
   align-items: start;
   margin-top: var(--space-10);
@@ -25,12 +28,41 @@
   padding-top: var(--space-8);
 }
 
+/*
+ * Uzun metin hiyerarşisi — 19 Eylül 2026 kullanıcı geri bildirimi:
+ * *"What We Do sayfalarındaki uzun yazıları biraz daha güzel ve düzenli
+ * yazabiliriz... her bölüm aynı puntoda olmamalı."*
+ *
+ * İki sorun vardı, ikisi de burada:
+ *
+ * 1. TEK PUNTO. Bütün paragraflar `--chapter-field-body` ile aynı ölçüdeydi;
+ *    göz nereden başlayacağını bilmiyordu. Açılış paragrafı artık bir kademe
+ *    büyük ve daha sıkı satır aralıklı, gerisi okunur gövde ölçüsünde.
+ *
+ * 2. SÖNDÜRÜLMÜŞ GÖVDE. `color: var(--text-muted)` (beyaz @ .55) yazıyordu
+ *    — tokens.css'in kendi kuralı bunu yasaklıyor: *"Gövde/proz metni
+ *    HİÇBİR YERDE bu token'la söndürülmez."* Uzun metin tam kontrastlı
+ *    beyaza döndü; hiyerarşiyi punto kuruyor, renk değil.
+ */
 .fieldCopy p {
   max-width: var(--chapter-field-measure);
   margin: 0;
   font-size: var(--chapter-field-body);
-  line-height: 1.45;
-  color: var(--text-muted);
+  /* 1.45 kısa bloklar için ayarlıydı; uzun paragrafta satır takibi
+     zorlaşıyor. */
+  line-height: 1.6;
+  color: var(--color-text-on-black);
+}
+
+/* Açılış paragrafı: bölüme giriş cümlesi. Daha büyük, daha sıkı, ölçüsü
+   biraz dar — bir "lede" gibi okunuyor. */
+.fieldCopy p:first-of-type {
+  max-width: 34ch;
+  font-family: var(--font-brand);
+  font-size: clamp(1.3rem, 1.05rem + 1.1vw, 2rem);
+  font-weight: var(--font-weight-heading-semibold);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
 }
 
 .fieldCopy .coordinate {
@@ -69,7 +101,19 @@
 .details li {
   max-width: var(--chapter-field-measure);
   font-size: var(--chapter-field-body);
-  line-height: 1.45;
+  line-height: 1.6;
+}
+
+/* Detay bölümlerinde de aynı iki kademe: bölümün ilk paragrafı giriş
+   cümlesi, gerisi gövde. Yalnız paragrafla BAŞLAYAN bölümlerde geçerli —
+   listeyle başlayan bölümlerde bir şey değişmiyor. */
+.details section > p:first-of-type {
+  max-width: 34ch;
+  font-family: var(--font-brand);
+  font-size: clamp(1.25rem, 1rem + 1.1vw, 2rem);
+  font-weight: var(--font-weight-heading-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .details p { margin: 0; }

@@ -52,6 +52,8 @@
 
 .option[aria-pressed="true"] {
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   border-color: var(--color-brand-yellow);
   color: var(--color-text-on-yellow);
 }
@@ -112,6 +114,8 @@
 
 .primary {
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   border: none;
   font-family: var(--font-brand);

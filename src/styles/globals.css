@@ -23,13 +23,40 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/**
+ * Başlık tabanı. Punto büyüdükçe espas ve satır sıkışır — tipografik
+ * hiyerarşi yalnız boyutla değil RİTİMLE de kurulsun diye (tokens.css
+ * "Espas" notu). Sayfa CSS'leri bu değerleri gerektiğinde ezebilir.
+ */
 h1,
 h2,
 h3 {
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-bold);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-heading);
   margin: 0;
-  color: var(--color-brand-yellow);
+  /*
+   * Başlık rengi DOLAYLI (19 Eylül 2026). Burası doğrudan
+   * `var(--color-brand-yellow)` yazıyordu ve sarı zeminli panellerde
+   * başlıklar SARI ÜZERİNE SARI çıkıyordu — yani hiç görünmüyorlardı.
+   * `scripts/audit-contrast.mjs` dört sayfada on bir tane buldu, hepsi
+   * 1.00:1: "CULTURE IS WHAT WE PRACTISE" (101px), "ZERO CARBON. FULL
+   * IMPACT." (96px), "WORK WITH THE CHAMPIONS" (86px) ve altı değer
+   * başlığı. Kullanıcı bunlardan birini "çok büyük bir boşluk var" diye
+   * bildirdi; boşluk sanılan şey görünmeyen başlıktı.
+   *
+   * Artık sarı zeminli her yüzey `--heading-color`'ı bir kez ezmek
+   * zorunda; değişken KALITSAL olduğu için iç içe başlıklar da düzeliyor.
+   * Varsayılan değişmedi: siyah zeminde başlıklar yine marka sarısı.
+   */
+  color: var(--heading-color, var(--color-brand-yellow));
+}
+
+/* h1 dev punto bandında: daha da sıkı. */
+h1 {
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
 }
 
 a {
@@ -75,6 +102,8 @@ a {
   z-index: 100;
   transform: translateY(calc(-100% - var(--space-3)));
   background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
   color: var(--color-text-on-yellow);
   font-family: var(--font-body);
   font-weight: var(--font-weight-body-medium);

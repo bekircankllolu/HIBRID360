@@ -1,0 +1,95 @@
+.strip {
+  padding-block: var(--space-12) 0;
+}
+
+.figure {
+  margin: 0;
+}
+
+/* 21:9 tam genişlik şerit; mobilde oran korunur (çok alçak kalmasın diye
+   en az 44svh). */
+.media {
+  position: relative;
+  aspect-ratio: 21 / 9;
+  min-height: min(44svh, 24rem);
+  overflow: hidden;
+  background: var(--color-brand-black);
+}
+
+.caption {
+  padding-block: var(--space-4) 0;
+  padding-inline: var(--page-gutter);
+  font-size: var(--font-size-micro);
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+  margin-top: var(--space-8);
+  padding-block: var(--space-4) 0;
+  padding-inline: var(--page-gutter);
+}
+
+.pending {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  max-width: var(--measure-prose);
+  margin: 0;
+  color: var(--color-brand-white);
+}
+
+.dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-brand-fuchsia);
+  translate: 0 -0.1em;
+}
+
+.pendingLabel {
+  font-family: var(--font-brand);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-brand);
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-heading-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-brand-white);
+  transition: color 180ms var(--ease-house);
+}
+
+.link svg {
+  transition: transform 420ms var(--ease-house);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-brand-yellow);
+}
+
+.link:hover svg {
+  transform: translateX(0.25rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link:hover svg {
+    transform: none;
+  }
+}

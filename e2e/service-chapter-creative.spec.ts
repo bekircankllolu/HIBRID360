@@ -93,10 +93,30 @@ for (const locale of ["tr", "en"] as const) {
       await expect(services.locator("[data-visual]")).toHaveCount(0);
     });
 
+    /*
+     * 19 Eylül 2026: kareler artık BOŞ DEĞİL — kullanıcı isteğiyle temsili
+     * görseller kondu. Değişmeyen şart: bunlar gerçek iş gibi
+     * sunulmayacak. Test o yüzden üç şeyi birden bağlıyor: dört kare var,
+     * dördü de gerçekten bir görsel taşıyor ve hem "galeri hazırlanıyor"
+     * notu hem de AI açıklaması sayfada duruyor.
+     */
     test("geçici galeri sahte proje göstermeden dört karelik contact sheet sunar", async ({ page }) => {
-      await expect(page.locator("[data-archive-frame]")).toHaveCount(4);
-      await expect(page.getByRole("status")).toContainText(
+      const frames = page.locator("[data-archive-frame]");
+      await expect(frames).toHaveCount(4);
+      await expect(frames.locator("img")).toHaveCount(4);
+
+      // Her karenin kendi betimlemesi var; hiçbiri boş alt metinle geçmiyor.
+      for (let index = 0; index < 4; index += 1) {
+        const alt = await frames.nth(index).locator("img").getAttribute("alt");
+        expect(alt?.length ?? 0).toBeGreaterThan(20);
+      }
+
+      const status = page.getByRole("status");
+      await expect(status).toContainText(
         locale === "tr" ? "Kampanya galerisi hazırlanıyor." : "The campaign gallery is on the way.",
+      );
+      await expect(status).toContainText(
+        locale === "tr" ? "AI ile üretilmiş temsili görsel" : "AI-generated representative visual",
       );
     });
 

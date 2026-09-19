@@ -1,8 +1,27 @@
 /**
  * Marka fontları — kendi barındırdığımız alt kümeler.
  *
- * CLAUDE.md marka sistemi: başlık/marka = Montserrat (Extra Bold dahil),
- * gövde = Inter (DECISIONS #2, VARSAYILANLA İLERLE).
+ * Rol sistemi (17 Eylül 2026 — bkz. tokens.css "Typography"):
+ *   display/başlık  = Archivo
+ *   gövde/UI        = Inter
+ *   editoryal       = Newsreader
+ *   chapter display = Space Grotesk (Creative)
+ *   logotype        = Montserrat (YALNIZ "Hibrid 360" yazımı — aşağıda)
+ *
+ * MONTSERRAT genel kullanımdan kaldırıldı; kod tabanındaki 200
+ * `font-family` çağrısının 182'sini tek başına karşılıyordu, rol
+ * sistemine geçişte Archivo başlıkları, Inter arayüz metnini devraldı.
+ * Kullanıcı geri bildirdi: gerçek logo render'ları (literal "Hibrid 360"
+ * metni, 5 yer) eskisi gibi kalmalı. Montserrat o beş yer için TEK
+ * AĞIRLIKTA (800, statik) geri eklendi — aşağıdaki ayrı @font-face notuna
+ * bakın. Bunların dışında hiçbir yer Montserrat kullanmıyor.
+ *
+ * Toplam font yükü: Archivo+Inter+Newsreader+Space Grotesk 85.1 KB,
+ * + logo-only Montserrat 14.5 KB = 99.6 KB (eski değişken Montserrat tek
+ * başına 32.3 KB'tı).
+ *
+ * Hero'daki "HIBRID" yazısı bundan etkilenmez: canlı metin değil, WebGL
+ * alfa maskesi (public/images/hibrid-wordmark.png).
  *
  * Neden next/font yerine kendi alt kümemiz:
  * Google'ın hazır alt kümelerinde Türkçe için gereken beş glif (ğ Ğ İ ş Ş)
@@ -12,33 +31,15 @@
  *
  * Buradaki dosyalar Google Fonts'un variable kaynaklarından fontTools ile
  * üretildi: Latin temel aralık + Türkçe glifler, ve yalnızca gerçekten
- * kullanılan ağırlık aralıkları (Inter 400-500, Montserrat 300-800).
- * Sonuç: 164KB -> 50KB.
+ * kullanılan eksen aralıkları.
  *
- * Lisans: her iki aile de SIL Open Font License 1.1 — yeniden dağıtım
- * serbest, lisans metinleri public/fonts/ altında birlikte taşınıyor.
+ * Lisans: hepsi SIL Open Font License 1.1 — yeniden dağıtım serbest,
+ * lisans metinleri public/fonts/ altında birlikte taşınıyor.
  *
- * Üretim komutu (yeniden üretmek gerekirse):
- *   pyftsubset <variable.ttf> --output-file=<ad>.woff2 --flavor=woff2 \
- *     --unicodes="U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,\
- *     U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,\
- *     U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD,U+011E-011F,U+0130,\
- *     U+015E-015F" --layout-features='kern,liga,calt' --name-IDs='*'
- * (ağırlık aralığı önce fontTools.varLib.instancer ile daraltılır)
+ * Üretim: `python scripts/generate-fonts.py` (Archivo + Newsreader;
+ * Inter ve Space Grotesk aynı yöntemle daha önce üretilmişti). Script
+ * Türkçe gliflerin varlığını subset sonrası doğruluyor.
  */
-
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat-latin-tr.woff2") format("woff2-variations");
-  /* Eylül 2026: aralık 600-800 iken ana sayfadaki "One Hybrid Production"
-     satırı tasarımdaki ince ağırlığı alamıyor, tarayıcı isteği 600'e
-     kırpıyordu. 300'e genişletildi: dosya 23.4KB -> 33.1KB (+9.7KB),
-     toplam font yükü ~50KB -> ~60KB. LCP bütçesi (<2.5sn mobil) ve
-     ilk yükleme bütçesi (<2MB) etkilenmiyor. */
-  font-weight: 300 800;
-  font-style: normal;
-  font-display: swap;
-}
 
 @font-face {
   font-family: "Inter";
@@ -49,10 +50,104 @@
 }
 
 /**
+ * Archivo — display ve başlık sesi (17 Eylül 2026 tipografi yenilemesi).
+ *
+ * NEDEN DEĞİŞTİ: denetimde kod tabanındaki 200 `font-family` çağrısının
+ * 182'si `--font-brand`, yani Montserrat'tı. Tek bir ses h1'den buton
+ * etiketine kadar her rolü taşıyordu; hiyerarşi yalnızca punto ve kalınlıkla
+ * kuruluyor, hiç biçimle kurulmuyordu. Sitenin "her sayfa aynı" hissinin
+ * kaynağı buydu.
+ *
+ * NEDEN ARCHIVO: referans alınan monks.com display'de `Helvetica Now
+ * Extended 800` kullanıyor — asıl ayırt edici özellik GENİŞLİK. Archivo
+ * (Omnibus Type, OFL) Helvetica'ya alternatif bir grotesk olarak tasarlandı
+ * ve gerçek bir genişlik ekseni taşıyor (kaynak: wght 100-900, wdth 62-125).
+ * Montserrat'ın geometrik dar gözlerinden belirgin biçimde ayrılıyor.
+ *
+ * GENİŞLİK 112'DE SABİT: eksen değişken bırakılırsa dosya 26.9 KB yerine
+ * 48.3 KB (ölçüldü) — tasarımın birden çok genişliğe ihtiyacı yok. 112
+ * bilinçli orta nokta: 125 (tam genişlik) Türkçe başlıkları bozuyor,
+ * "Sürdürülebilirlik" / "Prodüksiyon" İngilizce karşılıklarından uzun ve
+ * tam genişlikte satır sonlarında kırılıyor.
+ *
+ * Üretim: python scripts/generate-fonts.py (Montserrat/Inter ile aynı
+ * pyftsubset + varLib.instancer yöntemi, aynı Latin+TR unicode aralığı).
+ * Lisans: SIL Open Font License 1.1 — public/fonts/OFL-Archivo.txt
+ */
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin-tr.woff2") format("woff2-variations");
+  /* Taban 300: hero SolarSystem `.titleLead` ve Digital `.weightLight`
+     ince ağırlık istiyor; 500'den başlasaydı ikisi sessizce kalınlaşırdı.
+     300'e inmenin bedeli 1.2 KB (26.9 -> 28.1 KB). */
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
+ * Newsreader — editoryal kontrast sesi.
+ *
+ * monks.com'un dördüncü sesi `Morian Trial` 400: yüksek kontrastlı bir
+ * display serif. Alıntı, manifesto ve giriş cümlesi gibi "durup okunacak"
+ * yerlerde grotesk'in yanında duruyor. Sayfaya insan tonu veren şey bu
+ * kontrast — tek bir sans ailesinin punto oynayarak yapamadığı şey.
+ *
+ * 18 Eylül 2026'ya kadar bu rol Instrument Serif'teydi. Kullanıcı geri
+ * bildirdi: "serifli fontları daha okunaklı şık serifli fontla değiştir".
+ * Ölçüm de aynı yöne işaret ediyordu — Instrument Serif'in ağırlıklı
+ * ortalama harf genişliği 0.344 em, Newsreader'ın 0.405 em; Instrument
+ * dar gövdesi ve ince çizgileriyle 20px alıntılarda sıkışıyordu
+ * (numune karşılaştırması: dört aday aynı metinle çekildi).
+ *
+ * Newsreader (Production Type, OFL) ekran okuması için tasarlandı:
+ * açık kadran, dengeli kontrast, Türkçe glifleri tam. Tek ağırlık (400)
+ * ve optik boyut 24'e sabit — bkz. scripts/generate-fonts.py notu.
+ *
+ * Lisans: SIL Open Font License 1.1 — public/fonts/OFL-Newsreader.txt
+ */
+@font-face {
+  font-family: "Newsreader";
+  src: url("/fonts/newsreader-latin-tr.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
+ * Montserrat — YALNIZ logotype ("Hibrid 360" yazımı).
+ *
+ * 17 Eylül 2026 tipografi yenilemesinde Montserrat tamamen kaldırılmış,
+ * yerini --font-brand rolünde Archivo almıştı. Kullanıcı geri bildirdi:
+ * gerçek logo render'ları eskisi gibi kalmalı, güncellenmesine gerek yok.
+ * Etkilenen beş yer (hepsi literal "Hibrid 360" metni): Header `.logo`
+ * (nav), Header `.megaBrand` (mobil menü), Footer `.wordmark`,
+ * MeetTheCrewReveal `.wordmark` (arka plan), LanguageSwitcher `.eyebrow`.
+ * Bunların dışındaki HİÇBİR yer Montserrat kullanmıyor — sitenin geri
+ * kalan tipografisi (başlık, gövde, editoryal) Archivo/Inter/Newsreader
+ * sisteminde kalıyor (bkz. tokens.css `--font-logo` notu).
+ *
+ * Tek ağırlık, statik (300-800 aralık değil): beş kullanımın hepsi
+ * yalnız 800 (var(--font-weight-brand)) istiyor, aralığa ihtiyaç yok.
+ * Eski değişken 300-800 dosyası 32.3 KB idi (o aralık hero SolarSystem'in
+ * ve Digital sayfasının ince ağırlık ihtiyacı içindi — onlar artık
+ * Archivo kullanıyor). Tek ağırlık 14.5 KB.
+ *
+ * Lisans: SIL Open Font License 1.1 — public/fonts/OFL-Montserrat.txt
+ */
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat-logo-800-latin-tr.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/**
  * Service Chapter sistemi — büyük tipografik anlar (h1, hizmet dizini,
  * manifesto, DNA sloganı, "sıradaki servis") için ikinci bir marka sesi
  * (13 Eylül 2026 kullanıcı kararı, DECISIONS #37). Küçük UI metni
- * (etiket, eyebrow, gövde, nav) Montserrat/Inter'de kalıyor — bu yalnız
+ * (etiket, eyebrow, gövde, nav) Archivo/Inter'de kalıyor — bu yalnız
  * "dev tipografi" rolü, `--font-chapter-display` token'ı üzerinden.
  *
  * Tek ağırlık (700, ailenin en kalını — Space Grotesk'te 800/900 yok):
@@ -74,21 +169,79 @@
  * eşleştiği için yer değiştirme (CLS) oluşmaz.
  */
 @font-face {
-  font-family: "Montserrat Fallback";
-  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
-  ascent-override: 96.8%;
-  descent-override: 25.1%;
-  line-gap-override: 0%;
-  size-adjust: 106%;
-}
-
-@font-face {
   font-family: "Inter Fallback";
   src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
   ascent-override: 96.88%;
   descent-override: 24.12%;
   line-gap-override: 0%;
   size-adjust: 107%;
+}
+
+/**
+ * Archivo ve Newsreader yedekleri.
+ *
+ * ascent/descent: fontun kendi hhea (== OS/2 typo) değerleri, upm'e bölünmüş.
+ * Bu yöntem yukarıdaki Montserrat (96.8 / 25.1) ve Inter (96.88 / 24.12)
+ * değerlerini birebir üretiyor — doğrulandı.
+ *
+ * size-adjust: İngilizce harf sıklığıyla ağırlıklı ortalama ilerleme
+ * genişliğinin Arial'ınkine oranı (Capsize / next-font yöntemi). Inter için
+ * bu yöntem 107.41% veriyor, dosyadaki değer 107% — yöntem doğrulanmış oldu.
+ *
+ * NOT: Space Grotesk yedeğindeki 128.23% farklı bir yöntemle (OS/2
+ * xAvgCharWidth oranı) hesaplanmış; aynı ağırlıklı yöntem 111.04% veriyor.
+ * xAvgCharWidth fontlar arasında tutarsız doldurulan bir alan, yani oradaki
+ * değer muhtemelen ~17 puan yüksek ve swap anında sıçramaya yol açıyor.
+ * Bu yenilemede DOKUNULMADI: Space Grotesk yalnız Creative chapter'larında
+ * kullanılıyor ve o sayfa ayrı bir incelemede. Ayrı ele alınmalı.
+ */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  ascent-override: 87.8%;
+  descent-override: 21%;
+  line-gap-override: 0%;
+  size-adjust: 116.55%;
+}
+
+/* Serif'in yedeği de serif olmalı (Arial değil): yoksa font inene kadar
+   alıntılar sans görünüp sonra serif'e atlıyor — swap anı göze çarpıyor.
+   size-adjust bu yüzden Arial'a değil GEORGIA'ya göre hesaplanır. Georgia
+   listede ilk, Windows ve macOS'ta kurulu geliyor.
+
+   Değerler `python scripts/font-fallback-metrics.py <font>` çıktısı:
+   Newsreader hhea 73.5%/26.5%, ağırlıklı ortalama genişlik 0.40474 em,
+   Georgia 0.44246 em -> 91.47%. (Aynı script Instrument Serif için 77.71%
+   veriyor; dosyadaki eski elle hesap 76.86% idi — %1'lik fark harf sıklık
+   tablosundan geliyor, yöntem doğrulanmış sayılır.) */
+@font-face {
+  font-family: "Newsreader Fallback";
+  src: local("Georgia"), local("Times New Roman"), local("Liberation Serif");
+  ascent-override: 73.5%;
+  descent-override: 26.5%;
+  line-gap-override: 0%;
+  size-adjust: 91.47%;
+}
+
+/**
+ * Montserrat (logo) yedeği.
+ *
+ * ascent/descent: 96.8%/25.1% — Montserrat'ın hhea değerleri, değişken
+ * eksende sabit (300-800 aralığındaki eski dosyada da aynı ölçülmüştü).
+ *
+ * size-adjust: 122.48% — bu font artık TEK ağırlıkta (800, ExtraBold).
+ * ExtraBold'un harfleri daha geniş olduğu için ağırlıklı ortalama ilerleme
+ * genişliği eski 300-800 aralığının ortalamasından farklı: Arial'a göre
+ * 122.48% (eski çok-ağırlıklı dosya için 106% ölçülmüştü — o değer artık
+ * bu dosyaya uymuyor, doğrudan yeni dosyadan yeniden ölçüldü).
+ */
+@font-face {
+  font-family: "Montserrat Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  ascent-override: 96.8%;
+  descent-override: 25.1%;
+  line-gap-override: 0%;
+  size-adjust: 122.48%;
 }
 
 /* Arial'ın xAvgCharWidth/unitsPerEm'ine göre hesaplandı (aynı yöntem,

@@ -1,18 +1,18 @@
-/**
- * "Meet the crew" dairesel reveal (CUL-06).
+/*
+ * CUL-06 dairesel sahne — bkz. MeetTheCrewReveal.tsx.
  *
- * `--progress` (0→1) bileşen tarafından yazılır; ölçüler yalnızca bu
- * değişkenden türetilir (BeliefFounderVideo.module.css ile aynı desen).
+ * Bileşen tek bir sayı yazar: `--open` (0 → kapalı nokta, 1 → tam açık).
+ * Ölçülerin tamamı ondan türetilir. Değer bir ÇAN EĞRİSİ (aşağı indikçe
+ * büyür, bir süre açık kalır, indirmeye devam edince küçülür) — bu yüzden
+ * CSS tarafında ileri/geri ayrımı yok, tek değişken yetiyor.
  *
- * Medya **baştan** sahnenin tamamını kaplar (`inset: 0`); büyüyen tek şey
- * `clip-path` yarıçapı. Bu yüzden kaydırma boyunca reflow yok — yalnızca
- * GPU dostu bir maske animasyonu var — ve final karede video viewport'un
- * köşelerine kadar uzanır. Önceki sürümde daire `min(60vmin, 32rem)`
- * genişliğinde bir kutuya ve `%50` yarıçapa sıkışmıştı; yani asla tam
- * ekran olamıyordu.
+ * Büyüme `transform: scale` ile: medya daireyle birlikte ölçekleniyor, yani
+ * daire küçükken de kadrajın tamamı görünüyor. (Önceki sürüm `clip-path`
+ * büyütüyordu; o teknikte küçük daire yalnız karenin ortasındaki birkaç
+ * pikseli gösteriyordu.) Ayrıca `scale` layout'u hiç tetiklemiyor.
  */
 .wrapper {
-  height: 220svh;
+  height: 240svh;
   position: relative;
   /* BeliefFounderVideo ile aynı gerekçe: culture sayfasının page-gutter'ı
      içinde render edilir, negatif margin gutter'ı geri alıp sahnenin
@@ -21,13 +21,7 @@
 }
 
 .stage {
-  --progress: 0;
-  /* Başlangıç yarıçapı: `rem` tabanı mobilde de görünür bir daire
-     garantiler (saf `vmin` dar ekranda birkaç piksellik noktaya iner).
-     Bitiş yarıçapı viewport yarım köşegeninden fazla — daire ~0.63–0.74
-     ilerlemede köşeleri kapatır ve final karede tam ekran "durur". */
-  --reveal-start: max(2.25rem, 5vmin);
-  --reveal-end: 75vmax;
+  --open: 0;
   position: sticky;
   top: var(--header-height);
   height: calc(100svh - var(--header-height));
@@ -39,77 +33,72 @@
   background: var(--color-brand-black);
 }
 
-/* Arka plan wordmark — outline'dan doluya geçiş, tek eleman + ::after
-   overlay tekniği (monks'taki [data-title]:after çözümünün sadeleşmiş
-   hali; harf harf span bölmeye gerek yok). */
-.wordmark {
-  position: absolute;
-  z-index: 0;
-  margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  text-transform: uppercase;
-  letter-spacing: 0;
-  font-size: clamp(3rem, 14vw, 10rem);
-  line-height: 1;
-  white-space: nowrap;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.32);
-  transform: scale(calc(0.94 + var(--progress) * 0.06));
-  will-change: transform;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Sarı dolgu ilerlemenin ilk yarısında tamamlanır: ikinci yarıda daire
-   wordmark'ı zaten örtüyor, o aralıkta hâlâ dolmakta olan bir başlık
-   izleyiciye ulaşmaz. */
-.wordmark::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  -webkit-text-stroke: 0;
-  color: var(--color-brand-yellow);
-  opacity: clamp(0, calc(var(--progress) * 2), 1);
-}
-
-/* Figür ve maske sahnenin tamamına yayılır; ikisi de layout'ta yer
-   kaplamaz, bu yüzden `.stage` yüksekliğini kendisi belirler. */
 .circleFigure {
   position: absolute;
   inset: 0;
   z-index: 1;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/*
+ * Tam açık çap: ekran yüksekliğinin ~%62'si. Kullanıcı isteği "tamamen
+ * büyümesin, bir yere kadar büyüsün" — daire her zaman sahnenin içinde,
+ * çevresinde siyah kalıyor. Kapalı hâl 0.12 ölçek: monks'taki küçük nokta.
+ */
+/*
+ * Daire MARKA SARISI (19 Eylül 2026 kullanıcı isteği: "efekti sarı yapalım,
+ * sarı bir daire görelim; o daire büyüsün ve içinde konuşan birisi olsun").
+ * monks'taki pembe dairenin bizdeki karşılığı: kapalıyken dolu sarı bir
+ * disk, açıldıkça içindeki kişi beliriyor.
+ */
 .circle {
-  position: absolute;
-  inset: 0;
-  clip-path: circle(
-    calc(var(--reveal-start) + var(--progress) * var(--reveal-end)) at 50% 50%
-  );
-  will-change: clip-path;
+  width: min(62svh, 40rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-brand-yellow);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
+  transform: scale(calc(0.12 + 0.88 * var(--open)));
+  will-change: transform;
+  /* Sarı hale: daire küçükken sahnenin içinde bir ışık noktası gibi durur. */
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-brand-yellow) 70%, transparent),
+    0 0 calc(4rem * var(--open) + 1.5rem) color-mix(in srgb, var(--color-brand-yellow) 26%, transparent);
 }
 
+/*
+ * Medya dairenin İÇİNDE, sarının üstünde belirir: kapalı noktada yalnız sarı
+ * görünür, daire açılırken görüntü gelir. Eşik .12 → .46 arası: nokta
+ * evresinde 720p kareyi birkaç piksele sıkıştırmanın anlamı yok.
+ */
 .media {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   background: var(--color-brand-black);
+  opacity: clamp(0, (var(--open) - 0.12) / 0.34, 1);
 }
 
-/* CTA video üzerinde bağımsız overlay: alt orta, native kontrol
-   çubuğunun üstünde kalacak kadar yukarıda. */
+/* Etiket dairenin ALTINDA, sahnenin merkez ekseninde. Daire açılınca
+   belirir; kapanırken onunla birlikte çekilir. */
 .cta {
   position: absolute;
   z-index: 2;
   left: 50%;
-  bottom: clamp(4rem, 11vh, 6rem);
+  bottom: clamp(2.5rem, 8svh, 5rem);
   margin: 0;
   padding: 0.5rem 0.25rem;
   border: 0;
   background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: 0.9375rem;
@@ -117,20 +106,25 @@
   text-transform: uppercase;
   color: var(--color-brand-yellow);
   text-align: center;
-  /* Metin kareyi kaplayan bir görüntünün üzerinde duruyor ve o karenin
-     ne kadar aydınlık olacağını bilmiyoruz; gölge, sarının parlak bir
-     poster üzerinde okunmaz hale gelmesini engelliyor
-     (ClosingBody/MakeBrandBand ile aynı çözüm). */
   text-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.85);
   /* Reveal tamamlanana kadar görünmez VE odaklanılamaz: `visibility`
-     `opacity`'nin aksine öğeyi tab sırasından da çıkarır, yani
-     görünmeyen bir butona odak düşmez (WCAG "odak görünür"). */
+     `opacity`'nin aksine öğeyi tab sırasından da çıkarır. */
   opacity: 0;
   visibility: hidden;
   transform: translate(-50%, 0.75rem);
   transition:
     opacity 0.35s ease,
     transform 0.35s ease;
+}
+
+/* Temsili görsel notu — küçük, sakin, büyük harf değil. */
+.note {
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-body-medium);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .ctaRevealed {
@@ -140,7 +134,7 @@
 }
 
 /* Oynatma başladı: branded CTA görevini tamamladı, native kontroller
-   devraldı. Odak `startPlayback` sonrası video öğesine taşınıyor. */
+   devraldı. */
 .ctaStarted {
   opacity: 0;
   visibility: hidden;
@@ -155,51 +149,80 @@ button.cta:hover {
   color: var(--color-brand-fuchsia);
 }
 
-button.cta:focus-visible {
+button.cta:focus-visible,
+.toggle:focus-visible {
   outline: 2px solid var(--color-brand-fuchsia);
   outline-offset: 4px;
 }
 
-/* Poster modu: tıklanacak bir şey yok — imleç ve hover yanıltmasın.
-   Görünürlük yine `.ctaRevealed`'a bağlı, bu yüzden burada opacity/
-   visibility YOK: yazılsa aynı özgüllükte ve daha sonra geldiği için
-   `.ctaRevealed`'ı ezip açıklamayı kalıcı olarak görünmez yapardı. */
+/* Poster modunda tıklanacak bir şey yok — imleç ve hover yanıltmasın. */
 .ctaPassive {
   cursor: default;
 }
 
+/* WCAG 2.2.2 duraklat/oynat — sahnenin sağ üstünde, dairenin dışında. */
+.toggle {
+  position: absolute;
+  z-index: 2;
+  top: clamp(1rem, 3svh, 2rem);
+  right: clamp(1rem, 3vw, 2.5rem);
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body-medium);
+  letter-spacing: 0.04em;
+  color: var(--color-brand-white);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease;
+}
+
+.toggleRevealed {
+  opacity: 1;
+  visibility: visible;
+}
+
+.toggle:hover {
+  border-color: var(--color-brand-yellow);
+  color: var(--color-brand-yellow);
+}
+
 @media (max-width: 767px) {
   .wrapper {
-    height: 170svh;
+    height: 190svh;
+  }
+
+  .circle {
+    width: min(54svh, 82vw);
   }
 }
 
-/* CLAUDE.md zorunlu kuralı — hareket azaltmada sticky, büyüme ve wordmark
-   morph'u yok: medya baştan tam açık, statik durur.
-   `min-height` şart: `.circleFigure` artık `position: absolute`, yani
-   sahneye yükseklik veremez; olmasa bölüm sıfır yükseklikte çökerdi.
-   `position: relative` de şart — mutlak konumlu medya sahneye göre
-   yerleşmeye devam etsin (`static` olsa gövdeye kaçardı). */
+/* CLAUDE.md zorunlu kuralı — hareket azaltmada sticky ve büyüme yok:
+   daire baştan tam açık, statik durur. */
 .wrapperStatic {
   height: auto;
 }
 
 .wrapperStatic .stage {
-  --progress: 1;
+  --open: 1;
   position: relative;
   top: auto;
   height: auto;
-  min-height: min(70svh, 34rem);
+  min-height: min(76svh, 38rem);
+  padding-block: var(--space-12);
 }
 
 .wrapperStatic .circle {
-  clip-path: none;
-  /* Animasyon yokken tam ekran bir compositing katmanı ayırtmanın anlamı
-     yok — sadece bellek harcar. */
+  transform: none;
   will-change: auto;
 }
 
-.wrapperStatic .cta {
+.wrapperStatic .cta,
+.wrapperStatic .toggle {
   transition: none;
 }
 
@@ -210,31 +233,33 @@ button.cta:focus-visible {
   }
 
   .stage {
-    --progress: 1;
+    --open: 1;
     position: relative;
     top: auto;
     height: auto;
-    min-height: min(70svh, 34rem);
+    min-height: min(76svh, 38rem);
+    padding-block: var(--space-12);
   }
 
   .circle {
-    clip-path: none;
+    transform: none;
     will-change: auto;
   }
 
-  .cta {
+  .cta,
+  .toggle {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
     transition: none;
   }
 
+  .toggle {
+    transform: none;
+  }
+
   .ctaStarted {
     opacity: 0;
     visibility: hidden;
-  }
-
-  .wordmark {
-    transform: none;
   }
 }
