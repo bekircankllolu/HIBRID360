@@ -178,6 +178,33 @@ test.describe("İçerik ve düzen sözleşmeleri", () => {
       // sözleşme: madde eklemek/çıkarmak müşteri kararı.
       await expect(page.locator("main li")).toHaveCount(15);
     });
+
+    test(`/${locale}/what-we-do/how-we-work — metin sayfa diliyle yazılı, "belirlenecek" rozetleri yayında`, async ({
+      page,
+    }) => {
+      await seedConsent(page);
+      await page.goto(`/${locale}/what-we-do/how-we-work`, { waitUntil: "networkidle" });
+
+      // "NO BLACK BOX." marka sloganı: iki dilde de İngilizce (DECISIONS: sloganlar marka dili).
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText("NO BLACK BOX.");
+
+      // Karışık dil yasak: adım başlıkları ve tablo başlıkları sayfa dilinde,
+      // diğer dilin karşılığı hiçbir yerde yok.
+      const isTr = locale === "tr";
+      await expect(page.getByRole("heading", { level: 3 }).first()).toHaveText(
+        isTr ? "Brief ve uyum" : "Brief & fit",
+      );
+      await expect(
+        page.getByRole("columnheader", { name: isTr ? "Başlangıç" : "Starting from" }),
+      ).toBeVisible();
+      await expect(page.getByText(isTr ? "Pre-production" : "Prodüksiyon öncesi")).toHaveCount(0);
+
+      // Karar bekleyen alanlar (DECISIONS #15) uydurma rakam yerine görünür rozet:
+      // 1 (adım 2: "[X] iş günü") + 6 başlangıç + 6 süre hücresi.
+      await expect(
+        page.locator("main").getByText(isTr ? "belirlenecek" : "to be set", { exact: true }),
+      ).toHaveCount(13);
+    });
   }
 
   test('hiçbir canonical sayfada "Photo pending" görünmüyor', async ({

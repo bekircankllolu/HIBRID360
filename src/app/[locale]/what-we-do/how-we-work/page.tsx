@@ -10,13 +10,14 @@ import styles from "./page.module.css";
 
 /**
  * brief-rev12.md Bölüm 20.5 — How We Work.
- * Hero, beş adımlık süreç ve bütçe bandı tablosu SİTEYE GİRECEK METİN
- * kutularından birebir. Marka dili olduğu için metinler her iki locale'de
- * de İngilizce kalır.
+ * İngilizce metinler (beş adımlık süreç, bütçe bandı tablosu) SİTEYE GİRECEK
+ * METİN kutularından birebir. "NO BLACK BOX." marka sloganıdır, her iki
+ * locale'de İngilizce kalır; gövde metni Türkçe sürümde çevrilidir
+ * (src/data/how-we-work.ts — çeviri müşteri onayı bekliyor).
  *
  * TODO: docs/DECISIONS.md #15 bekleniyor — bütçe bandı başlangıç rakamları
  * ([X]) ve süre bantları ([n] weeks) ticari karardır, müşteride kalmalı.
- * Rakam uydurulmadı: tablodaki ilgili hücreler "karar bekleniyor" işaretiyle
+ * Rakam uydurulmadı: tablodaki ilgili hücreler "belirlenecek" rozetiyle
  * render ediliyor. Karar geldiğinde yalnızca src/data/how-we-work.ts
  * güncellenecek, arayüz değişmeyecek.
  */
@@ -62,14 +63,12 @@ export default async function HowWeWorkPage({
       />
 
       <h1 className={styles.heroTitle}>NO BLACK BOX.</h1>
-      <p className={styles.heroLead}>
-        How a project runs here, what it costs, and how long it takes.
-      </p>
+      <p className={styles.heroLead}>{t("lead")}</p>
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>{t("processTitle")}</h2>
         <ol className={styles.steps}>
-          {processSteps.map((step) => {
+          {processSteps[locale].map((step) => {
             const [before, after] = step.body.split("{pending}");
             return (
               <li key={step.step}>
@@ -103,7 +102,7 @@ export default async function HowWeWorkPage({
               </tr>
             </thead>
             <tbody>
-              {budgetBands.map((band) => (
+              {budgetBands[locale].map((band) => (
                 <tr key={band.format}>
                   <td className={styles.formatCell}>{band.format}</td>
                   <td>{band.startingFrom ?? pendingBadge}</td>

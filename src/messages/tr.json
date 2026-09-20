@@ -433,6 +433,7 @@
     "evidenceEmpty": "Hizmet verilen uluslararası yapımların listesi hazırlanıyor."
   },
   "howWeWork": {
+    "lead": "Bir projenin burada nasıl ilerlediği, ne kadara mal olduğu ve ne kadar sürdüğü.",
     "processTitle": "Süreç",
     "budgetTitle": "Bütçe bandı",
     "pendingShort": "belirlenecek",
@@ -583,9 +584,9 @@
   "video": {
     "soundOn": "Sesi aç",
     "soundOff": "Sesi kapat",
-    "subtitles": "Altyazı",
     "soundUnavailable": "Ses bu tarayıcıda kullanılamıyor",
     "soundError": "Ses yüklenemedi, tekrar denemek için dokunun",
+    "subtitles": "Altyazı",
     "playShowreel": "Showreeli oynat",
     "watchFilm": "Filmi izle",
     "aiGenerated": "AI ile üretilmiş temsili görseldir",
