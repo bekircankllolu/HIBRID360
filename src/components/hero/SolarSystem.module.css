@@ -14,6 +14,16 @@
      `clip` (hidden değil) diğer ekseni `auto`ya çevirmez, kaydırma kabı yok. */
   overflow-x: clip;
   overflow-y: visible;
+  /* Sürükleme bölümün tamamında: imleç ve dokunma davranışı da bölüm
+     düzeyinde. Dikey kaydırma ve iki parmakla yakınlaştırma (WCAG 1.4.4)
+     sayfaya kalır, yatay sürükleme sistemi çevirir. */
+  cursor: grab;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.section:active {
+  cursor: grabbing;
 }
 
 /*
@@ -152,18 +162,14 @@
 .stage {
   position: relative;
   z-index: 1;
-  cursor: grab;
   width: 100%;
   height: clamp(36rem, 74svh, 54rem);
   min-height: 36rem;
   margin: 0 auto;
   isolation: isolate;
   /* Dikey kaydırma sayfaya kalır; yatay sürükleme kamerayı çevirir. */
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
   scroll-margin-top: calc(var(--header-height) + var(--space-4));
-}
-.stage:active {
-  cursor: grabbing;
 }
 .canvas {
   display: block;
@@ -171,14 +177,25 @@
   height: 100%;
   pointer-events: none;
 }
+/* Poster yer tutucu: kristalin sahnedeki yerine oturur (kamera hedefi sahne
+   kutusunun ~%37,6'sında, düzlem kutu yüksekliğinin ~%31,7'si) ve sahne
+   kurulunca solar. Sahne hiç kurulamazsa (WebGL yok) kalıcı görüntü odur. */
 .fallback {
   position: absolute;
-  top: 50.625%;
+  top: 37.6%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: calc(32% * var(--crystal-scale));
-  max-width: calc(350px * var(--crystal-scale));
-  height: auto;
+  height: 31.7%;
+  width: auto;
+  aspect-ratio: 1;
+  max-width: 60%;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity 700ms ease;
+  pointer-events: none;
+}
+.fallback[data-ready="true"] {
+  opacity: 0;
 }
 /* Keep a real decode surface: WebKit can rasterize a 1px video as one pixel. */
 .mediaSource {
@@ -228,7 +245,7 @@
   background: transparent;
   color: var(--stone-color);
   cursor: pointer;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -302,6 +319,10 @@
 .detail {
   position: absolute;
   z-index: 6;
+  /* Bölümün geri kalanı sürükleme alanı; kartta imleç normal, metin seçilebilir. */
+  cursor: auto;
+  user-select: text;
+  -webkit-user-select: text;
   /* Referans (2.png): kürenin sağında, kadrajın üçte biri hizasında. Küre
      odakta hep aynı ekran noktasına oturduğu için kart sabit konumlanabiliyor. */
   top: 41%;
@@ -660,7 +681,7 @@
   }
   .dot {
     cursor: pointer;
-    touch-action: pan-y;
+    touch-action: pan-y pinch-zoom;
   }
   .dotLabel {
     opacity: 1;

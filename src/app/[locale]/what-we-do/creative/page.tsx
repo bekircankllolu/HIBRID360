@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { preload } from "react-dom";
 import { getTranslations } from "next-intl/server";
 import { MonaDrift } from "@/components/mona/MonaDrift";
 import { SERVICE_OFFERINGS } from "@/data/service-offerings";
@@ -85,14 +84,9 @@ export default async function CreativePage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  // LCP öğesi Space Grotesk ile yazılı başlık (DECISIONS #37); layout
-  // yalnızca Inter'i önden yüklüyor. Font keşfi CSS'i beklemesin (yalnız
-  // bu sayfada — site geneli layout'a dokunulmadı).
-  preload("/fonts/space-grotesk-700-latin-tr.woff2", {
-    as: "font",
-    type: "font/woff2",
-    crossOrigin: "anonymous",
-  });
+  // Space Grotesk preload'ı buradan `[locale]/layout.tsx`'e taşındı
+  // (20 Eylül 2026): LCP öğesi bütün bölüm sayfalarında bu fontla yazılı
+  // başlık, yalnız bu sayfada olması diğerlerini yedek fontla bırakıyordu.
   const t = await getTranslations("services.creative");
   const tChapter = await getTranslations("services.chapter");
   const tWhatWeDo = await getTranslations("whatWeDo");

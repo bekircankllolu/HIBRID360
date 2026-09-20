@@ -24,7 +24,10 @@
 }
 
 .title {
-  max-width: 11ch;
+  /* 11ch idi. `ch` yedek fontla gerçek Space Grotesk'te farklı genişlik verir,
+     kutu font inince zıplar; 11 x 0.648em (Space Grotesk 700 "0" ilerlemesi)
+     her iki durumda aynı (bkz. ServiceTitle.module.css). */
+  max-width: 7.128em;
   margin: 0;
   font-family: var(--font-chapter-display);
   font-size: clamp(3.5rem, 9.4vw, 9.5rem);
@@ -84,7 +87,7 @@
   }
 
   .title {
-    max-width: 8ch;
+    max-width: 5.184em; /* 8ch */
   }
 
   .heroFooter {

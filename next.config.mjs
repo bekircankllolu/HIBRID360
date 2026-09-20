@@ -56,6 +56,34 @@ const nextConfig = {
    */
   async headers() {
     return [
+      // Statik dosyalar (public/) için tarayıcı önbelleği. Vercel bunları
+      // varsayılan olarak `max-age=0, must-revalidate` ile sunuyor: sayfa
+      // değiştikçe her font/video/ses/görsel için yeniden doğrulama turu (304)
+      // gerekiyor; yavaş bağlantıda bu istekler video/JS indirmeyle yarışıyor.
+      //
+      // Süreler kasıtlı olarak kısa: müşteri incelemesi sürerken aynı adla
+      // değiştirilen bir dosya (MONA sesi, showreel vb.) günlerce eski görünmesin.
+      // Font nadiren değişir (7 gün); medya 1 saat taze + 1 gün arka planda
+      // yenileme. Bir varlığı DEĞİŞTİRİRKEN mümkünse yeni adla ekle
+      // (`-20260920` gibi) — o zaman önbellek hiç sorun olmaz.
+      {
+        source: "/fonts/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=604800, stale-while-revalidate=2592000",
+          },
+        ],
+      },
+      ...["/videos", "/audio", "/images"].map((prefix) => ({
+        source: `${prefix}/:path*`,
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, stale-while-revalidate=86400",
+          },
+        ],
+      })),
       {
         source: "/:path*",
         has: [{ type: "host", value: ".*\\.vercel\\.app" }],

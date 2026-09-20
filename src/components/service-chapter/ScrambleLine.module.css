@@ -1,0 +1,23 @@
+/*
+ * Kelime yuvası: boyutu nihai kelime belirler, karışan harfler üstüne biner.
+ * Yükleme bittiğindeki görünüm değişmez — ikisi de aynı metni, aynı
+ * yerde çiziyor (hayalet görünmez, canlı kopya tam üstünde).
+ */
+.slot {
+  position: relative;
+  display: inline-block;
+}
+
+.ghost {
+  visibility: hidden;
+  /* Kopyalanan metinde kelime iki kez çıkmasın. */
+  user-select: none;
+}
+
+.live {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  /* Karışan kelime nihai kelimeden genişse satır kırmaz, yalnız taşar. */
+  white-space: pre;
+}

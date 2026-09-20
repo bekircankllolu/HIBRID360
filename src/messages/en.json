@@ -433,6 +433,7 @@
     "evidenceEmpty": "The list of international productions we have serviced is on the way."
   },
   "howWeWork": {
+    "lead": "How a project runs here, what it costs, and how long it takes.",
     "processTitle": "Process",
     "budgetTitle": "Budget bands",
     "pendingShort": "to be set",
@@ -583,6 +584,8 @@
   "video": {
     "soundOn": "Sound on",
     "soundOff": "Sound off",
+    "soundUnavailable": "Sound isn't available in this browser",
+    "soundError": "Couldn't load the sound, tap to try again",
     "subtitles": "Subtitles",
     "playShowreel": "Play the showreel",
     "watchFilm": "Watch the film",

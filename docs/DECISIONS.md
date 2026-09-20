@@ -74,12 +74,23 @@ doldurulacak — kod tarafı hazır, tek eksik onaylı metin.
 | Sayfa | Ne eksik | Kaynak / kod |
 |---|---|---|
 | Digital | 10 hizmet açıklaması + 4 değer cümlesi | DIG-03 · `src/data/digital-services.ts`, `what-we-do/digital/page.tsx` |
-| How We Work | Hero cümlesi + 4 süreç adımı açıklaması | Bölüm 20.5 · `src/data/how-we-work.ts`, `what-we-do/how-we-work/page.tsx` |
+| How We Work | ~~Hero cümlesi + 4 süreç adımı açıklaması~~ **ÇEVRİLDİ (20 Eylül 2026) — müşteri onayı bekliyor** (aşağıdaki nota bak) | Bölüm 20.5 · `src/data/how-we-work.ts` (`tr` blokları), `messages/tr.json` → `howWeWork.lead` |
 | Insights | Hero alt başlığı | Bölüm 20.6 · `messages/tr.json` → `insights.heroSubtitle` |
 | Accessibility | "Our commitment" · "What we have done" · "Feedback" paragrafları | Bölüm 18.10 · `src/data/accessibility.ts` |
 | Cloud TV | "WHAT ARE HIBRID SOLUTIONS?" bölüm başlığı | `messages/tr.json` → `services.cloudTv.solutionsTitle` |
-| How We Work | Bütçe tablosundaki format adları ("Product / how-to film" vb.) | Bölüm 20.5 · `src/data/how-we-work.ts` → `budgetBands[].format` |
+| How We Work | ~~Bütçe tablosundaki format adları ("Product / how-to film" vb.)~~ **ÇEVRİLDİ (20 Eylül 2026) — müşteri onayı bekliyor** | Bölüm 20.5 · `src/data/how-we-work.ts` → `budgetBands.tr[]` |
 | Culture hub | Üç bölüm adı: What We Believe · Directors & Crew · Partners | `messages/tr.json` → `culture.hub.*` (Biz Kimiz ve Sürdürülebilirlik çevrildi) |
+
+**20 Eylül 2026 — How We Work Türkçesi:** müşteri incelemesinden sonra
+kullanıcı kararıyla ("sen yaz, müşteriye onaylatırız") hero cümlesi, 5 süreç
+adımı, 6 bütçe satırı (format adı + kapsam) Türkçeleştirildi. Bu, yukarıdaki
+"onaylanmamış çeviri uydurulmaz" kuralının bilinçli ve tek seferlik istisnası:
+metinler **geçicidir**, müşteri onayı/düzeltmesi gelince yalnız
+`src/data/how-we-work.ts` içindeki `tr` blokları güncellenir. "NO BLACK BOX."
+marka sloganı İngilizce kalır; "belirlenecek" rozetleri (bütçe başlangıcı,
+süre, "[X] iş günü") yayında görünür kalır — #15 hâlâ AÇIK. Sektör terimleri
+("treatment", "shooting board", "casting", "streaming", "Cloud TV") Türkiye
+prodüksiyon dilinde olduğu gibi kullanıldı.
 
 **İstisna (çeviri gerekmiyor):** Service Production (International)
 sayfası — CLAUDE.md "öncelikli dil EN; TR'de kısa özet yeterli" diyor,

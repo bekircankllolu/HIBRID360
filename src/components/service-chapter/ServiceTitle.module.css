@@ -1,6 +1,11 @@
 .title {
   margin: 0;
-  max-width: 10ch;
+  /* 10ch idi. `ch` birimi "0" glifinin genişliğinden hesaplanıyor: Space
+     Grotesk'te 0.648em, yedek fontta başka bir değer — yani kutu font
+     inmeden önce ve sonra FARKLI genişlikteydi ve başlık iki durumda ayrı
+     yerlerden satır kırıyordu. 6.48em = 10 x 0.648em: yüklenmiş haldeki
+     genişliğin birebir aynısı, ama yedek fontta da aynı kalıyor. */
+  max-width: 6.48em;
   font-family: var(--font-chapter-display);
   font-size: var(--chapter-display);
   font-weight: var(--font-weight-chapter-display);

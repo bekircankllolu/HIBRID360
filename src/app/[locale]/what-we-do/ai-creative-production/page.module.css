@@ -1,7 +1,7 @@
 .chapter { overflow: clip; background: var(--color-brand-black); color: var(--color-brand-white); }
 .intro, .proof, .flowSection, .band, .closing, .transcript { position: relative; padding: clamp(4rem, 10vw, 9rem) var(--page-gutter); }
 .intro { min-height: 72svh; display: grid; align-content: end; gap: var(--space-8); }
-.intro > h2 { max-width: 9ch; margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-display); line-height: .86; letter-spacing: 0; }
+.intro > h2 { max-width: 5.832em; /* 9ch: bkz. ../page.module.css .title */ margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-display); line-height: .86; letter-spacing: 0; }
 .intro > h2 span { display: block; color: var(--color-brand-yellow); }
 .intro > p { max-width: 34ch; margin: 0; font-size: var(--font-size-lead); line-height: 1.4; }
 .proof { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 7vw, 7rem); }
@@ -20,7 +20,7 @@
 .flow span { padding: var(--space-3) var(--space-4); border: 1px solid color-mix(in srgb, var(--color-brand-white) 30%, transparent); font-family: var(--font-brand); font-size: var(--font-size-label); font-weight: var(--font-weight-heading-bold); text-transform: uppercase; }
 .flow i { color: var(--color-brand-fuchsia); font-style: normal; }
 .manifesto { position: relative; min-height: min(52svh, 34rem); display: grid; place-items: center; padding: var(--space-16) var(--page-gutter); background: var(--color-brand-fuchsia); color: var(--color-text-on-fuchsia); }
-.manifesto p, .band p { max-width: 18ch; margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-manifesto); font-weight: var(--font-weight-chapter-display); line-height: 1; letter-spacing: 0; }
+.manifesto p, .band p { max-width: 11.664em; /* 18ch */ margin: 0; font-family: var(--font-chapter-display); font-size: var(--chapter-manifesto); font-weight: var(--font-weight-chapter-display); line-height: 1; letter-spacing: 0; }
 .band p { color: var(--color-brand-yellow); }
 .closing { display: grid; gap: var(--space-5); }
 .closing p, .closing strong { max-width: 30ch; margin: 0; font-family: var(--font-brand); font-size: clamp(1.4rem, 3vw, 3rem); line-height: 1.15; }
