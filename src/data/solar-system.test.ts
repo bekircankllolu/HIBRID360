@@ -457,10 +457,10 @@ describe("CRYSTAL_MEDIA", () => {
 
   it("uses the new client loop and its matching first-frame poster", () => {
     expect(CRYSTAL_MEDIA.interactive).toBe(
-      "/videos/hibrid-stone-loop-20260827.mp4",
+      "/videos/hibrid-crystal-loop-20260920.mp4",
     );
     expect(CRYSTAL_MEDIA.poster).toBe(
-      "/videos/hibrid-stone-loop-20260827.webp",
+      "/videos/hibrid-crystal-loop-20260920.webp",
     );
     expect(CRYSTAL_MEDIA.fps).toBe(24);
   });

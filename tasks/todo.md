@@ -864,3 +864,44 @@ bakılmak istenirse hazır.
 TERSİ doğru — `solar-scene.ts` AKTİF, parçacık sahnesi kullanılmıyor:
 - `src/lib/solar-dust.ts` + `solar-dust.test.ts`
 - `src/lib/solar-dust-scene.ts`
+
+---
+
+## 20 Eylül 2026 — Ekosistem yeniden tasarımı (dal: `feat/ecosystem-orbit`)
+
+Kaynak: kullanıcı referansları 1.png (sahne), 2.png (odak modu + kart),
+3.png (yeni HIBRID 360° kristal). Onaylanan kararlar: canlı Three.js sahnesi
+(tembel yüklenir), kristal = Higgsfield sarkaç döngüsü (yazı hep okunur),
+8 tıklanabilir sarı/pembe küre + beyaz/süs küreler, ses varsayılan kapalı +
+düğme, mobilde aynı sahne + kalite kademesi. `N-###` HUD kodu süs amaçlı;
+AI Creative Production kartında etiket yok (veri bilerek boş); eski sahne
+dosyaları silinmez.
+
+- [x] 1. Kristal üretimi (Higgsfield seedance_2_5, omni_reference, 8 sn) → ffmpeg ile döngü + poster (yazı bütün karelerde okunuyor, dikiş farkı 1,26 / medyan 1,00)
+- [x] 2. Statik sahne (yörüngeler + küreler + kristal poster) — 1.png ile yan yana
+- [x] 3. Hareket + kristal video (kristal bölgesi kare farkı 23,9: video oynuyor)
+- [x] 4. Tıklama / odak / kart / HUD — 2.png ile yan yana
+- [x] 5. Ses (ElevenLabs sfx + music; opt-in düğme; vokal yok: Scribe transkripti boş)
+- [ ] 6. Erişilebilirlik, performans, mobil, e2e/birim test güncellemesi, code-reviewer + verifier (e2e tam süit + inceleme sürüyor)
+
+Korunacak sözleşmeler: `ecosystem-stage` + data-motion/scene/running/focus,
+`#ecosystem-detail` (role=dialog, h3, link), 8 büyük harfli buton adı,
+`.point` sınıfı + `--ring`, duraklat düğmesi, reduced-motion tek kare,
+WebGL yoksa poster, noscript bağlantıları, sahne kilidi.
+Güncellenecek testler: `--ring` odak testi, `/images/site/solar/` doku testi,
+`CRYSTAL_MEDIA` dosya adı birim testi.
+
+### Bu turda öğrenilenler (ekosistem yeniden tasarımı)
+- Yazılım GL'de (SwiftShader) tam ardıl işlem 0,3 fps: ekran görüntüsü tutarsızlığı
+  ve e2e zaman aşımı yaratıyor. Çözüm: yazılım render'ı algılanınca `direct` mod
+  (composer yok); tasarım karşılaştırması için `localStorage["hibrid360-eco-quality"]="high"`.
+- Kare süresi sınırı 0,05 sn iken yavaş cihazda kamera hiç oturmuyordu → 0,2 sn.
+- Özel `ShaderMaterial`larda `#include <colorspace_fragment>` şart: yoksa doğrudan
+  çizimde renkler koyu (ardıl işlemde `OutputPass` dönüştürüyor, yani hata gizleniyor).
+- Ekran dışına taşan küreye tıklanamaz: tıklanabilir küreler yalnız iç halkalarda
+  (birim testle kilitli, negatif kontrolüyle).
+- Tembel doku yüklemesi asenkron olunca hareket-azaltma tek karesi yeniden çizilmeli
+  (yoksa kristal boş kalıyor).
+- Higgsfield `seedance_2_5` başlangıç karesi için `mode: "omni_reference"` ister;
+  Higgsfield `generate_audio` SFX üretmez (yalnız konuşma); Magnific bu kuruluşta kapalı;
+  SFX/ambiyans için ElevenLabs `creative_generate_in_flow` (`sfx`: 1-2 sn sabit, `music`: 180 sn).
