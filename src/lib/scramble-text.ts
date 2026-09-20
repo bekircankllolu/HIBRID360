@@ -10,7 +10,16 @@
  * tek seferlik bir giriş animasyonu için kullanıyor (bkz. useScrambleReveal).
  */
 
-const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+/**
+ * Karışık karakter havuzu — Q ve rakamlar ÇIKARILDI (20 Eylül 2026,
+ * müşteri hatası "başlıklar iç içe giriyor"). Space Grotesk'te Q'nun
+ * kuyruğu 0.18em taban çizgisinin altına iniyor, başlık satır aralığı ise
+ * 0.86: karışma sırasında kuyruk bir alt satırın harflerine giriyordu
+ * (~0.6sn). Rakamlar da aynı nedenle çıktı — hepsi tek genişlikte (0.648em)
+ * ve harflerden geniş, satırı gereksiz şişiriyorlardı. Kalan 25 harfin
+ * tamamı taban çizgisi üstünde kalıyor.
+ */
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPRSTUVWXYZ";
 
 function scrambleChar(random: () => number): string {
   return SCRAMBLE_CHARS[Math.floor(random() * SCRAMBLE_CHARS.length)];

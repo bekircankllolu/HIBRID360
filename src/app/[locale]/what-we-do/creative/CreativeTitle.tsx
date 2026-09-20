@@ -1,7 +1,7 @@
 "use client";
 
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-import { useScrambleReveal } from "@/hooks/useScrambleReveal";
+import { ScrambleLine } from "@/components/service-chapter/ScrambleLine";
 import styles from "./CreativeTitle.module.css";
 
 /**
@@ -30,20 +30,20 @@ import styles from "./CreativeTitle.module.css";
  * `aria-hidden`. `prefers-reduced-motion`'da efekt hiç başlamıyor
  * (`active=false`), metin ilk kareden itibaren düz ve sabit duruyor —
  * SSR/hidrasyon çıktısıyla birebir aynı (bkz. useScrambleReveal).
+ *
+ * 20 Eylül 2026: her kelime `ScrambleLine`'ın yuvasında — karışırken
+ * genişlik değişmiyor, başlık yeniden satır kırmıyor (ölçülen CLS 0.110
+ * TR / 0.147 EN buradan geliyordu).
  */
 export function CreativeTitle() {
   const active = !usePrefersReducedMotion();
-  const creativity = useScrambleReveal("CREATIVITY", { active, delayMs: 0, durationMs: 560 });
-  const without = useScrambleReveal("WITHOUT", { active, delayMs: 80, durationMs: 560 });
-  const limits = useScrambleReveal("LIMITS", { active, delayMs: 140, durationMs: 560 });
 
   return (
     <h1 className={styles.title} lang="en" aria-label="CREATIVITY WITHOUT LIMITS">
-      <span className={styles.white} aria-hidden="true">
-        {creativity}
-      </span>{" "}
+      <ScrambleLine className={styles.white} text="CREATIVITY" active={active} durationMs={560} />{" "}
       <span className={styles.overflow} aria-hidden="true">
-        <span>{without}</span> <span>{limits}</span>
+        <ScrambleLine text="WITHOUT" active={active} delayMs={80} durationMs={560} />{" "}
+        <ScrambleLine text="LIMITS" active={active} delayMs={140} durationMs={560} />
       </span>
     </h1>
   );

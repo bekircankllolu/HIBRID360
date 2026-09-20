@@ -139,7 +139,7 @@
 }
 
 .typePoster strong {
-  max-width: 9ch;
+  max-width: 5.832em; /* 9ch: `ch` yedek fontla kayar, bkz. page.module.css .title */
   font-family: var(--font-chapter-display);
   font-size: clamp(3rem, 7vw, 7rem);
   line-height: 0.86;

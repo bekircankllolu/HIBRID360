@@ -188,12 +188,10 @@
  * genişliğinin Arial'ınkine oranı (Capsize / next-font yöntemi). Inter için
  * bu yöntem 107.41% veriyor, dosyadaki değer 107% — yöntem doğrulanmış oldu.
  *
- * NOT: Space Grotesk yedeğindeki 128.23% farklı bir yöntemle (OS/2
- * xAvgCharWidth oranı) hesaplanmış; aynı ağırlıklı yöntem 111.04% veriyor.
- * xAvgCharWidth fontlar arasında tutarsız doldurulan bir alan, yani oradaki
- * değer muhtemelen ~17 puan yüksek ve swap anında sıçramaya yol açıyor.
- * Bu yenilemede DOKUNULMADI: Space Grotesk yalnız Creative chapter'larında
- * kullanılıyor ve o sayfa ayrı bir incelemede. Ayrı ele alınmalı.
+ * NOT: Space Grotesk yedeğindeki eski 128.23% farklı bir yöntemle (OS/2
+ * xAvgCharWidth oranı) hesaplanmıştı ve başlıkları font inerken iç içe
+ * geçiriyordu; 20 Eylül 2026'da tarayıcıda ölçülen değerle değiştirildi
+ * (aşağıdaki "Space Grotesk Fallback" notuna bakın).
  */
 @font-face {
   font-family: "Archivo Fallback";
@@ -244,16 +242,49 @@
   size-adjust: 122.48%;
 }
 
-/* Arial'ın xAvgCharWidth/unitsPerEm'ine göre hesaplandı (aynı yöntem,
-   Space Grotesk 700'ün gerçek OS/2 + hhea değerleriyle). Space Grotesk
-   Montserrat'tan belirgin ölçüde daha geniş harfler taşıyor (xAvgCharWidth
-   566/1000 vs Arial 904/2048) — bu yüzden size-adjust %128, diğer ikisinden
-   çok daha yüksek. */
+/**
+ * Space Grotesk yedeği — YALNIZ dev tipografi rolü (`--font-chapter-display`
+ * bu ailenin tek tüketicisi: h1'ler, hizmet dizini, manifesto, "sıradaki
+ * servis"). Bu yüzden değerler BÜYÜK HARF başlığa göre kalibre edildi.
+ *
+ * 20 Eylül 2026 — müşteri hatası: "What We Do" başlıkları font İNERKEN
+ * iç içe giriyor ve sağdan kesiliyordu. Kök neden buradaki eski
+ * `size-adjust: 128.23%` idi (OS/2 xAvgCharWidth oranı — fontlar arasında
+ * tutarsız doldurulan bir alan; dosyanın kendi notu da değerin şüpheli
+ * olduğunu yazıyordu):
+ *   · Arial'ın büyük harf yüksekliği 0.74em x 1.2823 = 0.949em, başlık
+ *     satır aralığı ise 0.86 (ServiceTitle.module.css) — harfler bir üst
+ *     satıra taşıyordu.
+ *   · "PRODUCTION" gerçek fontta 6.06em, yedekte 8.62em; mobilde 13vw
+ *     puntoda 350px'lik alana sığmıyor, `.chapter { overflow: clip }`
+ *     taşan kısmı kesiyordu.
+ *
+ * YENİ DEĞERLER — gerçek tarayıcıda ölçüldü (Playwright + canvas
+ * measureText, Chromium ve WebKit; sentetik bold ve local() çözümü dahil,
+ * sitedeki 26 gerçek başlık dizesi):
+ *   size-adjust 91%  → büyük harf genişlik oranı gerçek/Arial: Chromium
+ *     medyan 0.917, WebKit medyan 0.901. 0.91'de yedek en kötü durumda
+ *     gerçek fontun %2.5 üstünde kalıyor (mevcut boşluk payı %14), yani
+ *     ne kesiliyor ne de satır sonları kayıyor.
+ *   Bu ölçekle yedeğin İZİ her metrikte gerçek fontun ALTINDA kalıyor —
+ *   yani yükleme anı yayındaki halinden daha sıkışık olamaz:
+ *     büyük harf yüksekliği 0.673em (gerçek 0.700), İ 0.810em (0.920),
+ *     Ş/Ç kuyruğu 0.200em (0.220).
+ *   ascent/descent → gerçek fontun hhea değerlerini (0.984 / 0.292)
+ *     korur. size-adjust ÖLÇEKLEDİĞİ için (ölçüldü: ascent-override 100%
+ *     + size-adjust 50% = 50px) değerler size-adjust'a BÖLÜNEREK yazılır:
+ *     0.984/0.91 = 108.13%, 0.292/0.91 = 32.09%. Böylece taban çizgisi
+ *     font inince yerinden oynamıyor (CLS yok).
+ *
+ * NOT: büyük harf kalibrasyonu, aynı ailedeki karışık kalıplı metni
+ * (ScrollLitText/manifesto cümleleri) gerçek fontun bir tık ALTINDA
+ * bırakıyor — dar taraf güvenli taraf: taşma ve kesilme olmuyor.
+ */
 @font-face {
   font-family: "Space Grotesk Fallback";
   src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
-  ascent-override: 76.74%;
-  descent-override: 22.77%;
+  ascent-override: 108.13%;
+  descent-override: 32.09%;
   line-gap-override: 0%;
-  size-adjust: 128.23%;
+  size-adjust: 91%;
 }
