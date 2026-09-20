@@ -905,3 +905,41 @@ Güncellenecek testler: `--ring` odak testi, `/images/site/solar/` doku testi,
 - Higgsfield `seedance_2_5` başlangıç karesi için `mode: "omni_reference"` ister;
   Higgsfield `generate_audio` SFX üretmez (yalnız konuşma); Magnific bu kuruluşta kapalı;
   SFX/ambiyans için ElevenLabs `creative_generate_in_flow` (`sfx`: 1-2 sn sabit, `music`: 180 sn).
+
+---
+
+## 20 Eylül 2026 — Faz 1: müşteri incelemesinden çıkan hatalar + performans (dal: `fix/phase1-customer-review`)
+
+Kaynak: müşteri Vercel'de siteyi inceledi; kullanıcı bildirdi. Analiz raporları: `scratchpad/audit/design/design-audit.md`, `scratchpad/audit/overlap/overlap-report.md`.
+Kullanıcı kararları: sıra = Faz 1 (hatalar+performans) → Faz 2 (tasarım dili: What We Do dili tüm sayfalara, ana sayfa dahil; Think & Thank korunur; MONA yalnız seçili sayfalarda) → Faz 3 (What We Do görsel yenileme: 7 sayfa, Creative dahil, AI Creative hariç). Müşteri Mac kullanıyor; belirti: sahne açılmıyor, donma/kasma.
+
+- [x] A. Başlık çakışması: Space Grotesk preload (tüm sayfalar), yedek font yüzü `size-adjust` %128 → %91 (tarayıcıda ölçüldü), `ch` → `em` (ServiceTitle, hub `.title`, `.typePoster`, AI `.intro h2` + manifesto), scramble kelime yuvası (`ScrambleLine`) + Q/rakam havuzdan çıktı. TR büyük harf satır aralığı ≥ 1.05 Faz 2'ye bırakıldı (yüklü hali değiştirir)
+- [x] B1. Sürükleme: pointer capture (eşik sonrası, düğme tıklamaları bozulmasın), sürükleme alanı tüm bölüm, `buttons===0` koruması, bırakınca varsayılan kompozisyona yumuşak dönüş (gerçek zamanlı delta). e2e: takılı sürükleme, geri dönüş, başlık bölgesinden sürükleme
+- [x] B2. Ses: ambiyans ~-22 LUFS (kazanç 0.32→0.8, limiter), açılış onay sesi, Web Audio yoksa `aria-disabled` + görünür etiket, iOS sessiz anahtarı (`audioSession` / sessiz WAV). Gerçek Safari/iPhone'da DENENMEDİ
+- [x] B3. Performans/dayanıklılık: kademe merdiveni (high→medium→lite) + `gl.getError` doğrulaması, kare süresi EMA ile uyarlanabilir çözünürlük, MSAA yalnız high+DPR<1.5, bulanıklık 10 tap, sahne parçası+poster önden çekme, poster yer tutucu (sahne hazır olunca solar), bağlam kaybı/geri gelme, `?ecodebug` teşhis paneli, `deviceMemory<=4` → medium
+- [x] C. Önbellek başlıkları (`next.config.mjs`): font 7 gün, video/ses/görsel 1 saat + SWR. Kısa tutuldu: müşteri incelemesi sürerken aynı adla değişen dosya (MONA sesi, showreel) günlerce eski kalmasın. `images.minimumCacheTTL` ARTIRILMADI (aynı bayat-dosya riski, kazanç küçük)
+- [x] D. how-we-work TR çevirisi (`src/data/how-we-work.ts` → `Record<Locale,…>`, hero lead → `howWeWork.lead`), "belirlenecek" rozetleri kaldı, "NO BLACK BOX." İngilizce slogan. Çeviri MÜŞTERİ ONAYI BEKLİYOR. Birim test: iki dil yapı eşitliği
+- [~] E. Doğrulama: birim + e2e + başlık matrisi TAMAM (aşağıya bak); canlı Vercel testi merge SONRASI (kullanıcı onayı bekleniyor)
+
+**Sonuçlar (20 Eylül 2026)**
+- Kapılar: `tsc`, `eslint . --max-warnings=0` (CI'daki `npm run lint`), `vitest` 422+ yeşil (yük altında `starfield` testi 5 sn sınırını aşıp bir kez düştü, tek başına 3,5 sn'de geçiyor — eskiden beri ağır test), üretim build'i temiz.
+- e2e (üretim build'i): solar-system 24/24 (yeni: takılı sürükleme, varsayılana dönüş, başlık bölgesinden sürükleme, Web Audio yok, WebGL yok, ses inmezse tekrar dene), diğer 201 testten 197 geçti + 4 atlandı (Creative film testleri, eskiden beri koşullu atlanıyor), 0 düştü. `contact-form` bir koşuda yük altında düştü, tek başına 3/3 geçiyor (eskiden beri yük flake'i).
+- Başlık matrisi (kendi dedektörüm, aynı araç ÖNCE/SONRA, chromium+webkit, 390/1440, TR+EN, font-bloklu/yavaş ağ/duruk): ortak 50 kombinasyonda başlık-başlık çakışması 6 → 0, kesilen başlık 3 → 0, satır içi çakışma 5 → 1 (kalan: AI sayfası TR h2 "PRODÜKSİYON ŞİRKETİ Mİ?" 390 px'te 6,6 px, satır aralığı .95 — Faz 2 #7). Creative CLS 0,147 (EN) / 0,110 (TR) → 0,001. Ajanın font-bloklu TR matrisi (hub + 8 sayfa × chromium/webkit × 390/1440): çakışan başlık çifti ~90 → 1, en büyük çakışma 20,2 px → 1,5 px, kesilen satır 8 sayfa → 0. Kalan geçici durum: scramble sürerken (ilk ~0,8 sn) geniş harf bir yan kelimeye 1-3 px değebilir (efektin doğası).
+- `ch` → `em` yüklü hâlde birebir aynı genişlik (5 değer, fark 0 px, ölçüldü).
+- Gerçek GPU (RTX 3060 Ti, DPR 2, 1440×900): kademe `high`, tampon 1821×1758, 6,9 ms/kare, hata yok. Playwright WebKit (yazılım render, ~160 ms/kare): sahne kuruldu, otomatik kalite 7 sn içinde ölçek 0,5 + bloom/bulanıklık kapalı + kare atlamaya indi, sürükleme/varsayılana dönüş çalıştı.
+- Kod incelemesi (code-reviewer): 2 HIGH + 3 MEDIUM + 3 LOW düzeltildi — pinch-zoom (`touch-action: pan-y pinch-zoom`), tek başarısız indirmenin sesi kalıcı öldürmesi (yeni `error` durumu + "tekrar dene"), `ch` kutuları, boşa geçebilen sürükleme testleri (`headingZone` + `elementFromPoint`), bağlam kaybında boş kare döngüsü, InstancedMesh dispose, yarım kalan kurulum temizliği, teşhis paneli sabit hex. Bilerek bırakılan: bölümün tamamında `user-select: none` (sürükleme bölgesi tüm bölüm; `.detail` kartı seçilebilir).
+- DOĞRULANMADI: müşterinin gerçek Mac'i, gerçek Safari/iPhone (ses), seslerin kulakla kalitesi, canlı Vercel (merge sonrası).
+
+
+### Faz 2 taslağı (BAŞLAMADI — kullanıcı "tamam başla" demeden kod yok; önce plan onayı)
+
+Hedef: What We Do "Service Chapter" dilini tüm sayfalara yay (ana sayfa dahil); Think & Thank'in krem/mint/pembe dünyası kasıtlı, korunur; MONA parçaları yalnız seçili sayfalarda. Kaynak: `scratchpad/audit/design/design-audit.md` (oturum geçici dizini — kaybolduysa yeniden çıkar; 31 TR rota, 124 ekran görüntüsü).
+
+- [ ] 1. Tek display rolü: Space Grotesk 700, tracking 0, tek H1 ölçeği (`--chapter-display`) — bugün tek viewportta 12 farklı H1 puntosu (40 → 160 px)
+- [ ] 2. H1 rengi: beyaz + tek sarı satır kuralı (18 sayfada düz sarı H1)
+- [ ] 3. Kap/gutter: 41/20 px tam genişlik; 16 px, 36 px, 736 px ortalı, 672 px ortalı kapları kaldır
+- [ ] 4. Hero grameri: meta satırı + derece + hairline; Work/Contact'ın medya heroları
+- [ ] 5. Buton ailesi: tek PrimaryCta; MONA hapları, who-we-are hapı, Brief ghost butonu birleşir
+- [ ] 6. Fuşya gövde metni (hub kırıntısı, Brief girişi) kalkar; fuşya yalnız araç (derece, numara, çizgi, odak)
+- [ ] 7. TR büyük harf başlık satır aralığı ≥ 1.05 (`ai-creative-production/page.module.css:9` `.proof h2`, `ServiceChapter.module.css:95` `.details h2`): Faz 1'de yüklü hali değiştirmemek için bilerek DOKUNULMADI (390 px'te iki satır arası ~4,5 px dikey çakışma, harf mürekkebi çakışmıyor)
+- [ ] 8. Legal/sustainability şablonu; token dışı hex'ler (`#070707`, `#080808`, `#151515`, `#101010`…) → CSS özel özellikleri
