@@ -1,4 +1,10 @@
 .section {
+  /* Üstteki ekosistem bölümünün çizim katmanı bu bölümün içine taşıyor
+     (yörüngeler başlığın ARKASINDAN geçiyor). Konumlanmış öğeler DOM
+     sırasında canvas katmanından sonra çizilir; `z-index` verilmedi → yeni bir
+     yığın bağlamı açılmıyor (form popup'ının z-index'i etkilenmiyor). Arkaplan
+     yok, katman arkadan görünüyor. */
+  position: relative;
   width: 100%;
   min-height: min(68svh, 48rem);
   padding: clamp(3rem, 6vw, 6rem) var(--page-gutter);

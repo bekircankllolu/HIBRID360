@@ -323,8 +323,13 @@ export function stoneTrail(
  * `screen` ile birleştirilir; bu gerçek alfa değildir.
  */
 export const CRYSTAL_MEDIA = {
-  /** All-intra H.264: each frame is independently seekable for scroll control. */
-  interactive: "/videos/hibrid-stone-loop-20260827.mp4",
+  /**
+   * 20 Eylül 2026: yeni HIBRID 360° taşı (Higgsfield seedance_2_5, yavaş
+   * sarkaç). 768x768 H.264 tam aralıklı (yuvj420p — WebKit'te sınırlı aralık
+   * siyahı gri gösteriyor), 24 fps, ~7,3 sn, son 0,75 sn başa çapraz geçirilip
+   * dikişsiz döngü yapıldı. Yazı bütün karelerde okunuyor.
+   */
+  interactive: "/videos/hibrid-crystal-loop-20260920.mp4",
   fps: 24,
   scale: 0.85,
   playbackRate: 1,
@@ -332,20 +337,13 @@ export const CRYSTAL_MEDIA = {
   webm: "/videos/hibrid-stone.webm",
   mp4: "/videos/hibrid-stone.mp4",
   /** preload="none" olduğu için ilk kare bu görselden gelir. */
-  poster: "/videos/hibrid-stone-loop-20260827.webp",
-  width: 512,
-  height: 512,
-  /**
-   * Ölçülen parlak siluet yaklaşık 315×285 pikseldir. Bu bilgi kadrajı
-   * belgeler; sahnenin mevcut boyut ayarı `scale` ile korunur.
-   */
-  stoneRatio: 315 / 512,
-  /**
-   * Yeni siluet merkezi 260×251: yörünge merkezine hizalamak için
-   * kaynak 4 piksel sola ve 5 piksel aşağı kaydırılır.
-   */
-  offsetX: -4 / 512,
-  offsetY: 5 / 512,
+  poster: "/videos/hibrid-crystal-loop-20260920.webp",
+  width: 768,
+  height: 768,
+  /** Yeni karede parlak siluet karenin yaklaşık %86'sını kaplıyor. */
+  stoneRatio: 0.86,
+  offsetX: 0,
+  offsetY: 0,
 } as const;
 
 /**
