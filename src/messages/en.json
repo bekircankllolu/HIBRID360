@@ -584,6 +584,8 @@
     "soundOn": "Sound on",
     "soundOff": "Sound off",
     "subtitles": "Subtitles",
+    "soundUnavailable": "Sound isn't available in this browser",
+    "soundError": "Couldn't load the sound, tap to try again",
     "playShowreel": "Play the showreel",
     "watchFilm": "Watch the film",
     "aiGenerated": "AI-generated representative visual",

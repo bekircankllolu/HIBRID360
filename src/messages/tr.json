@@ -584,6 +584,8 @@
     "soundOn": "Sesi aç",
     "soundOff": "Sesi kapat",
     "subtitles": "Altyazı",
+    "soundUnavailable": "Ses bu tarayıcıda kullanılamıyor",
+    "soundError": "Ses yüklenemedi, tekrar denemek için dokunun",
     "playShowreel": "Showreeli oynat",
     "watchFilm": "Filmi izle",
     "aiGenerated": "AI ile üretilmiş temsili görseldir",

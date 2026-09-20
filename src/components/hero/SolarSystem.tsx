@@ -71,6 +71,13 @@ import styles from "./SolarSystem.module.css";
 
 const FOV = ECO_FOV;
 const DRAG_THRESHOLD = 6;
+/** Bırakıldıktan bu kadar süre sonra (ms) sistem varsayılan kompozisyona döner. */
+const RETURN_DELAY_MS = 1500;
+
+/** Açıyı (-π, π] aralığına indirger: kamera geri dönerken uzun yoldan dönmesin. */
+function wrapAngle(angle: number): number {
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
 
 /**
  * 20 Eylül 2026 — YENİ EKOSİSTEM (`feat/ecosystem-orbit`). Kullanıcı
@@ -87,13 +94,60 @@ function bodyDefs(): EcosystemBodyDef[] {
   }));
 }
 
+/** `?ecodebug` (ya da localStorage `hibrid360-eco-debug=1`): sahne teşhis paneli. */
+function debugEnabled(): boolean {
+  try {
+    return (
+      new URLSearchParams(window.location.search).has("ecodebug") ||
+      window.localStorage.getItem("hibrid360-eco-debug") === "1"
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Müşterinin cihazında ne olduğunu uzaktan görebilmek için küçük teşhis paneli
+ * (kademe, GPU, çözünürlük, kare süresi, geri düşme nedenleri). Panel DOM'a
+ * doğrudan yazılır (React durumu değil), yalnız teşhis bayrağı açıkken kurulur.
+ */
+function attachDebug(
+  stage: HTMLElement,
+  read: () => object | null,
+  failure: string[],
+): () => void {
+  const panel = document.createElement("pre");
+  panel.setAttribute("data-eco-debug", "");
+  panel.setAttribute("aria-hidden", "true");
+  panel.style.cssText =
+    "position:absolute;left:12px;bottom:12px;z-index:20;margin:0;padding:8px 10px;max-width:calc(100% - 24px);" +
+    "background:var(--color-brand-black);opacity:.92;color:var(--color-brand-yellow);" +
+    "font:11px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;" +
+    "border:1px solid var(--color-brand-yellow);pointer-events:none;";
+  stage.appendChild(panel);
+  const paint = () => {
+    const data = read();
+    panel.textContent = data
+      ? JSON.stringify(data, null, 1).replace(/[{}"]/g, "")
+      : `sahne KURULAMADI\n${failure.join("\n")}`;
+  };
+  paint();
+  const timer = window.setInterval(paint, 700);
+  return () => {
+    window.clearInterval(timer);
+    panel.remove();
+  };
+}
+
 /** Dokunmatik / dar / zayıf cihazlarda kalite kademesi (bloom ve MSAA kapanır). */
 function pickQuality(): "high" | "medium" {
   if (typeof window === "undefined") return "high";
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   const narrow = window.innerWidth < 820;
   const weak = (navigator.hardwareConcurrency ?? 8) <= 4;
-  return coarse || narrow || weak ? "medium" : "high";
+  // Chrome'un raporladığı cihaz belleği (GB): 4 ve altı zayıf sayılır.
+  const lowMemory = ((navigator as unknown as { deviceMemory?: number }).deviceMemory ?? 8) <= 4;
+  return coarse || narrow || weak || lowMemory ? "medium" : "high";
 }
 
 export function SolarSystem() {
@@ -111,6 +165,8 @@ export function SolarSystem() {
   const [active, setActive] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  /** Sahne çiziliyor mu? Kurulana (ya da bağlam kaybında geri gelene) kadar poster yer tutucu görünür. */
+  const [sceneReady, setSceneReady] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -134,6 +190,9 @@ export function SolarSystem() {
   const hoverRef = useRef<number | null>(null);
   const timeScaleRef = useRef(1);
   const dragRef = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
+  /** Son kullanıcı sürüklemesinin zamanı (performance.now): geri dönüş gecikmesi. */
+  const lastInputRef = useRef(0);
+  const lastYawWrittenRef = useRef(0);
   const cameraRef = useRef<CameraState>({
     target: ECO_CAMERA.target,
     distance: ECO_CAMERA.distance,
@@ -163,6 +222,7 @@ export function SolarSystem() {
     let live: EcosystemScene | null = null;
     let attempted = false;
     let disposed = false;
+    let detachDebug: (() => void) | null = null;
 
     /**
      * Sahne GÖRÜNÜR ALANA GİRİNCE kuruluyor, mount'ta değil: Three.js
@@ -179,9 +239,9 @@ export function SolarSystem() {
       if (live || attempted) return live;
       attempted = true;
       import("@/lib/ecosystem-scene")
-        .then(({ createEcosystemScene }) => {
+        .then(async (mod) => {
           if (disposed) return;
-          live = createEcosystemScene({
+          const created = await mod.createEcosystemScene({
             canvas,
             bodies,
             crystalVideo: reducedMotion ? null : video,
@@ -193,13 +253,42 @@ export function SolarSystem() {
             onTextureLoad: () => {
               if (reducedMotion && live && inView) renderStill();
             },
+            // GPU bağlamı kaybolursa (Mac'te GPU geçişi, bellek baskısı) poster
+            // görünür kalır; bağlam geri gelince sahne kaldığı yerden sürer.
+            // Bağlam kayıpken çizim yok: kare döngüsü de durur (yoksa her karede
+            // konum/yerleşim hesabı boşa dönüp zaten baskı altındaki GPU/bellek
+            // durumunu kötüleştirir); geri gelince görünürse sürer.
+            onContextLost: () => {
+              stage.dataset.scene = "recovering";
+              setSceneReady(false);
+              stop();
+            },
+            onContextRestored: () => {
+              stage.dataset.scene = "webgl";
+              setSceneReady(true);
+              if (!inView) return;
+              if (reducedMotion) renderStill();
+              else start();
+            },
           });
+          // Kurulum beklerken bileşen kapandıysa (rota değişti / mod değişti)
+          // yeni sahneyi sızdırma.
+          if (disposed) {
+            created?.dispose();
+            return;
+          }
+          live = created;
           if (!live) {
+            console.warn("Ecosystem scene unavailable:", mod.getSceneFailureReasons().join(" | "));
+            if (debugEnabled()) detachDebug = attachDebug(stage, () => null, mod.getSceneFailureReasons());
             failScene();
             return;
           }
           stage.dataset.scene = "webgl";
           stage.dataset.running = "false";
+          setSceneReady(true);
+          const built = live;
+          if (debugEnabled()) detachDebug = attachDebug(stage, () => built.diagnostics(), []);
           live.resize();
           if (!inView) return;
           if (reducedMotion) renderStill();
@@ -347,6 +436,24 @@ export function SolarSystem() {
       timeScaleRef.current = approach(timeScaleRef.current, wantsStill ? 0 : 1, 6, delta);
       if (!pausedRef.current) sceneTime += delta * timeScaleRef.current;
 
+      // Sürükleme bırakılınca (ya da bir küre seçilince) sistem varsayılan
+      // kompozisyona yumuşakça döner: döndürülmüş sahne kalıcı kalmasın, odak
+      // kamerası da sürükleme açısıyla bozulmasın. Gerçek zamanlı `delta`
+      // kullanılır (zaman ölçeği donsa da kamera hareket eder).
+      if (
+        dragRef.current?.moved !== true &&
+        (focusRef.current >= 0 || performance.now() - lastInputRef.current > RETURN_DELAY_MS)
+      ) {
+        const lambda = focusRef.current >= 0 ? 2.4 : 1.1;
+        manualYawRef.current = approach(wrapAngle(manualYawRef.current), 0, lambda, delta);
+        manualPitchRef.current = approach(manualPitchRef.current, 0, lambda, delta);
+      }
+      // Test kancası (kare başına DOM yazımı yok: yalnız belirgin değişimde).
+      if (Math.abs(manualYawRef.current - lastYawWrittenRef.current) > 0.01) {
+        lastYawWrittenRef.current = manualYawRef.current;
+        stage.dataset.manualYaw = manualYawRef.current.toFixed(2);
+      }
+
       for (const [index, body] of ECO_BODIES.entries()) {
         positions[index] = bodyPosition(body, sceneTime);
       }
@@ -486,7 +593,10 @@ export function SolarSystem() {
       },
       { rootMargin: "10% 0px" },
     );
-    observer.observe(stage);
+    // Bölümün TAMAMI izlenir (sahne kutusu değil): canvas başlık bölgesine ve
+    // alta taşıyor; yalnız kutu izlense, kutu ekrandan çıkınca görünen taşma
+    // alanındaki yıldızlar/halkalar donmuş kalırdı.
+    observer.observe(sectionRef.current ?? stage);
 
     const onVisibility = () => {
       if (document.hidden) stop();
@@ -510,46 +620,131 @@ export function SolarSystem() {
       stop();
       disposed = true;
       inView = false;
+      detachDebug?.();
       live?.dispose();
       live = null;
+      setSceneReady(false);
     };
   }, [bodies, reducedMotion]);
 
+  /**
+   * Sahne parçası ve poster, bölüm ekrana YAKLAŞIRKEN (1,5 ekran boyu kala) önden
+   * çekilir; kurulum ancak görünür alana girince başlar. Böylece yavaş bağlantıda
+   * sahne "boş siyah alan → 2 sn sonra açıldı" yerine hazır karşılıyor. GPU/video
+   * işi yok, yalnız indirme (performans bütçesine uygun: ilk yükleme değişmez).
+   */
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || typeof IntersectionObserver === "undefined") return;
+    const warm = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        warm.disconnect();
+        void import("@/lib/ecosystem-scene").catch(() => undefined);
+        const image = new window.Image();
+        image.src = CRYSTAL_MEDIA.poster;
+      },
+      { rootMargin: "150% 0px" },
+    );
+    warm.observe(section);
+    return () => warm.disconnect();
+  }, []);
+
   /* ------------------------------------------------------------ etkileşim */
 
-  const onPointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+  /**
+   * Sürükleme YAKALAMA ile: fare tuşu sahne alanının dışında bırakılsa bile
+   * `pointerup` bize gelir. Yakalama olmadan sürükleme "takılı" kalıyor, fare
+   * tuşa basmadan hareket ettirilince bile sistem dönmeye devam ediyordu
+   * (müşteri incelemesinde görülen hata). Yakalama YALNIZ eşik aşılınca
+   * başlar: aksi halde hedef bölüme kayar ve küre düğmelerinin `click`'i bozulur.
+   */
+  const finishDrag = useCallback(() => {
+    const drag = dragRef.current;
+    dragRef.current = null;
+    stageRef.current?.setAttribute("data-drag", "false");
+    return drag;
+  }, []);
+
+  const onPointerDown = useCallback((event: ReactPointerEvent<HTMLElement>) => {
     if (!event.isPrimary || event.button !== 0) return;
+    // Kart ve denetim düğmeleri sürüklemeyi başlatmaz (kart içinde metin seçilir).
+    if ((event.target as HTMLElement).closest("[data-detail], [data-eco-control]")) return;
     dragRef.current = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
   }, []);
 
-  const onPointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current;
-    if (!drag || drag.id !== event.pointerId) return;
-    const dx = event.clientX - drag.x;
-    const dy = event.clientY - drag.y;
-    if (!drag.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
-    drag.moved = true;
-    drag.x = event.clientX;
-    drag.y = event.clientY;
-    // Sürükleme kamerayı döndürür (eski sürümde gezegenler sürükleniyordu;
-    // 3B'de sahneyi gezmek çok daha doğal). Dikey açı sınırlı: kutba
-    // yapışınca sahne düzleşiyor.
-    manualYawRef.current -= dx * 0.005;
-    manualPitchRef.current = Math.max(-0.5, Math.min(0.7, manualPitchRef.current + dy * 0.004));
-  }, []);
+  const onPointerMove = useCallback(
+    (event: ReactPointerEvent<HTMLElement>) => {
+      const drag = dragRef.current;
+      if (!drag || drag.id !== event.pointerId) return;
+      // Fare tuşu artık basılı değil: sürükleme kaçırılmış bir `pointerup` yüzünden
+      // takılı kalmış olabilir, bitir.
+      if (event.pointerType === "mouse" && event.buttons === 0) {
+        finishDrag();
+        return;
+      }
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
+      if (!drag.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+      if (!drag.moved) {
+        try {
+          event.currentTarget.setPointerCapture(event.pointerId);
+        } catch {
+          // Yakalanamadıysa pencere düzeyindeki dinleyici (aşağıdaki efekt) bitirir.
+        }
+        stageRef.current?.setAttribute("data-drag", "true");
+      }
+      drag.moved = true;
+      drag.x = event.clientX;
+      drag.y = event.clientY;
+      lastInputRef.current = performance.now();
+      // Sürükleme kamerayı döndürür (eski sürümde gezegenler sürükleniyordu;
+      // 3B'de sahneyi gezmek çok daha doğal). Dikey açı sınırlı: kutba
+      // yapışınca sahne düzleşiyor. Bırakınca varsayılana döner (bkz. `step`).
+      manualYawRef.current -= dx * 0.005;
+      manualPitchRef.current = Math.max(-0.5, Math.min(0.7, manualPitchRef.current + dy * 0.004));
+    },
+    [finishDrag],
+  );
 
-  const endDrag = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current;
-    dragRef.current = null;
-    if (!drag || drag.moved) return;
-    // Sürükleme değil, tıklama: boşluğa tıklandıysa odaktan çık.
-    const target = event.target as HTMLElement;
-    if (target.closest("button") || target.closest("[data-detail]")) return;
-    setActive((current) => {
-      if (current !== null) soundRef.current.close();
-      return null;
-    });
-  }, []);
+  const endDrag = useCallback(
+    (event: ReactPointerEvent<HTMLElement>) => {
+      const drag = finishDrag();
+      if (drag?.moved) lastInputRef.current = performance.now();
+      try {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      } catch {
+        // Yakalama yoktu.
+      }
+      if (!drag || drag.moved) return;
+      // Sürükleme değil, tıklama: boşluğa tıklandıysa odaktan çık.
+      const target = event.target as HTMLElement;
+      if (target.closest("button") || target.closest("[data-detail]")) return;
+      setActive((current) => {
+        if (current !== null) soundRef.current.close();
+        return null;
+      });
+    },
+    [finishDrag],
+  );
+
+  // Yedek: yakalama başarısız olsa ya da pencere odağı kaybolsa da sürükleme bitsin.
+  useEffect(() => {
+    const cancel = () => {
+      if (dragRef.current) {
+        if (dragRef.current.moved) lastInputRef.current = performance.now();
+        finishDrag();
+      }
+    };
+    window.addEventListener("pointerup", cancel);
+    window.addEventListener("pointercancel", cancel);
+    window.addEventListener("blur", cancel);
+    return () => {
+      window.removeEventListener("pointerup", cancel);
+      window.removeEventListener("pointercancel", cancel);
+      window.removeEventListener("blur", cancel);
+    };
+  }, [finishDrag]);
 
   const dismiss = useCallback(
     (returnFocus: boolean) => {
@@ -573,6 +768,14 @@ export function SolarSystem() {
     return () => document.removeEventListener("keydown", onKey);
   }, [active, dismiss]);
 
+  const soundLabel =
+    sound.status === "unavailable"
+      ? video_t("soundUnavailable")
+      : sound.status === "error"
+        ? video_t("soundError")
+        : sound.enabled
+          ? video_t("soundOff")
+          : video_t("soundOn");
   const selected = active === null ? null : orbitStones[active];
   const selectedKey = active === null ? null : STONE_SERVICE_KEYS[active];
   const selectedBody = selected
@@ -587,6 +790,13 @@ export function SolarSystem() {
       className={styles.section}
       aria-labelledby="solar-system-title"
       style={{ "--crystal-scale": CRYSTAL_MEDIA.scale } as CSSProperties}
+      // Sürükleme BÖLÜMÜN tamamında (başlık bölgesi dahil): görünen sistem sahne
+      // kutusundan büyük, kutunun dışından tutup çevirmek doğal bir beklenti.
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={() => finishDrag()}
+      onLostPointerCapture={() => finishDrag()}
     >
       {/* Çizim katmanı BÖLÜM seviyesinde ve sahne kutusundan büyük: yörüngeler ve
           yıldızlar başlığın arkasına ve alttaki bölümün içine taşıyor, kenarlar
@@ -632,12 +842,8 @@ export function SolarSystem() {
         data-motion={reducedMotion || paused ? "paused" : "running"}
         data-scene="pending"
         data-focus={active === null ? "none" : orbitStones[active].label}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={() => {
-          dragRef.current = null;
-        }}
+        data-drag="false"
+        data-manual-yaw="0.00"
       >
         {/* Odak bağlantı çizgisi: küreden karta. Konumu kare döngüsünden yazılıyor. */}
         <svg
@@ -658,6 +864,7 @@ export function SolarSystem() {
           <button
             type="button"
             className={`${styles.control} ${styles.playbackControl}`}
+            data-eco-control=""
             onClick={() => setPaused((value) => !value)}
             aria-label={paused ? t("resumeAnimation") : t("pauseAnimation")}
             aria-pressed={paused}
@@ -670,24 +877,30 @@ export function SolarSystem() {
         <button
           type="button"
           className={`${styles.control} ${styles.soundControl}`}
+          data-eco-control=""
           onClick={sound.toggle}
-          aria-label={sound.enabled ? video_t("soundOff") : video_t("soundOn")}
+          aria-label={soundLabel}
           aria-pressed={sound.enabled}
-          title={sound.enabled ? video_t("soundOff") : video_t("soundOn")}
+          aria-disabled={sound.status === "unavailable"}
+          aria-busy={sound.status === "loading"}
+          title={soundLabel}
         >
           {sound.enabled ? <Volume2 size={18} aria-hidden="true" /> : <VolumeX size={18} aria-hidden="true" />}
         </button>
 
-        {unavailable && (
-          <Image
-            src={CRYSTAL_MEDIA.poster}
-            width={512}
-            height={512}
-            sizes="350px"
-            alt=""
-            className={styles.fallback}
-          />
-        )}
+        {/* Poster yer tutucu: sahne kurulana kadar (Three.js parçası + video inerken
+            1-2 sn) kristal görünsün, boş siyah alan kalmasın; hazır olunca solar.
+            WebGL yoksa kalıcı geri dönüş görüntüsü de odur. */}
+        <Image
+          src={CRYSTAL_MEDIA.poster}
+          width={CRYSTAL_MEDIA.width}
+          height={CRYSTAL_MEDIA.height}
+          sizes="(min-width: 1024px) 24vw, 60vw"
+          alt=""
+          aria-hidden="true"
+          className={styles.fallback}
+          data-ready={sceneReady && !unavailable ? "true" : "false"}
+        />
 
         {/* Kristal videosu yıldızın yüzey dokusu. Kaynak JS ile veriliyor —
             sahne görünmeden indirilmesin. */}
@@ -741,6 +954,8 @@ export function SolarSystem() {
               onClick={() => {
                 if (active === index) sound.close();
                 else sound.fly();
+                // Odak kamerası sürükleme açısını devralmasın: hemen varsayılana dön.
+                lastInputRef.current = 0;
                 setActive((value) => (value === index ? null : index));
               }}
             >

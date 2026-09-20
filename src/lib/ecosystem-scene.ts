@@ -23,6 +23,7 @@ import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 import {
+  ECO_BODIES,
   ECO_CAMERA,
   ECO_CRYSTAL_SIZE,
   ECO_FOV,
@@ -36,6 +37,8 @@ import {
 import { cameraEye, type CameraState, type ScreenPoint, type Vec3 } from "@/lib/solar-orbits";
 
 export type EcosystemQuality = "high" | "medium";
+/** Kademeli geri düşme merdiveni: high → medium → lite. */
+export type EcosystemTier = "high" | "medium" | "lite";
 
 export interface EcosystemBodyDef {
   radius: number;
@@ -59,11 +62,36 @@ export interface EcosystemFrame {
   parallax: number;
 }
 
+/** Teşhis modu (`?ecodebug`) ve uzaktan hata ayıklama için sahne durumu. */
+export interface EcosystemDiagnostics {
+  tier: EcosystemTier;
+  gpu: string;
+  webgl2: boolean;
+  msaa: number;
+  bloom: boolean;
+  blur: boolean;
+  pixelRatio: number;
+  scale: number;
+  buffer: string;
+  frameMs: number;
+  frameSkip: boolean;
+  contextLost: boolean;
+  fallbackReasons: string[];
+}
+
 export interface EcosystemScene {
   resize(): void;
   render(frame: EcosystemFrame): void;
   project(position: Vec3): ScreenPoint;
-  dispose(): void;
+  diagnostics(): EcosystemDiagnostics;
+  dispose(loseContext?: boolean): void;
+}
+
+/** Kurulum sırasında doğrulama ve ısınma için iç arayüz. */
+interface BuiltScene extends EcosystemScene {
+  warmup(): Promise<void>;
+  validate(): boolean;
+  setFallbackReasons(reasons: string[]): void;
 }
 
 const BRAND = { yellow: 0xfffc00, fuchsia: 0xff00ff } as const;
@@ -139,7 +167,7 @@ const STAR_FRAGMENT = /* glsl */ `
 `;
 
 /**
- * Odak modu bulanıklığı: 16 örnekli disk (iki ardışık geçiş) (altın açı sarmalı),
+ * Odak modu bulanıklığı: 10 örnekli disk (iki ardışık geçiş) (altın açı sarmalı),
  * piksel başına dönen örnekleme. Ayrık Gauss geçişleri ince halka çizgilerinde
  * şerit bırakıyordu ve 4-6 tam ekran geçiş gerektiriyordu; bu hem daha ucuz
  * hem de odak dışı (bokeh) görünüme daha yakın.
@@ -168,12 +196,12 @@ const DISC_BLUR = {
     void main() {
       float rot = noise(gl_FragCoord.xy + uSeed) * 6.2831853;
       vec4 sum = vec4(0.0);
-      for (int i = 0; i < 16; i++) {
-        float f = (float(i) + 0.5) / 16.0;
+      for (int i = 0; i < 10; i++) {
+        float f = (float(i) + 0.5) / 10.0;
         float a = float(i) * 2.39996323 + rot;
         sum += texture2D(tDiffuse, vUv + vec2(cos(a), sin(a)) * sqrt(f) * uRadius);
       }
-      gl_FragColor = sum / 16.0;
+      gl_FragColor = sum / 10.0;
     }
   `,
 };
@@ -216,7 +244,7 @@ const CRYSTAL_FRAGMENT = /* glsl */ `
 
 /* ------------------------------------------------------------------------ sahne */
 
-export function createEcosystemScene(options: {
+export interface EcosystemSceneOptions {
   canvas: HTMLCanvasElement;
   bodies: readonly EcosystemBodyDef[];
   /** Kristal videosu; `null` ise (hareket azaltma) yalnız poster çizilir. */
@@ -232,7 +260,26 @@ export function createEcosystemScene(options: {
   quality: EcosystemQuality;
   /** Poster dokusu inince çağrılır: hareket azaltmadaki tek kare yeniden çizilsin. */
   onTextureLoad?: () => void;
-}): EcosystemScene | null {
+  /** GPU bağlamı kaybolunca (Mac'te GPU geçişi, bellek baskısı) / geri gelince. */
+  onContextLost?: () => void;
+  onContextRestored?: () => void;
+}
+
+interface BuildOptions extends EcosystemSceneOptions {
+  tier: EcosystemTier;
+}
+
+/**
+ * Kurulum ortasında bir istisna fırlarsa (`buildScene` yarıda kalır, `dispose`
+ * elimizde yok) yarım kalan kaynakların temizliği: renderer, doku/hedefler ve
+ * canvas dinleyicileri. Sıradaki basamak AYNI canvas'ı kullanıyor; temizlenmezse
+ * başarısız denemenin GPU belleği ve dinleyicileri yaşamaya devam ederdi.
+ */
+interface PartialBuild {
+  cleanups: Array<() => void>;
+}
+
+function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | null {
   const { canvas, bodies, crystalVideo, crystalPoster } = options;
 
   let renderer: THREE.WebGLRenderer;
@@ -247,6 +294,7 @@ export function createEcosystemScene(options: {
   } catch {
     return null;
   }
+  partial.cleanups.push(() => renderer.dispose());
   // Yazılım render'ı (SwiftShader/llvmpipe) bloom + MSAA'yı taşıyamaz: otomatik
   // "medium". Tasarım karşılaştırması için localStorage anahtarı yükseği zorlar.
   const debugInfo = renderer.getContext().getExtension("WEBGL_debug_renderer_info");
@@ -260,9 +308,11 @@ export function createEcosystemScene(options: {
     forceHigh = false;
   }
   const software = /swiftshader|llvmpipe|software/i.test(gpuName);
-  const high = options.quality === "high" && (!software || forceHigh);
-  /** Yazılım render'ında ardıl işlem (bloom/bulanıklık) kurulmaz: doğrudan çizim. */
-  const direct = software && !forceHigh;
+  const isWebGL2 = renderer.capabilities.isWebGL2;
+  /** Yazılım render'ında (ya da merdivenin son basamağında) ardıl işlem kurulmaz. */
+  const lite = options.tier === "lite" || (software && !forceHigh);
+  const high = options.tier === "high" && !lite;
+  const direct = lite;
   /**
    * Yazılım render'ı (CI koşucuları, GPU'suz makineler): her piksel CPU'da
    * çiziliyor. Görsel tavanı değil KARARLILIĞI hedefleyen hafif kip: düşük
@@ -270,10 +320,9 @@ export function createEcosystemScene(options: {
    * yıldız. Paylaşımlı 2 vCPU'lu CI'da tam sahne her Playwright çağrısını
    * saniyelere uzatıp testleri zaman aşımına düşürüyordu.
    */
-  const lite = direct;
   renderer.setClearColor(0x000000, 1);
   renderer.toneMapping = THREE.NoToneMapping;
-  const pixelRatioCap = high ? 2 : 1.5;
+  const pixelRatioCap = high ? 1.75 : 1.5;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera((ECO_FOV * 180) / Math.PI, 16 / 9, 0.1, 400);
@@ -284,6 +333,9 @@ export function createEcosystemScene(options: {
     disposables.push(item);
     return item;
   };
+  partial.cleanups.push(() => {
+    for (const item of disposables) item.dispose();
+  });
 
   /* ---- aydınlatma: merkezdeki kristalden sıcak ışık + yumuşak çevre yansıması */
   if (!lite) {
@@ -488,7 +540,8 @@ export function createEcosystemScene(options: {
     mesh.frustumCulled = false;
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     scene.add(mesh);
-    return mesh;
+    // `InstancedMesh.dispose()` örnek matrisi tamponunu GPU'dan bırakır.
+    return track(mesh);
   };
   const coolMesh = makeInstanced(cool, coolMaterial);
   const warmMesh = makeInstanced(warm, warmMaterial);
@@ -547,12 +600,19 @@ export function createEcosystemScene(options: {
 
   /* ---- ardıl işlem: (odakta) bulanık ana sahne → keskin odak küresi → bloom */
   const size = new THREE.Vector2(1, 1);
+  /**
+   * MSAA: yüksek çözünürlükte (DPR ≥ 1.5) piksel zaten sık, yarım-float 4x MSAA
+   * hedefi ise yüzlerce MB bellek ve dolgu maliyeti — Mac'lerdeki kasma/donma
+   * şüphelilerinden biri. Yalnız düşük DPR'de açık.
+   */
+  const msaa = high && (window.devicePixelRatio || 1) < 1.5 ? 4 : 0;
   const buildPost = () => {
     const composer = new EffectComposer(
       renderer,
-      high
-        ? new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 })
-        : new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType }),
+      new THREE.WebGLRenderTarget(1, 1, {
+        type: THREE.HalfFloatType,
+        ...(msaa ? { samples: msaa } : {}),
+      }),
     );
     const mainPass = new LayerRenderPass(scene, camera);
     // İki ardışık geçiş, farklı dönüş tohumlarıyla: tek geçişin tanesini siler.
@@ -586,8 +646,13 @@ export function createEcosystemScene(options: {
    * retina'da 2x çarpanı ile bloom + MSAA zayıf ekran kartlarını boğardı.
    * Çarpan, piksel bütçesine sığacak şekilde otomatik düşer.
    */
-  const pixelBudget = lite ? 600_000 : high ? 5_500_000 : 2_600_000;
+  const pixelBudget = lite ? 600_000 : high ? 3_200_000 : 1_800_000;
   let pixelRatio = 1;
+  /** Uyarlanabilir çözünürlük: kare süresi kötüleşirse piksel çarpanı bununla küçülür. */
+  let qualityScale = 1;
+  let scaleCeiling = 1;
+  let bloomEnabled = high;
+  let blurEnabled = true;
   /** Sahne kutusunun canvas içindeki konumu (CSS px) — `project` bunu çıkarır. */
   let stageOffsetX = 0;
   let stageOffsetY = 0;
@@ -604,7 +669,10 @@ export function createEcosystemScene(options: {
 
     const fitRatio = Math.sqrt(pixelBudget / (width * height));
     // Hafif kipte çarpan 1'in ALTINA inebilir (canvas CSS boyutuna büyütülür).
-    pixelRatio = Math.max(lite ? 0.4 : 1, Math.min(window.devicePixelRatio || 1, pixelRatioCap, fitRatio));
+    pixelRatio = Math.max(
+      lite ? 0.4 : 0.5,
+      Math.min(window.devicePixelRatio || 1, pixelRatioCap, fitRatio) * qualityScale,
+    );
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
     post?.composer.setPixelRatio(pixelRatio);
@@ -622,6 +690,29 @@ export function createEcosystemScene(options: {
     }
   };
 
+  /* ---- GPU bağlamı kaybı (Mac'te GPU geçişi, bellek baskısı, sekme arka planı) */
+  let contextLost = false;
+  let disposing = false;
+  const onLost = (event: Event) => {
+    // preventDefault: tarayıcı bağlamı geri getirebilsin (three.js kendi durumunu
+    // geri yüklüyor; biz yalnız arayüze haber veriyoruz).
+    event.preventDefault();
+    if (disposing) return;
+    contextLost = true;
+    options.onContextLost?.();
+  };
+  const onRestored = () => {
+    if (disposing) return;
+    contextLost = false;
+    options.onContextRestored?.();
+  };
+  canvas.addEventListener("webglcontextlost", onLost);
+  canvas.addEventListener("webglcontextrestored", onRestored);
+  partial.cleanups.push(() => {
+    canvas.removeEventListener("webglcontextlost", onLost);
+    canvas.removeEventListener("webglcontextrestored", onRestored);
+  });
+
   /* ---- kare çizimi */
   let focused = -1;
   const setFocus = (index: number) => {
@@ -637,12 +728,84 @@ export function createEcosystemScene(options: {
     }
   };
 
+  /* ---- uyarlanabilir kalite: kare süresi izleyici */
+  let lastFrameAt = 0;
+  let frameEma = 0;
+  let badSince = 0;
+  let goodSince = 0;
+  let lastAdaptAt = 0;
+  let frameSkip = false;
+  let skipPhase = 0;
+  const degrade = () => {
+    if (qualityScale > 0.5) {
+      scaleCeiling = Math.max(0.5, qualityScale - 0.05);
+      qualityScale = Math.max(0.5, qualityScale - 0.15);
+      resize();
+    }
+    // Ucuz kazançlar önce: bloom, sonra odak bulanıklığı.
+    if (qualityScale <= 0.75) bloomEnabled = false;
+    if (qualityScale <= 0.6) blurEnabled = false;
+    // Hâlâ yavaşsa: kare atlama (yaklaşık 30 fps).
+    if (qualityScale <= 0.5 && !bloomEnabled && !blurEnabled) frameSkip = true;
+  };
+  const probeUp = () => {
+    frameSkip = false;
+    if (qualityScale >= scaleCeiling) return;
+    qualityScale = Math.min(scaleCeiling, qualityScale + 0.1);
+    if (high && qualityScale >= 0.8) bloomEnabled = true;
+    if (qualityScale >= 0.65) blurEnabled = true;
+    resize();
+  };
+  const adapt = (now: number) => {
+    if (lastFrameAt) {
+      const dt = now - lastFrameAt;
+      // Uzun boşluk (sekme gizliydi): ölçümü kirletmesin.
+      if (dt > 500) {
+        frameEma = 0;
+        badSince = 0;
+        goodSince = 0;
+      } else {
+        frameEma = frameEma ? frameEma * 0.92 + dt * 0.08 : dt;
+      }
+    }
+    lastFrameAt = now;
+    if (!frameEma || now - lastAdaptAt < 1200) return;
+    const slow = frameEma > 25; // ~40 fps altı
+    const fast = frameEma < 18.5; // 60 Hz ekranda tavan
+    if (slow) {
+      goodSince = 0;
+      badSince ||= now;
+      if (now - badSince > 900) {
+        degrade();
+        lastAdaptAt = now;
+        badSince = 0;
+      }
+    } else if (fast && (qualityScale < scaleCeiling || frameSkip)) {
+      badSince = 0;
+      goodSince ||= now;
+      if (now - goodSince > 6000) {
+        probeUp();
+        lastAdaptAt = now;
+        goodSince = 0;
+      }
+    } else {
+      badSince = 0;
+      goodSince = 0;
+    }
+  };
+
   const eye = new THREE.Vector3();
   const right = new THREE.Vector3();
   const target = new THREE.Vector3();
   const tmp = new THREE.Vector3();
 
   const render = (frame: EcosystemFrame) => {
+    if (contextLost) return;
+    adapt(performance.now());
+    if (frameSkip) {
+      skipPhase ^= 1;
+      if (skipPhase) return;
+    }
     const t = frame.timeSeconds;
     const [ex, ey, ez] = cameraEye(frame.camera);
     eye.set(ex, ey, ez);
@@ -695,7 +858,7 @@ export function createEcosystemScene(options: {
       return;
     }
     // Bulanıklık yalnız odakta çalışır (aksi halde yalnız ana geçiş çizilir).
-    const blurring = frame.focus >= 0 && frame.focusBlur > 0.02;
+    const blurring = blurEnabled && frame.focus >= 0 && frame.focusBlur > 0.02;
     post.mainPass.layerMask = blurring ? 1 << MAIN_LAYER : (1 << MAIN_LAYER) | (1 << FOCUS_LAYER);
     post.focusPass.enabled = blurring;
     for (const pass of post.blurPasses) {
@@ -705,7 +868,7 @@ export function createEcosystemScene(options: {
         (4.2 * frame.focusBlur) / Math.max(1, size.y),
       );
     }
-    post.bloomPass.enabled = high;
+    post.bloomPass.enabled = bloomEnabled;
     post.composer.render();
   };
 
@@ -727,12 +890,148 @@ export function createEcosystemScene(options: {
     };
   };
 
-  const dispose = () => {
+  let fallbackReasons: string[] = [];
+  const diagnostics = (): EcosystemDiagnostics => ({
+    tier: lite ? "lite" : high ? "high" : "medium",
+    gpu: gpuName || "bilinmiyor",
+    webgl2: isWebGL2,
+    msaa,
+    bloom: bloomEnabled,
+    blur: blurEnabled,
+    pixelRatio: +pixelRatio.toFixed(2),
+    scale: +qualityScale.toFixed(2),
+    buffer: `${Math.round(size.x * pixelRatio)}x${Math.round(size.y * pixelRatio)}`,
+    frameMs: +frameEma.toFixed(1),
+    frameSkip,
+    contextLost,
+    fallbackReasons,
+  });
+
+  /**
+   * Kurulum doğrulaması: bir kare (ve odak/bulanıklık yolunu) çizip GL hatası
+   * kalmadığına bakar. Eksik framebuffer (ör. bazı Safari/Mac GPU'larında yarım-float
+   * çoklu-örnek hedef) çizimde `INVALID_FRAMEBUFFER_OPERATION` üretir; bu, sahneyi
+   * kalıcı siyah bırakmak yerine bir alt kalite basamağına düşmeyi tetikler.
+   */
+  const validate = (): boolean => {
+    try {
+      const gl = renderer.getContext();
+      gl.getError(); // önceki artık hataları temizle
+      const frame: EcosystemFrame = {
+        timeSeconds: 0,
+        camera: {
+          target: ECO_CAMERA.target,
+          distance: ECO_CAMERA.distance,
+          yaw: ECO_CAMERA.yaw,
+          pitch: ECO_CAMERA.pitch,
+        },
+        focus: -1,
+        focusBlur: 0,
+        hover: -1,
+        positions: ECO_BODIES.map((body) => bodyPosition(body, 0)),
+        parallax: 0,
+      };
+      render(frame);
+      if (gl.getError() !== gl.NO_ERROR) return false;
+      if (post && blurEnabled) {
+        // Odak yolu (katman ayrımı + bulanıklık geçişleri) ayrıca sınanır; bozuksa
+        // yalnız bulanıklık kapatılır, sahne çalışmaya devam eder.
+        render({ ...frame, focus: 0, focusBlur: 1 });
+        if (gl.getError() !== gl.NO_ERROR) blurEnabled = false;
+        render(frame);
+        gl.getError();
+      }
+      lastFrameAt = 0;
+      frameEma = 0;
+      return !contextLost;
+    } catch {
+      return false;
+    }
+  };
+
+  /** Shader'ları paralel (bloklamayan) derle: ilk karedeki takılmayı azaltır. */
+  const warmup = async () => {
+    try {
+      await renderer.compileAsync(scene, camera);
+    } catch {
+      // Desteklenmiyorsa ilk karede eşzamanlı derlenir.
+    }
+  };
+
+  const dispose = (loseContext = true) => {
+    disposing = true;
+    canvas.removeEventListener("webglcontextlost", onLost);
+    canvas.removeEventListener("webglcontextrestored", onRestored);
     for (const item of disposables) item.dispose();
     renderer.dispose();
-    renderer.forceContextLoss();
+    // Başarısız bir basamağı atarken bağlamı KAYBETTİRME: sıradaki basamak aynı
+    // canvas'ta yeni bir renderer kuracak ve kayıp bağlamı geri alırdı.
+    if (loseContext) renderer.forceContextLoss();
   };
 
   resize();
-  return { resize, render, project, dispose };
+  return {
+    resize,
+    render,
+    project,
+    diagnostics,
+    dispose,
+    warmup,
+    validate,
+    setFallbackReasons: (reasons: string[]) => {
+      fallbackReasons = reasons;
+    },
+  };
+}
+
+/**
+ * Sahneyi kurar; başarısız olan basamak bir alt kaliteye düşer (high → medium →
+ * lite). Amaç, bazı Mac/Safari GPU'larında gelen "sahne hiç açılmıyor"
+ * şikâyetini kalıcı siyah alan yerine çalışan (daha sade) bir sahneye çevirmek.
+ * Hepsi başarısız olursa `null` döner ve bileşen posteri gösterir.
+ */
+/** Son başarısız kurulumun nedenleri (teşhis paneli ve konsol uyarısı için). */
+let lastFailureReasons: string[] = [];
+export function getSceneFailureReasons(): string[] {
+  return lastFailureReasons;
+}
+
+export async function createEcosystemScene(
+  options: EcosystemSceneOptions,
+): Promise<EcosystemScene | null> {
+  const ladder: EcosystemTier[] =
+    options.quality === "high" ? ["high", "medium", "lite"] : ["medium", "lite"];
+  const reasons: string[] = [];
+  for (const tier of ladder) {
+    let built: BuiltScene | null = null;
+    const partial: PartialBuild = { cleanups: [] };
+    try {
+      built = buildScene({ ...options, tier }, partial);
+      if (!built) {
+        reasons.push(`${tier}: renderer kurulamadı`);
+        continue;
+      }
+      await built.warmup();
+      if (built.validate()) {
+        built.setFallbackReasons(reasons);
+        return built;
+      }
+      reasons.push(`${tier}: doğrulama çizimi GL hatası verdi`);
+    } catch (error) {
+      reasons.push(`${tier}: ${String(error).slice(0, 120)}`);
+      // `buildScene` yarıda patladıysa elimizde `dispose` yok: kaynakları bırak.
+      if (!built) {
+        for (const cleanup of partial.cleanups.reverse()) {
+          try {
+            cleanup();
+          } catch {
+            // Temizlik en iyi çabayla: başarısız basamak zaten atılıyor.
+          }
+        }
+      }
+    }
+    built?.dispose(false);
+  }
+  lastFailureReasons = reasons;
+  return null;
 }

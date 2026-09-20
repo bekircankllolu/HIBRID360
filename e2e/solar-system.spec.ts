@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import sharp from "sharp";
 import { acceptCookies } from "./utils";
@@ -50,6 +50,36 @@ async function openScene(page: Page, locale = "tr", reduced = false) {
     await expect(stage).toHaveAttribute("data-running", "true", { timeout: 30_000 });
   }
   return stage;
+}
+
+/**
+ * Sahne kutusunun ÜSTÜNDE, sabit menünün ALTINDA bir nokta: başlık/yönerge bölgesi.
+ * Kutu ekranın tepesine yakınsa sayfayı biraz yukarı kaydırır (yoksa nokta kutunun
+ * içine düşer ve "kutu dışından sürükleme" testleri sessizce boşa geçerdi). Noktanın
+ * gerçekten sahne bölümünün içinde, sahne kutusunun dışında olduğu da doğrulanır.
+ */
+async function headingZone(page: Page, stage: Locator) {
+  const HEADER = 96;
+  let box = (await stage.boundingBox())!;
+  if (box.y < HEADER + 80) {
+    await page.evaluate((delta) => window.scrollBy(0, -delta), HEADER + 80 - box.y + 40);
+    box = (await stage.boundingBox())!;
+  }
+  const x = box.x + 260;
+  const y = box.y - 40;
+  expect(y).toBeGreaterThanOrEqual(HEADER);
+  const hit = await page.evaluate(
+    ([px, py]) => {
+      const element = document.elementFromPoint(px, py);
+      return {
+        inSection: Boolean(element?.closest("section[aria-labelledby='solar-system-title']")),
+        inStage: Boolean(element?.closest("[data-testid='ecosystem-stage']")),
+      };
+    },
+    [x, y],
+  );
+  expect(hit).toEqual({ inSection: true, inStage: false });
+  return { box, x, y };
 }
 
 /** Sahnenin ne kadarı aydınlık — "boş siyah kutu" nöbetçisi. */
@@ -418,4 +448,115 @@ test("çizim katmanı sahne kutusunu aşıyor: başlığın arkasına ve alttaki
   expect(Number(m.fieldZ)).toBeLessThan(Number(m.headingZ));
   expect(Number(m.fieldZ)).toBeLessThan(Number(m.stageZ));
   expect(m.reachOutPosition).toBe("relative");
+});
+
+test("fare tuşu sahne dışında bırakılınca sürükleme takılı kalmıyor (müşteri hatası)", async ({ page }) => {
+  // Regresyon: yakalama yokken `pointerup` sahne dışında kaçıyor, sürükleme takılı
+  // kalıyor ve fare tuşa basılmadan gezdirilince sistem dönmeye devam ediyordu.
+  const stage = await openScene(page);
+  const { box, y: outsideY } = await headingZone(page, stage);
+  const yaw = async () => Number(await stage.getAttribute("data-manual-yaw"));
+
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height * 0.6);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 + 220, box.y + box.height * 0.6, { steps: 8 });
+  await expect(stage).toHaveAttribute("data-drag", "true");
+  // Tuşu sahne KUTUSUNUN DIŞINDA (başlık bölgesi) bırak.
+  await page.mouse.move(box.x + box.width / 2 + 220, outsideY, { steps: 8 });
+  await page.mouse.up();
+  await expect(stage).toHaveAttribute("data-drag", "false");
+
+  // Tuşa BASMADAN gezdir: dönüş artmamalı (hata olsaydı ~2 rad birikirdi).
+  const before = Math.abs(await yaw());
+  for (let step = 0; step <= 20; step++) {
+    await page.mouse.move(box.x + 200 + step * 24, box.y + box.height * 0.5);
+  }
+  expect(Math.abs(await yaw())).toBeLessThanOrEqual(before + 0.05);
+});
+
+test("sürükleme bırakılınca sistem varsayılan kompozisyona yumuşakça dönüyor", async ({ page }) => {
+  const stage = await openScene(page);
+  const box = (await stage.boundingBox())!;
+  await page.mouse.move(box.x + 300, box.y + box.height * 0.6);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 560, box.y + box.height * 0.6, { steps: 8 });
+  await page.mouse.up();
+  const dragged = Math.abs(Number(await stage.getAttribute("data-manual-yaw")));
+  expect(dragged).toBeGreaterThan(0.5);
+  // ~1,5 sn bekleme + dönüş: yavaş CI'da da yetsin diye geniş süre.
+  await expect
+    .poll(async () => Math.abs(Number(await stage.getAttribute("data-manual-yaw"))), { timeout: 40_000, intervals: [500] })
+    .toBeLessThan(0.05);
+});
+
+test("sürükleme başlık bölgesinden de başlıyor (görünen sistem kutudan büyük)", async ({ page }) => {
+  const stage = await openScene(page);
+  // Sahne kutusunun hemen üstü, sabit menünün altı: başlık/yönerge bölgesi.
+  const { box, x, y } = await headingZone(page, stage);
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 520, y, { steps: 8 });
+  await expect(stage).toHaveAttribute("data-drag", "true");
+  await page.mouse.up();
+});
+
+test("Web Audio yoksa ses düğmesi bunu bildiriyor, sessizce yutmuyor", async ({ page }) => {
+  await page.addInitScript(() => {
+    Reflect.deleteProperty(window, "AudioContext");
+    Reflect.deleteProperty(window, "webkitAudioContext");
+  });
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  const stage = await openScene(page);
+  const button = stage.getByRole("button", { name: "Ses bu tarayıcıda kullanılamıyor", exact: true });
+  await expect(button).toHaveAttribute("aria-disabled", "true");
+  // Düğme `disabled` değil `aria-disabled`: odaklanabilir kalsın, ekran okuyucu
+  // nedenini okusun. Playwright aria-disabled'ı "etkin değil" saydığı için
+  // tıklama `force` ile yapılıyor; amaç basınca hiçbir şeyin patlamadığı.
+  await button.click({ force: true });
+  await expect(button).toHaveAttribute("aria-pressed", "false");
+  expect(pageErrors).toEqual([]);
+});
+
+test("ses dosyaları inmezse düğme bunu bildiriyor ve dokunulunca yeniden deniyor", async ({ page }) => {
+  // Regresyon (kod incelemesi): zayıf bağlantıda kopan tek bir indirme oturum
+  // boyunca sesi "bu tarayıcıda kullanılamıyor" diye kalıcı öldürüyordu.
+  await page.route("**/audio/ecosystem/*", (route) => route.abort());
+  const stage = await openScene(page);
+  await stage.getByRole("button", { name: "Sesi aç", exact: true }).click();
+
+  const retry = stage.getByRole("button", {
+    name: "Ses yüklenemedi, tekrar denemek için dokunun",
+    exact: true,
+  });
+  await expect(retry).toHaveAttribute("aria-pressed", "false");
+  await expect(retry).toHaveAttribute("aria-disabled", "false");
+
+  // Bağlantı geri geldi: aynı düğmeye dokunmak yeniden dener ve bu kez açılır.
+  await page.unroute("**/audio/ecosystem/*");
+  await retry.click();
+  const on = stage.getByRole("button", { name: "Sesi kapat", exact: true });
+  await expect(on).toHaveAttribute("aria-pressed", "true");
+  // "Yükleniyor" bitti ve hata durumuna geri dönmedi.
+  await expect(on).toHaveAttribute("aria-busy", "false");
+  await expect(on).toHaveAttribute("aria-label", "Sesi kapat");
+});
+
+test("WebGL kurulamazsa sahne kalıcı siyah kalmıyor: poster görünür, teşhis nedeni yazıyor", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+      if (/webgl/i.test(type)) return null;
+      return (original as (...args: unknown[]) => unknown).call(this, type, ...rest);
+    } as typeof original;
+  });
+  await page.goto("/tr?ecodebug");
+  await acceptCookies(page);
+  const stage = page.getByTestId("ecosystem-stage");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute("data-scene", "fallback", { timeout: 30_000 });
+  const poster = stage.locator("img[class*='fallback']");
+  await expect(poster).toHaveAttribute("data-ready", "false");
+  await expect(poster).toBeVisible();
+  await expect(stage.locator("[data-eco-debug]")).toContainText("KURULAMADI");
 });
