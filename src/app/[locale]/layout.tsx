@@ -99,22 +99,6 @@ export default async function LocaleLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        {/* Space Grotesk — dev tipografi (`--font-chapter-display`). Bütün
-            "What We Do" sayfalarının LCP öğesi bu fontla yazılı h1;
-            preload yalnız /what-we-do/creative sayfasındaydı, geri kalan
-            sekiz bölüm sayfası + hub fontu ancak CSS indikten SONRA keşfedip
-            yavaş bağlantıda 1-3sn yedek fontla duruyordu (müşteri hatası,
-            20 Eylül 2026). Bedeli 10.7KB: yedek metrikleri düzeltilmiş olsa
-            da (fonts.css) doğru çözüm yedeğin görünür kaldığı süreyi
-            kısaltmak. Bu dosyalardaki tek preload budur — Archivo/Newsreader
-            hâlâ preload edilmiyor. */}
-        <link
-          rel="preload"
-          href="/fonts/space-grotesk-700-latin-tr.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         <ConsentInitScript />
       </head>
       <body>
