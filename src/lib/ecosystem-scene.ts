@@ -263,6 +263,14 @@ export function createEcosystemScene(options: {
   const high = options.quality === "high" && (!software || forceHigh);
   /** Yazılım render'ında ardıl işlem (bloom/bulanıklık) kurulmaz: doğrudan çizim. */
   const direct = software && !forceHigh;
+  /**
+   * Yazılım render'ı (CI koşucuları, GPU'suz makineler): her piksel CPU'da
+   * çiziliyor. Görsel tavanı değil KARARLILIĞI hedefleyen hafif kip: düşük
+   * çözünürlük bütçesi, basit malzeme, ortam haritası ve süs halesi yok, az
+   * yıldız. Paylaşımlı 2 vCPU'lu CI'da tam sahne her Playwright çağrısını
+   * saniyelere uzatıp testleri zaman aşımına düşürüyordu.
+   */
+  const lite = direct;
   renderer.setClearColor(0x000000, 1);
   renderer.toneMapping = THREE.NoToneMapping;
   const pixelRatioCap = high ? 2 : 1.5;
@@ -278,11 +286,13 @@ export function createEcosystemScene(options: {
   };
 
   /* ---- aydınlatma: merkezdeki kristalden sıcak ışık + yumuşak çevre yansıması */
-  const pmrem = track(new THREE.PMREMGenerator(renderer));
-  const envScene = track(new RoomEnvironment());
-  const envTarget = track(pmrem.fromScene(envScene, 0.04));
-  scene.environment = envTarget.texture;
-  scene.environmentIntensity = 0.35;
+  if (!lite) {
+    const pmrem = track(new THREE.PMREMGenerator(renderer));
+    const envScene = track(new RoomEnvironment());
+    const envTarget = track(pmrem.fromScene(envScene, 0.04));
+    scene.environment = envTarget.texture;
+    scene.environmentIntensity = 0.35;
+  }
 
   const keyLight = new THREE.PointLight(0xffc96b, 110, 0, 2);
   keyLight.position.set(0, 0, 0);
@@ -296,7 +306,7 @@ export function createEcosystemScene(options: {
   }
 
   /* ---- yıldızlar */
-  const starCount = high ? 2600 : 1400;
+  const starCount = high ? 2600 : lite ? 600 : 1400;
   const starGeometry = track(new THREE.BufferGeometry());
   {
     const positions = new Float32Array(starCount * 3);
@@ -420,16 +430,24 @@ export function createEcosystemScene(options: {
 
   const glossy = (color: number, emissive: number) =>
     track(
-      new THREE.MeshPhysicalMaterial({
-        color,
-        roughness: 0.2,
-        metalness: 0,
-        clearcoat: 1,
-        clearcoatRoughness: 0.1,
-        emissive: color,
-        emissiveIntensity: emissive,
-        envMapIntensity: 1.9,
-      }),
+      lite
+        ? new THREE.MeshStandardMaterial({
+            color,
+            roughness: 0.4,
+            metalness: 0,
+            emissive: color,
+            emissiveIntensity: emissive * 1.8,
+          })
+        : new THREE.MeshPhysicalMaterial({
+            color,
+            roughness: 0.2,
+            metalness: 0,
+            clearcoat: 1,
+            clearcoatRoughness: 0.1,
+            emissive: color,
+            emissiveIntensity: emissive,
+            envMapIntensity: 1.9,
+          }),
     );
 
   const glowFor = (color: number, opacity: number) => {
@@ -488,7 +506,7 @@ export function createEcosystemScene(options: {
   };
 
   // Büyük süs kürelerin yumuşak halesi (referanstaki ışık sızıntısı).
-  const decorHalos = decor
+  const decorHalos = (lite ? [] : decor)
     .filter((d) => d.radius > 0.16)
     .map((d) => {
       const halo = glowFor(d.warmth ? 0xffe9b0 : 0xdfe6ff, 0.1);
@@ -568,7 +586,7 @@ export function createEcosystemScene(options: {
    * retina'da 2x çarpanı ile bloom + MSAA zayıf ekran kartlarını boğardı.
    * Çarpan, piksel bütçesine sığacak şekilde otomatik düşer.
    */
-  const pixelBudget = high ? 5_500_000 : 2_600_000;
+  const pixelBudget = lite ? 600_000 : high ? 5_500_000 : 2_600_000;
   let pixelRatio = 1;
   /** Sahne kutusunun canvas içindeki konumu (CSS px) — `project` bunu çıkarır. */
   let stageOffsetX = 0;
@@ -585,7 +603,8 @@ export function createEcosystemScene(options: {
     stageOffsetY = stageBox.top - canvasBox.top;
 
     const fitRatio = Math.sqrt(pixelBudget / (width * height));
-    pixelRatio = Math.max(1, Math.min(window.devicePixelRatio || 1, pixelRatioCap, fitRatio));
+    // Hafif kipte çarpan 1'in ALTINA inebilir (canvas CSS boyutuna büyütülür).
+    pixelRatio = Math.max(lite ? 0.4 : 1, Math.min(window.devicePixelRatio || 1, pixelRatioCap, fitRatio));
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
     post?.composer.setPixelRatio(pixelRatio);
@@ -599,7 +618,7 @@ export function createEcosystemScene(options: {
     starMaterial.uniforms.uPixelRatio.value = pixelRatio;
     for (const material of lineMaterials) {
       material.resolution.set(width * pixelRatio, height * pixelRatio);
-      material.linewidth = 1.35 * pixelRatio;
+      material.linewidth = Math.max(1, 1.35 * pixelRatio);
     }
   };
 

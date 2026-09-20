@@ -32,6 +32,12 @@ import { SERVICE_OFFERINGS } from "../src/data/service-offerings";
 
 const services = orbitStones.map((stone) => stone.label);
 
+// Paylaşımlı 2 vCPU'lu CI koşucusunda yazılım WebGL her sayfa çağrısını
+// yavaşlatıyor (yerelde ~10 sn süren testler orada 30-50 sn). Süre payı iki katı.
+test.beforeEach(async ({}, testInfo) => {
+  testInfo.setTimeout(testInfo.timeout * 2);
+});
+
 async function openScene(page: Page, locale = "tr", reduced = false) {
   await page.goto(`/${locale}`);
   await acceptCookies(page);
@@ -65,15 +71,24 @@ test("sahne yıldız, gezegenler ve yörüngelerle çiziliyor", async ({ page },
   expect(await litFraction(shot)).toBeGreaterThan(0.04);
 
   // Sekiz gezegenin etiketi de sahnenin İÇİNDE duruyor (kadraj dışına
-  // düşen bir gezegen tıklanamaz olurdu).
+  // düşen bir gezegen tıklanamaz olurdu). TEK evaluate: yavaş CI koşucusunda
+  // (yazılım WebGL) her Playwright çağrısı saniyeler sürüyor; sekiz ardışık
+  // boundingBox testi 30 sn sınırına takılıyordu.
   const box = (await stage.boundingBox())!;
-  for (const label of services) {
-    const button = page.getByRole("button", { name: label, exact: true });
-    const target = (await button.boundingBox())!;
-    expect(target.x).toBeGreaterThanOrEqual(box.x - 4);
-    expect(target.x + target.width).toBeLessThanOrEqual(box.x + box.width + 4);
-    expect(target.y).toBeGreaterThanOrEqual(box.y - 4);
-    expect(target.y + target.height).toBeLessThanOrEqual(box.y + box.height + 4);
+  const rects = await page.evaluate((labels) => {
+    const root = document.querySelector("[data-testid='ecosystem-stage']")!;
+    return labels.map((label) => {
+      const el = [...root.querySelectorAll("button")].find((b) => b.getAttribute("aria-label") === label);
+      const r = el?.getBoundingClientRect();
+      return { label, found: Boolean(el), x: r?.left ?? 0, y: r?.top ?? 0, w: r?.width ?? 0, h: r?.height ?? 0 };
+    });
+  }, services);
+  for (const target of rects) {
+    expect(target.found, `${target.label} düğmesi DOM'da`).toBe(true);
+    expect(target.x, target.label).toBeGreaterThanOrEqual(box.x - 4);
+    expect(target.x + target.w, target.label).toBeLessThanOrEqual(box.x + box.width + 4);
+    expect(target.y, target.label).toBeGreaterThanOrEqual(box.y - 4);
+    expect(target.y + target.h, target.label).toBeLessThanOrEqual(box.y + box.height + 4);
   }
 });
 
