@@ -64,7 +64,10 @@ test("desktop shell, mega menu and ecosystem use the full viewport", async ({
     name: "One Hybrid Production Ecosystem.",
   });
   await ecosystem.scrollIntoViewIfNeeded();
-  await expect(mega).toBeHidden();
+  // Menü scroll olayında kapanıyor; olay, sahne kurulurken (Three.js parse +
+  // shader derleme) ana iş parçacığı meşgulken geç işlenebilir — yavaş CI'da 5 sn
+  // yetmedi. Davranış aynı, yalnız süre payı geniş.
+  await expect(mega).toBeHidden({ timeout: 20_000 });
   const stage = page.getByTestId("ecosystem-stage");
   await expect(stage).toHaveAttribute("data-motion", "running");
   // Sahne 18 Eylül 2026'da WebGL'e geçti: canvas'tan 2B bağlam okunamıyor,

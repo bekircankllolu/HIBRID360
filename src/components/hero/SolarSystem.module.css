@@ -1,4 +1,7 @@
 .section {
+  /* Çizim katmanının alt taşması (alttaki bölümün içine): yörüngeler
+     "Sizin için ne yapabiliriz?" yazısının arkasından geçip siyaha sönüyor. */
+  --bleed-bottom: clamp(16rem, 42svh, 30rem);
   position: relative;
   min-height: 100svh;
   /* Alt dolgu ışığın sönmesi için: yıldızın halesi sahnenin dışına taşıyor
@@ -6,7 +9,44 @@
   padding: clamp(3rem, 7vh, 5rem) 0 clamp(2rem, 7vh, 6rem);
   background: var(--color-brand-black);
   color: var(--color-brand-white);
-  overflow: clip;
+  /* Yalnız YATAY kırpma: dikey taşma serbest (`overflow: clip` iki ekseni de
+     kırpıyordu → yörüngeler sahne kutusunun kenarında düz kesiliyordu).
+     `clip` (hidden değil) diğer ekseni `auto`ya çevirmez, kaydırma kabı yok. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/*
+ * Çizim katmanı (20 Eylül 2026, kullanıcı: "yörüngeler alt ve üstte kesiliyor;
+ * ekosistem maskelenmesin, siyahtan geçiş olsun; başlık yıldızların içinde
+ * dursun"). Katman bölümün TAMAMINI + alt taşmayı kaplıyor; WebGL kamerası
+ * hâlâ sahne kutusuna göre kurulu, yani merkezdeki kompozisyon aynı kaldı.
+ * Kenarlar maskeyle siyaha (bölüm/sayfa zemini) sönüyor: üstte yıldızlar
+ * başlığın arkasında belirir, altta yörüngeler bir sonraki bölümün yazısının
+ * arkasında kaybolur.
+ */
+.field {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: calc(-1 * var(--bleed-bottom));
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 clamp(4rem, 12%, 9rem),
+    #000 calc(100% - var(--bleed-bottom) - 1rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 clamp(4rem, 12%, 9rem),
+    #000 calc(100% - var(--bleed-bottom) - 1rem),
+    transparent 100%
+  );
 }
 
 /*
@@ -14,16 +54,20 @@
  * "üst taraftaki ışıklar kesiliyor... ya azaltalım ya taşsın; üstteki
  * ECOSYSTEM yazısının arkasına da taşırabiliriz").
  *
- * Kanvasın kendi koronası kanvas kutusunda bitiyor ve kenarında görünür bir
- * kesik bırakıyordu. Bu katman bölümün tamamını kaplıyor: başlığın arkasından
- * geçiyor, altta yavaşça sönüyor. Kanvas koronası da bu yüzden küçültüldü.
+ * Bu katman bölümün tamamını kaplıyor: başlığın arkasından geçiyor, altta
+ * yavaşça sönüyor. Canvas artık opak ve bölümün tamamını kapladığı için ışık
+ * canvas'ın ÜSTÜNE `screen` karışımıyla biniyor (önceden canvas'ın altındaydı
+ * ve başlık bölgesinde siyah bantla sahne arasında renk dikişi yapıyordu).
+ * DOM sırasında canvas'tan sonra geldiği için üstte; başlık ve sahne kutusu
+ * z-index 1 ile bunun da önünde.
  */
-.section::before {
+.section::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  mix-blend-mode: screen;
   background: radial-gradient(
     ellipse 62% 52% at 50% 62%,
     rgba(255, 196, 64, 0.17),
@@ -42,6 +86,13 @@
   position: absolute;
   right: 0;
   top: 12%;
+  z-index: 4;
+}
+/* Ses düğmesi duraklat düğmesinin altında. Ses varsayılan KAPALI. */
+.soundControl {
+  position: absolute;
+  right: 0;
+  top: calc(12% + 52px);
   z-index: 4;
 }
 .title {
@@ -115,8 +166,7 @@
   cursor: grabbing;
 }
 .canvas {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -201,9 +251,12 @@
   transition: opacity 150ms ease;
 }
 .dot:hover::after,
-.dot:focus-visible::after,
-.pointActive .dot::after {
+.dot:focus-visible::after {
   opacity: 0.75;
+}
+/* Odaktayken düz halka yerine HUD halkası (aşağıda) çiziliyor. */
+.pointActive .dot::after {
+  opacity: 0;
 }
 .dot {
   border-radius: 50%;
@@ -226,13 +279,21 @@
   letter-spacing: 0;
   color: var(--color-brand-yellow);
   white-space: nowrap;
-  opacity: 0.92;
+  /* Referans tasarımda küreler etiketsiz: ad yalnız imleç ya da klavye
+     odağı üstündeyken görünüyor (düğmenin erişilebilir adı zaten var). */
+  opacity: 0;
+  transition: opacity 0.18s ease;
   pointer-events: none;
 }
 .dot:hover .dotLabel,
-.dot:focus-visible .dotLabel,
-.pointActive .dotLabel {
+.dot:focus-visible .dotLabel {
   opacity: 1;
+}
+/* Odaktaki kürenin adını kart yazıyor; etiket kürenin yüzünü örtmesin.
+   Dokunmada yapışan :hover'a karşı özgüllük yüksek tutuldu. */
+.pointActive .dot .dotLabel,
+.pointActive .dot:hover .dotLabel {
+  opacity: 0;
 }
 /* Panel artık gezegeni takip eden küçük bir balon değil: kamera zaten
    gezegene uçuyor, panel de sahnenin sağında sabit duruyor ve hizmetin
@@ -241,24 +302,30 @@
 .detail {
   position: absolute;
   z-index: 6;
-  top: var(--space-6);
-  right: var(--space-6);
-  max-height: calc(100% - 2 * var(--space-6));
+  /* Referans (2.png): kürenin sağında, kadrajın üçte biri hizasında. Küre
+     odakta hep aynı ekran noktasına oturduğu için kart sabit konumlanabiliyor. */
+  top: 41%;
+  left: 34.4%;
+  max-height: 56%;
   display: grid;
   align-content: start;
-  width: min(23rem, 42%);
-  max-width: calc(100% - 24px);
+  width: min(31rem, 34%);
+  min-width: 20rem;
   overflow-y: auto;
-  gap: 10px;
-  padding: 16px 18px;
-  border: 1px solid color-mix(in srgb, var(--stone-color) 35%, #202020);
-  border-top-color: var(--stone-color);
-  border-radius: 2px;
-  background: #08090a;
-  box-shadow: 0 10px 32px rgb(0 0 0 / 65%);
+  gap: 12px;
+  padding: 22px 26px 20px;
+  border: 1.5px solid var(--stone-color);
+  border-radius: 14px;
+  background: rgb(10 8 14 / 74%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--stone-color) 22%, transparent),
+    0 0 34px color-mix(in srgb, var(--stone-color) 30%, transparent),
+    0 26px 60px rgb(0 0 0 / 60%);
   color: var(--color-brand-white);
   visibility: hidden;
-  animation: detailReveal 180ms ease-out both;
+  animation: detailReveal 260ms ease-out both;
 }
 .detail:not([hidden]) {
   visibility: visible;
@@ -290,7 +357,7 @@
 }
 .detail h3 {
   margin: 0;
-  font: var(--font-weight-brand) clamp(1.1rem, 1.6vw, 1.5rem) / 1.1 var(--font-brand);
+  font: var(--font-weight-brand) clamp(1.6rem, 2.5vw, 2.4rem) / 1.05 var(--font-brand);
   letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--stone-color);
@@ -312,16 +379,17 @@
   list-style: none;
 }
 .detailList li {
-  padding: 3px 7px;
-  border: 1px solid rgb(255 255 255 / 18%);
-  font: var(--font-weight-heading-semibold) 0.6875rem / 1.3 var(--font-brand);
-  letter-spacing: 0.02em;
-  color: #cfcfd4;
+  padding: 4px 10px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 4px;
+  font: var(--font-weight-heading-semibold) 0.75rem / 1.3 var(--font-brand);
+  letter-spacing: 0.03em;
+  color: #e4e4e8;
 }
 .detail p {
   margin: 0;
-  font: 400 0.8125rem / 1.5 var(--font-body);
-  color: #dedee2;
+  font: 400 0.9375rem / 1.5 var(--font-body);
+  color: #e8e8ec;
   overflow-wrap: anywhere;
 }
 .detailLink {
@@ -335,6 +403,179 @@
 }
 .detailLink:hover {
   color: var(--stone-color);
+}
+/* Alt satır: bağlantı solda, hizmetin sıra konumunu gösteren ince çizgi sağda. */
+.detailFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 6px;
+}
+.detailProgress {
+  position: relative;
+  flex: 0 1 8.5rem;
+  height: 2px;
+  background: rgb(255 255 255 / 22%);
+}
+.detailProgress i {
+  position: absolute;
+  top: -1px;
+  width: 12%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--stone-color);
+  box-shadow: 0 0 10px var(--stone-color);
+}
+
+/* Küreden karta bağlantı çizgisi — konum JS'ten (layoutLabels). */
+.connector {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.connector line {
+  stroke: var(--stone-color);
+  stroke-width: 1.5;
+  stroke-opacity: 0.9;
+}
+.connector circle {
+  fill: var(--stone-color);
+}
+
+/* Odak HUD'ı (2.png): noktalı hedefleme halkası + N-### rozeti. Süs — ekran
+   okuyucuya kapalı (aria-hidden), tıklamayı engellemez. */
+.hud {
+  --hud-d: calc(var(--ring, 44px) * 1.19);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  color: var(--stone-color);
+  animation: hudIn 320ms ease-out both;
+}
+.hudRing {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--hud-d);
+  height: var(--hud-d);
+  transform: translate(-50%, -50%);
+  overflow: visible;
+  animation: hudSpin 46s linear infinite;
+}
+.hudRing circle {
+  fill: none;
+}
+.hudDots {
+  stroke: rgb(255 255 255 / 85%);
+  stroke-width: 0.9;
+  stroke-dasharray: 0.4 2.4;
+  stroke-linecap: round;
+}
+.hudArc {
+  stroke: currentColor;
+  stroke-width: 0.7;
+  stroke-opacity: 0.9;
+  stroke-dasharray: 26 14 52 20 18 140;
+}
+.hudRing .hudNodeWhite {
+  fill: #fff;
+}
+.hudRing .hudNode {
+  fill: currentColor;
+}
+.hudTag {
+  position: absolute;
+  right: calc(var(--hud-d) * 0.44);
+  bottom: calc(var(--hud-d) * 0.36);
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 4px;
+  row-gap: 6px;
+  white-space: nowrap;
+}
+.hudReticle {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 1px solid rgb(255 255 255 / 34%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 5%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.hudReticle svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+.hudReticleDot {
+  fill: currentColor;
+  stroke: none;
+}
+.hudLeader {
+  grid-row: 1;
+  width: 8px;
+  height: 14px;
+  border: 1px solid rgb(255 255 255 / 70%);
+  border-right: 0;
+}
+.hudCode {
+  grid-row: 1;
+  font: var(--font-weight-body-medium) 0.75rem / 1 var(--font-ui);
+  letter-spacing: 0.16em;
+  color: var(--color-brand-white);
+}
+.hudBars {
+  grid-column: 3;
+  grid-row: 2;
+  display: grid;
+  gap: 3px;
+  width: 4.4rem;
+}
+.hudBars i,
+.hudBars b {
+  display: block;
+  height: 1px;
+  background: rgb(255 255 255 / 45%);
+}
+.hudBars i:nth-child(2) {
+  width: 70%;
+}
+.hudBars b {
+  width: 26%;
+  height: 2px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+@keyframes hudSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes hudIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes detailReveal {
   from {
@@ -406,8 +647,13 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .detail {
+  .detail,
+  .hud,
+  .hudRing {
     animation: none;
+  }
+  .connector {
+    transition: none;
   }
   .dot::after {
     transition: none;
@@ -430,6 +676,13 @@
     bottom: var(--space-4);
     left: var(--space-4);
     width: auto;
+    min-width: 0;
     max-height: 52%;
+    padding: 16px 18px;
+  }
+  /* Küçük ekranda rozet ve bağlantı çizgisi kalabalık yapar; halka kalır. */
+  .hudTag,
+  .connector {
+    display: none;
   }
 }

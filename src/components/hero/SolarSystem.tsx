@@ -10,30 +10,38 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { Volume2, VolumeX } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useEcosystemSound } from "@/hooks/useEcosystemSound";
 import {
   orbitStones,
   CRYSTAL_MEDIA,
-  SOLAR_BODIES,
-  SOLAR_CAMERA,
-  SOLAR_STAR_RADIUS,
   SOLAR_SYSTEM_TITLE,
   STONE_SERVICE_KEYS,
 } from "@/data/solar-system";
 import { SERVICE_OFFERINGS } from "@/data/service-offerings";
 import { chapterOf, formatDegree } from "@/lib/service-chapter";
 import {
+  ECO_BODIES,
+  ECO_CAMERA,
+  ECO_FOCUS_NDC,
+  ECO_FOV,
+  bodyPosition,
+  ecosystemFocusDistance,
+  swayYaw,
+} from "@/lib/ecosystem-orbits";
+import type { EcosystemBodyDef, EcosystemScene } from "@/lib/ecosystem-scene";
+import {
   approach,
   approachVec,
-  focusDistance,
-  orbitPosition,
+  cross,
+  normalize,
   shortestAngle,
   type CameraState,
   type Vec3,
 } from "@/lib/solar-orbits";
-import { createSolarScene, type SolarBodyDef, type SolarScene } from "@/lib/solar-scene";
 import { acquireSceneLock, onSceneLockReleased, releaseSceneLock } from "@/lib/webgl-scene";
 import styles from "./SolarSystem.module.css";
 
@@ -61,35 +69,42 @@ import styles from "./SolarSystem.module.css";
  * - WebGL yoksa poster görseline düşer.
  */
 
-const FOV = Math.PI / 4;
+const FOV = ECO_FOV;
 const DRAG_THRESHOLD = 6;
 
 /**
- * 20 Eylül 2026 — PARÇACIK SÜRÜMÜNDEN GERİ DÖNÜLDÜ. Kullanıcı: *"gezegen
- * list sistem olabilir, bundan bir önceki yaptığımız, onu geri getirelim.
- * ekosistem düzenlemesini bir türlü beğenemedim."* Dokulu gezegen sahnesi
- * (`solar-scene.ts`) hiç silinmemişti — yalnız kullanımdan kaldırılmıştı,
- * bu yüzden geri dönüş bir dosya değişimi. Parçacık sahnesi
- * (`solar-dust-scene.ts`, `solar-dust.ts`) dosyada duruyor, kullanılmıyor.
+ * 20 Eylül 2026 — YENİ EKOSİSTEM (`feat/ecosystem-orbit`). Kullanıcı
+ * referansları: eşmerkezli ince halkalar, cilalı küreler, merkezde yeni
+ * HIBRID 360° kristali; küreye tıklayınca kamera yaklaşır, arka plan
+ * bulanıklaşır, yanda cam kart açılır. Sahne Three.js (`ecosystem-scene.ts`)
+ * ve tembel yüklenir. Eski dokulu-gezegen sahnesi (`solar-scene.ts`) ve
+ * parçacık sahnesi dosyada duruyor, kullanılmıyor (silme onayı bekliyor).
  */
-function bodyDefs(): SolarBodyDef[] {
-  return SOLAR_BODIES.map((body) => ({
-    id: body.id,
-    albedo: `/images/site/solar/${body.id}-albedo.webp`,
-    height: `/images/site/solar/${body.id}-height.webp`,
+function bodyDefs(): EcosystemBodyDef[] {
+  return ECO_BODIES.map((body, index) => ({
     radius: body.radius,
-    tilt: body.tilt,
-    spin: body.spin,
-    orbit: body.orbit,
-    ring: "ring" in body ? body.ring : undefined,
-    nightLights: "nightLights" in body ? body.nightLights : undefined,
+    color: orbitStones[index].color,
   }));
+}
+
+/** Dokunmatik / dar / zayıf cihazlarda kalite kademesi (bloom ve MSAA kapanır). */
+function pickQuality(): "high" | "medium" {
+  if (typeof window === "undefined") return "high";
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  const narrow = window.innerWidth < 820;
+  const weak = (navigator.hardwareConcurrency ?? 8) <= 4;
+  return coarse || narrow || weak ? "medium" : "high";
 }
 
 export function SolarSystem() {
   const reducedMotion = usePrefersReducedMotion();
   const locale = useLocale();
   const t = useTranslations("common");
+  const video_t = useTranslations("video");
+  const sound = useEcosystemSound();
+  // Kare döngüsü efekti bağımlılık dizisinde yeniden kurulmasın diye ref üzerinden.
+  const soundRef = useRef(sound);
+  soundRef.current = sound;
   const wwd = useTranslations("whatWeDo");
   const descriptions = wwd.raw("list") as Array<{ title: string; body: string }>;
 
@@ -102,6 +117,7 @@ export function SolarSystem() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const detailRef = useRef<HTMLDivElement>(null);
+  const connectorRef = useRef<SVGSVGElement>(null);
   const labelRefs = useRef<Array<HTMLDivElement | null>>([]);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -119,12 +135,13 @@ export function SolarSystem() {
   const timeScaleRef = useRef(1);
   const dragRef = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
   const cameraRef = useRef<CameraState>({
-    target: [0, 0, 0],
-    distance: SOLAR_CAMERA.distance,
-    yaw: SOLAR_CAMERA.yaw,
-    pitch: SOLAR_CAMERA.pitch,
+    target: ECO_CAMERA.target,
+    distance: ECO_CAMERA.distance,
+    yaw: ECO_CAMERA.yaw,
+    pitch: ECO_CAMERA.pitch,
   });
-  const yawDriftRef = useRef(SOLAR_CAMERA.yaw);
+  /** 0 → 1: odaktayken arka planın bulanıklığı (yumuşatılmış). */
+  const focusBlurRef = useRef(0);
   const manualYawRef = useRef(0);
   const manualPitchRef = useRef(0);
 
@@ -143,37 +160,56 @@ export function SolarSystem() {
     if (!canvas || !stage) return;
 
     const video = videoRef.current;
-    let live: SolarScene | null = null;
+    let live: EcosystemScene | null = null;
     let attempted = false;
+    let disposed = false;
 
     /**
-     * Sahne GÖRÜNÜR ALANA GİRİNCE kuruluyor, mount'ta değil. Kurulum
-     * sekiz gezegenin dokusunu (~300 KB) indiriyor; sayfanın altındaki bir
-     * bölüm için bunu peşin ödemek performans bütçesini deler (CLAUDE.md;
-     * e2e "medya görünür alana girmeden indirilmiyor" nöbetçisi).
+     * Sahne GÖRÜNÜR ALANA GİRİNCE kuruluyor, mount'ta değil: Three.js
+     * paketi (`import()` ile ayrı parça) ve kristal videosu ancak o zaman
+     * iniyor (performans bütçesi; e2e "medya görünür alana girmeden
+     * indirilmiyor" nöbetçisi). Kurulum asenkron: ilk çağrı `null` döner,
+     * yükleme bitince `start`/`renderStill` kendini yeniden çağırır.
      */
-    const ensureScene = (): SolarScene | null => {
+    const failScene = () => {
+      setUnavailable(true);
+      stage.dataset.scene = "fallback";
+    };
+    const ensureScene = (): EcosystemScene | null => {
       if (live || attempted) return live;
       attempted = true;
-      try {
-        live = createSolarScene({
-          canvas,
-          bodies,
-          starTexture: reducedMotion ? null : video,
-          starRadius: SOLAR_STAR_RADIUS,
+      import("@/lib/ecosystem-scene")
+        .then(({ createEcosystemScene }) => {
+          if (disposed) return;
+          live = createEcosystemScene({
+            canvas,
+            bodies,
+            crystalVideo: reducedMotion ? null : video,
+            crystalPoster: CRYSTAL_MEDIA.poster,
+            stage,
+            quality: pickQuality(),
+            // Hareket azaltmada tek kare çiziliyor: poster sonradan inince
+            // (asenkron) kareyi yeniden çiz, yoksa kristal boş kalıyor.
+            onTextureLoad: () => {
+              if (reducedMotion && live && inView) renderStill();
+            },
+          });
+          if (!live) {
+            failScene();
+            return;
+          }
+          stage.dataset.scene = "webgl";
+          stage.dataset.running = "false";
+          live.resize();
+          if (!inView) return;
+          if (reducedMotion) renderStill();
+          else start();
+        })
+        .catch((error: unknown) => {
+          console.error("Ecosystem scene failed:", error);
+          if (!disposed) failScene();
         });
-      } catch (error) {
-        console.error("Solar scene failed:", error);
-      }
-      if (!live) {
-        setUnavailable(true);
-        stage.dataset.scene = "fallback";
-        return null;
-      }
-      stage.dataset.scene = "webgl";
-      stage.dataset.running = "false";
-      live.resize();
-      return live;
+      return null;
     };
 
     const holder = Symbol("solar-system");
@@ -185,7 +221,7 @@ export function SolarSystem() {
     let last = 0;
     let sceneTime = 0;
 
-    const positions: Vec3[] = bodies.map((body) => orbitPosition(body.orbit, 0));
+    const positions: Vec3[] = ECO_BODIES.map((body) => bodyPosition(body, 0));
 
     /**
      * Etiket kalabalığını açar. Gezegenler bir araya geldiğinde (iç
@@ -210,7 +246,7 @@ export function SolarSystem() {
       }
     };
 
-    const layoutLabels = (scene: SolarScene) => {
+    const layoutLabels = (scene: EcosystemScene) => {
       const focus = focusRef.current;
       const centre = scene.project([0, 0, 0]);
       const placed: Array<{ x: number; y: number } | null> = [];
@@ -221,6 +257,9 @@ export function SolarSystem() {
         if (!screen.visible) {
           element.style.opacity = "0";
           element.style.pointerEvents = "none";
+          // Ekranda olmayan küre sekme sırasından da çıkar: görünmez bir
+          // düğmeye odaklanmak WCAG 2.4.7 ihlali (ve sahneyi durdurup ses çalıyor).
+          element.style.visibility = "hidden";
           placed.push(null);
           continue;
         }
@@ -232,7 +271,7 @@ export function SolarSystem() {
         const dx = screen.x - centre.x;
         const dy = screen.y - centre.y;
         const length = Math.hypot(dx, dy) || 1;
-        const focal = canvas.clientHeight / (2 * Math.tan(FOV / 2));
+        const focal = stage.clientHeight / (2 * Math.tan(FOV / 2));
         const radiusPx = (bodies[index].radius / Math.max(0.001, screen.distance)) * focal;
         // Kap gezegenin TAM ÜSTÜNDE (tıklama hedefi gezegenin kendisi),
         // yazı ise yıldızın tersine doğru kayıyor — gezegeni örtmüyor.
@@ -246,10 +285,42 @@ export function SolarSystem() {
         element.style.setProperty("--ring", `${Math.max(26, radiusPx * 2.3).toFixed(0)}px`);
         // Odaktaki gezegenin etiketi gizleniyor: adını zaten panel yazıyor,
         // etiket gezegenin yüzünü örtüyordu. Diğerleri soluklaşıyor.
-        element.style.opacity =
-          focus === index ? "0" : focus >= 0 ? "0.22" : fade.toFixed(2);
+        element.style.opacity = focus === index ? "1" : focus >= 0 ? "0.22" : fade.toFixed(2);
         element.style.pointerEvents = "auto";
+        element.style.visibility = "visible";
         element.style.zIndex = String(1000 - Math.round(screen.distance * 10));
+      }
+
+      // Odaktaki küreden karta bağlantı çizgisi (2.png): küre kenarından
+      // kartın sol-üst köşesine. Yalnız odakta ölçülür (düzen okuması pahalı).
+      const connector = connectorRef.current;
+      const detail = detailRef.current;
+      if (connector && detail && focus >= 0 && !detail.hidden) {
+        const from = scene.project(positions[focus]);
+        const stageBox = stage.getBoundingClientRect();
+        const detailBox = detail.getBoundingClientRect();
+        const toX = detailBox.left - stageBox.left;
+        const toY = detailBox.top - stageBox.top + 18;
+        const dx = toX - from.x;
+        const dy = toY - from.y;
+        const length = Math.hypot(dx, dy) || 1;
+        const focal = stage.clientHeight / (2 * Math.tan(FOV / 2));
+        const edge = (bodies[focus].radius / Math.max(0.001, from.distance)) * focal * 1.32;
+        const line = connector.firstElementChild as SVGLineElement | null;
+        const node = connector.lastElementChild as SVGCircleElement | null;
+        if (line && node && length > edge + 8) {
+          line.setAttribute("x1", (from.x + (dx / length) * edge).toFixed(1));
+          line.setAttribute("y1", (from.y + (dy / length) * edge).toFixed(1));
+          line.setAttribute("x2", toX.toFixed(1));
+          line.setAttribute("y2", toY.toFixed(1));
+          node.setAttribute("cx", toX.toFixed(1));
+          node.setAttribute("cy", toY.toFixed(1));
+          connector.style.opacity = "1";
+        } else {
+          connector.style.opacity = "0";
+        }
+      } else if (connector) {
+        connector.style.opacity = "0";
       }
 
       // Kalabalık açıldıktan SONRA yazının kaymasını yaz: kap (tıklama
@@ -268,48 +339,80 @@ export function SolarSystem() {
       frameId = null;
       const scene = live;
       if (!scene) return;
-      const delta = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
+      // Üst sınır 0,2 sn: yavaş (yazılım render'lı) cihazlar animasyonu gerçek
+      // zamana yakın tutar, sekme arka plandan dönünce de sıçrama olmaz.
+      const delta = last ? Math.min(0.2, (now - last) / 1000) : 0.016;
       last = now;
-      const wantsStill = hoverRef.current !== null;
+      const wantsStill = hoverRef.current !== null || focusRef.current >= 0;
       timeScaleRef.current = approach(timeScaleRef.current, wantsStill ? 0 : 1, 6, delta);
       if (!pausedRef.current) sceneTime += delta * timeScaleRef.current;
 
-      for (const [index, body] of bodies.entries()) {
-        positions[index] = orbitPosition(body.orbit, sceneTime);
+      for (const [index, body] of ECO_BODIES.entries()) {
+        positions[index] = bodyPosition(body, sceneTime);
       }
 
       const focus = focusRef.current;
       const camera = cameraRef.current;
+      // Sıfır genişlikte (gizli üst öğe) `fit` Infinity → kalıcı NaN kamera olmasın.
+      const aspect = Math.max(0.25, stage.clientWidth / Math.max(1, stage.clientHeight));
+      // Dar (dikey) ekranlarda yatay görüş açısı küçülür: kamera geri çekilir.
+      const fit = Math.max(1, 1.45 / aspect);
+      const baseYaw = swayYaw(sceneTime) + manualYawRef.current;
       if (focus >= 0 && positions[focus]) {
-        // Yıldız kameranın ARKASINDA kalsın: gezegenin aydınlık yüzünü
-        // görüyoruz. Göz, yıldızla gezegen arasındaki doğruda duruyor.
+        // Referans (2.png): küre kadrajın sol-altında, kart sağda, kristal
+        // uzakta ve arkada. Bunun için kamera kürenin DIŞ tarafına geçip içeri
+        // (kristale doğru) bakıyor; iç halkadaki küre için kristal aksi halde
+        // kameranın dibinde kalıp ekranı kaplıyordu. Hedef, kürenin `ndc`
+        // kadar ters yönüne kaydırılır.
         const p = positions[focus];
-        const length = Math.hypot(p[0], p[1], p[2]) || 1;
-        const goalYaw = Math.atan2(-p[0], -p[2]);
-        const goalPitch = Math.asin(Math.max(-1, Math.min(1, -p[1] / length))) + 0.14;
-        camera.target = approachVec(camera.target, p, 3.2, delta);
-        camera.distance = approach(
-          camera.distance,
-          focusDistance(bodies[focus].radius, FOV),
-          3.0,
-          delta,
-        );
-        camera.yaw = approach(shortestAngle(camera.yaw, goalYaw + manualYawRef.current), goalYaw + manualYawRef.current, 2.6, delta);
-        camera.pitch = approach(camera.pitch, goalPitch + manualPitchRef.current, 2.6, delta);
+        const outward = Math.atan2(p[0], p[2]) + manualYawRef.current;
+        const distance = ecosystemFocusDistance(bodies[focus].radius);
+        const halfH = camera.distance * Math.tan(FOV / 2);
+        const halfW = halfH * aspect;
+        const ndc = aspect < 0.9 ? { x: 0, y: 0.34 } : ECO_FOCUS_NDC;
+        const cp = Math.cos(camera.pitch);
+        const forward: Vec3 = [
+          -Math.sin(camera.yaw) * cp,
+          -Math.sin(camera.pitch),
+          -Math.cos(camera.yaw) * cp,
+        ];
+        const right = normalize(cross(forward, [0, 1, 0]));
+        const up = cross(right, forward);
+        const goal: Vec3 = [
+          p[0] - right[0] * ndc.x * halfW - up[0] * ndc.y * halfH,
+          p[1] - right[1] * ndc.x * halfW - up[1] * ndc.y * halfH,
+          p[2] - right[2] * ndc.x * halfW - up[2] * ndc.y * halfH,
+        ];
+        camera.target = approachVec(camera.target, goal, 3.2, delta);
+        camera.distance = approach(camera.distance, distance, 3.0, delta);
+        camera.yaw = approach(shortestAngle(camera.yaw, outward), outward, 2.6, delta);
+        camera.pitch = approach(camera.pitch, ECO_CAMERA.pitch + manualPitchRef.current, 2.6, delta);
       } else {
-        // Kamera kayması da aynı zaman ölçeğine bağlı: gezegenin üstünde
-        // dururken sahnenin tamamı duruyor, yalnız gezegenler değil.
-        if (!pausedRef.current) {
-          yawDriftRef.current += SOLAR_CAMERA.drift * delta * timeScaleRef.current;
-        }
-        const goalYaw = yawDriftRef.current + manualYawRef.current;
-        camera.target = approachVec(camera.target, [0, 0, 0], 2.4, delta);
-        camera.distance = approach(camera.distance, SOLAR_CAMERA.distance, 2.2, delta);
-        camera.yaw = approach(shortestAngle(camera.yaw, goalYaw), goalYaw, 2.4, delta);
-        camera.pitch = approach(camera.pitch, SOLAR_CAMERA.pitch + manualPitchRef.current, 2.4, delta);
+        camera.target = approachVec(camera.target, ECO_CAMERA.target, 2.4, delta);
+        camera.distance = approach(camera.distance, ECO_CAMERA.distance * fit, 2.2, delta);
+        camera.yaw = approach(shortestAngle(camera.yaw, baseYaw), baseYaw, 2.4, delta);
+        camera.pitch = approach(camera.pitch, ECO_CAMERA.pitch + manualPitchRef.current, 2.4, delta);
       }
+      focusBlurRef.current = approach(focusBlurRef.current, focus >= 0 ? 1 : 0, 4.5, delta);
 
-      scene.render({ timeSeconds: sceneTime, camera, focus, positions });
+      // Kaydırma paralaksı: sahne kutusunun ekran ortasına göre konumu (-1..1).
+      // Kare başında, DOM yazmalarından ÖNCE okunur (zorunlu yerleşim yok).
+      const stageBox = stage.getBoundingClientRect();
+      const viewport = Math.max(1, window.innerHeight);
+      const parallax = Math.max(
+        -1,
+        Math.min(1, (viewport / 2 - (stageBox.top + stageBox.height / 2)) / viewport),
+      );
+
+      scene.render({
+        timeSeconds: sceneTime,
+        camera,
+        focus,
+        focusBlur: focusBlurRef.current,
+        hover: hoverRef.current ?? -1,
+        positions,
+        parallax,
+      });
       layoutLabels(scene);
       if (running) frameId = requestAnimationFrame(step);
     };
@@ -321,6 +424,7 @@ export function SolarSystem() {
       if (frameId !== null) cancelAnimationFrame(frameId);
       frameId = null;
       video?.pause();
+      soundRef.current.pause();
       if (holdsLock) {
         releaseSceneLock(holder);
         holdsLock = false;
@@ -347,14 +451,24 @@ export function SolarSystem() {
         video.load();
       }
       video?.play().catch(() => undefined);
+      soundRef.current.resume();
       frameId = requestAnimationFrame(step);
     };
 
     /** Hareket azaltma: tek kare, gezegenler başlangıç konumlarında. */
     const renderStill = () => {
+      if (disposed) return;
       const scene = ensureScene();
       if (!scene) return;
-      scene.render({ timeSeconds: 0, camera: cameraRef.current, focus: -1, positions });
+      scene.render({
+        timeSeconds: 0,
+        camera: cameraRef.current,
+        focus: -1,
+        focusBlur: 0,
+        hover: -1,
+        positions,
+        parallax: 0,
+      });
       layoutLabels(scene);
     };
 
@@ -386,6 +500,7 @@ export function SolarSystem() {
       if (reducedMotion) renderStill();
     });
     resizeObserver.observe(canvas);
+    resizeObserver.observe(stage);
 
     return () => {
       observer.disconnect();
@@ -393,7 +508,10 @@ export function SolarSystem() {
       document.removeEventListener("visibilitychange", onVisibility);
       unsubscribe?.();
       stop();
+      disposed = true;
+      inView = false;
       live?.dispose();
+      live = null;
     };
   }, [bodies, reducedMotion]);
 
@@ -427,16 +545,20 @@ export function SolarSystem() {
     // Sürükleme değil, tıklama: boşluğa tıklandıysa odaktan çık.
     const target = event.target as HTMLElement;
     if (target.closest("button") || target.closest("[data-detail]")) return;
-    setActive(null);
+    setActive((current) => {
+      if (current !== null) soundRef.current.close();
+      return null;
+    });
   }, []);
 
   const dismiss = useCallback(
     (returnFocus: boolean) => {
       const index = active;
+      if (index !== null) sound.close();
       setActive(null);
       if (returnFocus && index !== null) buttonRefs.current[index]?.focus();
     },
-    [active],
+    [active, sound],
   );
 
   useEffect(() => {
@@ -466,6 +588,22 @@ export function SolarSystem() {
       aria-labelledby="solar-system-title"
       style={{ "--crystal-scale": CRYSTAL_MEDIA.scale } as CSSProperties}
     >
+      {/* Çizim katmanı BÖLÜM seviyesinde ve sahne kutusundan büyük: yörüngeler ve
+          yıldızlar başlığın arkasına ve alttaki bölümün içine taşıyor, kenarlar
+          maskeyle siyaha sönüyor (düz kesik yok). Başlık ve alttaki bölümün
+          yazıları bu katmanın ÖNÜNDE. Tıklamayı engellemez.
+          `key`: reduced-motion ayarı mount SONRASI değişince (hook önce `false`
+          döner) efekt yeniden kurulur; eski sahne `forceContextLoss()` ile
+          bağlamı kaybettirdiği için AYNI canvas'ta yeni renderer kalıcı
+          siyah kalıyordu. Her mod kendi taze canvas'ını alıyor. */}
+      <div className={styles.field} aria-hidden="true">
+        <canvas
+          key={reducedMotion ? "still" : "motion"}
+          ref={canvasRef}
+          className={styles.canvas}
+        />
+      </div>
+
       <div className={styles.heading}>
         {/* Başlık iki katmanlı okunuyor — üstte ince "One Hybrid Production",
             altta harf aralığı açılmış ECOSYSTEM. Erişilebilir ad özgün
@@ -501,7 +639,20 @@ export function SolarSystem() {
           dragRef.current = null;
         }}
       >
-        <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
+        {/* Odak bağlantı çizgisi: küreden karta. Konumu kare döngüsünden yazılıyor. */}
+        <svg
+          ref={connectorRef}
+          className={styles.connector}
+          style={
+            {
+              "--stone-color": selected ? `var(--color-brand-${selected.color})` : undefined,
+            } as CSSProperties
+          }
+          aria-hidden="true"
+        >
+          <line x1="0" y1="0" x2="0" y2="0" />
+          <circle cx="0" cy="0" r="3" />
+        </svg>
 
         {!reducedMotion && (
           <button
@@ -515,6 +666,17 @@ export function SolarSystem() {
             <span aria-hidden="true">{paused ? "▷" : "Ⅱ"}</span>
           </button>
         )}
+
+        <button
+          type="button"
+          className={`${styles.control} ${styles.soundControl}`}
+          onClick={sound.toggle}
+          aria-label={sound.enabled ? video_t("soundOff") : video_t("soundOn")}
+          aria-pressed={sound.enabled}
+          title={sound.enabled ? video_t("soundOff") : video_t("soundOn")}
+        >
+          {sound.enabled ? <Volume2 size={18} aria-hidden="true" /> : <VolumeX size={18} aria-hidden="true" />}
+        </button>
 
         {unavailable && (
           <Image
@@ -532,8 +694,8 @@ export function SolarSystem() {
         <video
           ref={videoRef}
           className={styles.mediaSource}
-          width={512}
-          height={512}
+          width={CRYSTAL_MEDIA.width}
+          height={CRYSTAL_MEDIA.height}
           preload="none"
           muted
           loop
@@ -564,23 +726,56 @@ export function SolarSystem() {
               aria-haspopup="dialog"
               onPointerEnter={() => {
                 hoverRef.current = index;
+                sound.hover();
               }}
               onPointerLeave={() => {
                 if (hoverRef.current === index) hoverRef.current = null;
               }}
               onFocus={() => {
                 hoverRef.current = index;
+                sound.hover();
               }}
               onBlur={() => {
                 if (hoverRef.current === index) hoverRef.current = null;
               }}
-              onClick={() => setActive((value) => (value === index ? null : index))}
+              onClick={() => {
+                if (active === index) sound.close();
+                else sound.fly();
+                setActive((value) => (value === index ? null : index));
+              }}
             >
               <span className={styles.dotCore} aria-hidden="true" />
               <span className={styles.dotLabel} aria-hidden="true">
                 {stone.label}
               </span>
             </button>
+            {active === index && (
+              <div className={styles.hud} aria-hidden="true">
+                <svg className={styles.hudRing} viewBox="0 0 100 100">
+                  <circle className={styles.hudDots} cx="50" cy="50" r="48.5" />
+                  <circle className={styles.hudArc} cx="50" cy="50" r="44" />
+                  <circle className={styles.hudNodeWhite} cx="50" cy="1.5" r="1.4" />
+                  <circle className={styles.hudNode} cx="93" cy="72" r="1.1" />
+                  <circle className={styles.hudNode} cx="9" cy="70" r="1.1" />
+                </svg>
+                <div className={styles.hudTag}>
+                  <span className={styles.hudReticle}>
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="5.2" />
+                      <circle cx="12" cy="12" r="1.3" className={styles.hudReticleDot} />
+                      <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+                    </svg>
+                  </span>
+                  <span className={styles.hudLeader} />
+                  <span className={styles.hudCode}>N-{ECO_BODIES[index].hud}</span>
+                  <span className={styles.hudBars}>
+                    <i />
+                    <i />
+                    <b />
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         ))}
 
@@ -628,9 +823,14 @@ export function SolarSystem() {
                   ))}
                 </ul>
               )}
-              <Link href={selected.href} className={styles.detailLink}>
-                {t("learnMore")} <span aria-hidden="true">→</span>
-              </Link>
+              <div className={styles.detailFooter}>
+                <Link href={selected.href} className={styles.detailLink}>
+                  {t("learnMore")} <span aria-hidden="true">→</span>
+                </Link>
+                <span className={styles.detailProgress} aria-hidden="true">
+                  <i style={{ left: `${(active! / (orbitStones.length - 1)) * 88}%` }} />
+                </span>
+              </div>
             </>
           )}
         </div>
