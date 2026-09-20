@@ -42,6 +42,28 @@ const nextConfig = {
   // Tahmine bırakmak yerine depo kökü sabitleniyor.
   outputFileTracingRoot: path.dirname(fileURLToPath(import.meta.url)),
 
+  /**
+   * Geçici barındırma adresleri (`*.vercel.app`) arama motorlarına KAPALI
+   * (20 Eylül 2026): site müşteri incelemesi için Vercel'de herkese açık, ama
+   * gerçek alan adı (hibrid360.com) bağlanmadan indekslenmemeli — aksi halde
+   * vercel.app kopyası arama sonuçlarında gerçek sitenin önüne geçebilir.
+   *
+   * `X-Robots-Tag` başlığı HTML, görsel, video ve PDF dahil her yanıta uygulanır
+   * (robots.txt'in `Disallow`'u yerine tercih edildi: engellenen bir URL'in
+   * başlığı hiç okunamaz, başka sitelerin bağlantısıyla yine de listelenebilir).
+   * Eşleşme `Host` başlığına göre: özel alan adında başlık HİÇ eklenmez, yani
+   * canlıya geçişte ek bir değişiklik gerekmez.
+   */
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: ".*\\.vercel\\.app" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }],
+      },
+    ];
+  },
+
   async redirects() {
     return [
       ...LOCALES.flatMap((locale) =>
