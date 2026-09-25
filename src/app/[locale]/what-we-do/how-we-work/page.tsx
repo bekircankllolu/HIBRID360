@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
+import { PageHero } from "@/components/page/PageHero";
+import { PageTitle } from "@/components/page/PageTitle";
+import { ChapterRule } from "@/components/service-chapter/ChapterRule";
+import { Button } from "@/components/ui/Button";
 import { processSteps, budgetBands } from "@/data/how-we-work";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
@@ -20,6 +23,11 @@ import styles from "./page.module.css";
  * Rakam uydurulmadı: tablodaki ilgili hücreler "belirlenecek" rozetiyle
  * render ediliyor. Karar geldiğinde yalnızca src/data/how-we-work.ts
  * güncellenecek, arayüz değişmeyecek.
+ *
+ * Faz 2 / B1 (tasarım dili): hero `PageHero` + `PageTitle`; slogan iki dilde
+ * İngilizce → `lang="en"`. Bölüm başlıkları `ChapterRule` (h2 — e2e ilk h3'ü
+ * adım başlığı olarak okuyor, sıra bozulmaz). Sayfa ortalı kaptan çıktı:
+ * bölümler `--page-gutter` kenarından sola yaslı.
  */
 
 export async function generateMetadata({
@@ -62,11 +70,17 @@ export default async function HowWeWorkPage({
         ])}
       />
 
-      <h1 className={styles.heroTitle}>NO BLACK BOX.</h1>
-      <p className={styles.heroLead}>{t("lead")}</p>
+      <PageHero
+        crumbs={[
+          { label: "What We Do", href: "/what-we-do", lang: "en" },
+          { label: "How We Work", lang: "en" },
+        ]}
+        title={<PageTitle text="NO BLACK BOX." lang="en" />}
+        lede={t("lead")}
+      />
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("processTitle")}</h2>
+        <ChapterRule title={t("processTitle")} />
         <ol className={styles.steps}>
           {processSteps[locale].map((step) => {
             const [before, after] = step.body.split("{pending}");
@@ -90,7 +104,7 @@ export default async function HowWeWorkPage({
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("budgetTitle")}</h2>
+        <ChapterRule title={t("budgetTitle")} />
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
@@ -118,9 +132,9 @@ export default async function HowWeWorkPage({
 
       <section className={styles.cta}>
         {/* brief 20.5: "Sayfanın altında tek CTA: Brief Builder (20.8)". */}
-        <Link href="/brief" className={styles.ctaButton}>
+        <Button variant="primary" href="/brief">
           {t("cta")}
-        </Link>
+        </Button>
       </section>
     </div>
   );

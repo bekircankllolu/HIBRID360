@@ -1,0 +1,188 @@
+/**
+ * Button — sitenin tek buton dili (Faz 2 / B0).
+ *
+ * Çekirdek eski `PrimaryCta.module.css`'ten BİREBİR taşındı: primary/md
+ * ölçüleri, sarı zemin, fuşya süpürme ve sert ofset blok değişmedi
+ * (CtaBand piksel aynı kalır). Varyantlar yalnız renk rollerini değiştirir;
+ * geometri ve hareket her varyantta aynı.
+ *
+ * Üzerine gelince zemin SOLDAN SAĞA fuşyaya süpürülür — markanın imza
+ * hareketi:
+ *
+ * - Marka paletinin dışına çıkmaz: bütün renkler sabit marka
+ *   değişkenlerinden, arada üçüncü bir ton yok.
+ * - Kontrast kuralı korunur (CLAUDE.md, sözleşmeli): sarı ve fuşya zeminde
+ *   metin SİYAH. ghost/inverse de odakta siyaha döner; beyaz ya da sarı
+ *   metin fuşya üstünde AA geçmez.
+ * - Süpürme imlecin geldiği yönü izler, "açık/kapalı" bir renk sıçraması
+ *   değil — buton basılmayı bekleyen bir şey gibi durur.
+ *
+ * `isolation: isolate` + `z-index: -1`: süpürme katmanı butonun ZEMİNİNİN
+ * (ve ghost'un içe çizilen çerçevesinin) üstünde ama METNİNİN altında
+ * boyanır. Böylece etiket için ayrı bir sarmalayıcı elemana gerek kalmıyor.
+ *
+ * Renk rolleri `--button-*` özel özellikleriyle verilir: varyant yalnız bu
+ * değişkenleri yazar, durum kuralları (hover/odak/devre dışı) tek yerde.
+ *
+ * Yalnız transform, gölge ve renk geçişi: layout değişmez, CLS üretmez.
+ * prefers-reduced-motion'da globals.css süreleri 0.01ms'e indirir — renk
+ * yine değişir, hareket olmaz.
+ */
+.button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-block;
+  /* <button> tarayıcı varsayılanlarını sıfırlar; <a> için etkisiz. */
+  border: 0;
+  appearance: none;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--button-bg);
+  color: var(--button-fg);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-heading-bold);
+  letter-spacing: var(--tracking-heading);
+  /* İlk gölge ghost'un çerçevesi (içe çizilir, süpürme onu da örter).
+     İkincisi hover'daki ofset blok: dinlenmede şeffaf ve sıfır, yani
+     eski `box-shadow: none` ile aynı görünür ve aynı biçimde canlanır. */
+  box-shadow:
+    inset 0 0 0 1px var(--button-frame),
+    0 0 0 transparent;
+  transition:
+    transform 320ms var(--ease-house),
+    box-shadow 320ms var(--ease-house),
+    color 420ms var(--ease-house);
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand-fuchsia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms var(--ease-house);
+}
+
+/* ---------- Varyantlar: yalnız renk rolleri ---------- */
+
+.primary {
+  --button-bg: var(--color-brand-yellow);
+  --button-fg: var(--color-text-on-yellow);
+  --button-frame: transparent;
+  /* Siyah zeminde beyaz ofset blok. */
+  --button-offset: var(--color-brand-white);
+  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
+  --heading-color: var(--color-text-on-yellow);
+}
+
+/* Siyah zeminde ikincil eylem. Çerçeve --text-muted: siyahta ~6.3:1,
+   bileşen sınırı için gereken 3:1'in üstünde (WCAG 1.4.11). */
+.ghost {
+  --button-bg: transparent;
+  --button-fg: var(--color-text-on-black);
+  --button-frame: var(--text-muted);
+  --button-offset: var(--color-brand-white);
+}
+
+/* Sarı panel üstünde (çerez bandı gibi): siyah zemin + sarı metin. Ofset
+   blok ve odak halkası siyah — fuşya halka sarıda 3:1'in altında kalıyor. */
+.inverse {
+  --button-bg: var(--color-brand-black);
+  --button-fg: var(--color-brand-yellow);
+  --button-frame: transparent;
+  --button-offset: var(--color-brand-black);
+}
+
+.inverse:focus-visible {
+  outline-color: var(--color-brand-black);
+}
+
+/* ---------- Durumlar ---------- */
+
+.button:hover::before,
+.button:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-2px);
+  /* Süpürmeyle aynı süre ve eğri: metin fuşya zeminle birlikte kararır. */
+  color: var(--color-text-on-fuchsia);
+  /* Gölge değil, sert bir ofset blok: markanın grafik dili yumuşak
+     gölgeye değil düz renge dayanıyor. */
+  box-shadow:
+    inset 0 0 0 1px var(--button-frame),
+    4px 4px 0 var(--button-offset);
+}
+
+.button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow:
+    inset 0 0 0 1px var(--button-frame),
+    0 0 0 var(--button-offset);
+}
+
+/* Devre dışı (yalnız <button>): soluk, hareketsiz, süpürmesiz. Durum
+   kurallarından SONRA gelir; aynı özgüllükte onları ezer. */
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  color: var(--button-fg);
+  box-shadow:
+    inset 0 0 0 1px var(--button-frame),
+    0 0 0 transparent;
+}
+
+.button:disabled::before {
+  transform: scaleX(0);
+}
+
+/* ---------- Ölçüler ---------- */
+
+.md {
+  min-height: 3.5rem;
+  padding: 1rem 2rem;
+}
+
+/*
+ * 44 px dokunma hedefi (WCAG 2.5.8'in 24 px tabanının rahat üstü). İçerik
+ * (~37-40 px) min-height'tan kısa: `<a>`'da metin üstte kalmasın diye flex
+ * ile dikeyde ortalanır. md inline-block kalır — PrimaryCta yerleşimi
+ * birebir korunsun diye (≤480 px'te 1.5 px'lik fark metni üstte bırakıyor;
+ * ortalamak CtaBand'deki etiketi 0.75 px kaydırırdı).
+ */
+.sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  font-size: var(--font-size-label);
+}
+
+/**
+ * Dar ekranda birincil etiket tek satırda kalsın.
+ *
+ * Ölçüm (390px): "Let's Build Something Extraordinary." varsayılan
+ * ölçüde 350px'lik kutuya sığmayıp iki satıra düşüyordu. Yatay dolgu ve
+ * punto dar ekrana göre kısıldı; 480px üstünde ölçü değişmiyor.
+ *
+ * 320px'te İngilizce etiket tek satıra ancak ~13px puntoyla sığar —
+ * birincil CTA için fazla küçük. O genişlikte iki satır bilinçli olarak
+ * kabul ediliyor ve `text-wrap: balance` ile satırlar dengeleniyor.
+ */
+@media (max-width: 480px) {
+  .md {
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem;
+    text-wrap: balance;
+  }
+}

@@ -6,10 +6,13 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.14);
 }
 
+/* Kenar boşluğu sayfa gutter'ı (tokens.css --page-gutter; 41 px@1440,
+   20 px@390): logo ve kontroller sayfa içeriği ve footer'la aynı dikey
+   çizgide. Eskiden kendi clamp'i vardı (36 px@1440, mobilde 12 px). */
 .inner {
   width: 100%;
   height: var(--header-height);
-  padding-inline: clamp(1rem, 2.5vw, 3rem);
+  padding-inline: var(--page-gutter);
   display: flex;
   align-items: center;
   gap: clamp(2rem, 5vw, 7rem);
@@ -152,7 +155,7 @@
   left: 0;
   z-index: 70;
   min-height: 13rem;
-  padding: clamp(2.5rem, 4vw, 4.5rem) clamp(1rem, 2.5vw, 3rem);
+  padding: clamp(2.5rem, 4vw, 4.5rem) var(--page-gutter);
   background: var(--color-brand-yellow);
   /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
   --heading-color: var(--color-text-on-yellow);
@@ -267,7 +270,8 @@
 
   .navList {
     min-height: calc(100dvh - var(--header-height));
-    padding: clamp(2rem, 7vh, 5rem) clamp(1rem, 5vw, 3rem);
+    /* Menü öğeleri logoyla aynı dikey çizgide başlar. */
+    padding: clamp(2rem, 7vh, 5rem) var(--page-gutter);
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
@@ -320,10 +324,6 @@
 }
 
 @media (max-width: 520px) {
-  .inner {
-    padding-inline: 0.75rem;
-  }
-
   .logo {
     font-size: 0.95rem;
   }

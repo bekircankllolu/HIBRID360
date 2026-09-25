@@ -3,8 +3,11 @@ import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { EmptyState } from "@/components/EmptyState";
+import { PageHero } from "@/components/page/PageHero";
+import { PageTitle } from "@/components/page/PageTitle";
+import { ChapterRule } from "@/components/service-chapter/ChapterRule";
+import { Button } from "@/components/ui/Button";
 import { serviceProductionOffer } from "@/data/service-production";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { localizedAlternates } from "@/lib/site";
 import styles from "./page.module.css";
@@ -23,7 +26,16 @@ import styles from "./page.module.css";
  * Sayfada hiçbir oran yazılmadı; brief'in güvenli ifadesi ("we guide you
  * through the current incentive scheme") kullanıldı. Resmî kaynak linki
  * güncel mevzuat teyit edilince eklenecek.
+ *
+ * Faz 2 / B1 (tasarım dili): hero `PageHero` + `PageTitle` (cümle kademesi).
+ * Başlık iki dilde de İngilizce → `lang="en"`; `splitTitle` son cümle
+ * sınırından böler: "SHOOT IN TÜRKIYE." beyaz, "WITH A CREW …" sarı. Metin
+ * değişmedi. Sayfa ortalı kaptan çıktı: bölümler `--page-gutter` kenarından
+ * sola yaslı, aralar `--section-space*`.
  */
+
+const TITLE = "SHOOT IN TÜRKIYE. WITH A CREW THAT ALREADY KNOWS THE WAY.";
+const LEAD = "Locations, permits, crew, gear and post — one contact, one contract, one country.";
 
 export async function generateMetadata({
   params,
@@ -62,17 +74,21 @@ export default async function ServiceProductionPage({
         ])}
       />
 
-      {locale === "tr" && <p className={styles.localeNote}>{t("localeNote")}</p>}
+      <PageHero
+        crumbs={[
+          { label: "What We Do", href: "/what-we-do", lang: "en" },
+          // Kırıntı kısa ad: tam ad ("… (International)") 390 px'te iki satıra
+          // kırılıp ayracı satır sonunda bırakıyordu. Tam ad metadata ve JSON-LD'de.
+          { label: "Service Production", lang: "en" },
+        ]}
+        title={<PageTitle text={TITLE} lang="en" tier="sentence" />}
+        lede={LEAD}
+        ledeLang="en"
+      >
+        {locale === "tr" && <p className={styles.localeNote}>{t("localeNote")}</p>}
+      </PageHero>
 
-      <h1 className={styles.heroTitle}>
-        SHOOT IN TÜRKIYE. WITH A CREW THAT ALREADY KNOWS THE WAY.
-      </h1>
-      <p className={styles.heroLead}>
-        Locations, permits, crew, gear and post — one contact, one contract, one
-        country.
-      </p>
-
-      <div className={styles.offer}>
+      <div className={styles.offer} lang="en">
         {serviceProductionOffer.map((item) => (
           <div key={item.title} className={styles.offerItem}>
             <h2 className={styles.offerTitle}>{item.title}</h2>
@@ -82,23 +98,23 @@ export default async function ServiceProductionPage({
       </div>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("evidenceTitle")}</h2>
+        <ChapterRule title={t("evidenceTitle")} />
         {/* TODO: brief 20.4 — "Kanıt satırı şart: daha önce hangi ülkelerden
             hangi yapımlara hizmet verildi — yoksa sayfa iddia olarak kalır."
             Bu liste mevcut portföyden derlenecek; Supabase `works` tablosunda
             ülke/servis-prodüksiyon alanı yok, envanterle birlikte (DECISIONS
             #16) şema da genişletilmeli. */}
-        <EmptyState message={t("evidenceEmpty")} />
+        <EmptyState message={t("evidenceEmpty")} align="start" />
       </section>
 
       <section className={styles.cta}>
-        <p className={styles.ctaLead}>
+        <p className={styles.ctaLead} lang="en">
           Send us the treatment and the shoot window. You get a local budget
           within two working days.
         </p>
-        <Link href="/brief" className={styles.ctaButton}>
+        <Button variant="primary" href="/brief" lang="en">
           Get a production quote
-        </Link>
+        </Button>
       </section>
     </div>
   );

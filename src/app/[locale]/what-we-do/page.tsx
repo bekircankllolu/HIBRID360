@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { PageHero } from "@/components/page/PageHero";
+import { PageTitle } from "@/components/page/PageTitle";
 import { breadcrumbListJsonLd } from "@/lib/schema";
 import { siteImages } from "@/data/site-images";
 import { SERVICE_CATALOG } from "@/data/services";
@@ -27,6 +29,11 @@ import styles from "./page.module.css";
  * Sunum: editoryal hizmet dizini ve aktif hizmete ait sabit görsel alanı.
  * Yeni sinematik fotoğraflar src/data/site-images.ts üzerinden paylaşılır.
  * AI Creative Production görselsiz tipografik kapak kullanır.
+ *
+ * Faz 2 / B1: hero ortak `PageHero` (band) + `PageTitle` ile çiziliyor —
+ * kırıntı soluk (fuşya metin yok), başlık `splitTitle` ile bölünür (TR "NE" /
+ * "YAPIYORUZ": ilk satır beyaz, son satır sarı), kenar = `--page-gutter`.
+ * Başlık sayfa dilinde çevrilen bir metin: `lang` = locale.
  */
 
 // META tablosu (Bölüm 10) — TR description henüz yazılmadı, EN'de ayarlı.
@@ -57,8 +64,6 @@ export default async function WhatWeDoPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations("whatWeDo");
-  const heroTitle = t("heroTitle");
-  const [heroLead, ...heroAccent] = heroTitle.split(" ");
   const descriptions = t.raw("list") as Array<{ title: string; body: string }>;
   const items: ServiceDirectoryItem[] = SERVICE_CATALOG.map((service) => {
     const image = service.imageKey ? siteImages.services[service.imageKey] : undefined;
@@ -86,12 +91,13 @@ export default async function WhatWeDoPage({
           { name: "What We Do", path: "/what-we-do" },
         ])}
       />
-      <header className={styles.hero}>
-        <p className={styles.kicker} lang="en">Hibrid 360 / What We Do</p>
-        <h1 className={styles.title}>
-          <span className={styles.titleLead}>{heroLead}</span>{" "}
-          <span className={styles.titleAccent}>{heroAccent.join(" ")}</span>
-        </h1>
+      <PageHero
+        crumbs={[
+          { label: "Hibrid 360", href: "/" },
+          { label: "What We Do", lang: "en" },
+        ]}
+        title={<PageTitle text={t("heroTitle")} lang={locale} />}
+      >
         <div className={styles.heroFooter}>
           <p className={styles.heroBody}>{t("heroBody")}</p>
           <p
@@ -102,12 +108,14 @@ export default async function WhatWeDoPage({
             <span>{locale === "tr" ? "ALAN · 360°" : "DISCIPLINES · 360°"}</span>
           </p>
         </div>
-      </header>
+      </PageHero>
 
-      <ServiceDirectory
-        items={items}
-        label={locale === "tr" ? "Hizmet alanları" : "Service disciplines"}
-      />
+      <div className={styles.directoryFrame}>
+        <ServiceDirectory
+          items={items}
+          label={locale === "tr" ? "Hizmet alanları" : "Service disciplines"}
+        />
+      </div>
     </div>
   );
 }

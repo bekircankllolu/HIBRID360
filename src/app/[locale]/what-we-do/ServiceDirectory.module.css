@@ -3,7 +3,10 @@
   grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
   gap: clamp(var(--space-8), 5vw, var(--space-24));
   align-items: start;
-  padding-block: clamp(var(--space-16), 9vw, 8rem);
+  /* Üst dolgu dar kademe: üstündeki PageHero zaten `--section-space` alt
+     dolgusu bırakıyor; ikisi toplanınca hero ile dizin arası ~265 px'e
+     çıkıyordu (Faz 2 / B1). */
+  padding-block: var(--section-space-tight) clamp(var(--space-16), 9vw, 8rem);
 }
 
 .stage {
@@ -15,7 +18,7 @@
   min-height: 32rem;
   margin: 0;
   overflow: hidden;
-  background: #070707;
+  background: var(--surface-1);
   isolation: isolate;
 }
 
