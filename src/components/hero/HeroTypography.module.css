@@ -120,6 +120,43 @@
   object-fit: cover;
 }
 
+/* Dokunmatikte oynat/duraklat: kadrajın tamamı dokunma alanı. Duraklatılmışken
+   ortada oynat ikonu; oynarken ikon gizlenir (dokunmak yine duraklatır). */
+.showreelPlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-brand-white);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.showreelPlayIcon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  padding-left: 0.2rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-brand-black) 72%, transparent);
+  transition: opacity 220ms var(--ease-house);
+}
+
+.showreelPlay[data-playing="true"] .showreelPlayIcon {
+  opacity: 0;
+}
+
+.showreelPlay:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: -4px;
+}
+
 /* Ses düğmesi: kadrajın sağ alt köşesi; küçük kadrajda da, tam ekranda da
    görünür. 44 px dokunma hedefi, siyah perde üstünde beyaz ikon (her kare
    üstünde okunur), odakta sarı halka. */

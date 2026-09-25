@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Volume2, VolumeX } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { HOME_SHOWREEL } from "@/data/home-showreel";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import type { Locale } from "@/i18n/routing";
@@ -31,6 +31,13 @@ import styles from "./HeroTypography.module.css";
  * olduğu belirtilen poster aynı scroll sahnesinde gösterilir; onaylı
  * video geldiğinde yalnızca src/data/home-showreel.ts güncellenir.
  */
+/**
+ * Dokunmatik (telefon/tablet) cihaz: showreel kendiliğinden İNMEZ ve oynamaz
+ * (25 Eylül 2026 kullanıcı kararı — mobil veride 43 MB'lık video izlenmeden
+ * inmesin). Poster + oynat düğmesi görünür; dokununca oynar.
+ */
+const TAP_TO_PLAY_QUERY = "(hover: none) and (pointer: coarse)";
+
 export function HeroTypography() {
   const t = useTranslations("home");
   const tVideo = useTranslations("video");
@@ -60,6 +67,9 @@ export function HeroTypography() {
    */
   const [muted, setMuted] = useState(true);
   const [userStarted, setUserStarted] = useState(false);
+  /** Dokunmatik cihazda dokununca oynat kipi (bkz. TAP_TO_PLAY_QUERY). */
+  const [tapToPlay, setTapToPlay] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const hasShowreel = HOME_SHOWREEL !== null;
   const hasPlayableShowreel = Boolean(
@@ -79,6 +89,14 @@ export function HeroTypography() {
     observer.observe(stage);
     return () => observer.disconnect();
   }, [hasShowreel]);
+
+  useEffect(() => {
+    const query = window.matchMedia(TAP_TO_PLAY_QUERY);
+    const update = () => setTapToPlay(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     if (!hasShowreel || prefersReducedMotion) return;
@@ -109,7 +127,10 @@ export function HeroTypography() {
     const video = videoRef.current;
     if (!video) return;
 
-    if (showreelInView && ((deferredLoad && !prefersReducedMotion) || userStarted)) {
+    // Kendiliğinden oynatma yalnız masaüstünde; dokunmatikte ve hareket
+    // azaltmada yalnız ziyaretçi başlatınca (`userStarted`).
+    const autoplay = deferredLoad && !prefersReducedMotion && !tapToPlay;
+    if (showreelInView && (autoplay || userStarted)) {
       void video.play().catch(() => {
         // Tarayıcı otomatik oynatmayı engellerse poster görünmeye devam eder.
       });
@@ -117,7 +138,20 @@ export function HeroTypography() {
     }
 
     video.pause();
-  }, [deferredLoad, prefersReducedMotion, showreelInView, userStarted]);
+  }, [deferredLoad, prefersReducedMotion, showreelInView, tapToPlay, userStarted]);
+
+  /** Dokunmatikte kadraja dokunmak oynatır / duraklatır. */
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      setUserStarted(true);
+      void video.play().catch(() => setUserStarted(false));
+      return;
+    }
+    setUserStarted(false);
+    video.pause();
+  };
 
   const toggleSound = () => {
     const video = videoRef.current;
@@ -224,6 +258,8 @@ export function HeroTypography() {
                 preload="none"
                 poster={HOME_SHOWREEL.poster}
                 aria-label={HOME_SHOWREEL.title[locale]}
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
               >
                 {HOME_SHOWREEL.webm && (
                   <source src={HOME_SHOWREEL.webm} type={HOME_SHOWREEL.webmType ?? "video/webm"} />
@@ -244,6 +280,19 @@ export function HeroTypography() {
                 fetchPriority="low"
                 decoding="async"
               />
+            )}
+            {hasPlayableShowreel && tapToPlay && (
+              <button
+                type="button"
+                className={styles.showreelPlay}
+                data-playing={playing ? "true" : "false"}
+                onClick={togglePlayback}
+                aria-label={playing ? tVideo("pause") : tVideo("playShowreel")}
+              >
+                <span className={styles.showreelPlayIcon} aria-hidden="true">
+                  <Play size={26} fill="currentColor" />
+                </span>
+              </button>
             )}
             {hasPlayableShowreel && HOME_SHOWREEL.hasAudio && (
               <button
