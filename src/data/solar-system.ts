@@ -348,6 +348,29 @@ export const CRYSTAL_MEDIA = {
 
 /**
  * ---------------------------------------------------------------------
+ * Ekosistem küreleri — kristal görseller (25 Eylül 2026)
+ * ---------------------------------------------------------------------
+ *
+ * Müşterinin verdiği pembe / sarı / beyaz kristal küre görselleri eski
+ * parlak kürelerin yerine geçti; yörünge, hız, boyut, odak ve etkileşim
+ * DEĞİŞMEDİ. Görsel küreye yapıştırılmaz: gerçek 3B yontulmuş (fasetli) kürenin
+ * ışık haritası (matcap) olarak kullanılır — küre döndükçe iç parlamalar
+ * fasetler arasında kayar (src/lib/ecosystem-scene.ts → GEM_FRAGMENT).
+ * Dokular `scripts/prepare-ecosystem-crystals.mjs` ile üretilir.
+ *
+ * `frame`: dokunun yarı kenarı / küre diski yarıçapı (matcap örneklemesi diski
+ * bu oranla bulur). `halo`: hale ve kenar ışıması rengi — görselin kendi
+ * parlama rengi (üretim betiğinin ölçtüğü disk kenarı ortalaması).
+ */
+export const ECO_CRYSTAL_SPHERES = {
+  fuchsia: { src: "/images/site/ecosystem/crystal-fuchsia-20260925.webp", halo: 0xff0675 },
+  yellow: { src: "/images/site/ecosystem/crystal-yellow-20260925.webp", halo: 0xffa602 },
+  white: { src: "/images/site/ecosystem/crystal-white-20260925.webp", halo: 0xf2efff },
+  frame: 1.3,
+} as const;
+
+/**
+ * ---------------------------------------------------------------------
  * Detay kartının açılma yönü
  * ---------------------------------------------------------------------
  *
