@@ -82,3 +82,72 @@ function lastIndexWithin(text: string, needle: string, limit: number): number {
 function cut(text: string, at: number): LessTalkParts {
   return { lead: text.slice(0, at).trim(), rest: text.slice(at).trim() };
 }
+
+/**
+ * Açılış cümlelerinde elle halkaya alınan TEK kilit kelime, madde sırasıyla
+ * (25 Eylül 2026 kullanıcı: "önemli kelimeleri, sadece tek bir kelime,
+ * daire içine alabiliriz"). Metin değişmez; kelime bulunamazsa halka
+ * çizilmez — `less-talk.test.ts` gerçek metinlerde geçtiklerini denetler.
+ */
+export const LESS_TALK_EMPHASIS: Readonly<Record<"tr" | "en", readonly string[]>> = {
+  tr: ["inanır", "değil", "seviyoruz"],
+  en: ["believes", "not", "love"],
+};
+
+export interface EmphasisParts {
+  before: string;
+  word: string;
+  after: string;
+}
+
+const LETTER = /[\p{L}\p{N}]/u;
+
+/**
+ * `word`in metindeki ilk TAM kelime geçişini ayırır ("not", "notably"nin
+ * içinde eşleşmez). `before + word + after` her zaman özgün metindir.
+ * Kelime yoksa `null`.
+ */
+export function splitEmphasis(text: string, word: string): EmphasisParts | null {
+  if (!word) return null;
+  let from = 0;
+  while (from <= text.length) {
+    const at = text.indexOf(word, from);
+    if (at < 0) return null;
+    const end = at + word.length;
+    const openLeft = at === 0 || !LETTER.test(text[at - 1]);
+    const openRight = end === text.length || !LETTER.test(text[end]);
+    if (openLeft && openRight) {
+      return { before: text.slice(0, at), word, after: text.slice(end) };
+    }
+    from = at + 1;
+  }
+  return null;
+}
+
+/**
+ * Elle çekilmiş halka: başlangıcını geçip biraz daha dönen, kapanmayan tek
+ * hat (kalem bir kez hızlıca dolanmış gibi). 200×100'lük kutuda tanımlı;
+ * {@link scalePath} ile gerçek kutuya taşınır.
+ */
+export const HAND_CIRCLE_PATH =
+  "M152 14 C 118 3, 52 5, 22 28 C -4 48, 14 84, 72 93 C 128 101, 190 84, 194 52 " +
+  "C 197 24, 150 7, 96 8 C 70 9, 50 15, 36 24";
+
+/**
+ * Mutlak koordinatlı bir yolu (yalnız M/C/L/S komutları, x-y çiftleri)
+ * eksen başına ölçekler.
+ *
+ * Neden SVG `transform`/`preserveAspectRatio="none"` değil: halka 5:1'lik
+ * bir kelimeye gerilince çizgi kalınlığı eksen başına bozuluyordu;
+ * `vector-effect: non-scaling-stroke` onu düzeltiyor ama kesik çizgi
+ * (`pathLength` + `stroke-dasharray`) ekran uzayında hesaplanıp yolun
+ * yalnız bir kısmını çiziyordu — halkanın yanları hiç görünmüyordu.
+ * Koordinatları sayısal olarak ölçeklemek ikisini birden çözüyor.
+ */
+export function scalePath(d: string, sx: number, sy: number): string {
+  let axis = 0;
+  return d.replace(/-?\d*\.?\d+/g, (token) => {
+    const value = Number(token) * (axis++ % 2 === 0 ? sx : sy);
+    return String(Math.round(value * 100) / 100);
+  });
+}
