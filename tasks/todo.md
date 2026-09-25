@@ -947,7 +947,7 @@ Sapma (B0): `ChapterHero` refaktörü yerine `PageHero` bağımsız kurulur (pla
   - [x] `e2e/routes.json|ts` (tek rota kaynağı), `e2e/design-language.spec.ts` (7 hizmet sayfası ile tohum; MONA izin listesi), taşma bekçisine 6 yasal rota + 404, `src/styles/hex-guard.test.ts` (ratchet, `hex-baseline.json`)
   - [x] `scripts/design-audit.mjs` (`shoot`/`compare`, `.design-audit/` gitignore'da). Taban: `C:\Users\bekir\HIBRID360-baseline` worktree (port 3200, `feat/design-language` başı) → `.design-audit/baseline`. B0 farkı: her rotada YALNIZ header (masaüstü %0,495; mobil %5–8, sabit header her karede), Creative CTA bandı — başka fark yok (fark görüntüleri incelendi)
   - Doğrulama: tsc/eslint/vitest 518+, tam Playwright 309 geçti + 4 önceden atlanan (313 test), kod incelemesi (2 MEDIUM + 2 LOW düzeltildi)
-- [ ] **B1 What We Do ailesi**: hub, service-production, how-we-work
+- [x] **B1 What We Do ailesi**: hub, service-production, how-we-work (25 Eylül 2026). `PageHero`/`PageTitle`/`Button`/`ChapterRule`; `EmptyState align`, `PageHero ledeLang`, `.details h2:lang(tr)` 1.05. b0→b1 karşılaştırma: 25 rota %0,000; 6 hizmet sayfası yalnız TR kareleri (satır aralığı). Tam Playwright 327+4 atlanan. Kod incelemesi: engelleyici yok, İngilizce lede/blok `lang` düzeltildi. Sonraki: B2 yasal 7 sayfa
 - [ ] **B2 Yasal 7 sayfa** (tek modül)
 - [ ] **B3 Culture hub + directors**
 - [ ] **B4 Who We Are / What We Believe / Partners** (+ ölü CSS)

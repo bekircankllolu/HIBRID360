@@ -101,6 +101,13 @@ describe("PageHero", () => {
     expect(ledes[0].nextElementSibling?.textContent).toBe("CTA");
   });
 
+  it("ledeLang lede'e lang yazar (İngilizce lede TR sayfada)", () => {
+    const withLang = render(<PageHero title={TITLE} lede="One contact." ledeLang="en" />);
+    expect(withLang.getElementsByClassName(styles.lede)[0].getAttribute("lang")).toBe("en");
+    const without = render(<PageHero title={TITLE} lede="Tek cümle." />);
+    expect(without.getElementsByClassName(styles.lede)[0].hasAttribute("lang")).toBe(false);
+  });
+
   it("size işareti: varsayılan band, screen", () => {
     expect(render(<PageHero title={TITLE} />).dataset.size).toBe("band");
     expect(render(<PageHero title={TITLE} size="screen" />).dataset.size).toBe("screen");

@@ -1,39 +1,31 @@
+/*
+ * Service Production (International) — Faz 2 / B1. Hero ortak `PageHero`'da
+ * (kenar, dolgu, başlık, lede). Sayfa ortalı kap değil: her blok kendi
+ * `--page-gutter` kenarından sola yaslı başlar, bloklar arası
+ * `--section-space` (PageHero alt dolgusu da aynı token).
+ */
 .page {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
+  padding-bottom: var(--section-space);
 }
 
+/* TR sürümdeki dil notu (içerik İngilizce). Sarı çizgi araç, metin beyaz. */
 .localeNote {
-  border-left: 2px solid var(--color-brand-yellow);
+  max-width: var(--measure-prose);
+  margin: 0;
   padding-left: var(--space-4);
-  margin-bottom: var(--space-12);
+  border-left: 2px solid var(--color-brand-yellow);
   font-size: var(--font-size-label);
 }
 
-.heroTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  line-height: 1.05;
-  margin: 0 0 var(--space-6);
-}
-
-.heroLead {
-  max-width: var(--measure-prose);
-
-  margin: 0;
-}
-
 .offer {
-  margin-top: var(--space-24);
   display: grid;
   gap: var(--space-8);
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  padding-inline: var(--page-gutter);
 }
 
 .offerItem {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid var(--color-hairline);
   padding-top: var(--space-4);
 }
 
@@ -50,46 +42,23 @@
 }
 
 .section {
-  margin-top: var(--space-24);
-}
-
-.sectionTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-  margin-bottom: var(--space-4);
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--section-space);
+  padding-inline: var(--page-gutter);
 }
 
 .cta {
-  margin-top: var(--space-24);
-  padding-top: var(--space-12);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: var(--section-space);
+  margin-inline: var(--page-gutter);
+  padding-top: var(--section-space-tight);
+  border-top: 1px solid var(--color-hairline);
 }
 
 .ctaLead {
   max-width: var(--measure-prose);
-
+  margin: 0 0 var(--space-6);
   font-family: var(--font-brand);
   font-weight: var(--font-weight-heading-semibold);
   font-size: clamp(1.125rem, 2.5vw, 1.75rem);
-}
-
-.ctaButton {
-  display: inline-block;
-  margin-top: var(--space-6);
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
-}
-
-.ctaButton:hover {
-  transform: translateY(-2px);
 }

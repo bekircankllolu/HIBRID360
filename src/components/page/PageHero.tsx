@@ -52,6 +52,11 @@ export interface PageHeroProps {
   title: ReactNode;
   /** TEK cümle. */
   lede?: string;
+  /**
+   * Lede sayfa dilinden farklıysa ("en"): ekran okuyucu yanlış telaffuz etmesin
+   * (WCAG 3.1.2). Örn. Service Production'ın İngilizce lede'i TR sayfada.
+   */
+  ledeLang?: TitleLang;
   size?: PageHeroSize;
   /** Lede'nin altına akan ek içerik (ör. buton). */
   children?: ReactNode;
@@ -62,6 +67,7 @@ export function PageHero({
   meta,
   title,
   lede,
+  ledeLang,
   size = "band",
   children,
 }: PageHeroProps) {
@@ -78,7 +84,11 @@ export function PageHero({
 
       <div className={styles.title}>{title}</div>
 
-      {lede ? <p className={styles.lede}>{lede}</p> : null}
+      {lede ? (
+        <p className={styles.lede} lang={ledeLang}>
+          {lede}
+        </p>
+      ) : null}
 
       {children}
     </header>

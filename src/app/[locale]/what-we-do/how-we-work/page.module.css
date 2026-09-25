@@ -1,50 +1,36 @@
+/*
+ * How We Work — Faz 2 / B1. Hero ortak `PageHero`'da (kenar, dolgu, başlık,
+ * lede). Sayfa ortalı kap değil: bölümler `--page-gutter` kenarından sola
+ * yaslı, aralar `--section-space` (PageHero alt dolgusu da aynı token).
+ * Bölüm başlıkları `ChapterRule` (çizgi + soluk etiket).
+ */
 .page {
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-4);
-}
-
-.heroTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: var(--font-size-display);
-  margin: 0 0 var(--space-4);
-}
-
-.heroLead {
-  max-width: var(--measure-prose);
-
-  margin: 0;
+  padding-bottom: var(--section-space);
 }
 
 .section {
-  margin-top: var(--space-24);
+  display: grid;
+  gap: var(--space-6);
+  padding-inline: var(--page-gutter);
 }
 
-.sectionTitle {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-semibold);
-  font-size: var(--font-size-label);
-
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-brand-yellow);
-  margin-bottom: var(--space-6);
+.section + .section {
+  margin-top: var(--section-space);
 }
 
 /* Süreç sıralı okunur. auto-fit ızgara 5 adımı 4+1 dağıtıp son adımı yetim
    bırakıyordu. Masaüstünde her adım tek bir sıra: numara | başlık | gövde,
    ince ayraçla — zaman çizelgesi gibi. Mobilde doğal dikey akış. */
+/* Üst çizgiyi ChapterRule çiziyor; satırlar yalnız alt ayraç taşır. */
 .steps {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .steps > li {
   padding: var(--space-6) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid var(--color-hairline);
 }
 
 .stepNumber {
@@ -85,7 +71,7 @@
 /* Karar bekleyen rakamlar için görünür işaretçi — sahte rakam yazılmaz. */
 .pending {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--color-brand-white) 12%, transparent);
   border-bottom: 1px dashed var(--color-brand-yellow);
   padding: 0 var(--space-2);
   font-variant-numeric: tabular-nums;
@@ -105,7 +91,7 @@
 .table td {
   text-align: left;
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid var(--color-hairline);
   font-size: var(--font-size-label);
 
   vertical-align: top;
@@ -126,27 +112,13 @@
 }
 
 .tableNote {
-  margin-top: var(--space-4);
+  margin: 0;
   font-size: var(--font-size-label);
 }
 
 .cta {
-  margin-top: var(--space-24);
-  padding-top: var(--space-12);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.ctaButton {
-  display: inline-block;
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-heading-bold);
-  padding: var(--space-3) var(--space-6);
-}
-
-.ctaButton:hover {
-  transform: translateY(-2px);
+  margin-top: var(--section-space);
+  margin-inline: var(--page-gutter);
+  padding-top: var(--section-space-tight);
+  border-top: 1px solid var(--color-hairline);
 }

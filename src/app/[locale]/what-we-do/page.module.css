@@ -1,49 +1,17 @@
+/*
+ * What We Do hub — Faz 2 / B1. Hero ortak `PageHero` + `PageTitle`
+ * (kenar boşluğu, band dolgusu, kırıntı ve başlık ölçüsü orada). Bu dosyada
+ * yalnız hero'nun alt satırı (gövde + sayaç) ve dizin çerçevesi kaldı.
+ *
+ * Sayfa kabı yatay dolgu TAŞIMAZ: PageHero kendi `--page-gutter` dolgusunu
+ * veriyor, iki kez verilirse başlık 82 px'ten başlardı. Dizin aynı kenarı
+ * `.directoryFrame`'den alır.
+ */
 .page {
   width: 100%;
-  padding-inline: var(--page-gutter);
   overflow: clip;
   background: var(--color-brand-black);
   color: var(--color-brand-white);
-}
-
-.hero {
-  display: grid;
-  align-content: end;
-  min-height: clamp(34rem, 72vh, 52rem);
-  padding-block: clamp(var(--space-16), 9vw, 8rem) var(--space-8);
-  border-bottom: 1px solid var(--color-hairline);
-}
-
-.kicker {
-  margin: 0 0 clamp(var(--space-8), 8vh, var(--space-16));
-  font-family: var(--font-brand);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-heading-bold);
-  text-transform: uppercase;
-  color: var(--color-brand-fuchsia);
-}
-
-.title {
-  /* 11ch idi. `ch` yedek fontla gerçek Space Grotesk'te farklı genişlik verir,
-     kutu font inince zıplar; 11 x 0.648em (Space Grotesk 700 "0" ilerlemesi)
-     her iki durumda aynı (bkz. ServiceTitle.module.css). */
-  max-width: 7.128em;
-  margin: 0;
-  font-family: var(--font-chapter-display);
-  font-size: clamp(3.5rem, 9.4vw, 9.5rem);
-  font-weight: var(--font-weight-chapter-display);
-  line-height: 0.86;
-  letter-spacing: 0;
-  color: var(--color-brand-white);
-  overflow-wrap: normal;
-}
-
-.titleLead {
-  color: var(--color-brand-white);
-}
-
-.titleAccent {
-  color: var(--color-brand-yellow);
 }
 
 .heroFooter {
@@ -51,16 +19,16 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--space-8);
   align-items: end;
-  margin-top: clamp(var(--space-8), 6vw, var(--space-16));
 }
 
+/* Gövde metni tam beyaz: soluk beyaz yalnız meta/etiket rolünde. */
 .heroBody {
   max-width: 43ch;
   margin: 0;
   font-family: var(--font-body);
   font-size: clamp(1.125rem, 1.05rem + 0.32vw, 1.5rem);
   line-height: 1.42;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-brand-white);
 }
 
 .heroCount {
@@ -74,6 +42,7 @@
   text-transform: uppercase;
 }
 
+/* Sayı fuşya: araç rengi (numara), gövde metni değil. */
 .heroCount strong {
   font-family: var(--font-chapter-display);
   font-size: clamp(2.75rem, 4.6vw, 4.75rem);
@@ -81,15 +50,14 @@
   color: var(--color-brand-fuchsia);
 }
 
+/* Hero ile dizin arasındaki ince çizgi eskiden hero'nun alt kenarıydı; artık
+   dizin çerçevesinin üst kenarı (PageHero alt kenar çizmiyor). */
+.directoryFrame {
+  margin-inline: var(--page-gutter);
+  border-top: 1px solid var(--color-hairline);
+}
+
 @media (max-width: 767px) {
-  .hero {
-    min-height: 34rem;
-  }
-
-  .title {
-    max-width: 5.184em; /* 8ch */
-  }
-
   .heroFooter {
     grid-template-columns: minmax(0, 1fr);
   }

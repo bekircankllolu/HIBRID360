@@ -54,3 +54,13 @@
 .emptyStateCompact .emptyStateDetail {
   margin-inline: 0;
 }
+
+/* Sola yaslı varyant (Faz 2 tasarım dili): kutu ve dolgu aynı, yalnız hiza.
+   Ek satırın otomatik yatay kenarı da sıfırlanır, yoksa ortada kalırdı. */
+.emptyStateStart {
+  text-align: left;
+}
+
+.emptyStateStart .emptyStateDetail {
+  margin-inline: 0;
+}
