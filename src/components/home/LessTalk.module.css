@@ -1,168 +1,242 @@
 /*
- * HOME-05 "Az Laf, Çok İş" — bkz. LessTalk.tsx başlığındaki gerekçe.
+ * HOME-05 "az laf, çok iş" — bkz. LessTalk.tsx başlığındaki gerekçe.
  *
- * 19 Eylül 2026'da yeniden tasarlandı. Önceki sürüm müşterinin referans
- * PDF'ine piksel piksel ölçülmüş üç kademeli dar sütundu; kullanıcı onu
- * "sıkışık ve amatörce" bulup değiştirilmesini istedi. Buradaki ölçüler
- * artık referanstan değil, tipografik sistemden geliyor.
+ * 25 Eylül 2026: Syne poster, 2. tur. KURALLAR (kullanıcı): içi boş
+ * başlayıp sonradan dolan tipografi yok, kontur yok, büyük harf yok,
+ * ince→kalın ağırlık geçişi yok, harf zıplaması yok. Hareket yalnız el
+ * çizimi halkalar.
  */
 
 .section {
-  /* Çizgiler ekranın iki yanından giriyor; bu dönüşüm sayfanın
-     scrollWidth'ini büyütüp yatay kaydırma çubuğu doğurur. `clip`,
-     `hidden`den farklı olarak kaydırma konteyneri yaratmaz ve sticky
-     ataları bozmaz. */
+  /* Halka ve dev satır kadraj kenarına yaklaşıyor; `clip`, `hidden`den
+     farklı olarak kaydırma konteyneri yaratmaz. */
   overflow-x: clip;
   width: 100%;
-  padding: clamp(1rem, 1.5vw, 1.5rem) var(--page-gutter) clamp(6rem, 10vw, 10rem);
+  padding: 0 var(--page-gutter) clamp(6rem, 10vw, 10rem);
 }
 
-/* ---------- Başlık sahnesi ---------- */
+/* ---------- Poster sahnesi ---------- */
 
-/*
- * Koreografi tek bir ilerlemeden türüyor:
- *   --enter  (0 → .42)  çizgiler dışarıdan girer
- *   --word   (.34 → .52) yazı demetin üstünde belirir
- *   --spread (.5 → 1)   demet dikeyde açılır ve söner
- * Bindirmeler bilinçli: yazı, çizgiler daha demet hâlindeyken çıkıyor;
- * dağılma yazının okunması bittikten sonra başlıyor.
- */
-.titleScene {
-  --enter: clamp(0, var(--progress, 1) / 0.42, 1);
-  --word: clamp(0, (var(--progress, 1) - 0.34) / 0.18, 1);
-  --spread: clamp(0, (var(--progress, 1) - 0.5) / 0.5, 1);
-
+.stage {
   position: relative;
+  min-height: calc(100svh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.5rem, 3.5vw, 3rem);
+  padding-block: clamp(3rem, 6vw, 5rem) 0;
   isolation: isolate;
-  padding-block: clamp(2.5rem, 6vw, 6rem);
 }
 
 /*
- * Çizgi katmanı. Kutu başlığın kendisinden geniş: demet dağılırken
- * çizgiler metnin üstüne/altına taşsın, bir kutunun içinde hapsolmuş
- * gibi durmasın. `inset` yatayda negatif — `.section`'ın `clip`'i kesiyor.
+ * Baskı greni: statik bir gürültü dokusu, sahnenin üstünde `multiply` ile.
+ * Siyah zeminde görünmez, yalnız açık renkli harflerin üstünde koyu
+ * benekler bırakır — "distressed" mürekkep hissi. Doku bir kez
+ * rasterleşir; hareket onu yeniden çizdirmez.
  */
-.rays {
+.stage::after {
+  content: "";
   position: absolute;
   inset: 0 calc(-1 * var(--page-gutter));
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
-}
-
-.rays i {
-  --dir: -1;
-  /* Merkezden uzaklık (satır sayısı tek olduğu için orta çizgi 0'da). */
-  --offset: calc(var(--n) - 4);
-
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  /* Uçları eriyen hairline: kadraj kenarında sert kesilmiyor. */
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--color-brand-yellow) 22%,
-    var(--color-brand-yellow) 78%,
-    transparent
-  );
-  /* Girişte yatay, dağılmada dikey. İkisi tek transform'da: ayrı
-     özelliklere bölünürse tarayıcı iki ayrı katman oluşturuyor. */
-  transform: translate3d(
-    calc((1 - var(--enter)) * var(--dir) * 120%),
-    calc(var(--offset) * (0.1rem + var(--spread) * 4.2rem)),
-    0
-  );
-  opacity: calc(var(--enter) * (1 - var(--spread) * 0.88));
-}
-
-/* Tek sıradakiler soldan, çiftler sağdan. */
-.rays i:nth-child(even) {
-  --dir: 1;
-}
-
-/* Orta çizgi demetin çapası: hep en parlak, en son söner. */
-.rays i:nth-child(5) {
-  opacity: calc(var(--enter) * (1 - var(--spread) * 0.55));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3.2 0 0 0 -1.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  mix-blend-mode: multiply;
+  opacity: 0.75;
 }
 
 /*
- * Başlık. İki satır, ikincisi sağa kaçık — bu ilişki referanstan geliyor
- * ve KORUNDU (marka kompozisyonu), değişen yalnız çevresindeki boşluk ve
- * hareket. Punto ölçeği Archivo'nun cap yüksekliğine göre ayarlı
- * (Montserrat 800 cap/em 0.700, Archivo 800 0.686 — ölçüldü).
+ * Başlık kabı. `container-type` puntoyu kabın genişliğine bağlıyor:
+ * `100cqw / fit` — fit, satırın em genişliği (LessTalk.tsx `useFitTitle`;
+ * font inene kadar kaba tahmin).
  */
 .title {
+  container-type: inline-size;
   position: relative;
-  z-index: 1;
-  scroll-margin-top: calc(var(--header-height) + var(--space-4));
+  width: 100%;
   margin: 0;
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(2.83rem, 9.01vw, 10.45rem);
-  line-height: 0.856;
-  /* Dev puntoda sıkı espas sistemin kuralı; ayrıca Archivo (wdth 112)
-     Montserrat'tan %8-13 geniş, espas olmadan EN sürümü kompozisyonu
-     taşırıyordu. */
-  letter-spacing: -0.044em;
-  /* Büyük harf yalnızca çizimde, metinde değil. Türkçe locale'de tarayıcı
-     doğru eşlemeyi yapar (html lang="tr"). */
-  text-transform: uppercase;
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  font-family: var(--font-poster);
+  font-weight: 800;
+  font-synthesis: none;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: none;
+  /* h2'nin hesaplanan rengi marka sarısı (revision-layout e2e sözleşmesi);
+     "az laf," satırı kendi rengini açık fuşyaya çekiyor. */
+  color: var(--color-brand-yellow);
 }
 
-.titleLine {
+.row {
+  position: relative;
+  display: block;
+  line-height: 0.86;
+  /* Küçük harf yalnız çizimde; kaynak metin deck'teki gibi. Türkçe
+     eşleme (İ→i) html lang'den gelir. */
+  text-transform: lowercase;
+}
+
+.line {
+  display: flex;
+  gap: 0 0.26em;
+  width: max-content;
+  white-space: nowrap;
+}
+
+.word {
   display: block;
 }
 
-.titleLine:nth-child(2) {
-  padding-left: clamp(1.06rem, 22.44vw, 25.5rem);
+/* "az laf," — küçük, durgun: laf az. "çok iş"in üçte biri. */
+.talk {
+  font-size: min(calc(100cqw / var(--fit-line) * 0.345), 11.5svh);
+  color: var(--color-brand-fuchsia-light);
 }
 
-.titleMark {
+/*
+ * "çok iş" — dev. Satırın %84'ü: kalan pay halkanın taşması için. Sağa
+ * yaslı; halkanın sağ taşmasına kendi em'inde yer bırakılır.
+ */
+.work {
+  font-size: min(calc(100cqw / var(--fit-line) * 0.666), 28.8svh);
+  /* Halkanın taşma payı: üstte/altta ~0,45 em; sağda satır genişliğiyle
+     orantılı (bkz. .workCircle). */
+  margin: 0.34em calc(8% + 0.2em) 0.34em auto;
+}
+
+/* ---------- El çizimi halka ---------- */
+
+/*
+ * İnce beyaz halka: kelimenin kutusundan biraz taşar (el bir kez hızlıca
+ * dolanmış gibi). Yol, SVG'nin gerçek boyutuna JS'te ölçeklenir
+ * (`scalePath`); kalınlık bu yüzden her eksende piksel olarak sabit. Çizim bir el hareketi
+ * hızında, zamana bağlı — kaydırmaya bağlı değil.
+ */
+.circle {
+  position: absolute;
+  /* SVG yerleşik öğe: left+right ile gerilmez, boyut açık verilir. */
+  left: -0.24em;
+  top: -0.26em;
+  width: calc(100% + 0.44em);
+  height: calc(100% + 0.42em);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.circle path {
+  fill: none;
+  stroke: var(--color-text-on-black);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 760ms cubic-bezier(0.45, 0, 0.2, 1) 180ms;
+}
+
+.circle[data-drawn="true"] path {
+  stroke-dashoffset: 0;
+}
+
+/* Başlıktaki halka satırın ölçeğinde: biraz daha geniş pay, biraz daha
+   kalın çizgi (dev puntoda 1,5 px kayboluyordu). */
+/*
+ * Başlıktaki halka: "çok iş" ~5 em genişliğinde, 1 em boyunda — sıkı bir
+ * halka iki paralel çizgiye dönüşüp harflere yapışıyordu. Dikeyde geniş
+ * pay (üst 0,46 em, alt 0,4 em) ona el çizimi elips karakterini veriyor.
+ */
+.workCircle {
+  /* Yatay pay satır genişliğiyle ORANTILI: uzun satırda ("more work",
+     ~8,4 em) elips çok basıklaşıyor ve yanları erken kıvrılıyor; sabit em
+     payında uçtaki harfler ("m", "k") halkanın dışında kalıyordu (ölçüldü). */
+  left: calc(-8% - 0.2em);
+  top: -0.46em;
+  width: calc(116% + 0.4em);
+  height: calc(100% + 0.86em);
+}
+
+.workCircle path {
+  stroke-width: 2.25px;
+  transition-duration: 900ms;
+  transition-delay: 260ms;
+}
+
+/* Halkaya alınan kelime: kutu, halkanın referansı. Satır içinde bölünmez. */
+.circled {
+  position: relative;
   display: inline-block;
-  padding: 0.12em 0;
-  color: var(--color-brand-yellow);
-  opacity: var(--word);
-  /* Kelime demetin içinden çıkıyormuş gibi: hafif dikey ve ölçek. */
-  transform: translate3d(0, calc(1.1rem * (1 - var(--word))), 0)
-    scale(calc(0.965 + 0.035 * var(--word)));
-  transform-origin: left center;
-  /* `translate` (hover) ve `transform` (scroll) ayrı özellikler: scroll'un
-     her karede yazdığı dönüşüm hover geçişine takılıp gecikmesin. */
-  transition:
-    background-color 260ms var(--ease-house),
-    box-shadow 260ms var(--ease-house),
-    color 260ms var(--ease-house),
-    translate 260ms var(--ease-house);
 }
 
-.titleLine:nth-child(2) .titleMark {
-  transform-origin: right center;
+/*
+ * Künye: posterin alt kenarı — küçük, sessiz, dizginin ölçeğini okutuyor.
+ * Solda marka, ortada barkod, sağda madde sayacı.
+ */
+.colophon {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-top: clamp(0.9rem, 1.4vw, 1.25rem);
+  border-top: 1px solid var(--color-hairline);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-body-regular);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--color-text-on-black);
 }
 
-.titleMark:hover {
-  background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
-  color: var(--color-text-on-yellow);
-  box-shadow: 0 0 0 0.1em var(--color-brand-yellow);
-  translate: 0.4rem 0;
+.colophon > :last-child {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dekoratif barkod: farklı kalınlıkta dikey çizgiler, tek gradyanda. */
+.barcode {
+  width: 4.5rem;
+  height: 0.875rem;
+  background: linear-gradient(
+    90deg,
+    currentColor 0 4%,
+    transparent 4% 8%,
+    currentColor 8% 10%,
+    transparent 10% 15%,
+    currentColor 15% 21%,
+    transparent 21% 24%,
+    currentColor 24% 26%,
+    transparent 26% 32%,
+    currentColor 32% 35%,
+    transparent 35% 38%,
+    currentColor 38% 46%,
+    transparent 46% 50%,
+    currentColor 50% 52%,
+    transparent 52% 57%,
+    currentColor 57% 62%,
+    transparent 62% 65%,
+    currentColor 65% 67%,
+    transparent 67% 73%,
+    currentColor 73% 79%,
+    transparent 79% 82%,
+    currentColor 82% 84%,
+    transparent 84% 89%,
+    currentColor 89% 95%,
+    transparent 95% 97%,
+    currentColor 97% 100%
+  );
 }
 
 /* ---------- Maddeler ---------- */
 
 /*
- * Tam genişlik editoryal şeritler. Kademeli sütunlar kaldırıldı: metin
- * artık 633px'lik bir kutuya sıkışmıyor, ölçüsünü `--measure-*` belirliyor.
+ * Tam genişlik editoryal şeritler: küçük numara, dev açılış cümlesi, gövde
+ * sağda ayrı bir sütunda. Metinler büyük — kullanıcı: "bu bölümün
+ * metinlerini büyük büyük kullanabiliriz".
  */
 .body {
   width: 100%;
-  max-width: 92rem;
-  margin: clamp(3rem, 7vw, 7rem) auto 0;
+  margin: clamp(2rem, 5vw, 5rem) 0 0;
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--color-hairline);
@@ -170,129 +244,70 @@
 
 .itemSlot {
   --reveal: clamp(0, (var(--progress, 1) - 0.02) / 0.22, 1);
-  --index-reveal: clamp(0, (var(--progress, 1) - 0.1) / 0.2, 1);
 
   border-bottom: 1px solid var(--color-hairline);
 }
 
-/*
- * Üç sütun: numara · açılış · gerisi.
- *
- * İki sütunla denendi ve bırakıldı: metin ölçüsü 46 karakterde kaldığı
- * için satırın sağ yarısı boş kalıyordu (1440px'te ~700px ölü alan) ve
- * şeritler yarım kalmış gibi duruyordu. Üç sütunda iki metin kademesi
- * yan yana geliyor, şerit tam genişliği taşıyor ve okuma soldan sağa
- * doğal olarak akıyor.
- *
- * Numara sütunu sabit genişlikte: üç satırın metin kenarı birbiriyle
- * hizalanıyor. (Eski sürümde `auto` idi ve "01" ile "03" aynı genişlikte
- * olduğu hâlde metin kenarı satırdan satıra oynuyordu.)
- */
 .item {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, clamp(3.5rem, 11vw, 11rem)) minmax(0, 1fr);
-  gap: clamp(1.25rem, 4.5vw, 5rem);
+  grid-template-columns: minmax(0, clamp(3rem, 8vw, 8rem)) minmax(0, 1fr);
+  column-gap: clamp(1rem, 3vw, 3rem);
   align-items: start;
-  padding-block: clamp(2.25rem, 4.6vw, 4.75rem);
+  padding-block: clamp(2.5rem, 5.5vw, 5.5rem);
   opacity: var(--reveal);
   transform: translate3d(0, calc(2.5rem * (1 - var(--reveal))), 0);
 }
 
-/*
- * Numara: içi boş kontur. Sayfadaki diğer iri sarı ögelerle yarışmıyor
- * ama satırı taşıyacak kadar büyük. Satır üzerinde imleç gezerken içi
- * doluyor — kullanıcının istediği "01 02 03 üzerine gelince hareketlensin".
- * Dekoratif (`aria-hidden`): sıra bilgisini zaten `<ol>` taşıyor.
- */
+/* Numara: küçük, dolu, fuşya — bir araç, başlık değil. */
 .index {
-  font-family: var(--font-brand);
-  font-weight: var(--font-weight-brand);
-  font-size: clamp(2.6rem, 7.6vw, 8rem);
-  line-height: 0.76;
-  letter-spacing: -0.04em;
+  padding-top: 0.6em;
+  font-family: var(--font-poster);
+  font-size: clamp(0.9375rem, 1.2vw, 1.125rem);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--color-brand-yellow);
-  opacity: var(--index-reveal);
-  transform: translate3d(0, calc(0.6rem * (1 - var(--index-reveal))), 0);
-  transition:
-    color 320ms var(--ease-house),
-    -webkit-text-stroke-color 320ms var(--ease-house);
-}
-
-.item:hover .index {
-  color: var(--color-brand-yellow);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-brand-fuchsia);
 }
 
 .itemText {
   margin: 0;
   display: grid;
-  gap: clamp(0.9rem, 1.7vw, 1.5rem);
+  gap: clamp(1.25rem, 2.4vw, 2.25rem);
   color: var(--color-text-on-black);
 }
 
 /*
- * İki punto kademesi. Hiyerarşi PUNTO ve AĞIRLIKLA kuruluyor, renkle
- * değil: tokens.css'in kuralı "gövde/proz metni hiçbir yerde --text-muted
- * ile söndürülmez". İkisi de tam kontrastlı beyaz.
+ * Açılış: dev dizgi. Hiyerarşi PUNTO ve AĞIRLIKLA, renkle değil (tokens.css:
+ * gövde metni --text-muted ile söndürülmez). Metin kaynağındaki gibi cümle
+ * düzeninde — büyük harfe çevrilmez.
  */
 .lead {
   display: block;
-  max-width: 24ch;
+  max-width: 17em;
   color: var(--color-text-on-black);
-  font-family: var(--font-brand);
-  font-size: clamp(1.4rem, 2.6vw, 2.6rem);
-  font-weight: var(--font-weight-heading-semibold);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  /* Dengeli satırlar: üç satırlık bir açılış cümlesinde son satırın tek
-     kelime kalmasını engelliyor. */
+  font-family: var(--font-poster);
+  font-size: clamp(1.9rem, 4.9vw, 5.25rem);
+  font-weight: 700;
+  font-synthesis: none;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   text-wrap: balance;
   transition: translate 420ms var(--ease-house);
 }
 
 .rest {
   display: block;
-  max-width: var(--chapter-field-measure);
+  justify-self: end;
+  width: 100%;
+  max-width: 34rem;
   color: var(--color-text-on-black);
   font-family: var(--font-ui);
-  font-size: clamp(1rem, 1.25vw, 1.1875rem);
+  font-size: clamp(1.0625rem, 1.35vw, 1.3125rem);
   font-weight: var(--font-weight-body-regular);
-  line-height: 1.6;
+  line-height: 1.55;
 }
-
-/*
- * Geniş ekran yerleşimi — bu blok `.itemText`, `.lead` ve `.rest`
- * tanımlarından SONRA durmak ZORUNDA. Aynı özgüllükte olduğu için önceki
- * yerinde (`.item`'ın hemen ardında) `.itemText { display: grid }` onu
- * eziyordu; üç sütunlu ızgara hiç kurulmuyor, metin 290px'lik bir şeride
- * sıkışıyordu (tarayıcıda ölçüldü).
- */
-@media (min-width: 1000px) {
-  .item {
-    grid-template-columns:
-      minmax(0, clamp(3.5rem, 11vw, 11rem))
-      minmax(0, 1.05fr)
-      minmax(0, 0.95fr);
-  }
-
-  .itemText {
-    display: contents;
-  }
-
-  .lead {
-    grid-column: 2;
-  }
-
-  .rest {
-    grid-column: 3;
-    /* Açılışın ilk satırıyla aynı optik hatta: açılış puntosu daha büyük,
-       gövde onun x-yüksekliğine değil, ilk satır tabanına yaklaşıyor. */
-    padding-top: 0.4rem;
-  }
-}
-
 
 /*
  * Hover şeridi: satırın altından soldan sağa akan sarı hairline. Yalnız
@@ -306,8 +321,6 @@
   bottom: -1px;
   height: 1px;
   background: var(--color-brand-yellow);
-  /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-  --heading-color: var(--color-text-on-yellow);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 520ms var(--ease-house);
@@ -323,57 +336,61 @@
 }
 
 @media (max-width: 720px) {
-  .item {
-    /* Dar ekranda numara metnin üstünde: yan yana kalırsa metin sütunu
-       24 karaktere düşüyor. */
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(0.75rem, 3vw, 1.25rem);
+  /* Dar ekranda "çok iş" kelime başına bir satır ("çok / iş"): tek satırda
+     punto ~90 px'te kalıyor, ekranın yarısı boş duruyordu. "az laf," tek
+     satır ve küçük kalır. */
+  .talk {
+    font-size: min(calc(100cqw / var(--fit-line) * 0.713), 9.2svh);
   }
 
-  .titleLine:nth-child(2) {
-    padding-left: clamp(0.75rem, 4vw, 2rem);
+  .work {
+    font-size: min(calc(100cqw / var(--fit-word) * 0.666), 21.6svh);
+    margin-top: 0.5em;
+  }
+
+  .work .line {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .item {
+    /* Dar ekranda numara metnin üstünde. */
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .index {
+    padding-top: 0;
+  }
+
+  .rest {
+    justify-self: start;
   }
 }
 
 /*
  * CLAUDE.md: prefers-reduced-motion zorunlu destek.
  *
- * `!important` bilinçli: useScrollScene hareket azaltmada zaten
- * `--progress: 1` yazıyor, ama o yazılana kadar (hidrasyon) ölçülmemiş bir
- * ara değer görünmesin ve gelecekte daha özgül bir hareket kuralı eklense
- * de bu blok kazansın. Erişilebilirlik garantisi — hiçbir koşulda
- * yenilmemeli, aksi hâlde bölüm opacity:0'da kalabilir.
- *
- * Çizgi koreografisi burada tamamen kapanıyor: "ekran dışından gelip
- * ortada birleşen" bir hareketin durağan karşılığı yok, kalıntı çizgiler
- * de kompozisyonu bozardı.
+ * Harflerin zıplaması durur, halkalar çizilmiş hâlde görünür, maddelerin
+ * giriş/hover hareketleri kapanır. `!important` bilinçli:
+ * erişilebilirlik garantisi, daha özgül bir hareket kuralına yenilmemeli.
  */
 @media (prefers-reduced-motion: reduce) {
-  .rays {
-    display: none;
+  .section .circle path {
+    /* Halka çizilmiş hâlde durur; çizim hareketi yok. */
+    stroke-dashoffset: 0;
+    transition: none;
   }
 
-  .section .titleMark,
   .section .item,
-  .section .index,
   .section .lead {
     opacity: 1 !important;
     transform: none !important;
     translate: none !important;
     transition: none !important;
-    will-change: auto !important;
   }
 
   .section .sweep {
     display: none;
-  }
-
-  .section .titleMark:hover {
-    /* Highlight tepkisi kalır, hareket kalmaz. */
-    background: var(--color-brand-yellow);
-    /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
-    --heading-color: var(--color-text-on-yellow);
-    color: var(--color-text-on-yellow);
-    box-shadow: 0 0 0 0.1em var(--color-brand-yellow);
   }
 }

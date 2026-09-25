@@ -129,6 +129,23 @@ def build_logo_font() -> None:
     print(f"  {target.name}")
 
 
+def build_syne(source: TTFont | None = None) -> None:
+    """Syne — ana sayfa "az laf, çok iş" poster tipografisi (25 Eylül 2026).
+
+    Değişken ağırlık (400-800) KORUNUR: bölümün hareketi ağırlık ekseninin
+    kendisi ("az laf" incelir, "çok iş" kalınlaşır). Kullanıcının teslim
+    ettiği TTF verilirse (`source`) indirme atlanır.
+    """
+    print("Syne — poster (wght 400-800 değişken)")
+    font = source or TTFont(io.BytesIO(fetch(f"{GF}/syne/Syne%5Bwght%5D.ttf")))
+    build(font, OUT / "syne-latin-tr.woff2")
+
+    target = OUT / "OFL-Syne.txt"
+    if not target.exists():
+        target.write_bytes(fetch(f"{GF}/syne/OFL.txt"))
+    print(f"  {target.name}")
+
+
 def main() -> None:
     print("Archivo — display + başlık (wght 300-800, wdth 112 sabit)")
     archivo = TTFont(io.BytesIO(fetch(f"{GF}/archivo/Archivo%5Bwdth%2Cwght%5D.ttf")))
@@ -151,6 +168,7 @@ def main() -> None:
     build(archivo, OUT / "archivo-latin-tr.woff2")
 
     build_logo_font()
+    build_syne()
 
     # Editoryal serif: 18 Eylül 2026'da Instrument Serif'ten Newsreader'a
     # geçildi (kullanıcı: "serifli fontları daha okunaklı şık serifli fontla

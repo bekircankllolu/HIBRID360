@@ -164,6 +164,34 @@
 }
 
 /**
+ * Poster sesi — ana sayfa "az laf, çok iş" bölümü (25 Eylül 2026,
+ * kullanıcının teslim ettiği Syne). Değişken ağırlık 400-800 korunur:
+ * bölümün hareketi ağırlık ekseninin kendisi. Yalnız büyük puntoda ve
+ * küçük harfle kullanılır.
+ *
+ * Alt küme: `scripts/generate-fonts.py` `build_syne` (Latin + Türkçe),
+ * 227 glif, 27.2 KB. Lisans: OFL 1.1 — public/fonts/OFL-Syne.txt
+ */
+@font-face {
+  font-family: "Syne";
+  src: url("/fonts/syne-latin-tr.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* `python scripts/font-fallback-metrics.py public/fonts/syne-latin-tr.woff2 --base arial`:
+   hhea 92.5% / 27.5%, ortalama genişlik 0.43558 em -> Arial'a göre 103.71%. */
+@font-face {
+  font-family: "Syne Fallback";
+  src: local("Arial"), local("Helvetica Neue"), local("Liberation Sans");
+  ascent-override: 92.5%;
+  descent-override: 27.5%;
+  line-gap-override: 0%;
+  size-adjust: 103.71%;
+}
+
+/**
  * Metrik uyumlu yedek aileler — font inene kadar yazı sistem fontuyla
  * çizilir; ascent/descent override'ları gerçek fontun metrikleriyle
  * eşleştiği için yer değiştirme (CLS) oluşmaz.

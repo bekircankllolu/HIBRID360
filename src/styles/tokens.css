@@ -91,6 +91,14 @@
   --font-chapter-display: "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
   --font-weight-chapter-display: 700; /* Space Grotesk'in en kalın ağırlığı — 800/900 yok */
 
+  /* Poster sesi — şimdilik yalnız ana sayfa "az laf, çok iş" (25 Eylül
+     2026, deneme). Syne, değişken ağırlık 400-800; bkz. fonts.css "Syne". */
+  --font-poster: "Syne", "Syne Fallback", system-ui, sans-serif;
+  /* Fuşyanın açık tonu (kullanıcı: "fuşya biraz daha açık tonlu bazı
+     yerlerde"). Yeni hex değil, marka fuşyası + beyaz karışımı; siyah
+     zeminde kontrast 9:1 üstü. */
+  --color-brand-fuchsia-light: color-mix(in srgb, var(--color-brand-fuchsia) 42%, var(--color-brand-white));
+
   --font-weight-brand: 800; /* Archivo ExtraBold — dev başlık/statement */
   --font-weight-heading-bold: 700; /* Archivo Bold — H1-H3 */
   --font-weight-heading-semibold: 600; /* Archivo SemiBold — H1-H3 */
