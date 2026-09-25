@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { gotoSettled } from "./utils";
 import {
   ALL_ROUTES,
   CANONICAL_ROUTES,
@@ -396,7 +397,7 @@ test.describe("MONA izin listesi", () => {
 
       test(`${url} — MONA yok`, async ({ page }) => {
         await seedConsent(page);
-        await page.goto(url, { waitUntil: "networkidle" });
+        await gotoSettled(page, url);
         const present = Object.entries(await countMonaMarkers(page))
           .filter(([, count]) => count > 0)
           .map(([name, count]) => `${name} ×${count}`);

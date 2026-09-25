@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { gotoSettled } from "./utils";
 
 /**
  * Hidrasyon uyuşmazlığı nöbetçisi.
@@ -62,7 +63,7 @@ test.describe("Hidrasyon", () => {
     });
     page.on("pageerror", (error) => errors.push(error.message));
 
-    await page.goto("/tr", { waitUntil: "networkidle" });
+    await gotoSettled(page, "/tr");
 
     // Bant DOM'da var ama CSS ile gizli — gecikmeli girip LCP'yi kendine
     // çekmesin diye işaretleme ilk HTML'de geliyor (bkz. CookieBanner).

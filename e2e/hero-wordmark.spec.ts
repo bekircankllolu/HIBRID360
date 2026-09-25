@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { gotoSettled } from "./utils";
 
 /**
  * Hero wordmark iki katmanlidir: ilk boyamada Arial Black ile cizilen
@@ -17,7 +18,7 @@ test.describe("Hero wordmark", () => {
   test("sayfa acilir acilmaz dokulu sahne devreye girer, yedek gizlenir", async ({
     page,
   }) => {
-    await page.goto("/tr", { waitUntil: "networkidle" });
+    await gotoSettled(page, "/tr");
 
     const fallback = page.getByRole("img", { name: "HIBRID", exact: true });
 
@@ -31,7 +32,7 @@ test.describe("Hero wordmark", () => {
   }) => {
     // CLAUDE.md: prefers-reduced-motion destegi zorunlu.
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/tr", { waitUntil: "networkidle" });
+    await gotoSettled(page, "/tr");
 
     const fallback = page.getByRole("img", { name: "HIBRID", exact: true });
     await expect(fallback).toHaveCSS("opacity", "1");
@@ -47,7 +48,7 @@ test.describe("Hero wordmark", () => {
   }) => {
     // Yedek gorunur kalsin diye hareket azaltma ile aciyoruz.
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/tr", { waitUntil: "networkidle" });
+    await gotoSettled(page, "/tr");
 
     const fallback = page.getByRole("img", { name: "HIBRID", exact: true });
 

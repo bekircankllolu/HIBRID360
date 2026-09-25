@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { gotoSettled } from "./utils";
 import { CANONICAL_ROUTES, LOCALES, OVERFLOW_ROUTES } from "./routes";
 
 /**
@@ -259,7 +260,7 @@ test.describe("Menü hedefleri", () => {
       request,
     }) => {
       await seedConsent(page);
-      await page.goto(`/${locale}`, { waitUntil: "networkidle" });
+      await gotoSettled(page, `/${locale}`);
 
       const hrefs = await page
         .locator("header a[href], footer a[href]")

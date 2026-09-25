@@ -11,3 +11,16 @@ export async function acceptCookies(page: Page) {
   const visible = await button.isVisible({ timeout: 3000 }).catch(() => false);
   if (visible) await button.click();
 }
+
+/**
+ * `waitUntil: "networkidle"` yerine: `load` + ağın boşalması için KISA bir
+ * bekleme. Ana sayfa showreel'i (61 sn, 43 MB) oynarken tarayıcı tek bir uzun
+ * akış isteğini açık tutar; H.264 çalabilen tarayıcıda "ağ boşaldı" anı hiç
+ * gelmez ve test zaman aşımına düşerdi (CI'daki Chromium H.264 çalamadığı için
+ * orada görünmüyordu). Boşalma gelmezse test devam eder.
+ */
+export async function gotoSettled(page: Page, url: string) {
+  const response = await page.goto(url, { waitUntil: "load" });
+  await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => undefined);
+  return response;
+}

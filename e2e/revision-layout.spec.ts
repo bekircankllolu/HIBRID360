@@ -209,6 +209,36 @@ test("showreel expands from the top-right frame to the viewport", async ({
   expect(expanded.height).toBeGreaterThan(800);
 });
 
+test("dokunmatikte showreel kendiliğinden inmez; dokununca oynar", async ({ browser, baseURL }) => {
+  // 25 Eylül 2026 kullanıcı kararı: mobil veride 43 MB'lık video izlenmeden inmesin.
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  const page = await context.newPage();
+  const videoRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/videos/home-showreel")) videoRequests.push(request.url());
+  });
+  await page.goto("/tr", { waitUntil: "load" });
+  await acceptCookies(page);
+
+  const frame = page.locator('[class*="HeroTypography_showreelFrame"]');
+  const showreel = frame.locator("video");
+  const play = frame.getByRole("button", { name: "Showreeli oynat", exact: true });
+  await expect(play).toBeVisible();
+  // Masaüstündeki ertelenmiş başlatma (load + boşta kare) süresinden uzun bekle.
+  await page.waitForTimeout(3000);
+  expect(videoRequests).toEqual([]);
+  await expect(showreel).toHaveJSProperty("paused", true);
+
+  await play.tap();
+  await expect.poll(() => videoRequests.length, { timeout: 15_000 }).toBeGreaterThan(0);
+  await context.close();
+});
+
 test("language dialog and mobile menu remain unclipped", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/tr");
