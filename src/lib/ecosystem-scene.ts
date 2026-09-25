@@ -240,6 +240,94 @@ const CRYSTAL_FRAGMENT = /* glsl */ `
   }
 `;
 
+/**
+ * Yontulmuş kristal küre (25 Eylül 2026). Müşterinin kristal görselleri ışık
+ * haritası (matcap): görünüm uzayındaki normal, görselin küre diskinde bir
+ * noktaya karşılık gelir. Normal, yumuşak küre normali ile faset (düz yüz)
+ * normalinin karışımı — görsel fasetlere bölünür, küre döndükçe içindeki
+ * parlamalar fasetten fasete kayar. `instanceMatrix` süs taşları (InstancedMesh).
+ */
+const GEM_VERTEX = /* glsl */ `
+  attribute float aFacet;
+  attribute vec3 aBary;
+  varying vec3 vBary;
+  varying vec3 vSmooth;
+  varying vec3 vFacetNormal;
+  varying vec3 vView;
+  varying float vFacet;
+  void main() {
+    mat4 model = modelMatrix;
+    #ifdef USE_INSTANCING
+      model = modelMatrix * instanceMatrix;
+    #endif
+    mat4 mv = viewMatrix * model;
+    mat3 nm = mat3(mv);
+    vec4 mvPosition = mv * vec4(position, 1.0);
+    vSmooth = nm * normalize(position);
+    vFacetNormal = nm * normal;
+    vView = -mvPosition.xyz;
+    vFacet = aFacet;
+    vBary = aBary;
+    gl_Position = projectionMatrix * mvPosition;
+  }
+`;
+
+const GEM_FRAGMENT = /* glsl */ `
+  uniform sampler2D uMap;
+  uniform vec3 uTint;
+  uniform vec3 uRim;
+  uniform float uTime;
+  uniform float uSparkle;
+  varying vec3 vSmooth;
+  varying vec3 vFacetNormal;
+  varying vec3 vView;
+  varying float vFacet;
+  varying vec3 vBary;
+
+  // three MeshMatcapMaterial ile aynı görünüm tabanı (perspektifte kenarda kaymaz).
+  vec2 matcap(vec3 n, vec3 viewDir) {
+    vec3 x = normalize(vec3(viewDir.z, 0.0, -viewDir.x));
+    vec3 y = cross(viewDir, x);
+    return vec2(dot(x, n), dot(y, n));
+  }
+
+  void main() {
+    vec3 V = normalize(vView);
+    vec3 ns = normalize(vSmooth);
+    vec3 nf = normalize(vFacetNormal);
+    // Faset ağırlığı: görsel tanınır kalsın ama küre gerçek bir kesim gibi kırılsın.
+    vec3 n = normalize(mix(ns, nf, 0.55));
+    // Doku karesi diski FRAME payıyla taşıyor: disk yarıçapı 0.5 / FRAME.
+    vec2 uv = 0.5 + matcap(n, V) * (0.5 / GEM_FRAME) * 0.97;
+    vec3 color = texture2D(uMap, uv).rgb * uTint;
+    // Faset başına hafif ton farkı: yüzeyler birbirinden ayrışsın.
+    color *= 0.86 + 0.28 * vFacet;
+
+    // Kenar ışıması (görselin kendi parlama rengi).
+    float facing = clamp(dot(ns, V), 0.0, 1.0);
+    color += uRim * pow(1.0 - facing, 2.6) * 0.85;
+
+    // Faset parıltısı: sağ üstten gelen ışığı yansıtan yüzler. Fasetlerin yalnız
+    // bir kısmı "yıldız" olur ve kendi ritminde parlayıp söner (bloom büyütür).
+    // Yansıma yumuşak (karışık) normalle: tüm faset düz beyaz üçgen olmasın.
+    vec3 L = normalize(vec3(0.45, 0.62, 0.64));
+    float sheen = pow(max(dot(reflect(-V, n), L), 0.0), 70.0);
+    color += vec3(1.0) * sheen * 0.35;
+    // Yıldız: seçili fasetlerin ORTASINDA küçük bir ışık noktası (ağırlık
+    // merkezine uzaklık), faset ışığa döndüğünde parlar, kendi ritminde söner.
+    float spec = pow(max(dot(reflect(-V, nf), L), 0.0), 24.0);
+    float twinkle = 0.5 + 0.5 * sin(uTime * (1.1 + vFacet * 2.3) + vFacet * 47.0);
+    float center = pow(clamp(min(min(vBary.x, vBary.y), vBary.z) * 3.0, 0.0, 1.0), 6.0);
+    float star = step(0.78, vFacet) * twinkle * twinkle * center;
+    color += vec3(1.0) * spec * star * 3.2 * uSparkle;
+
+    // Kenar yumuşatma: silüette alfa sıfıra iner (MSAA kapalıyken tırtık olmasın).
+    float edge = smoothstep(0.0, 0.16, facing);
+    gl_FragColor = vec4(color, edge);
+    #include <colorspace_fragment>
+  }
+`;
+
 /* ------------------------------------------------------------------------ sahne */
 
 export interface EcosystemSceneOptions {
@@ -453,21 +541,17 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
   };
 
   /*
-   * ---- küreler: kristal görseller (25 Eylül 2026)
+   * ---- küreler: 3B yontulmuş kristal (25 Eylül 2026, 2. tur)
    *
-   * Her küre iki parçadan oluşur:
-   *   1) GÖRÜNMEZ küre (yalnız derinlik yazar): eski opak kürenin birebir
-   *      yerinde ve boyunda. Arkasındaki yörünge çizgilerini, yıldızları ve
-   *      kristali eskisi gibi gizler; kendi yörünge çizgisi kürenin "içinden"
-   *      geçmez.
-   *   2) Kristal görsel düzlemi: kameraya dönük, kürenin ÖN teğet noktasında.
-   *      Boyu, kürenin ekrandaki silüetini birebir kaplayacak şekilde perspektifle
-   *      hesaplanır (`placeSurface`) — disk eski küreyle aynı ekran boyunda.
+   * Müşterinin pembe / sarı / beyaz kristal görselleri kürenin ÜSTÜNE yapıştırılmaz;
+   * ışık haritası (matcap) olarak kullanılır. Küre gerçek bir çok yüzlü (fasetli)
+   * geometri: her faset normali görselin farklı bir noktasını örnekler, küre
+   * döndükçe iç parlamalar fasetler arasında kayar — gerçek bir mücevher gibi.
+   * Üstüne: kenar ışıması (görselin kendi parlama rengi), bazı fasetlerde ışığı
+   * yakalayınca parlayıp sönen yıldız parıltısı (bloom büyütür).
    * Yörünge, hız, boyut, odak katmanı, hale nabzı ve üzerine gelince parlama
-   * değişmedi; yalnız kürenin görünüşü.
+   * değişmedi.
    */
-  const sphereHigh = track(new THREE.SphereGeometry(1, 56, 40));
-  const sphereLow = track(new THREE.SphereGeometry(1, 20, 14));
   const glowTexture = track(
     radialTexture(128, [
       [0, "rgba(255,255,255,1)"],
@@ -493,12 +577,48 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
     return sprite;
   };
 
-  /** Yalnız derinlik yazan malzeme (renk yok). */
-  const occluderMaterial = track(new THREE.MeshBasicMaterial({ colorWrite: false }));
+  /**
+   * Fasetli küre: ikosahedron (bölünmüş) — her üçgen kendi düz normalini taşır
+   * (`normal`), yumuşak küre normali konumdan gelir; `aFacet` faset başına sabit
+   * tohumlu rastgele sayı (parıltı seçimi ve hafif ton farkı).
+   */
+  const facetedSphere = (detail: number, seedStart: number) => {
+    const geometry = new THREE.IcosahedronGeometry(1, detail);
+    const position = geometry.getAttribute("position");
+    const normals = new Float32Array(position.count * 3);
+    const facets = new Float32Array(position.count);
+    const bary = new Float32Array(position.count * 3);
+    const a = new THREE.Vector3();
+    const b = new THREE.Vector3();
+    const c = new THREE.Vector3();
+    let seed = seedStart;
+    const rnd = () => {
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+    for (let i = 0; i < position.count; i += 3) {
+      a.fromBufferAttribute(position, i);
+      b.fromBufferAttribute(position, i + 1);
+      c.fromBufferAttribute(position, i + 2);
+      const n = c.sub(b).cross(a.sub(b)).normalize();
+      const value = rnd();
+      for (let k = 0; k < 3; k++) {
+        normals.set([n.x, n.y, n.z], (i + k) * 3);
+        facets[i + k] = value;
+        bary[(i + k) * 3 + k] = 1;
+      }
+    }
+    geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+    geometry.setAttribute("aFacet", new THREE.BufferAttribute(facets, 1));
+    geometry.setAttribute("aBary", new THREE.BufferAttribute(bary, 3));
+    return track(geometry);
+  };
+  const gemHigh = facetedSphere(3, 0x9e3779b9);
+  const gemLow = facetedSphere(2, 0x7f4a7c15);
 
-  /** Kristal dokuları; yüklenince çizime katılır (öncesinde kare görünmesin). */
+  /** Kristal dokuları; yüklenince çizime katılır (öncesinde küre görünmesin). */
   const crystalLoads: Array<Promise<void>> = [];
-  const crystalMaterials: THREE.MeshBasicMaterial[] = [];
+  const crystalMaterials: THREE.ShaderMaterial[] = [];
   const loadCrystal = (src: string) => {
     let settle = () => {};
     crystalLoads.push(
@@ -511,7 +631,7 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
         src,
         () => {
           for (const material of crystalMaterials) {
-            if (material.map === texture) material.visible = true;
+            if (material.uniforms.uMap.value === texture) material.visible = true;
           }
           settle();
           options.onTextureLoad?.();
@@ -528,110 +648,73 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
   const yellowTexture = loadCrystal(ECO_CRYSTAL_SPHERES.yellow.src);
   const whiteTexture = loadCrystal(ECO_CRYSTAL_SPHERES.white.src);
 
-  /**
-   * Dokular önceden çarpılmış alfa taşır (siyah zemin şeffaf, disk opak):
-   * bileşim One / OneMinusSrcAlpha. `min(rgb, a)`: kayıplı webp sıkıştırması
-   * parlamanın uçlarında rengi alfanın biraz üstüne taşıyabiliyor (ışıltı noktası).
-   */
-  const crystalSurface = (map: THREE.Texture, tint = 0xffffff) => {
-    const material = new THREE.MeshBasicMaterial({
-      map,
-      color: tint,
+  const gem = (map: THREE.Texture, rim: number, tint = 0xffffff, sparkle = 1) => {
+    const material = new THREE.ShaderMaterial({
+      vertexShader: GEM_VERTEX,
+      fragmentShader: GEM_FRAGMENT,
+      defines: { GEM_FRAME: ECO_CRYSTAL_SPHERES.frame.toFixed(3) },
+      uniforms: {
+        uMap: { value: map },
+        uTint: { value: new THREE.Color(tint) },
+        uRim: { value: new THREE.Color(rim) },
+        uTime: { value: 0 },
+        uSparkle: { value: sparkle },
+      },
+      // Yalnız silüetteki 1-2 px yarı saydam; derinlik yine yazılır (arkadaki
+      // yörünge çizgilerini ve yıldızları eski opak küre gibi gizler).
       transparent: true,
-      depthWrite: false,
-      blending: THREE.CustomBlending,
-      blendEquation: THREE.AddEquation,
-      blendSrc: THREE.OneFactor,
-      blendDst: THREE.OneMinusSrcAlphaFactor,
-      blendSrcAlpha: THREE.OneFactor,
-      blendDstAlpha: THREE.OneMinusSrcAlphaFactor,
+      depthWrite: true,
     });
-    // Doku gelmeden çizilmesin: yüklenmemiş doku siyah kare olarak görünürdü.
+    // Doku gelmeden çizilmesin: yüklenmemiş doku siyah küre olarak görünürdü.
     material.visible = Boolean(map.image);
-    material.onBeforeCompile = (shader) => {
-      shader.fragmentShader = shader.fragmentShader.replace(
-        "#include <map_fragment>",
-        "#include <map_fragment>\n  diffuseColor.rgb = min(diffuseColor.rgb, vec3(diffuseColor.a));",
-      );
-    };
     crystalMaterials.push(material);
     return track(material);
   };
-  const plane = track(new THREE.PlaneGeometry(1, 1));
-  /** Yüzeyler yörünge çizgilerinden ÖNCE çizilir: öndeki çizgiler üstüne eklenir. */
-  const SURFACE_ORDER = -1;
 
-  /**
-   * Kristal düzlemini kürenin ön teğet noktasına yerleştirir. Göz uzaklığı d,
-   * yarıçap r: kürenin görünen silüeti, teğet düzlemde yarıçapı
-   * (d − r)·r / √(d² − r²) olan bir diske karşılık gelir; doku bu diski
-   * `frame` payıyla (parlama) taşır.
-   */
-  const toEye = new THREE.Vector3();
-  const placeSurface = (object: THREE.Object3D, x: number, y: number, z: number, radius: number) => {
-    toEye.set(eye.x - x, eye.y - y, eye.z - z);
-    const d = toEye.length();
-    const lift = radius * 1.002;
-    toEye.divideScalar(Math.max(d, 1e-4));
-    object.position.set(x + toEye.x * lift, y + toEye.y * lift, z + toEye.z * lift);
-    object.lookAt(eye);
-    const disk = d > radius * 1.05 ? ((d - lift) * radius) / Math.sqrt(d * d - radius * radius) : radius;
-    object.scale.setScalar(disk * 2 * ECO_CRYSTAL_SPHERES.frame);
-  };
-
-  const fuchsiaSurface = crystalSurface(fuchsiaTexture);
-  const yellowSurface = crystalSurface(yellowTexture);
+  const fuchsiaGem = gem(fuchsiaTexture, ECO_CRYSTAL_SPHERES.fuchsia.halo);
+  const yellowGem = gem(yellowTexture, ECO_CRYSTAL_SPHERES.yellow.halo);
   const clickable = bodies.map((body) => {
-    const mesh = new THREE.Mesh(sphereHigh, occluderMaterial);
+    const mesh = new THREE.Mesh(gemHigh, body.color === "yellow" ? yellowGem : fuchsiaGem);
     mesh.scale.setScalar(body.radius);
-    const surface = new THREE.Mesh(plane, body.color === "yellow" ? yellowSurface : fuchsiaSurface);
-    surface.renderOrder = SURFACE_ORDER;
     const halo = glowFor(
       body.color === "yellow" ? ECO_CRYSTAL_SPHERES.yellow.halo : ECO_CRYSTAL_SPHERES.fuchsia.halo,
       0.3,
     );
     halo.scale.setScalar(body.radius * 4.2);
-    scene.add(mesh, surface, halo);
-    return { mesh, surface, halo, radius: body.radius };
+    scene.add(mesh, halo);
+    return { mesh, halo, radius: body.radius };
   });
 
-  // Süs küreler: beyaz kristal; sıcak olanlar eski krem tonuyla boyanır. Her
-  // grup iki InstancedMesh: derinlik küresi + kameraya dönük kristal düzlemi.
+  // Süs küreler: beyaz kristal (sıcak olanlar eski krem tonuyla); tek InstancedMesh
+  // her grup için. Küçük oldukları için daha az fasetli geometri.
   const decor: EcoDecor[] = buildDecor(high);
   const cool = decor.filter((d) => d.warmth === 0);
   const warm = decor.filter((d) => d.warmth === 1);
-  const makeInstanced = (geometry: THREE.BufferGeometry, material: THREE.Material, count: number) => {
-    const mesh = new THREE.InstancedMesh(geometry, material, Math.max(1, count));
+  const makeInstanced = (list: EcoDecor[], material: THREE.Material) => {
+    const mesh = new THREE.InstancedMesh(gemLow, material, Math.max(1, list.length));
     mesh.frustumCulled = false;
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     scene.add(mesh);
     // `InstancedMesh.dispose()` örnek matrisi tamponunu GPU'dan bırakır.
     return track(mesh);
   };
-  const decorGroup = (list: EcoDecor[], tint: number) => {
-    const occluder = makeInstanced(sphereLow, occluderMaterial, list.length);
-    const surface = makeInstanced(plane, crystalSurface(whiteTexture, tint), list.length);
-    surface.renderOrder = SURFACE_ORDER;
-    return { list, occluder, surface };
-  };
-  const decorGroups = [decorGroup(cool, 0xffffff), decorGroup(warm, 0xfff1c8)];
+  const decorGroups = [
+    { list: cool, mesh: makeInstanced(cool, gem(whiteTexture, ECO_CRYSTAL_SPHERES.white.halo, 0xffffff, 0.8)) },
+    { list: warm, mesh: makeInstanced(warm, gem(whiteTexture, 0xffe9b0, 0xfff1c8, 0.8)) },
+  ];
   const scratch = new THREE.Object3D();
   const placeDecor = (group: (typeof decorGroups)[number], t: number) => {
     group.list.forEach((item, i) => {
       const p = bodyPosition(item, t);
       scratch.position.set(p[0], p[1], p[2]);
-      scratch.quaternion.identity();
+      // Her süs taşı kendi hızında, eğik eksende döner (fasetler ışığı yakalasın).
+      scratch.rotation.set(0.35 + (i % 5) * 0.12, t * (0.12 + (i % 7) * 0.02) + i * 1.7, 0);
       scratch.scale.setScalar(item.radius);
       scratch.updateMatrix();
-      group.occluder.setMatrixAt(i, scratch.matrix);
-      placeSurface(scratch, p[0], p[1], p[2], item.radius);
-      scratch.updateMatrix();
-      group.surface.setMatrixAt(i, scratch.matrix);
+      group.mesh.setMatrixAt(i, scratch.matrix);
     });
-    for (const mesh of [group.occluder, group.surface]) {
-      mesh.count = group.list.length;
-      mesh.instanceMatrix.needsUpdate = true;
-    }
+    group.mesh.count = group.list.length;
+    group.mesh.instanceMatrix.needsUpdate = true;
   };
 
   // Büyük süs kürelerin yumuşak halesi (referanstaki ışık sızıntısı).
@@ -794,13 +877,13 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
   const setFocus = (index: number) => {
     if (index === focused) return;
     if (focused >= 0) {
-      for (const part of [clickable[focused].mesh, clickable[focused].surface, clickable[focused].halo]) {
+      for (const part of [clickable[focused].mesh, clickable[focused].halo]) {
         part.layers.set(MAIN_LAYER);
       }
     }
     focused = index;
     if (focused >= 0) {
-      for (const part of [clickable[focused].mesh, clickable[focused].surface, clickable[focused].halo]) {
+      for (const part of [clickable[focused].mesh, clickable[focused].halo]) {
         part.layers.set(FOCUS_LAYER);
       }
     }
@@ -906,7 +989,8 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
       const p = frame.positions[index];
       if (!p) return;
       item.mesh.position.set(p[0], p[1], p[2]);
-      placeSurface(item.surface, p[0], p[1], p[2], item.radius);
+      // Eğik eksende yavaş dönüş: fasetler ışığı yakalar, iç parlamalar kayar.
+      item.mesh.rotation.set(0.32, t * 0.15 + index, 0.12);
       item.halo.position.set(p[0], p[1], p[2]);
       const pulse = 0.28 + 0.06 * Math.sin(t * 1.7 + index * 1.3);
       const boost = frame.hover === index ? 0.25 : 0;
@@ -914,6 +998,7 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
     });
 
     for (const group of decorGroups) placeDecor(group, t);
+    for (const material of crystalMaterials) material.uniforms.uTime.value = t;
     for (const { halo, item } of decorHalos) {
       const p = bodyPosition(item, t);
       halo.position.set(p[0], p[1], p[2]);

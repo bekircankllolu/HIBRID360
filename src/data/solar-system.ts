@@ -352,15 +352,15 @@ export const CRYSTAL_MEDIA = {
  * ---------------------------------------------------------------------
  *
  * Müşterinin verdiği pembe / sarı / beyaz kristal küre görselleri eski
- * parlak (üç boyutlu) kürelerin yerine geçti; yörünge, hız, boyut, odak ve
- * etkileşim DEĞİŞMEDİ. Dokular `scripts/prepare-ecosystem-crystals.mjs` ile
- * üretilir: kare, önceden çarpılmış alfa, disk opak, parlama yumuşak.
+ * parlak kürelerin yerine geçti; yörünge, hız, boyut, odak ve etkileşim
+ * DEĞİŞMEDİ. Görsel küreye yapıştırılmaz: gerçek 3B yontulmuş (fasetli) kürenin
+ * ışık haritası (matcap) olarak kullanılır — küre döndükçe iç parlamalar
+ * fasetler arasında kayar (src/lib/ecosystem-scene.ts → GEM_FRAGMENT).
+ * Dokular `scripts/prepare-ecosystem-crystals.mjs` ile üretilir.
  *
- * `frame`: dokunun yarı kenarı / küre diski yarıçapı. Sahne düzlemi bu oranla
- * büyütülür ki disk eski kürenin tam ekran boyuna otursun.
- * `halo`: eski marka renkli halelerin yerine görselin kendi parlama rengi
- * (üretim betiğinin ölçtüğü disk kenarı ortalaması) — hale nabzı ve üzerine
- * gelince parlama aynen sürer, yalnız ton görselle uyumlu.
+ * `frame`: dokunun yarı kenarı / küre diski yarıçapı (matcap örneklemesi diski
+ * bu oranla bulur). `halo`: hale ve kenar ışıması rengi — görselin kendi
+ * parlama rengi (üretim betiğinin ölçtüğü disk kenarı ortalaması).
  */
 export const ECO_CRYSTAL_SPHERES = {
   fuchsia: { src: "/images/site/ecosystem/crystal-fuchsia-20260925.webp", halo: 0xff0675 },
