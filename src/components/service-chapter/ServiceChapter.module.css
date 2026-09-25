@@ -97,6 +97,12 @@
   text-transform: uppercase;
 }
 
+/* Türkçe büyük harf başlıkta İ Ö Ü Ş Ç noktaları .98'de üst satırın alt
+   kenarına giriyordu (Faz 1 devri, B1). Yalnız TR h2; EN aynı kalır. */
+.details h2:lang(tr) {
+  line-height: 1.05;
+}
+
 .details p,
 .details li {
   max-width: var(--chapter-field-measure);
