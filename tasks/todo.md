@@ -932,15 +932,28 @@ Kullanıcı kararları: sıra = Faz 1 (hatalar+performans) → Faz 2 (tasarım d
 - DOĞRULANMADI: müşterinin gerçek Mac'i, gerçek Safari/iPhone (ses), seslerin kulakla kalitesi, canlı Vercel (merge sonrası).
 
 
-### Faz 2 taslağı (BAŞLAMADI — kullanıcı "tamam başla" demeden kod yok; önce plan onayı)
+### Faz 2 — Tasarım dilini tüm sayfalara yayma (ONAYLANDI 20 Eylül 2026; plan dosyası: `~/.claude/plans/shimmering-yawning-spark.md`)
 
-Hedef: What We Do "Service Chapter" dilini tüm sayfalara yay (ana sayfa dahil); Think & Thank'in krem/mint/pembe dünyası kasıtlı, korunur; MONA parçaları yalnız seçili sayfalarda. Kaynak: `scratchpad/audit/design/design-audit.md` (oturum geçici dizini — kaybolduysa yeniden çıkar; 31 TR rota, 124 ekran görüntüsü).
+Dal düzeni: `feat/design-language` (toplama dalı, `claude/phase-0-setup-amip8r`'dan) ← her grup `design/bN-*` dalından PR. Ana dala merge için AYRI onay. 5 kontrol noktası: (1) B0–B1, (2) B2–B5, (3) B6–B7, (4) B8, (5) B9.
+Kesin kararlar: Space Grotesk 700 display her sayfada (ana sayfa dahil); Think & Thank aynen; MONA = nokta yapısı, yalnız hizmet sayfaları + hub + AI (ana sayfa/Brief yok); Work/Contact medya hero kalır; ana sayfa yalnız yazı dili; ana dala tek seferde.
+Sapma (B0): `ChapterHero` refaktörü yerine `PageHero` bağımsız kurulur (planın yedek yolu) — Faz 3 chapter hero'larını zaten yeniden yazacak; iki CSS'in birleştirilmesi Faz 3 sonrasına borç.
 
-- [ ] 1. Tek display rolü: Space Grotesk 700, tracking 0, tek H1 ölçeği (`--chapter-display`) — bugün tek viewportta 12 farklı H1 puntosu (40 → 160 px)
-- [ ] 2. H1 rengi: beyaz + tek sarı satır kuralı (18 sayfada düz sarı H1)
-- [ ] 3. Kap/gutter: 41/20 px tam genişlik; 16 px, 36 px, 736 px ortalı, 672 px ortalı kapları kaldır
-- [ ] 4. Hero grameri: meta satırı + derece + hairline; Work/Contact'ın medya heroları
-- [ ] 5. Buton ailesi: tek PrimaryCta; MONA hapları, who-we-are hapı, Brief ghost butonu birleşir
-- [ ] 6. Fuşya gövde metni (hub kırıntısı, Brief girişi) kalkar; fuşya yalnız araç (derece, numara, çizgi, odak)
-- [ ] 7. TR büyük harf başlık satır aralığı ≥ 1.05 (`ai-creative-production/page.module.css:9` `.proof h2`, `ServiceChapter.module.css:95` `.details h2`): Faz 1'de yüklü hali değiştirmemek için bilerek DOKUNULMADI (390 px'te iki satır arası ~4,5 px dikey çakışma, harf mürekkebi çakışmıyor)
-- [ ] 8. Legal/sustainability şablonu; token dışı hex'ler (`#070707`, `#080808`, `#151515`, `#101010`…) → CSS özel özellikleri
+- [x] **B0 Temel** (`design/b0-foundation`, 25 Eylül 2026)
+  - [x] tokenlar: `--chapter-display-l`, `--chapter-leading*`, `--section-space*`, `--surface-1/-2`
+  - [x] `scripts/generate-title-metrics.py` → `src/lib/title-metrics.ts`; `src/lib/page-title.ts` (`splitTitle`, `titleFit`, `needsTallLeading`, `upperForLang`) + 66 vitest (tarayıcı ölçümüyle ≤%1,2 uyum)
+  - [x] `PageTitle` (düz metin, `cqw` sığdırma, açık `lang`, font `preload()`), `PageHero` (kırıntı + çizgi, lede; marka kırıntısı otomatik `lang="en"`); 40 gerçek H1 × 3 kademe × 320–1440 px gerçek tarayıcıda taşma 0 (Chromium + WebKit, font engelli de)
+  - [x] `Button` (primary/ghost/inverse; md/sm), `PrimaryCta` = sarmalayıcı (piksel aynı)
+  - [x] Header/Footer/LanguageSwitcher kenar boşluğu → `--page-gutter` (36→41 px, mobil 12/16→20 px); CtaBand `/creative` özel durumu kalktı (Creative bandı 252→324 px, bilinçli)
+  - [x] `e2e/routes.json|ts` (tek rota kaynağı), `e2e/design-language.spec.ts` (7 hizmet sayfası ile tohum; MONA izin listesi), taşma bekçisine 6 yasal rota + 404, `src/styles/hex-guard.test.ts` (ratchet, `hex-baseline.json`)
+  - [x] `scripts/design-audit.mjs` (`shoot`/`compare`, `.design-audit/` gitignore'da). Taban: `C:\Users\bekir\HIBRID360-baseline` worktree (port 3200, `feat/design-language` başı) → `.design-audit/baseline`. B0 farkı: her rotada YALNIZ header (masaüstü %0,495; mobil %5–8, sabit header her karede), Creative CTA bandı — başka fark yok (fark görüntüleri incelendi)
+  - Doğrulama: tsc/eslint/vitest 518+, tam Playwright 309 geçti + 4 önceden atlanan (313 test), kod incelemesi (2 MEDIUM + 2 LOW düzeltildi)
+- [ ] **B1 What We Do ailesi**: hub, service-production, how-we-work
+- [ ] **B2 Yasal 7 sayfa** (tek modül)
+- [ ] **B3 Culture hub + directors**
+- [ ] **B4 Who We Are / What We Believe / Partners** (+ ölü CSS)
+- [ ] **B5 Solutions + Brief + 404**
+- [ ] **B6 Work + Clients + Contact** (medya hero kalır)
+- [ ] **B7 AI Creative Production** (MonaDots'a dokunulmaz)
+- [ ] **B8 Ana sayfa (yalnız yazı dili)**, preload YOK, LCP ×3 ölçüm
+- [ ] **B9 Temizlik + yayın**: global h1–h3 beyaz, ölü CSS/token, DECISIONS/CLAUDE.md/lessons, tam denetim, toplama dalı → ana dal (AYRI onay)
+- [ ] Faz 1'den devreden: TR büyük harf h2 satır aralığı ≥ 1,05 (AI `.proof h2`, `.details h2`) → B1/B7
