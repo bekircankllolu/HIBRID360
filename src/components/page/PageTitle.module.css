@@ -1,0 +1,87 @@
+/*
+ * PageTitle — sayfa başlığı (h1). Gerekçe ve sözleşmeler: PageTitle.tsx.
+ *
+ * Punto = min(kademe tavanı, kap genişliği / --title-fit). --title-fit
+ * sunucuda en uzun kelimeden hesaplanıp kaba satır içi yazılır (boş
+ * başlıkta yok; o durumda `var(--title-fit, 1)` tavanı kap genişliğiyle sınırlar).
+ */
+
+/*
+ * Satır kutularının sığdırıldığı kap. `container-type: inline-size` kabın
+ * genişliğini içerikten koparır — punto kap genişliğinden hesaplandığı için
+ * zorunlu. Bedeli: kendini içeriğe göre boyutlayan bağlamda (flex satırı,
+ * `justify-self: start`, mutlak konum) kap 0'a çöker ve punto 0 olurdu;
+ * `width: 100%` kabı her bağlamda bulunduğu bloğun genişliğine sabitler.
+ */
+.box {
+  width: 100%;
+  container-type: inline-size;
+}
+
+.title {
+  --title-cap: var(--chapter-display);
+  --title-leading: var(--chapter-leading);
+
+  margin: 0;
+  font-family: var(--font-chapter-display);
+  font-weight: var(--font-weight-chapter-display);
+  /* Kap sorgusu birimini (cqw) ve min()'i tanımayan eski tarayıcı: yalnız tavan. */
+  font-size: var(--title-cap);
+  line-height: var(--title-leading);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-align: left;
+  /* h1 rengi hep açık: globals.css'teki `--heading-color` mirasına güvenilmez. */
+  color: var(--color-brand-white);
+  /* Kelime ortasından kırılma yok. Üçü de kalıtsal: üst öğeden gelen bir
+     değer sığdırma sözleşmesini bozmasın. */
+  hyphens: manual;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/*
+ * min() var ama cqw yok (ör. iOS 15 Safari): kap ≈ sayfa içerik genişliği
+ * varsayımı. Başlık tam genişlikte değilse yine tavanı aşmaz (min), yani
+ * yalnız tavanla çizmekten hiçbir durumda kötü değil. @supports ŞART: var()
+ * içeren bildirim desteklenmeyen tarayıcıda hesaplama anında geçersiz olur ve
+ * punto üstteki tavana değil, üst öğenin puntosuna düşer.
+ */
+@supports (width: min(1px, 2px)) {
+  .title {
+    font-size: min(var(--title-cap), calc((100vw - 2 * var(--page-gutter)) / var(--title-fit, 1)));
+  }
+}
+
+@supports (width: 1cqw) {
+  .title {
+    font-size: min(var(--title-cap), calc(100cqw / var(--title-fit, 1)));
+  }
+}
+
+.title[data-tier="l"] {
+  --title-cap: var(--chapter-display-l);
+}
+
+.title[data-tier="sentence"] {
+  --title-cap: var(--chapter-manifesto);
+  --title-leading: var(--chapter-leading-sentence);
+}
+
+/* İ Ö Ü Ş Ç Ğ içeren büyük harf başlık: nokta ve çengeller üst satıra değmesin. */
+.title[data-tall="true"] {
+  --title-leading: var(--chapter-leading-tall);
+}
+
+.title[data-tier="sentence"][data-tall="true"] {
+  --title-leading: var(--chapter-leading-sentence-tall);
+}
+
+.line {
+  display: block;
+}
+
+/* 2+ satırlı başlığın son satırı; tek satırlık başlıkta hiç yok. */
+.accent {
+  color: var(--color-brand-yellow);
+}

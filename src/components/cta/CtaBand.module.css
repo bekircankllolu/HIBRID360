@@ -13,16 +13,9 @@
   text-align: center;
 }
 
-.band[data-compact] {
-  min-height: 28svh;
-  padding-block: clamp(2.5rem, 5vw, 5rem);
-  border-top: 1px solid color-mix(in srgb, var(--color-brand-black) 20%, transparent);
-}
-
 /* Dar ekranda yüksekliği içerik belirler. */
 @media (max-width: 760px) {
-  .band,
-  .band[data-compact] {
+  .band {
     min-height: 0;
   }
 }

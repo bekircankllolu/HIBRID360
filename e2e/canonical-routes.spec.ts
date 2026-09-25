@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { CANONICAL_ROUTES, LOCALES, OVERFLOW_ROUTES } from "./routes";
 
 /**
  * Canonical rotalar ve eski yol yönlendirmeleri.
@@ -12,57 +13,24 @@ import { test, expect, type Page } from "@playwright/test";
  *   - Sayfa davranışı  → canonical rotalar üzerinden
  *   - Yönlendirme      → status + Location başlığı üzerinden, takip
  *                        edilmeden
- */
-const CANONICAL_ROUTES = [
-  "/who-we-are",
-  "/what-we-do",
-  "/what-we-believe",
-  "/solutions",
-  "/clients",
-  "/partners",
-  "/contact",
-  "/work",
-  "/think-and-thank",
-] as const;
-
-const LOCALES = ["tr", "en"] as const;
-
-/**
- * Yatay taşma testinin kapsamı — canonical üst sayfalar + What We Do
- * alt sayfalarının TAMAMI + görsel yoğun Culture rotaları.
+ *
+ * Rota listeleri (CANONICAL_ROUTES, OVERFLOW_ROUTES, LOCALES) Faz 2 B0'dan
+ * beri `e2e/routes.json`'da — tasarım dili bekçisi ve denetim aracı
+ * (`scripts/design-audit.mjs`) aynı listeyi okuyor.
+ *
+ * Yatay taşma kapsamı (OVERFLOW_ROUTES) — canonical üst sayfalar + What We
+ * Do alt sayfalarının TAMAMI + görsel yoğun Culture rotaları + 6 yasal
+ * sayfa + 404.
  *
  * 30 Ağustos 2026 QA denetimi: taşma testi yalnızca üst sayfaları
  * kapsadığı için hizmet detay rotalarındaki taşmalar (390px'te
  * /what-we-do/event-management +127px'e kadar) hiç yakalanmıyordu. Kök
  * neden ortak bir CSS kalıbıydı — hero başlığının clamp tabanı — ve o
- * kalıp yalnızca test edilmeyen sayfalarda yaşıyordu.
+ * kalıp yalnızca test edilmeyen sayfalarda yaşıyordu. Aynı ders Faz 2
+ * B0'da yasal sayfalara ve 404'e uygulandı: B2 ve B5 bu sayfaların
+ * başlıklarını büyük display kademesine taşıyacak, taşma riski ilk orada
+ * doğar — nöbetçi o değişiklikten ÖNCE yerinde olmalı.
  */
-const OVERFLOW_ROUTES = [
-  "",
-  "/who-we-are",
-  "/what-we-do",
-  "/what-we-believe",
-  "/solutions",
-  "/clients",
-  "/partners",
-  "/contact",
-  "/work",
-  "/think-and-thank",
-  "/brief",
-  "/culture",
-  "/culture/directors",
-  "/culture/sustainability",
-  "/what-we-do/creative",
-  "/what-we-do/production",
-  "/what-we-do/post-production",
-  "/what-we-do/digital",
-  "/what-we-do/live-broadcast",
-  "/what-we-do/cloud-tv",
-  "/what-we-do/event-management",
-  "/what-we-do/ai-creative-production",
-  "/what-we-do/how-we-work",
-  "/what-we-do/service-production",
-] as const;
 
 /** next.config.mjs → LEGACY_ROUTE_MAP ile birebir aynı olmalı. */
 const LEGACY_REDIRECTS = [
@@ -260,6 +228,8 @@ test.describe("Yatay taşma", () => {
   // için en dar uç şart: orada geçen ölçü yukarıda da geçiyor.
   for (const width of [320, 375, 390, 768, 1440]) {
     test(`${width}px — hiçbir rota yatay taşmıyor`, async ({ page }) => {
+      // 31 rota × 2 dil ardışık gezinme: yük altında 30 sn'ye yaklaşıyordu.
+      test.setTimeout(120_000);
       await seedConsent(page);
       await page.setViewportSize({ width, height: 900 });
 

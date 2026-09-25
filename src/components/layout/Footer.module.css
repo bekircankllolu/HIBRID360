@@ -6,6 +6,9 @@
   border-top: 1px solid var(--color-brand-black);
 }
 
+/* Kenar boşluğu her genişlikte --page-gutter (41 px@1440, 20 px@390):
+   header ve sayfa içeriğiyle aynı dikey çizgi. Dar ekrandaki 16 px'lik
+   ayrı değer kaldırıldı. */
 .inner {
   width: 100%;
   padding: clamp(3rem, 5vw, 5rem) var(--page-gutter) 1.5rem;
@@ -244,10 +247,6 @@
 }
 
 @media (max-width: 560px) {
-  .inner {
-    padding-inline: 1rem;
-  }
-
   .columns {
     grid-template-columns: 1fr;
   }

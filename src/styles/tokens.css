@@ -246,6 +246,30 @@
   --chapter-manifesto: clamp(1.75rem, 5vw, 5rem);
   --chapter-index: clamp(2rem, 6.4vw, 6.5rem);
 
+  /**
+   * Faz 2 — sayfa başlığı ölçeği (PageTitle/PageHero, src/components/page).
+   * Üç kademe: xl = --chapter-display (kısa başlık, hero), l (uzun/ikincil
+   * sayfa), cümle = --chapter-manifesto (1440px'te 72px). Buradakiler TAVAN;
+   * asıl boyut `min(kademe, calc(100cqw / titleFit))` ile en uzun kelimeye
+   * göre sığdırılır (src/lib/page-title.ts).
+   * Satır aralığı: İ Ö Ü Ş Ç Ğ içeren TR büyük harf başlıkta .86 → .93
+   * (noktalar ve çengeller alttaki satıra giriyordu); cümle başlıkta 1 / 1.05.
+   */
+  --chapter-display-l: clamp(2rem, 6.6vw, 7.25rem);
+  --chapter-leading: 0.86;
+  --chapter-leading-tall: 0.93;
+  --chapter-leading-sentence: 1;
+  --chapter-leading-sentence-tall: 1.05;
+
+  /* Bölüm dikey ritmi: bugün 72·96·100.8·112·115.2·144·160 px yan yana. */
+  --section-space: clamp(4rem, 9vw, 9rem);
+  --section-space-tight: clamp(2.5rem, 5vw, 4.5rem);
+
+  /* Yüzeyler: token dışı #050505–#090909 ve #101010–#151515 grileri buraya
+     toplanır. Marka siyahı + beyazın karışımı, yeni hex yok. */
+  --surface-1: color-mix(in srgb, var(--color-brand-white) 4%, var(--color-brand-black));
+  --surface-2: color-mix(in srgb, var(--color-brand-white) 8%, var(--color-brand-black));
+
   /* Servis bölümlerinin okunur gövde metni (field/details). Manifesto
      ölçeğiyle karıştırılmaz: uzun paragraflar burada, kısa slogan orada.
      Hedef mobilde 18-20px, masaüstünde 26-28px; ölçü 46 karakter bandında
