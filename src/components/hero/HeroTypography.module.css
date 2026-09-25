@@ -120,6 +120,43 @@
   object-fit: cover;
 }
 
+/* Ses düğmesi: kadrajın sağ alt köşesi; küçük kadrajda da, tam ekranda da
+   görünür. 44 px dokunma hedefi, siyah perde üstünde beyaz ikon (her kare
+   üstünde okunur), odakta sarı halka. */
+.showreelSound {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--color-hairline);
+  background: color-mix(in srgb, var(--color-brand-black) 72%, transparent);
+  color: var(--color-brand-white);
+  cursor: pointer;
+  transition:
+    background-color 180ms var(--ease-house),
+    color 180ms var(--ease-house);
+}
+
+.showreelSound:hover {
+  background: var(--color-brand-fuchsia);
+  color: var(--color-brand-black);
+}
+
+.showreelSound[aria-pressed="true"] {
+  background: var(--color-brand-yellow);
+  color: var(--color-brand-black);
+}
+
+.showreelSound:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 3px;
+}
+
 .showreelDisclosure {
   position: absolute;
   left: var(--space-3);

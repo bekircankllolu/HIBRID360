@@ -155,7 +155,7 @@ test("homepage revision order, copy and footer details stay intact", async ({
   ]);
 });
 
-test("representative showreel expands from the top-right frame to the viewport", async ({
+test("showreel expands from the top-right frame to the viewport", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -163,20 +163,30 @@ test("representative showreel expands from the top-right frame to the viewport",
   await acceptCookies(page);
 
   /*
-   * 19 Eylül 2026: kadraj artık POSTER DEĞİL, VİDEO taşıyor (10 sn'lik
-   * temsili showreel üretildi). Bu yüzden `img` yerine `video` aranıyor.
-   * AI açıklaması yerinde duruyor ve durmaya devam etmeli — onaylı master
-   * gelene kadar bu görüntünün gerçek bir kampanya olmadığı sayfada
-   * yazılı kalmalı.
+   * 25 Eylül 2026: müşterinin gerçek showreel'i (61 sn, müzikli). Temsili
+   * AI videosu ve "AI ile üretilmiş temsili…" açıklaması kalktı. Video
+   * sessiz başlar (otomatik ses yasak); kadrajdaki düğme sesi açar/kapatır.
    */
   const frame = page.locator('[class*="HeroTypography_showreelFrame"]');
   const showreel = frame.locator("video");
   await expect(showreel).toHaveCount(1);
   await expect(showreel).toHaveAttribute("preload", "none");
   await expect(showreel).toHaveJSProperty("muted", true);
-  await expect(
-    frame.getByText("AI ile üretilmiş temsili showreel videosu"),
-  ).toBeVisible();
+  await expect(frame.getByText("AI ile üretilmiş temsili showreel videosu")).toHaveCount(0);
+
+  // Ses düğmesi: varsayılan kapalı; basınca açılır, tekrar basınca kapanır.
+  const soundOn = frame.getByRole("button", { name: "Sesi aç", exact: true });
+  await expect(soundOn).toHaveAttribute("aria-pressed", "false");
+  await soundOn.click();
+  const soundOff = frame.getByRole("button", { name: "Sesi kapat", exact: true });
+  await expect(soundOff).toHaveAttribute("aria-pressed", "true");
+  await expect(showreel).toHaveJSProperty("muted", false);
+  await soundOff.click();
+  await expect(frame.getByRole("button", { name: "Sesi aç", exact: true })).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  await expect(showreel).toHaveJSProperty("muted", true);
 
   const initial = (await frame.boundingBox())!;
   expect(initial.width).toBeLessThan(600);

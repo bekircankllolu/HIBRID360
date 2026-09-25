@@ -1,44 +1,39 @@
 export interface HomeShowreelAsset {
   mp4?: string;
   webm?: string;
+  /** `<source type>` için tam kodek dizgesi: desteklemeyen tarayıcı MP4'e düşer. */
+  webmType?: string;
   poster: string;
   title: Record<"tr" | "en", string>;
   disclosure?: "ai-generated";
+  /** Videoda müzik var: ses aç/kapat düğmesi gösterilir (varsayılan sessiz). */
+  hasAudio?: boolean;
 }
 
 /**
- * Client showreel delivery point.
+ * Ana sayfa showreel'i — 25 Eylül 2026: müşterinin gerçek showreel'i
+ * (`HIBRID360_Showreel_v02_Muzikli`, 61 sn, 1920×1080, 24 fps, müzikli).
+ * Önceki 10 sn'lik temsili AI videosunun yerine geçti; "temsili" etiketi kalktı.
  *
- * 19 Eylül 2026 kullanıcı isteği: *"ana sayfadaki yukarıdan sağ köşeden
- * aşağı inen show reel bölümü... Higgsfield hesabımızdan bir video çekip
- * koyabilirsin (ya da 10 sn'lik bir showreel video üret)."*
+ * Kalite korunur: müşterinin teslim ettiği web dosyası (H.264 High 1080p,
+ * 5,4 Mbps, AAC 320k) YENİDEN SIKIŞTIRILMADAN olduğu gibi (moov başta, akışa
+ * hazır). AV1/WebM denendi ve BİLEREK eklenmedi: 18 Mbps master'dan CRF 20-30
+ * AV1, master'a göre SSIM 0,960 verdi (web MP4: 0,977) — film grenini
+ * yumuşatıyor. Kaliteyi düşürecek ikinci bir kaynak yerine tek, özgün MP4.
  *
- * Buradaki dosya o istek üzerine üretildi: 10 saniye, tek çekim, kamera
- * ekibin arasından aydınlık sete doğru yavaşça ilerliyor. Görsel dil What
- * We Do v4 setiyle aynı (siyah baskın kadraj, sıcak pratik ışık, tek fuşya
- * gösterge) — ana sayfa ile hizmet sayfaları aynı çekimden çıkmış gibi
- * duruyor. Poster, videonun İLK KARESİ: video devraldığında sıçrama yok.
+ * Ses: otomatik ses YASAK (CLAUDE.md) — video sessiz başlar, kadrajdaki
+ * düğmeyle açılır. İndirme sayfa yüklendikten sonra başlar ve kadraj
+ * görünmüyorken video durur (bkz. HeroTypography.tsx `deferredLoad`).
  *
- * ONAYLI MASTER HÂLÂ BEKLENİYOR. Bu görüntü gerçek bir Hibrid 360
- * kampanyasını göstermiyor ve `disclosure: "ai-generated"` ile sayfada
- * AÇIKÇA öyle etiketleniyor. Onaylı master geldiğinde yalnızca bu
- * dosyadaki yollar değişir; kadraj ve scroll davranışı aynı kalır,
- * `disclosure` o zaman kaldırılır.
- *
- * Ağırlık: AV1/WebM 722 KB önce denenir, H.264 1280px 998 KB yedek.
- * İlk sürüm 1600px'ti (1.18 MB / 1.51 MB); Lighthouse mobilde LCP'yi
- * 5.1 sn'ye çıkardığı için hem küçültüldü hem de indirmesi `load`
- * sonrasına ertelendi (bkz. HeroTypography.tsx `deferredLoad`). Kadraj
- * tam ekrana açıldığında 1280 kaynak %12 büyütülüyor — arka plan
- * showreel'i için görünür bir kayıp değil, ölçüldü.
+ * Poster: açılış sahnesinin 0,9. saniyesi (video siyahtan açılıyor; ilk kare
+ * siyah olduğu için poster olarak kullanılmadı).
  */
 export const HOME_SHOWREEL: HomeShowreelAsset | null = {
-  mp4: "/videos/home-showreel.mp4",
-  webm: "/videos/home-showreel.webm",
-  poster: "/images/site/home/showreel-representative-1600w.webp",
+  mp4: "/videos/home-showreel-20260925.mp4",
+  poster: "/images/site/home/showreel-20260925-1600w.webp",
   title: {
-    tr: "Film setinde ekibin arasından aydınlık sahneye ilerleyen temsili AI showreel videosu",
-    en: "Representative AI showreel video moving through the crew toward a lit film set",
+    tr: "Hibrid 360 showreel",
+    en: "Hibrid 360 showreel",
   },
-  disclosure: "ai-generated",
+  hasAudio: true,
 };
