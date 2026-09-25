@@ -64,7 +64,9 @@
   z-index: 100;
   display: grid;
   place-items: center;
-  padding: clamp(1rem, 4vw, 4rem);
+  /* Yatayda sayfa gutter'ı: dar ekranda panel içeriği header logosuyla,
+     kapat düğmesi header kontrolleriyle aynı dikey çizgide. */
+  padding: clamp(1rem, 4vw, 4rem) var(--page-gutter);
   background: var(--color-brand-yellow);
   /* Sarı zemin: başlıklar da siyah (globals.css --heading-color). */
   --heading-color: var(--color-text-on-yellow);
@@ -177,7 +179,7 @@
 .close {
   position: absolute;
   top: clamp(1rem, 2.5vw, 2.5rem);
-  right: clamp(1rem, 2.5vw, 3rem);
+  right: var(--page-gutter);
   width: 3rem;
   height: 3rem;
   padding: 0;
