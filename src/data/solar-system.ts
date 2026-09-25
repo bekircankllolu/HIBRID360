@@ -348,6 +348,29 @@ export const CRYSTAL_MEDIA = {
 
 /**
  * ---------------------------------------------------------------------
+ * Ekosistem küreleri — kristal görseller (25 Eylül 2026)
+ * ---------------------------------------------------------------------
+ *
+ * Müşterinin verdiği pembe / sarı / beyaz kristal küre görselleri eski
+ * parlak (üç boyutlu) kürelerin yerine geçti; yörünge, hız, boyut, odak ve
+ * etkileşim DEĞİŞMEDİ. Dokular `scripts/prepare-ecosystem-crystals.mjs` ile
+ * üretilir: kare, önceden çarpılmış alfa, disk opak, parlama yumuşak.
+ *
+ * `frame`: dokunun yarı kenarı / küre diski yarıçapı. Sahne düzlemi bu oranla
+ * büyütülür ki disk eski kürenin tam ekran boyuna otursun.
+ * `halo`: eski marka renkli halelerin yerine görselin kendi parlama rengi
+ * (üretim betiğinin ölçtüğü disk kenarı ortalaması) — hale nabzı ve üzerine
+ * gelince parlama aynen sürer, yalnız ton görselle uyumlu.
+ */
+export const ECO_CRYSTAL_SPHERES = {
+  fuchsia: { src: "/images/site/ecosystem/crystal-fuchsia-20260925.webp", halo: 0xff0675 },
+  yellow: { src: "/images/site/ecosystem/crystal-yellow-20260925.webp", halo: 0xffa602 },
+  white: { src: "/images/site/ecosystem/crystal-white-20260925.webp", halo: 0xf2efff },
+  frame: 1.3,
+} as const;
+
+/**
+ * ---------------------------------------------------------------------
  * Detay kartının açılma yönü
  * ---------------------------------------------------------------------
  *

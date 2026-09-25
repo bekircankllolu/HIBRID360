@@ -13,7 +13,6 @@
  * bileşenden gelir (`ecosystem-orbits.ts`) — buton ile küre aynı noktada.
  */
 import * as THREE from "three";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
@@ -35,6 +34,7 @@ import {
   type EcoDecor,
 } from "@/lib/ecosystem-orbits";
 import { cameraEye, type CameraState, type ScreenPoint, type Vec3 } from "@/lib/solar-orbits";
+import { ECO_CRYSTAL_SPHERES } from "@/data/solar-system";
 
 export type EcosystemQuality = "high" | "medium";
 /** Kademeli geri düşme merdiveni: high → medium → lite. */
@@ -93,8 +93,6 @@ interface BuiltScene extends EcosystemScene {
   validate(): boolean;
   setFallbackReasons(reasons: string[]): void;
 }
-
-const BRAND = { yellow: 0xfffc00, fuchsia: 0xff00ff } as const;
 
 /** Odak katmanı: seçili küre keskin çizilsin diye ayrı katmanda. */
 const MAIN_LAYER = 0;
@@ -337,25 +335,11 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
     for (const item of disposables) item.dispose();
   });
 
-  /* ---- aydınlatma: merkezdeki kristalden sıcak ışık + yumuşak çevre yansıması */
-  if (!lite) {
-    const pmrem = track(new THREE.PMREMGenerator(renderer));
-    const envScene = track(new RoomEnvironment());
-    const envTarget = track(pmrem.fromScene(envScene, 0.04));
-    scene.environment = envTarget.texture;
-    scene.environmentIntensity = 0.35;
-  }
-
-  const keyLight = new THREE.PointLight(0xffc96b, 110, 0, 2);
-  keyLight.position.set(0, 0, 0);
-  const fillLight = new THREE.DirectionalLight(0xffffff, 0.55);
-  fillLight.position.set(-6, 8, 14);
-  // Odakta kameradan gelen dolgu ışığı: dış taraftan bakınca kürenin yüzü aydınlansın.
-  const focusLight = new THREE.DirectionalLight(0xffffff, 0);
-  for (const light of [keyLight, fillLight, focusLight]) {
-    light.layers.enableAll();
-    scene.add(light);
-  }
+  /*
+   * Işık ve ortam haritası YOK (25 Eylül 2026): yalnız eski parlak (lit) küreler
+   * içindi. Küreler artık ışığı kendi içinde taşıyan kristal görseller; PMREM
+   * üretimi ve ışık hesabı kalktı (zayıf GPU'larda kurulum ve kare maliyeti düşer).
+   */
 
   /* ---- yıldızlar */
   const starCount = high ? 2600 : lite ? 600 : 1400;
@@ -468,7 +452,20 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
     });
   };
 
-  /* ---- küreler */
+  /*
+   * ---- küreler: kristal görseller (25 Eylül 2026)
+   *
+   * Her küre iki parçadan oluşur:
+   *   1) GÖRÜNMEZ küre (yalnız derinlik yazar): eski opak kürenin birebir
+   *      yerinde ve boyunda. Arkasındaki yörünge çizgilerini, yıldızları ve
+   *      kristali eskisi gibi gizler; kendi yörünge çizgisi kürenin "içinden"
+   *      geçmez.
+   *   2) Kristal görsel düzlemi: kameraya dönük, kürenin ÖN teğet noktasında.
+   *      Boyu, kürenin ekrandaki silüetini birebir kaplayacak şekilde perspektifle
+   *      hesaplanır (`placeSurface`) — disk eski küreyle aynı ekran boyunda.
+   * Yörünge, hız, boyut, odak katmanı, hale nabzı ve üzerine gelince parlama
+   * değişmedi; yalnız kürenin görünüşü.
+   */
   const sphereHigh = track(new THREE.SphereGeometry(1, 56, 40));
   const sphereLow = track(new THREE.SphereGeometry(1, 20, 14));
   const glowTexture = track(
@@ -479,28 +476,6 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
       [1, "rgba(255,255,255,0)"],
     ]),
   );
-
-  const glossy = (color: number, emissive: number) =>
-    track(
-      lite
-        ? new THREE.MeshStandardMaterial({
-            color,
-            roughness: 0.4,
-            metalness: 0,
-            emissive: color,
-            emissiveIntensity: emissive * 1.8,
-          })
-        : new THREE.MeshPhysicalMaterial({
-            color,
-            roughness: 0.2,
-            metalness: 0,
-            clearcoat: 1,
-            clearcoatRoughness: 0.1,
-            emissive: color,
-            emissiveIntensity: emissive,
-            envMapIntensity: 1.9,
-          }),
-    );
 
   const glowFor = (color: number, opacity: number) => {
     const sprite = new THREE.Sprite(
@@ -518,44 +493,145 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
     return sprite;
   };
 
-  const yellowMaterial = glossy(BRAND.yellow, 0.16);
-  const fuchsiaMaterial = glossy(BRAND.fuchsia, 0.2);
+  /** Yalnız derinlik yazan malzeme (renk yok). */
+  const occluderMaterial = track(new THREE.MeshBasicMaterial({ colorWrite: false }));
+
+  /** Kristal dokuları; yüklenince çizime katılır (öncesinde kare görünmesin). */
+  const crystalLoads: Array<Promise<void>> = [];
+  const crystalMaterials: THREE.MeshBasicMaterial[] = [];
+  const loadCrystal = (src: string) => {
+    let settle = () => {};
+    crystalLoads.push(
+      new Promise<void>((resolve) => {
+        settle = resolve;
+      }),
+    );
+    const texture = track(
+      new THREE.TextureLoader().load(
+        src,
+        () => {
+          for (const material of crystalMaterials) {
+            if (material.map === texture) material.visible = true;
+          }
+          settle();
+          options.onTextureLoad?.();
+        },
+        undefined,
+        () => settle(),
+      ),
+    );
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+    return texture;
+  };
+  const fuchsiaTexture = loadCrystal(ECO_CRYSTAL_SPHERES.fuchsia.src);
+  const yellowTexture = loadCrystal(ECO_CRYSTAL_SPHERES.yellow.src);
+  const whiteTexture = loadCrystal(ECO_CRYSTAL_SPHERES.white.src);
+
+  /**
+   * Dokular önceden çarpılmış alfa taşır (siyah zemin şeffaf, disk opak):
+   * bileşim One / OneMinusSrcAlpha. `min(rgb, a)`: kayıplı webp sıkıştırması
+   * parlamanın uçlarında rengi alfanın biraz üstüne taşıyabiliyor (ışıltı noktası).
+   */
+  const crystalSurface = (map: THREE.Texture, tint = 0xffffff) => {
+    const material = new THREE.MeshBasicMaterial({
+      map,
+      color: tint,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.CustomBlending,
+      blendEquation: THREE.AddEquation,
+      blendSrc: THREE.OneFactor,
+      blendDst: THREE.OneMinusSrcAlphaFactor,
+      blendSrcAlpha: THREE.OneFactor,
+      blendDstAlpha: THREE.OneMinusSrcAlphaFactor,
+    });
+    // Doku gelmeden çizilmesin: yüklenmemiş doku siyah kare olarak görünürdü.
+    material.visible = Boolean(map.image);
+    material.onBeforeCompile = (shader) => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <map_fragment>",
+        "#include <map_fragment>\n  diffuseColor.rgb = min(diffuseColor.rgb, vec3(diffuseColor.a));",
+      );
+    };
+    crystalMaterials.push(material);
+    return track(material);
+  };
+  const plane = track(new THREE.PlaneGeometry(1, 1));
+  /** Yüzeyler yörünge çizgilerinden ÖNCE çizilir: öndeki çizgiler üstüne eklenir. */
+  const SURFACE_ORDER = -1;
+
+  /**
+   * Kristal düzlemini kürenin ön teğet noktasına yerleştirir. Göz uzaklığı d,
+   * yarıçap r: kürenin görünen silüeti, teğet düzlemde yarıçapı
+   * (d − r)·r / √(d² − r²) olan bir diske karşılık gelir; doku bu diski
+   * `frame` payıyla (parlama) taşır.
+   */
+  const toEye = new THREE.Vector3();
+  const placeSurface = (object: THREE.Object3D, x: number, y: number, z: number, radius: number) => {
+    toEye.set(eye.x - x, eye.y - y, eye.z - z);
+    const d = toEye.length();
+    const lift = radius * 1.002;
+    toEye.divideScalar(Math.max(d, 1e-4));
+    object.position.set(x + toEye.x * lift, y + toEye.y * lift, z + toEye.z * lift);
+    object.lookAt(eye);
+    const disk = d > radius * 1.05 ? ((d - lift) * radius) / Math.sqrt(d * d - radius * radius) : radius;
+    object.scale.setScalar(disk * 2 * ECO_CRYSTAL_SPHERES.frame);
+  };
+
+  const fuchsiaSurface = crystalSurface(fuchsiaTexture);
+  const yellowSurface = crystalSurface(yellowTexture);
   const clickable = bodies.map((body) => {
-    const mesh = new THREE.Mesh(sphereHigh, body.color === "yellow" ? yellowMaterial : fuchsiaMaterial);
+    const mesh = new THREE.Mesh(sphereHigh, occluderMaterial);
     mesh.scale.setScalar(body.radius);
-    const halo = glowFor(BRAND[body.color], 0.3);
+    const surface = new THREE.Mesh(plane, body.color === "yellow" ? yellowSurface : fuchsiaSurface);
+    surface.renderOrder = SURFACE_ORDER;
+    const halo = glowFor(
+      body.color === "yellow" ? ECO_CRYSTAL_SPHERES.yellow.halo : ECO_CRYSTAL_SPHERES.fuchsia.halo,
+      0.3,
+    );
     halo.scale.setScalar(body.radius * 4.2);
-    scene.add(mesh, halo);
-    return { mesh, halo, radius: body.radius };
+    scene.add(mesh, surface, halo);
+    return { mesh, surface, halo, radius: body.radius };
   });
 
-  // Süs küreler: tek InstancedMesh (beyaz) + tek InstancedMesh (sıcak beyaz).
+  // Süs küreler: beyaz kristal; sıcak olanlar eski krem tonuyla boyanır. Her
+  // grup iki InstancedMesh: derinlik küresi + kameraya dönük kristal düzlemi.
   const decor: EcoDecor[] = buildDecor(high);
   const cool = decor.filter((d) => d.warmth === 0);
   const warm = decor.filter((d) => d.warmth === 1);
-  const coolMaterial = glossy(0xf4f6ff, 0.12);
-  const warmMaterial = glossy(0xfff1c8, 0.12);
-  const makeInstanced = (list: EcoDecor[], material: THREE.Material) => {
-    const mesh = new THREE.InstancedMesh(high ? sphereHigh : sphereLow, material, Math.max(1, list.length));
+  const makeInstanced = (geometry: THREE.BufferGeometry, material: THREE.Material, count: number) => {
+    const mesh = new THREE.InstancedMesh(geometry, material, Math.max(1, count));
     mesh.frustumCulled = false;
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     scene.add(mesh);
     // `InstancedMesh.dispose()` örnek matrisi tamponunu GPU'dan bırakır.
     return track(mesh);
   };
-  const coolMesh = makeInstanced(cool, coolMaterial);
-  const warmMesh = makeInstanced(warm, warmMaterial);
+  const decorGroup = (list: EcoDecor[], tint: number) => {
+    const occluder = makeInstanced(sphereLow, occluderMaterial, list.length);
+    const surface = makeInstanced(plane, crystalSurface(whiteTexture, tint), list.length);
+    surface.renderOrder = SURFACE_ORDER;
+    return { list, occluder, surface };
+  };
+  const decorGroups = [decorGroup(cool, 0xffffff), decorGroup(warm, 0xfff1c8)];
   const scratch = new THREE.Object3D();
-  const placeDecor = (mesh: THREE.InstancedMesh, list: EcoDecor[], t: number) => {
-    list.forEach((item, i) => {
+  const placeDecor = (group: (typeof decorGroups)[number], t: number) => {
+    group.list.forEach((item, i) => {
       const p = bodyPosition(item, t);
       scratch.position.set(p[0], p[1], p[2]);
+      scratch.quaternion.identity();
       scratch.scale.setScalar(item.radius);
       scratch.updateMatrix();
-      mesh.setMatrixAt(i, scratch.matrix);
+      group.occluder.setMatrixAt(i, scratch.matrix);
+      placeSurface(scratch, p[0], p[1], p[2], item.radius);
+      scratch.updateMatrix();
+      group.surface.setMatrixAt(i, scratch.matrix);
     });
-    mesh.count = list.length;
-    mesh.instanceMatrix.needsUpdate = true;
+    for (const mesh of [group.occluder, group.surface]) {
+      mesh.count = group.list.length;
+      mesh.instanceMatrix.needsUpdate = true;
+    }
   };
 
   // Büyük süs kürelerin yumuşak halesi (referanstaki ışık sızıntısı).
@@ -718,13 +794,15 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
   const setFocus = (index: number) => {
     if (index === focused) return;
     if (focused >= 0) {
-      clickable[focused].mesh.layers.set(MAIN_LAYER);
-      clickable[focused].halo.layers.set(MAIN_LAYER);
+      for (const part of [clickable[focused].mesh, clickable[focused].surface, clickable[focused].halo]) {
+        part.layers.set(MAIN_LAYER);
+      }
     }
     focused = index;
     if (focused >= 0) {
-      clickable[focused].mesh.layers.set(FOCUS_LAYER);
-      clickable[focused].halo.layers.set(FOCUS_LAYER);
+      for (const part of [clickable[focused].mesh, clickable[focused].surface, clickable[focused].halo]) {
+        part.layers.set(FOCUS_LAYER);
+      }
     }
   };
 
@@ -828,15 +906,14 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
       const p = frame.positions[index];
       if (!p) return;
       item.mesh.position.set(p[0], p[1], p[2]);
+      placeSurface(item.surface, p[0], p[1], p[2], item.radius);
       item.halo.position.set(p[0], p[1], p[2]);
       const pulse = 0.28 + 0.06 * Math.sin(t * 1.7 + index * 1.3);
       const boost = frame.hover === index ? 0.25 : 0;
       (item.halo.material as THREE.SpriteMaterial).opacity = pulse + boost;
-      item.mesh.rotation.y = t * 0.15 + index;
     });
 
-    placeDecor(coolMesh, cool, t);
-    placeDecor(warmMesh, warm, t);
+    for (const group of decorGroups) placeDecor(group, t);
     for (const { halo, item } of decorHalos) {
       const p = bodyPosition(item, t);
       halo.position.set(p[0], p[1], p[2]);
@@ -848,9 +925,6 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
       crystalMaterial.uniforms.uMap.value = videoTexture;
     }
     crystalGlow.material.opacity = 0.16 + 0.03 * Math.sin(t * 0.9);
-
-    focusLight.position.copy(eye);
-    focusLight.intensity = 1.5 * frame.focusBlur;
 
     if (!post) {
       camera.layers.enableAll();
@@ -956,6 +1030,13 @@ function buildScene(options: BuildOptions, partial: PartialBuild): BuiltScene | 
     } catch {
       // Desteklenmiyorsa ilk karede eşzamanlı derlenir.
     }
+    // Kristal dokuları gelmeden sahne açılırsa küreler bir an görünmez olur:
+    // kısa süre bekle (poster yer tutucu bu arada görünür). Yavaş bağlantıda
+    // beklemez; dokular gelince kendiliğinden görünürler.
+    await Promise.race([
+      Promise.all(crystalLoads),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 2500)),
+    ]);
   };
 
   const dispose = (loseContext = true) => {

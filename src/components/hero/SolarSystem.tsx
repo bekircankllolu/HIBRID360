@@ -18,6 +18,7 @@ import { useEcosystemSound } from "@/hooks/useEcosystemSound";
 import {
   orbitStones,
   CRYSTAL_MEDIA,
+  ECO_CRYSTAL_SPHERES,
   SOLAR_SYSTEM_TITLE,
   STONE_SERVICE_KEYS,
 } from "@/data/solar-system";
@@ -641,8 +642,17 @@ export function SolarSystem() {
         if (!entry.isIntersecting) return;
         warm.disconnect();
         void import("@/lib/ecosystem-scene").catch(() => undefined);
-        const image = new window.Image();
-        image.src = CRYSTAL_MEDIA.poster;
+        // Poster + kristal küre dokuları (üçü toplam ~120 KB): sahne açılınca
+        // küreler gecikmeden görünsün.
+        for (const src of [
+          CRYSTAL_MEDIA.poster,
+          ECO_CRYSTAL_SPHERES.fuchsia.src,
+          ECO_CRYSTAL_SPHERES.yellow.src,
+          ECO_CRYSTAL_SPHERES.white.src,
+        ]) {
+          const image = new window.Image();
+          image.src = src;
+        }
       },
       { rootMargin: "150% 0px" },
     );
