@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { Volume2, VolumeX } from "lucide-react";
 import { HOME_SHOWREEL } from "@/data/home-showreel";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import type { Locale } from "@/i18n/routing";
@@ -32,6 +33,7 @@ import styles from "./HeroTypography.module.css";
  */
 export function HeroTypography() {
   const t = useTranslations("home");
+  const tVideo = useTranslations("video");
   const locale = useLocale() as Locale;
   const stageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -51,6 +53,13 @@ export function HeroTypography() {
    * sessizce devralıyor. Kullanıcı açısından görünen kadraj aynı.
    */
   const [deferredLoad, setDeferredLoad] = useState(false);
+  /**
+   * Ses: video HER ZAMAN sessiz başlar (otomatik ses yasak). Ziyaretçi düğmeye
+   * basınca açılır. Hareket azaltma açıksa video kendiliğinden oynamaz; sesi
+   * açmak aynı zamanda oynatma isteğidir (`userStarted`).
+   */
+  const [muted, setMuted] = useState(true);
+  const [userStarted, setUserStarted] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const hasShowreel = HOME_SHOWREEL !== null;
   const hasPlayableShowreel = Boolean(
@@ -100,7 +109,7 @@ export function HeroTypography() {
     const video = videoRef.current;
     if (!video) return;
 
-    if (deferredLoad && showreelInView && !prefersReducedMotion) {
+    if (showreelInView && ((deferredLoad && !prefersReducedMotion) || userStarted)) {
       void video.play().catch(() => {
         // Tarayıcı otomatik oynatmayı engellerse poster görünmeye devam eder.
       });
@@ -108,7 +117,24 @@ export function HeroTypography() {
     }
 
     video.pause();
-  }, [deferredLoad, prefersReducedMotion, showreelInView]);
+  }, [deferredLoad, prefersReducedMotion, showreelInView, userStarted]);
+
+  const toggleSound = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const nextMuted = !video.muted;
+    video.muted = nextMuted;
+    setMuted(nextMuted);
+    if (nextMuted) return;
+    setUserStarted(true);
+    if (video.paused) {
+      void video.play().catch(() => {
+        // Oynatma reddedilirse (ör. güç tasarrufu) sessiz duruma geri dön.
+        video.muted = true;
+        setMuted(true);
+      });
+    }
+  };
 
   useEffect(() => {
     if (!hasShowreel) return;
@@ -200,7 +226,7 @@ export function HeroTypography() {
                 aria-label={HOME_SHOWREEL.title[locale]}
               >
                 {HOME_SHOWREEL.webm && (
-                  <source src={HOME_SHOWREEL.webm} type="video/webm" />
+                  <source src={HOME_SHOWREEL.webm} type={HOME_SHOWREEL.webmType ?? "video/webm"} />
                 )}
                 {HOME_SHOWREEL.mp4 && (
                   <source src={HOME_SHOWREEL.mp4} type="video/mp4" />
@@ -218,6 +244,18 @@ export function HeroTypography() {
                 fetchPriority="low"
                 decoding="async"
               />
+            )}
+            {hasPlayableShowreel && HOME_SHOWREEL.hasAudio && (
+              <button
+                type="button"
+                className={styles.showreelSound}
+                onClick={toggleSound}
+                aria-pressed={!muted}
+                aria-label={muted ? tVideo("soundOn") : tVideo("soundOff")}
+                title={muted ? tVideo("soundOn") : tVideo("soundOff")}
+              >
+                {muted ? <VolumeX size={20} aria-hidden="true" /> : <Volume2 size={20} aria-hidden="true" />}
+              </button>
             )}
             {HOME_SHOWREEL.disclosure === "ai-generated" && (
               <span className={styles.showreelDisclosure}>
